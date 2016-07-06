@@ -1,0 +1,505 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C39090771D2C9AF8000DFD15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39090761D2C9AF8000DFD15 /* AppDelegate.swift */; };
+		C39090791D2C9AF8000DFD15 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39090781D2C9AF8000DFD15 /* ViewController.swift */; };
+		C390907C1D2C9AF8000DFD15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C390907A1D2C9AF8000DFD15 /* Main.storyboard */; };
+		C390907E1D2C9AF8000DFD15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C390907D1D2C9AF8000DFD15 /* Assets.xcassets */; };
+		C39090811D2C9AF8000DFD15 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C390907F1D2C9AF8000DFD15 /* LaunchScreen.storyboard */; };
+		C390908C1D2C9AF8000DFD15 /* WYFISATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C390908B1D2C9AF8000DFD15 /* WYFISATests.swift */; };
+		C39090971D2C9AF8000DFD15 /* WYFISAUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39090961D2C9AF8000DFD15 /* WYFISAUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C39090881D2C9AF8000DFD15 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C390906B1D2C9AF7000DFD15 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C39090721D2C9AF7000DFD15;
+			remoteInfo = WYFISA;
+		};
+		C39090931D2C9AF8000DFD15 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C390906B1D2C9AF7000DFD15 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C39090721D2C9AF7000DFD15;
+			remoteInfo = WYFISA;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C39090731D2C9AF7000DFD15 /* WYFISA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WYFISA.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C39090761D2C9AF8000DFD15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C39090781D2C9AF8000DFD15 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C390907B1D2C9AF8000DFD15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C390907D1D2C9AF8000DFD15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C39090801D2C9AF8000DFD15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C39090821D2C9AF8000DFD15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C39090871D2C9AF8000DFD15 /* WYFISATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WYFISATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C390908B1D2C9AF8000DFD15 /* WYFISATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WYFISATests.swift; sourceTree = "<group>"; };
+		C390908D1D2C9AF8000DFD15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C39090921D2C9AF8000DFD15 /* WYFISAUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WYFISAUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C39090961D2C9AF8000DFD15 /* WYFISAUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WYFISAUITests.swift; sourceTree = "<group>"; };
+		C39090981D2C9AF8000DFD15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C39090701D2C9AF7000DFD15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C39090841D2C9AF8000DFD15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C390908F1D2C9AF8000DFD15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C390906A1D2C9AF7000DFD15 = {
+			isa = PBXGroup;
+			children = (
+				C39090751D2C9AF8000DFD15 /* WYFISA */,
+				C390908A1D2C9AF8000DFD15 /* WYFISATests */,
+				C39090951D2C9AF8000DFD15 /* WYFISAUITests */,
+				C39090741D2C9AF7000DFD15 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C39090741D2C9AF7000DFD15 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C39090731D2C9AF7000DFD15 /* WYFISA.app */,
+				C39090871D2C9AF8000DFD15 /* WYFISATests.xctest */,
+				C39090921D2C9AF8000DFD15 /* WYFISAUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C39090751D2C9AF8000DFD15 /* WYFISA */ = {
+			isa = PBXGroup;
+			children = (
+				C39090761D2C9AF8000DFD15 /* AppDelegate.swift */,
+				C39090781D2C9AF8000DFD15 /* ViewController.swift */,
+				C390907A1D2C9AF8000DFD15 /* Main.storyboard */,
+				C390907D1D2C9AF8000DFD15 /* Assets.xcassets */,
+				C390907F1D2C9AF8000DFD15 /* LaunchScreen.storyboard */,
+				C39090821D2C9AF8000DFD15 /* Info.plist */,
+			);
+			path = WYFISA;
+			sourceTree = "<group>";
+		};
+		C390908A1D2C9AF8000DFD15 /* WYFISATests */ = {
+			isa = PBXGroup;
+			children = (
+				C390908B1D2C9AF8000DFD15 /* WYFISATests.swift */,
+				C390908D1D2C9AF8000DFD15 /* Info.plist */,
+			);
+			path = WYFISATests;
+			sourceTree = "<group>";
+		};
+		C39090951D2C9AF8000DFD15 /* WYFISAUITests */ = {
+			isa = PBXGroup;
+			children = (
+				C39090961D2C9AF8000DFD15 /* WYFISAUITests.swift */,
+				C39090981D2C9AF8000DFD15 /* Info.plist */,
+			);
+			path = WYFISAUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C39090721D2C9AF7000DFD15 /* WYFISA */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C390909B1D2C9AF8000DFD15 /* Build configuration list for PBXNativeTarget "WYFISA" */;
+			buildPhases = (
+				C390906F1D2C9AF7000DFD15 /* Sources */,
+				C39090701D2C9AF7000DFD15 /* Frameworks */,
+				C39090711D2C9AF7000DFD15 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WYFISA;
+			productName = WYFISA;
+			productReference = C39090731D2C9AF7000DFD15 /* WYFISA.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C39090861D2C9AF8000DFD15 /* WYFISATests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C390909E1D2C9AF8000DFD15 /* Build configuration list for PBXNativeTarget "WYFISATests" */;
+			buildPhases = (
+				C39090831D2C9AF8000DFD15 /* Sources */,
+				C39090841D2C9AF8000DFD15 /* Frameworks */,
+				C39090851D2C9AF8000DFD15 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C39090891D2C9AF8000DFD15 /* PBXTargetDependency */,
+			);
+			name = WYFISATests;
+			productName = WYFISATests;
+			productReference = C39090871D2C9AF8000DFD15 /* WYFISATests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		C39090911D2C9AF8000DFD15 /* WYFISAUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C39090A11D2C9AF8000DFD15 /* Build configuration list for PBXNativeTarget "WYFISAUITests" */;
+			buildPhases = (
+				C390908E1D2C9AF8000DFD15 /* Sources */,
+				C390908F1D2C9AF8000DFD15 /* Frameworks */,
+				C39090901D2C9AF8000DFD15 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C39090941D2C9AF8000DFD15 /* PBXTargetDependency */,
+			);
+			name = WYFISAUITests;
+			productName = WYFISAUITests;
+			productReference = C39090921D2C9AF8000DFD15 /* WYFISAUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C390906B1D2C9AF7000DFD15 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "RISE & RUN LLC";
+				TargetAttributes = {
+					C39090721D2C9AF7000DFD15 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					C39090861D2C9AF8000DFD15 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = C39090721D2C9AF7000DFD15;
+					};
+					C39090911D2C9AF8000DFD15 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = C39090721D2C9AF7000DFD15;
+					};
+				};
+			};
+			buildConfigurationList = C390906E1D2C9AF7000DFD15 /* Build configuration list for PBXProject "WYFISA" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C390906A1D2C9AF7000DFD15;
+			productRefGroup = C39090741D2C9AF7000DFD15 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C39090721D2C9AF7000DFD15 /* WYFISA */,
+				C39090861D2C9AF8000DFD15 /* WYFISATests */,
+				C39090911D2C9AF8000DFD15 /* WYFISAUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C39090711D2C9AF7000DFD15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C39090811D2C9AF8000DFD15 /* LaunchScreen.storyboard in Resources */,
+				C390907E1D2C9AF8000DFD15 /* Assets.xcassets in Resources */,
+				C390907C1D2C9AF8000DFD15 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C39090851D2C9AF8000DFD15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C39090901D2C9AF8000DFD15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C390906F1D2C9AF7000DFD15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C39090791D2C9AF8000DFD15 /* ViewController.swift in Sources */,
+				C39090771D2C9AF8000DFD15 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C39090831D2C9AF8000DFD15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C390908C1D2C9AF8000DFD15 /* WYFISATests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C390908E1D2C9AF8000DFD15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C39090971D2C9AF8000DFD15 /* WYFISAUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C39090891D2C9AF8000DFD15 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C39090721D2C9AF7000DFD15 /* WYFISA */;
+			targetProxy = C39090881D2C9AF8000DFD15 /* PBXContainerItemProxy */;
+		};
+		C39090941D2C9AF8000DFD15 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C39090721D2C9AF7000DFD15 /* WYFISA */;
+			targetProxy = C39090931D2C9AF8000DFD15 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C390907A1D2C9AF8000DFD15 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C390907B1D2C9AF8000DFD15 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C390907F1D2C9AF8000DFD15 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C39090801D2C9AF8000DFD15 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C39090991D2C9AF8000DFD15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C390909A1D2C9AF8000DFD15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C390909C1D2C9AF8000DFD15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = WYFISA/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.riserunllc.WYFISA;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C390909D1D2C9AF8000DFD15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = WYFISA/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.riserunllc.WYFISA;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		C390909F1D2C9AF8000DFD15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = WYFISATests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.riserunllc.WYFISATests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WYFISA.app/WYFISA";
+			};
+			name = Debug;
+		};
+		C39090A01D2C9AF8000DFD15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = WYFISATests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.riserunllc.WYFISATests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WYFISA.app/WYFISA";
+			};
+			name = Release;
+		};
+		C39090A21D2C9AF8000DFD15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = WYFISAUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.riserunllc.WYFISAUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = WYFISA;
+			};
+			name = Debug;
+		};
+		C39090A31D2C9AF8000DFD15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = WYFISAUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.riserunllc.WYFISAUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = WYFISA;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C390906E1D2C9AF7000DFD15 /* Build configuration list for PBXProject "WYFISA" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C39090991D2C9AF8000DFD15 /* Debug */,
+				C390909A1D2C9AF8000DFD15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C390909B1D2C9AF8000DFD15 /* Build configuration list for PBXNativeTarget "WYFISA" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C390909C1D2C9AF8000DFD15 /* Debug */,
+				C390909D1D2C9AF8000DFD15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		C390909E1D2C9AF8000DFD15 /* Build configuration list for PBXNativeTarget "WYFISATests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C390909F1D2C9AF8000DFD15 /* Debug */,
+				C39090A01D2C9AF8000DFD15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		C39090A11D2C9AF8000DFD15 /* Build configuration list for PBXNativeTarget "WYFISAUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C39090A21D2C9AF8000DFD15 /* Debug */,
+				C39090A31D2C9AF8000DFD15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C390906B1D2C9AF7000DFD15 /* Project object */;
+}
