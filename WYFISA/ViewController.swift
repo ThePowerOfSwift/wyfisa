@@ -14,8 +14,10 @@ class ViewController: UIViewController, G8TesseractDelegate {
 
     @IBOutlet var filterView: GPUImageView!
     @IBOutlet var resultView: UIImageView!
-    let stillCamera: GPUImageStillCamera = GPUImageStillCamera()
+    let stillCamera = GPUImageStillCamera()
+   // let filter = GPUImageAdaptiveThresholdFilter()
     let filter = GPUImageFilter()
+
     var isProcessing: Bool = false
     let tesseract:G8Tesseract = G8Tesseract(language:"eng");
 
@@ -45,27 +47,39 @@ class ViewController: UIViewController, G8TesseractDelegate {
         // tesseract lib init
         let tesseract:G8Tesseract = G8Tesseract(language:"eng");
         tesseract.delegate = self;
-        tesseract.pageSegmentationMode = .Auto
-        tesseract.engineMode = .TesseractCubeCombined
+        //tesseract.pageSegmentationMode = .Auto
+        //tesseract.engineMode = .TesseractCubeCombined
         
         // camera config
         stillCamera.outputImageOrientation = .Portrait;
-        stillCamera.jpegCompressionQuality = 10;
+        //stillCamera.jpegCompressionQuality = 10;
         
         // setup OCR enhanced filter
-        //filter.blurRadiusInPixels = 20.0
+        // filter.blurRadiusInPixels = 10.0
 
         stillCamera.addTarget(filter)
         filter.addTarget(self.filterView)
         
+        do {
+         try stillCamera.inputCamera.lockForConfiguration()
+         stillCamera.inputCamera.videoZoomFactor = 2.0
+         stillCamera.inputCamera.focusMode = .Locked
+         stillCamera.inputCamera.setFocusModeLockedWithLensPosition(0.2, completionHandler: nil)
+         stillCamera.inputCamera.unlockForConfiguration()
+        } catch let error {
+            print(error)
+        }
+        
         // start capture
         stillCamera.startCameraCapture()
-        print(stillCamera.inputCamera.focusMode.rawValue)
         
-        stillCamera.inputCamera.addObserver(self, forKeyPath: "adjustingFocus", options: .New, context: nil)
         
+        // stillCamera.inputCamera.addObserver(self, forKeyPath: "adjustingFocus", options: .New, context: nil)
+        
+        /*
         // save photo
         captureFromCamera()
+        */
     }
     
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
@@ -73,13 +87,43 @@ class ViewController: UIViewController, G8TesseractDelegate {
             if path == "adjustingFocus" {
                 if let changeTo = change!["new"]  {
                     if (changeTo as! Int) == 0 {
-                        self.captureFromCamera()
+                        print(changeTo)
+                        filter.useNextFrameForImageCapture()
+                        
+                        if let image = filter.imageFromCurrentFramebuffer(){
+                            self.resultView.image = image
+
+                            dispatch_async(dispatch_get_main_queue()) {
+                                print("dispatch")
+                                self.processImage(image)
+                            }
+                        } else {
+                            print("nil")
+                        }
+   
+            
                     }
                 }
             }
         }
     }
     
+    
+
+    func processImage(image: UIImage){
+       // let cropFilter = GPUImageCropFilter(cropRegion: CGRect(x: 0, y: 0, width: 0.25, height: 0.25))
+        let scaledImage = image // cropFilter.imageByFilteringImage(image)
+
+        print(scaledImage.size)
+        
+       // self.tesseract.rect = CGRect(x: 0, y: 0, width: 200, height: 200)
+        self.tesseract.image = scaledImage
+        print("recognize")
+        self.tesseract.recognize()
+        print("---\n", self.tesseract.recognizedText)
+        self.resultView.image = scaledImage
+
+    }
     
     func captureFromCamera(){
         self.isProcessing = true
@@ -92,15 +136,8 @@ class ViewController: UIViewController, G8TesseractDelegate {
 
             // Give Tesseract the filtered image
             dispatch_async(dispatch_get_main_queue()) {
-
                 if let image = processedImage {
-                    let scaledImage = self.scaleImage(image, maxDimension: 240)
-                    self.tesseract.image = scaledImage
-                    self.tesseract.recognize()
-                    //print("---\n", self.tesseract.recognizedText)
-                    self.resultView.image = scaledImage
-                } else {
-                    print("nil day")
+                    self.processImage(image)
                 }
             }
                                                                     
