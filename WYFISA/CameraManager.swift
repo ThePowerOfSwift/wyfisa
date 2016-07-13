@@ -89,8 +89,6 @@ class CameraManager: NSObject {
                         self.callbackLock.lock()
                         if self.onAutoFocus.isEmpty == false {
                             let cbFunc = self.onAutoFocus.removeFirst()
-                            print(self.onAutoFocus.count, cbFunc)
-
                             cbFunc()
                         }
                         self.callbackLock.unlock()

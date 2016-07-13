@@ -9,12 +9,13 @@
 import UIKit
 import GPUImage
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CaptureHandlerDelegate {
+class ViewController: UIViewController,CaptureHandlerDelegate {
 
-    @IBOutlet var verseTable: UITableView!
+    @IBOutlet var verseTable: VerseTableView!
     @IBOutlet var filterView: GPUImageView!
     let stillCamera = CameraManager()
     var nVerses = 0
+    var captureLock: NSLock = NSLock()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,73 +31,41 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // start capture
         stillCamera.capture()
 
-        // setup tableview
-        self.verseTable.delegate = self
-        self.verseTable.dataSource = self
     }
 
+    @IBAction func handleScreenTap(sender: AnyObject) {
+        stillCamera.focus()
+    }
     
     @IBAction func addRowForVerse(sender: AnyObject) {
-        
+        self.captureLock.lock()
+
         // adds row to verse table
-        self.nVerses = self.nVerses + 1
-        let idxSet = NSIndexSet(index: 0)
-        self.verseTable.insertSections(idxSet, withRowAnimation: .Fade)
-        
-        // capture while row is being added
-        let event = CaptureHandler(id: self.nVerses, camera: self.stillCamera)
-        event.delegate = self
-        event.recognizeFrameFromCamera()
+        self.verseTable.appendVerse("Scanning")
+        let numSections = self.verseTable.addSection()
+
+        // start a capture event
+        let captureEvent = CaptureHandler(id: numSections, camera: self.stillCamera)
+        captureEvent.delegate = self
+        captureEvent.recognizeFrameFromCamera()
+        self.captureLock.unlock()
+
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
 
-
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCellWithIdentifier("verseCell"){
-            cell.layer.cornerRadius = 2
-            return cell
-        } else {
-            return UITableViewCell()
-        }
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 60.0
-    }
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return self.nVerses
-    }
-    
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 10.0
-    }
-    
-    func tableView(tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
-        view.tintColor = UIColor.clearColor()
-    }
-    
+    // when frame has been processed we need to write it back to the cell
     func didProcessFrame(sender: CaptureHandler, withText text: String, forId id: Int) {
-        let index = id - self.nVerses
-        print("GOT \(id) For \(index)")
-        print(text)
-
-        let indexPath = NSIndexPath(forRow: 0, inSection: index)
-        if let cell = self.verseTable.cellForRowAtIndexPath(indexPath){
-            if let view = cell.viewWithTag(1) {
-                let label = view as! UILabel
-                label.text = text
-                print("SET LABEL", label.text)
-            }
-            self.verseTable.reloadSections(NSIndexSet(index: index), withRowAnimation: .Fade)
-        }
+        self.captureLock.lock()
+        self.verseTable.updateVerseAtIndex(id-1, withText: text)
+        self.verseTable.reloadData()
+        self.captureLock.unlock()
     }
     
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
 }
 

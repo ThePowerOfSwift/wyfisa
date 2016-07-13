@@ -31,17 +31,12 @@ class CaptureHandler {
     }
     
     func onAutoFocus(){
-
-       // let asyncQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-       // dispatch_async(asyncQueue) {
-            // ready
-            if let image = self.camera.imageFromFrame(){
-                self.processImage(image)
-            } else {
-                print("nil frame")
-            }
-        //}
-        
+        // ready
+        if let image = self.camera.imageFromFrame(){
+            self.processImage(image)
+        } else {
+            print("nil frame")
+        }
     }
     
     func processImage(image: UIImage){
