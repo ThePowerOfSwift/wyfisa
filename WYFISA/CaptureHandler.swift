@@ -9,36 +9,46 @@
 import Foundation
 import TesseractOCR
 
+protocol CaptureHandlerDelegate: class {
+    func didProcessFrame(sender: CaptureHandler, withText text: String, forId id: Int)
+}
+
 class CaptureHandler {
-    var label: UILabel
-    var camera: CameraManager
+    let id: Int
+    var lastCapturedText: String?
+    let camera: CameraManager
+    weak var delegate:CaptureHandlerDelegate?
+
     
-    init(label: UILabel, camera: CameraManager){
-        self.label = label
+    init(id: Int, camera: CameraManager){
+        self.id = id
         self.camera = camera
     }
     
     func recognizeFrameFromCamera(){
-        camera.onAutoFocus = self.onAutoFocus
+        camera.addAutoFocusCallback(self.onAutoFocus)
         camera.focus()
     }
     
     func onAutoFocus(){
-        // ready
-        if let image = camera.imageFromFrame(){
-            dispatch_async(dispatch_get_main_queue()) {
+
+       // let asyncQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+       // dispatch_async(asyncQueue) {
+            // ready
+            if let image = self.camera.imageFromFrame(){
                 self.processImage(image)
+            } else {
+                print("nil frame")
             }
-        } else {
-            print("nil")
-        }
+        //}
+        
     }
     
     func processImage(image: UIImage){
         let tesseract:G8Tesseract = G8Tesseract(language:"eng");
         tesseract.image = image
         tesseract.recognize()
-        print("---\n", tesseract.recognizedText)
-        self.label.text = tesseract.recognizedText
+        //print("---\n", tesseract.recognizedText, self.label)
+        self.delegate?.didProcessFrame(self, withText: tesseract.recognizedText, forId: self.id)
     }
 }

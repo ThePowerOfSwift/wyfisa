@@ -9,7 +9,7 @@
 import UIKit
 import GPUImage
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CaptureHandlerDelegate {
 
     @IBOutlet var verseTable: UITableView!
     @IBOutlet var filterView: GPUImageView!
@@ -34,16 +34,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.verseTable.delegate = self
         self.verseTable.dataSource = self
     }
-    
+
     
     @IBAction func addRowForVerse(sender: AnyObject) {
         
         // adds row to verse table
         self.nVerses = self.nVerses + 1
-
-        // when table is reloaded new cells well container OCR data
-        self.verseTable.reloadData()
-    
+        let idxSet = NSIndexSet(index: 0)
+        self.verseTable.insertSections(idxSet, withRowAnimation: .Fade)
+        
+        // capture while row is being added
+        let event = CaptureHandler(id: self.nVerses, camera: self.stillCamera)
+        event.delegate = self
+        event.recognizeFrameFromCamera()
     }
     
     override func didReceiveMemoryWarning() {
@@ -57,15 +60,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCellWithIdentifier("verseCell"){
-            if indexPath.section == self.nVerses-1 {
-                // this is last verse so we need to trigger ocr event
-                if let view = cell.viewWithTag(1) {
-                    let label = view as! UILabel
-                    let event = CaptureHandler(label: label, camera: self.stillCamera)
-                    event.recognizeFrameFromCamera()
-                }
-                cell.layer.cornerRadius = 2
-            }
+            cell.layer.cornerRadius = 2
             return cell
         } else {
             return UITableViewCell()
@@ -85,6 +80,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         view.tintColor = UIColor.clearColor()
+    }
+    
+    func didProcessFrame(sender: CaptureHandler, withText text: String, forId id: Int) {
+        let index = id - self.nVerses
+        print("GOT \(id) For \(index)")
+        print(text)
+
+        let indexPath = NSIndexPath(forRow: 0, inSection: index)
+        if let cell = self.verseTable.cellForRowAtIndexPath(indexPath){
+            if let view = cell.viewWithTag(1) {
+                let label = view as! UILabel
+                label.text = text
+                print("SET LABEL", label.text)
+            }
+            self.verseTable.reloadSections(NSIndexSet(index: index), withRowAnimation: .Fade)
+        }
     }
     
 }

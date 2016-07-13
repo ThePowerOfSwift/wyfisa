@@ -12,8 +12,9 @@ import GPUImage
 
 class CameraManager: NSObject {
     var camera: GPUImageStillCamera
-    var onAutoFocus: ((Void)->Void)?
     var cropFilter: GPUImageCropFilter
+    var onAutoFocus: Array<((Void)->Void)> = Array<((Void)->Void)>()
+    var callbackLock: NSLock = NSLock()
     
     override init(){
         // init a still image camera
@@ -28,9 +29,10 @@ class CameraManager: NSObject {
         thresholdFilter.addTarget(self.cropFilter)
         
         super.init()
-        
-        // watches for autofocus events
+
+        // will observe auto focus events
         self.camera.inputCamera.addObserver(self, forKeyPath: "adjustingFocus", options: .New, context: nil)
+        
     }
     
     func focus(){
@@ -69,18 +71,29 @@ class CameraManager: NSObject {
         return cropFilter.imageFromCurrentFramebuffer()
     }
     
+    func addAutoFocusCallback(cbFunc: ((Void)->Void)) {
+        self.callbackLock.lock()
+        self.onAutoFocus.append(cbFunc)
+        self.callbackLock.unlock()
+    }
+
     // can call autofocus method
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?,
                                          context ontext: UnsafeMutablePointer<Void>) {
         
-        // process image just after finishing autofocus
+        // check if focus event changed to done
         if let path = keyPath {
             if path == "adjustingFocus" {
                 if let changeTo = change!["new"]  {
                     if (changeTo as! Int) == 0 {
-                        if let cbFunc = self.onAutoFocus {
+                        self.callbackLock.lock()
+                        if self.onAutoFocus.isEmpty == false {
+                            let cbFunc = self.onAutoFocus.removeFirst()
+                            print(self.onAutoFocus.count, cbFunc)
+
                             cbFunc()
                         }
+                        self.callbackLock.unlock()
                     }
                 }
             }
