@@ -10,22 +10,23 @@ import UIKit
 import TesseractOCR
 import GPUImage
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet var verseTable: UITableView!
     @IBOutlet var filterView: GPUImageView!
-    @IBOutlet var resultView: UIImageView!
     let stillCamera = GPUImageStillCamera()
-    let filter = GPUImageFilter()
-
+    var cropFilter = GPUImageCropFilter()
     var isProcessing: Bool = false
-    let tesseract:G8Tesseract = G8Tesseract(language:"eng");
-
+    var nVerses = 0
+    var lastRecognizedText: String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
 
         // send camera to live view
         stillCamera.outputImageOrientation = .Portrait;
+        let filter = GPUImageFilter()
         stillCamera.addTarget(filter)
         filterView.fillMode = GPUImageFillModeType.init(2)
         
@@ -33,7 +34,7 @@ class ViewController: UIViewController {
         thresholdFilter.blurRadiusInPixels = 20.0
         filter.addTarget(thresholdFilter)
         
-        let cropFilter = GPUImageCropFilter(cropRegion: CGRect(x: 0.25, y: 0.25, width: 0.5, height: 0.5))
+        self.cropFilter = GPUImageCropFilter(cropRegion: CGRect(x: 0.2, y: 0.2, width: 0.6, height: 0.6))
         thresholdFilter.addTarget(cropFilter)
         filter.addTarget(self.filterView)
         
@@ -41,8 +42,7 @@ class ViewController: UIViewController {
         do {
          try stillCamera.inputCamera.lockForConfiguration()
          stillCamera.inputCamera.videoZoomFactor = 1.5
-        // stillCamera.inputCamera.focusMode = .Locked
-        // stillCamera.inputCamera.setFocusModeLockedWithLensPosition(0.2, completionHandler: nil)
+         stillCamera.inputCamera.focusMode = .AutoFocus
          stillCamera.inputCamera.unlockForConfiguration()
         } catch let error {
             print(error)
@@ -51,15 +51,14 @@ class ViewController: UIViewController {
         // start capture
         stillCamera.startCameraCapture()
         
-        // read frames
-        dispatch_async(dispatch_get_main_queue()) {
-            while true {
-                self.readFrame(cropFilter)
-                sleep(1)
-               GPUImageContext.sharedFramebufferCache().purgeAllUnassignedFramebuffers()
-                G8Tesseract.clearCache()
-            }
-        }
+        // observer autofocus
+        stillCamera.inputCamera.addObserver(self, forKeyPath: "adjustingFocus", options: .New, context: nil)
+        
+        // setup tableview
+        self.verseTable.delegate = self
+        self.verseTable.dataSource = self
+        
+        
     }
     
     func readFrame(fromFilter: GPUImageCropFilter){
@@ -72,41 +71,88 @@ class ViewController: UIViewController {
     
 
     func processImage(image: UIImage){
-        self.tesseract.image = image
+        let tesseract:G8Tesseract = G8Tesseract(language:"eng");
+        tesseract.image = image
         print("recognize", image.size)
-        self.tesseract.recognize()
-        print("---\n", self.tesseract.recognizedText)
-        
+        tesseract.recognize()
+        print("---\n", tesseract.recognizedText)
+        self.lastRecognizedText = tesseract.recognizedText
     }
     
+    @IBAction func doFrameCapture(sender: AnyObject) {
+        
+        // do auto focus to trigger image capture
+        do {
+            try stillCamera.inputCamera.lockForConfiguration()
+            stillCamera.inputCamera.focusMode = .AutoFocus
+            stillCamera.inputCamera.unlockForConfiguration()
+        } catch let error {
+            print(error)
+        }
+        
+        self.nVerses = self.nVerses + 1
+        self.verseTable.reloadData()
+    }
+    
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?,
+                                         context ontext: UnsafeMutablePointer<Void>) {
+        if let path = keyPath {
+            if path == "adjustingFocus" {
+                if let changeTo = change!["new"]  {
+                    if (changeTo as! Int) == 0 {
+                        self.cropFilter.useNextFrameForImageCapture()
+                        
+                        if let image = self.cropFilter.imageFromCurrentFramebuffer(){
+                            let asyncQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+                            dispatch_async(asyncQueue) {
+                                self.processImage(image)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
-    func scaleImage(image: UIImage, maxDimension: CGFloat) -> UIImage {
-        
-        var scaledSize = CGSize(width: maxDimension, height: maxDimension)
-        var scaleFactor: CGFloat
-        
-        if image.size.width > image.size.height {
-            scaleFactor = image.size.height / image.size.width
-            scaledSize.width = maxDimension
-            scaledSize.height = scaledSize.width * scaleFactor
+
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCellWithIdentifier("verseCell"){
+            if indexPath.section == self.nVerses-1 {
+                // this is last verse so change text
+                if let view = cell.viewWithTag(1) {
+                    let label = view as! UILabel
+                    label.text = self.lastRecognizedText
+                }
+                cell.layer.cornerRadius = 2
+            }
+            return cell
         } else {
-            scaleFactor = image.size.width / image.size.height
-            scaledSize.height = maxDimension
-            scaledSize.width = scaledSize.height * scaleFactor
+            return UITableViewCell()
         }
-        
-        UIGraphicsBeginImageContext(scaledSize)
-        image.drawInRect(CGRectMake(0, 0, scaledSize.width, scaledSize.height))
-        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return scaledImage
     }
-
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 60.0
+    }
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return self.nVerses
+    }
+    
+    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 10.0
+    }
+    
+    func tableView(tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        view.tintColor = UIColor.clearColor()
+    }
+    
 }
 
