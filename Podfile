@@ -8,6 +8,7 @@ target 'WYFISA' do
   # Pods for WYFISA
   pod 'TesseractOCRiOS', '4.0.0'
   pod 'GPUImage', '0.1.7'
+  pod "STRegex", "~> 0.3.1"
 
   target 'WYFISATests' do
     inherit! :search_paths

@@ -25,17 +25,22 @@ class CameraManager: NSObject {
         let thresholdFilter = GPUImageAdaptiveThresholdFilter()
         thresholdFilter.blurRadiusInPixels = 20.0
         self.camera.addTarget(thresholdFilter)
-        self.cropFilter = GPUImageCropFilter(cropRegion: CGRect(x: 0.2, y: 0.2, width: 0.6, height: 0.6))
+        self.cropFilter = GPUImageCropFilter(cropRegion: CGRect(x: 0.2, y: 0.2, width: 0.6, height: 0.4))
         thresholdFilter.addTarget(self.cropFilter)
         
         super.init()
 
         // will observe auto focus events
-        self.camera.inputCamera.addObserver(self, forKeyPath: "adjustingFocus", options: .New, context: nil)
+        if self.camera.inputCamera != nil {
+            self.camera.inputCamera.addObserver(self, forKeyPath: "adjustingFocus", options: .New, context: nil)
+        }
         
     }
     
     func focus(){
+        if self.camera.inputCamera == nil {
+            return
+        }
         // will trigger an autofocus kvo
         do {
             try camera.inputCamera.lockForConfiguration()
@@ -47,6 +52,9 @@ class CameraManager: NSObject {
     }
     
     func zoom(by: CGFloat){
+        if self.camera.inputCamera  == nil {
+            return
+        }
         // will trigger an autofocus kvo
         do {
             try camera.inputCamera.lockForConfiguration()
@@ -60,6 +68,10 @@ class CameraManager: NSObject {
     // add filters and targets to camera
     func addCameraTarget(target: GPUImageInput!){
         self.camera.addTarget(target)
+    }
+    
+    func addDebugTarget(target: GPUImageInput!){
+        self.cropFilter.addTarget(target)
     }
     
     func capture(){

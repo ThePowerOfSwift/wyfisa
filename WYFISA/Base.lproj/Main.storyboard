@@ -22,6 +22,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HAV-Ay-XOw" customClass="GPUImageView">
                                 <rect key="frame" x="0.0" y="20" width="600" height="600"/>
                                 <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CaptureBox-1" translatesAutoresizingMaskIntoConstraints="NO" id="ggB-0g-XGh">
+                                        <rect key="frame" x="60" y="150" width="480" height="180"/>
+                                    </imageView>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Eb-dI-Jp5" customClass="VerseTableView" customModule="WYFISA" customModuleProvider="target">
                                         <rect key="frame" x="8" y="30" width="240" height="360"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -68,15 +71,34 @@
                                         </prototypes>
                                         <sections/>
                                     </tableView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yKv-fP-VGS" customClass="GPUImageView">
+                                        <rect key="frame" x="345" y="21" width="240" height="128"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="200" id="9Pv-vo-Opb"/>
+                                            <constraint firstAttribute="height" constant="200" id="F2d-Mw-IXB"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.84705882349999995" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
                                 <constraints>
+                                    <constraint firstItem="ggB-0g-XGh" firstAttribute="centerY" secondItem="HAV-Ay-XOw" secondAttribute="centerY" multiplier="0.8" id="1x6-Bt-ecO"/>
+                                    <constraint firstItem="ggB-0g-XGh" firstAttribute="height" secondItem="HAV-Ay-XOw" secondAttribute="height" multiplier="0.3" id="712-ZE-eqc"/>
+                                    <constraint firstItem="ggB-0g-XGh" firstAttribute="centerX" secondItem="HAV-Ay-XOw" secondAttribute="centerX" id="BHm-KW-7gQ"/>
                                     <constraint firstItem="9Eb-dI-Jp5" firstAttribute="width" secondItem="HAV-Ay-XOw" secondAttribute="width" multiplier="0.4" id="BaF-JW-wMZ"/>
+                                    <constraint firstAttribute="trailing" secondItem="yKv-fP-VGS" secondAttribute="trailing" id="GJh-CQ-QGp"/>
+                                    <constraint firstItem="ggB-0g-XGh" firstAttribute="width" secondItem="HAV-Ay-XOw" secondAttribute="width" multiplier="0.8" id="RHn-pf-QWx"/>
                                     <constraint firstItem="9Eb-dI-Jp5" firstAttribute="centerY" secondItem="HAV-Ay-XOw" secondAttribute="centerY" multiplier="0.7" id="RtJ-9K-BHT"/>
                                     <constraint firstItem="9Eb-dI-Jp5" firstAttribute="height" secondItem="HAV-Ay-XOw" secondAttribute="height" multiplier="0.6" id="b2V-Xl-em6"/>
                                     <constraint firstItem="9Eb-dI-Jp5" firstAttribute="leading" secondItem="HAV-Ay-XOw" secondAttribute="leadingMargin" id="dhM-yD-K0d"/>
+                                    <constraint firstItem="yKv-fP-VGS" firstAttribute="top" secondItem="HAV-Ay-XOw" secondAttribute="top" id="jnv-VE-PYj"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="subviews">
+                                        <exclude reference="yKv-fP-VGS"/>
+                                    </mask>
+                                </variation>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="LOG-v3-AS5" appends="YES" id="ZLH-Ma-DqO"/>
                                 </connections>
@@ -101,6 +123,7 @@
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="debugWindow" destination="yKv-fP-VGS" id="niX-FU-QZa"/>
                         <outlet property="filterView" destination="HAV-Ay-XOw" id="I1V-KO-weU"/>
                         <outlet property="verseTable" destination="9Eb-dI-Jp5" id="09h-TB-rea"/>
                     </connections>
@@ -116,6 +139,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="CaptureBox-1" width="295" height="283"/>
         <image name="Oval 1" width="104" height="104"/>
     </resources>
 </document>

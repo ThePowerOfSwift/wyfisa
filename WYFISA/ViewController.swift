@@ -11,6 +11,7 @@ import GPUImage
 
 class ViewController: UIViewController,CaptureHandlerDelegate {
 
+    @IBOutlet var debugWindow: GPUImageView!
     @IBOutlet var verseTable: VerseTableView!
     @IBOutlet var filterView: GPUImageView!
     let stillCamera = CameraManager()
@@ -23,6 +24,7 @@ class ViewController: UIViewController,CaptureHandlerDelegate {
         // send camera to live view
         self.filterView.fillMode = GPUImageFillModeType.init(2)
         self.stillCamera.addCameraTarget(self.filterView)
+        //self.stillCamera.addDebugTarget(self.debugWindow)
         
         // camera config
         stillCamera.zoom(1.5)
@@ -58,8 +60,14 @@ class ViewController: UIViewController,CaptureHandlerDelegate {
 
     // when frame has been processed we need to write it back to the cell
     func didProcessFrame(sender: CaptureHandler, withText text: String, forId id: Int) {
+    
+       let matchedText = TextMatcher.findVersesInText(text)
+        print(text, matchedText)
+        
         self.captureLock.lock()
-        self.verseTable.updateVerseAtIndex(id-1, withText: text)
+        if let text = matchedText {
+            self.verseTable.updateVerseAtIndex(id-1, withText: text)
+        }
         self.verseTable.reloadData()
         self.captureLock.unlock()
     }
