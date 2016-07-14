@@ -15,6 +15,7 @@ class ViewController: UIViewController,CaptureHandlerDelegate {
     @IBOutlet var verseTable: VerseTableView!
     @IBOutlet var filterView: GPUImageView!
     let stillCamera = CameraManager()
+    let db = DBQuery()
     var nVerses = 0
     var captureLock: NSLock = NSLock()
 
@@ -43,7 +44,8 @@ class ViewController: UIViewController,CaptureHandlerDelegate {
         self.captureLock.lock()
 
         // adds row to verse table
-        self.verseTable.appendVerse("Scanning")
+        let defaultVerse = BookInfo(id: "", name: "...", text: "loading")
+        self.verseTable.appendVerse(defaultVerse)
         let numSections = self.verseTable.addSection()
 
         // start a capture event
@@ -60,13 +62,15 @@ class ViewController: UIViewController,CaptureHandlerDelegate {
 
     // when frame has been processed we need to write it back to the cell
     func didProcessFrame(sender: CaptureHandler, withText text: String, forId id: Int) {
-    
-       let matchedText = TextMatcher.findVersesInText(text)
-        print(text, matchedText)
-        
         self.captureLock.lock()
-        if let text = matchedText {
-            self.verseTable.updateVerseAtIndex(id-1, withText: text)
+        
+        print(text)
+        
+        if var bookInfo = TextMatcher.findVersesInText(text) {
+            if let verse = db.lookupVerse(bookInfo.id){
+                bookInfo.text = verse
+                self.verseTable.updateVerseAtIndex(id-1, withBookInfo: bookInfo)
+            }
         }
         self.verseTable.reloadData()
         self.captureLock.unlock()

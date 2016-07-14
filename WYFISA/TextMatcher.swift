@@ -9,6 +9,39 @@
 import Foundation
 import Regex
 
+
+struct BookInfo {
+    let id: String
+    let name: String
+    var text: String?
+}
+
+class TextMatcher {
+    
+    class func findVersesInText(text: String) -> BookInfo? {
+        var bookInfo: BookInfo?
+        let bookStr = Books.bookPatterns()
+        let chapters: Regex = Regex("(\(bookStr))\\w*?.? (\\d{1,3}):(\\d{1,3})",  options: [.IgnoreCase])
+        
+        let matches = chapters.allMatches(text)
+        for match in matches {
+            let book = match.captures[0]!
+            let chapter = match.captures[1]!
+            let verse = match.captures[2]!
+            let matchedText = "\(book) \(chapter):\(verse)"
+            
+            let bookId = String(format: "%02d", Int(Books.patternId(book)))
+            let chapterId = String(format: "%03d", Int(chapter)!)
+            let verseId = String(format: "%03d", Int(verse)!)
+            let id = "\(bookId)\(chapterId)\(verseId)"
+
+            print(id, matchedText)
+            bookInfo = BookInfo(id: id, name: matchedText, text: "Not Found")
+        }
+        return bookInfo
+    }
+}
+
 enum Books: Int {
     case Gen = 1,Ex,Lev,Num,Deut,Josh,Judg,Ruth,Sam1,Sam2,Kings1,Kings2,Chr1,Chr2,Ezra,Neh,Esth,Job,Ps,Prov,Ecc,Song,Isa,Jer,Lam,Ezek,Dan,Hos,Joel,Am,Ob,Jon,Mic,Nah,Hab,Zeph,Hag,Zech,Mal,Mt,Mk,Lk,Jn,Acts,Rom,Cor1,Cor2,Gal,Eph,Phil,Col,Thess1,Thess2,Tim1,Tim2,Titus,Philemon,Heb,Jas,Pet1,Pet2,Jn1,Jn2,Jn3,Jude,Rev
     func pattern() -> String {
@@ -146,9 +179,22 @@ enum Books: Int {
         case .Rev:
             return "Revelation|Rev|Re|The Revelation"
         }
-        
-
     }
+
+    static func patternId(pattern: String) -> Int {
+        for i in 1...66 {
+            if let book = Books(rawValue: i) {
+                let lfString = pattern+"|"
+                let rtString = "|"+pattern
+                if book.pattern().containsString(lfString) ||
+                    book.pattern().containsString(rtString) {
+                    return i
+                }
+            }
+        }
+        return 1
+    }
+
     static func bookPatterns() -> String {
         var books = Books.Gen.pattern()
         for i in 2...66 {
@@ -157,26 +203,5 @@ enum Books: Int {
             }
         }
         return books
-    }
-}
-
-
-
-class TextMatcher {
-    
-    class func findVersesInText(text: String) -> String? {
-        var matchedText: String?
-        let bookStr = Books.bookPatterns()
-        print(bookStr)
-        let chapters: Regex = Regex.init("(\(bookStr))\\w*?.? (\\d{1,3}):(\\d{1,3})")
-        
-        let matches = chapters.allMatches(text)
-        for match in matches {
-            let book = match.captures[0]!
-            let chapter = match.captures[1]!
-            let verse = match.captures[2]!
-            matchedText = "\(book) \(chapter):\(verse)"
-        }
-        return matchedText
     }
 }

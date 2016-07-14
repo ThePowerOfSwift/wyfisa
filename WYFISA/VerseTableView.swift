@@ -11,7 +11,7 @@ import UIKit
 class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     var nVerses: Int = 0
-    var recentVerses: [String] = [String]()
+    var recentVerses: [BookInfo] = [BookInfo]()
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -21,12 +21,12 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         self.dataSource = self
     }
     
-    func appendVerse(text: String){
-        self.recentVerses.append(text)
+    func appendVerse(book: BookInfo){
+        self.recentVerses.append(book)
     }
     
-    func updateVerseAtIndex(id: Int, withText text: String){
-        self.recentVerses[id] = text
+    func updateVerseAtIndex(id: Int, withBookInfo book: BookInfo){
+        self.recentVerses[id] = book
     }
     
     func addSection() -> Int{
@@ -55,7 +55,8 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         
         if let verseCell = cell {
             let index = self.numberOfSectionsInTableView(tableView) - indexPath.section - 1
-            verseCell.labelText.text = self.recentVerses[index]
+            verseCell.labelHeader.text = self.recentVerses[index].name
+            verseCell.labelText.text = self.recentVerses[index].text
             return verseCell
         } else {
             return VerseTableViewCell(style: .Default, reuseIdentifier: nil)
