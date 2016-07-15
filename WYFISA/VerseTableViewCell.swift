@@ -18,9 +18,18 @@ class VerseTableViewCell: UITableViewCell {
         // Initialization code
     }
     
-    func load(id: Int) {
-        
+    func updateWithBookInfo(book: BookInfo, isExpanded: Bool) {
+        self.labelHeader.text = book.name
+        self.labelText.text = book.text
+        if isExpanded == true {
+            self.labelText.lineBreakMode = .ByWordWrapping
+            self.labelText.numberOfLines = 0
+        } else {
+            self.labelText.lineBreakMode = .ByTruncatingTail
+            self.labelText.numberOfLines = 1
+        }
     }
+    
     
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

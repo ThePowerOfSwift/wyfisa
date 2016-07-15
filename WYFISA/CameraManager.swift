@@ -67,7 +67,15 @@ class CameraManager: NSObject {
     
     // add filters and targets to camera
     func addCameraTarget(target: GPUImageInput!){
-        self.camera.addTarget(target)
+        let guassFilter = GPUImageGaussianSelectiveBlurFilter()
+        print(guassFilter)
+        guassFilter.excludeCircleRadius = 0.3
+//        guassFilter.excludeCirclePoint = CGPoint(x: <#T##CGFloat#>, y: <#T##CGFloat#>)
+        guassFilter.aspectRatio = 1.5
+        self.camera.addTarget(guassFilter)
+        guassFilter.addTarget(target)
+        
+        //self.camera.addTarget(target)
     }
     
     func addDebugTarget(target: GPUImageInput!){
@@ -76,6 +84,14 @@ class CameraManager: NSObject {
     
     func capture(){
         self.camera.startCameraCapture()
+    }
+    
+    func pause(){
+        self.camera.pauseCameraCapture()
+    }
+    
+    func resume(){
+        self.camera.resumeCameraCapture()
     }
     
     func imageFromFrame() -> UIImage? {

@@ -47,7 +47,7 @@ enum Books: Int {
     func pattern() -> String {
         switch self {
         case .Gen:
-            return "Genesis|Gen|Ge|Gn"
+            return "Genesis|Gen|Ge|Gn|Gcn"
         case .Ex:
             return "Exodus|Exo|Ex|Exod"
         case .Lev:
@@ -83,7 +83,7 @@ enum Books: Int {
         case .Job:
             return "Job|Jb"
         case .Ps:
-            return "Psalm|Psa|Pslm|Ps|Psalms|Psa|Psm|Pss"
+            return "Psalm|Psa|Pslm|Ps|Psalms|Psa|Psm|Pss|P5"
         case .Prov:
             return "Proverbs|Prov|Pr|Prv"
         case .Ecc:

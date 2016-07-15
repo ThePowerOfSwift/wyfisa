@@ -11,7 +11,10 @@ import UIKit
 class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     var nVerses: Int = 0
+    var nVersesOffset: Int = 0
     var recentVerses: [BookInfo] = [BookInfo]()
+    var isExpanded: Bool = false
+    var nLock: NSLock = NSLock()
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -21,12 +24,29 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         self.dataSource = self
     }
     
+    func addToSectionBy(i: Int){
+        self.nVerses = self.nVerses + i
+    }
     func appendVerse(book: BookInfo){
         self.recentVerses.append(book)
     }
     
     func updateVerseAtIndex(id: Int, withBookInfo book: BookInfo){
         self.recentVerses[id] = book
+    }
+    
+    // when a render fails the section id is 0
+    // and the array value is the last one added
+    func removeFailedVerse(){
+        self.nVerses = self.nVerses - 1
+        let idxSet = NSIndexSet(index: 0)
+        UIView.animateWithDuration(0.2, animations: {
+            self.deleteSections(idxSet, withRowAnimation: .Top)
+            print("RemoveIdx", self.recentVerses.count-1)
+            self.recentVerses.removeAtIndex(self.recentVerses.count-1)
+        })
+        
+        // whenever a remove happens and other elements are
     }
     
     func addSection() -> Int{
@@ -55,8 +75,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         
         if let verseCell = cell {
             let index = self.numberOfSectionsInTableView(tableView) - indexPath.section - 1
-            verseCell.labelHeader.text = self.recentVerses[index].name
-            verseCell.labelText.text = self.recentVerses[index].text
+            verseCell.updateWithBookInfo(self.recentVerses[index], isExpanded: self.isExpanded)
             return verseCell
         } else {
             return VerseTableViewCell(style: .Default, reuseIdentifier: nil)
@@ -65,7 +84,19 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 60.0
+
+        if self.isExpanded == true {
+            // dynamic text sizing
+            let index = self.numberOfSectionsInTableView(tableView) - indexPath.section - 1
+            if let text = self.recentVerses[index].text {
+                let height = text.heightWithConstrainedWidth(self.frame.size.width,
+                                                             font: UIFont.systemFontOfSize(16))
+                if height  > 30 { // bigger than a loading text
+                    return height + 50
+                }
+            }
+        }
+        return 60
     }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return self.nVerses
@@ -79,5 +110,49 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         view.tintColor = UIColor.clearColor()
     }
 
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        // code
+    }
+    
+    func expandView(toSize: CGSize) -> Bool {
+        UIView.animateWithDuration(0.2, animations: {
+            if self.isExpanded == false {
+                self.frame.size.width = toSize.width*0.95
+                self.frame.size.height = toSize.height*0.75
+            } else {
+                self.frame.size.width = toSize.width*0.40
+                self.frame.size.height = toSize.height*0.35
+            }
+        })
+        
 
+        self.reloadData()
+        self.isExpanded = !self.isExpanded
+        return self.isExpanded
+    }
+    
+    func clear(){
+        UIView.animateWithDuration(0.5, animations: {
+            self.alpha = 0
+        })
+        
+        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
+        dispatch_after(delayTime, dispatch_get_main_queue()) {
+            self.nVerses = 0
+            self.recentVerses = [BookInfo]()
+            self.reloadData()
+            self.alpha = 1
+        }
+    }
+
+}
+
+extension String {
+    func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: CGFloat.max)
+        
+        let boundingBox = self.boundingRectWithSize(constraintRect, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)
+        
+        return boundingBox.height
+    }
 }

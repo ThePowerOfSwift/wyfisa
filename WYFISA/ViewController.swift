@@ -14,6 +14,11 @@ class ViewController: UIViewController,CaptureHandlerDelegate {
     @IBOutlet var debugWindow: GPUImageView!
     @IBOutlet var verseTable: VerseTableView!
     @IBOutlet var filterView: GPUImageView!
+    @IBOutlet var expandButton: UIButton!
+    @IBOutlet var captureButton: UIButton!
+    @IBOutlet var maskView: UIView!
+    @IBOutlet var captureBox: UIImageView!
+    
     let stillCamera = CameraManager()
     let db = DBQuery()
     var nVerses = 0
@@ -25,7 +30,7 @@ class ViewController: UIViewController,CaptureHandlerDelegate {
         // send camera to live view
         self.filterView.fillMode = GPUImageFillModeType.init(2)
         self.stillCamera.addCameraTarget(self.filterView)
-        //self.stillCamera.addDebugTarget(self.debugWindow)
+        // self.stillCamera.addDebugTarget(self.debugWindow)
         
         // camera config
         stillCamera.zoom(1.5)
@@ -54,6 +59,36 @@ class ViewController: UIViewController,CaptureHandlerDelegate {
         captureEvent.recognizeFrameFromCamera()
         self.captureLock.unlock()
 
+    }
+    
+    @IBAction func didPressExpandButton(sender: AnyObject) {
+        // expand|shrink table view
+        let didExpand = self.verseTable.expandView(self.view.frame.size)
+        
+        // modify button image to represent state
+        var buttonImage = UIImage(named: "arrow-expand")
+        if didExpand == true {
+            self.stillCamera.pause()
+            buttonImage = UIImage(named: "arrow-expand-blue")
+            UIView.animateWithDuration(0.5, animations: {
+              self.captureButton.alpha = 0
+              self.captureBox.alpha = 0
+              self.maskView.alpha = 0.8
+            })
+        } else {
+            self.stillCamera.resume()
+            UIView.animateWithDuration(0.2, animations: {
+                self.captureButton.alpha = 1
+                self.captureBox.alpha = 1
+                self.maskView.alpha = 0
+            })
+        }
+        self.expandButton.setImage(buttonImage, forState: .Normal)
+
+    }
+    
+    @IBAction func didPressRefreshButton(sender: AnyObject) {
+        self.verseTable.clear()
     }
     
     override func didReceiveMemoryWarning() {
