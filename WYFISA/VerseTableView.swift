@@ -44,10 +44,10 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     func removeFailedVerse(){
         self.nVerses = self.nVerses - 1
         let idxSet = NSIndexSet(index: 0)
-        UIView.animateWithDuration(0.2, animations: {
+        Animations.start(0.2) {
             self.deleteSections(idxSet, withRowAnimation: .Top)
             self.recentVerses.removeAtIndex(self.recentVerses.count-1)
-        })        
+        }     
     }
     
     func addSection() {
@@ -115,7 +115,8 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func expandView(toSize: CGSize) -> Bool {
-        UIView.animateWithDuration(0.2, animations: {
+        
+        Animations.start(0.2) {
             if self.isExpanded == false {
                 self.frame.size.width = toSize.width*0.95
                 self.frame.size.height = toSize.height*0.75
@@ -123,7 +124,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
                 self.frame.size.width = toSize.width*0.40
                 self.frame.size.height = toSize.height*0.35
             }
-        })
+        }
         
 
         self.reloadData()
@@ -132,12 +133,14 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func clear(){
-        UIView.animateWithDuration(0.5, animations: {
-            self.alpha = 0
-        })
         
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
-        dispatch_after(delayTime, dispatch_get_main_queue()) {
+        // fade out table
+        Animations.start(0.5) {
+            self.alpha = 0
+        }
+        
+        // clear table rows
+        Timing.runAfter(1) {
             self.nVerses = 0
             self.recentVerses = [VerseInfo]()
             self.reloadData()

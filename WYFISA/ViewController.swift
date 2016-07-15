@@ -28,7 +28,9 @@ class ViewController: UIViewController, CameraManagerDelegate {
     @IBOutlet var maskView: UIView!
     @IBOutlet var captureBox: UIImageView!
     
+    
     let stillCamera = CameraManager()
+    var workingText = "Searching"
     let db = DBQuery()
     var session = CaptureSession()
     var captureLock = NSLock()
@@ -36,7 +38,8 @@ class ViewController: UIViewController, CameraManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.checkCameraAccess()
+
         // send camera to live view
         self.filterView.fillMode = GPUImageFillModeType.init(2)
         self.stillCamera.addCameraTarget(self.filterView)
@@ -66,18 +69,18 @@ class ViewController: UIViewController, CameraManagerDelegate {
         if didExpand == true {
             self.stillCamera.pause()
             buttonImage = UIImage(named: "arrow-expand-blue")
-            UIView.animateWithDuration(0.5, animations: {
+            Animations.start(0.5) {
               self.captureButton.alpha = 0
               self.captureBox.alpha = 0
               self.maskView.alpha = 0.8
-            })
+            }
         } else {
             self.stillCamera.resume()
-            UIView.animateWithDuration(0.2, animations: {
+            Animations.start(0.5) {
                 self.captureButton.alpha = 1
                 self.captureBox.alpha = 1
                 self.maskView.alpha = 0
-            })
+            }
         }
         self.expandButton.setImage(buttonImage, forState: .Normal)
 
@@ -90,8 +93,7 @@ class ViewController: UIViewController, CameraManagerDelegate {
             self.verseTable.clear()
             
             // unlock safely after clear operation
-            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
-            dispatch_after(delayTime, dispatch_get_main_queue()) {
+            Timing.runAfter(1){
                 self.captureLock.unlock()
             }
         }
@@ -103,14 +105,21 @@ class ViewController: UIViewController, CameraManagerDelegate {
     }
     
     @IBAction func didPressCaptureButton(sender: AnyObject) {
-
+        
+        
         if self.captureLock.tryLock() {
+            if  self.session.currentId  == 0 {
+                // establish initial focus
+                self.stillCamera.focus(.AutoFocus)
+            }
+
+            self.stillCamera.focus(.Locked)
+
             self.session.active = true
             let sessionId = self.session.currentId
-            stillCamera.focus(.AutoFocus)
 
             // adds row to verse table
-            let defaultVerse = VerseInfo(id: "", name: "Searching", text: "")
+            let defaultVerse = VerseInfo(id: "", name: self.workingText, text: "")
             self.verseTable.appendVerse(defaultVerse)
             self.verseTable.addSection()
            
@@ -134,6 +143,7 @@ class ViewController: UIViewController, CameraManagerDelegate {
         }
         self.session.matches = nil
         self.session.active = false
+        stillCamera.focus(.Locked)
     }
     
     @IBAction func didReleaseCaptureButton(sender: AnyObject) {
@@ -159,6 +169,8 @@ class ViewController: UIViewController, CameraManagerDelegate {
         if let allVerses = TextMatcher.findVersesInText(text) {
             
             // we have detection
+            stillCamera.focus(.Locked)
+
             for var verseInfo in allVerses {
                 if let verse = self.db.lookupVerse(verseInfo.id){
                     verseInfo.text = verse
@@ -186,9 +198,10 @@ class ViewController: UIViewController, CameraManagerDelegate {
                 }
             }
         } else {
-            // adjust focus
+            if stillCamera.focusIsLocked() {
+                stillCamera.focus(.AutoFocus)
+            }
             self.verseTable.updateVersePending(id-1)
-            stillCamera.focus(.AutoFocus)
         }
         
         // reload table on main queue
@@ -201,6 +214,19 @@ class ViewController: UIViewController, CameraManagerDelegate {
     
     override func prefersStatusBarHidden() -> Bool {
         return true
+    }
+    
+    func checkCameraAccess() {
+        
+        if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) !=  AVAuthorizationStatus.Authorized
+        {
+            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { (granted :Bool) -> Void in
+                if granted == false
+                {
+                    self.workingText = "Camera Disabled!"
+                }
+            });
+        }
     }
 }
 

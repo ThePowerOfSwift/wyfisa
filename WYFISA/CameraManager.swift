@@ -9,6 +9,7 @@
 import Foundation
 import GPUImage
 import TesseractOCR
+import AVFoundation
 
 protocol CameraManagerDelegate: class {
     func didProcessFrame(sender: CameraManager, withText text: String, fromSession: UInt64)
@@ -43,8 +44,12 @@ class CameraManager {
             camera.inputCamera.focusMode = mode
             camera.inputCamera.unlockForConfiguration()
         } catch let error {
-            print(error)
+            print("Focus error", error)
         }
+    }
+    
+    func focusIsLocked() -> Bool {
+        return camera.inputCamera.focusMode == .Locked
     }
     
     func zoom(by: CGFloat){
@@ -63,8 +68,11 @@ class CameraManager {
     
     // add filters and targets to camera
     func addCameraTarget(target: GPUImageInput!){
+        
+        let targetWidth = (target as! UIView).frame.size.width
         let guassFilter = GPUImageGaussianSelectiveBlurFilter()
-        guassFilter.excludeCircleRadius = 0.3
+        guassFilter.excludeCircleRadius = targetWidth/2000
+        
         guassFilter.aspectRatio = 1.5
         self.camera.addTarget(guassFilter)
         guassFilter.addTarget(target)

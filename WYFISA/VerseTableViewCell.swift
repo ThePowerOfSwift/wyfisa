@@ -21,9 +21,25 @@ class VerseTableViewCell: UITableViewCell {
     
     func updateWithVerseInfo(verse: VerseInfo, isExpanded: Bool) {
 
-        if verse.id != "" {
-            self.searchIcon.hidden = true
+        if  verse.id.characters.count > 0 {
+            // hiding icon
+            self.searchIcon.alpha = 0
+            self.labelHeader.alpha = 1
+        } else {
+            // still searching - show
+            self.searchIcon.alpha = 0.6
+            
+            // flash searching text
+            Animations.start(1){
+                self.labelHeader.alpha = 0.3
+            }
+            
+            Animations.startAfter(1, forDuration: 1){
+                self.labelHeader.alpha = 1
+            }
+            
         }
+        
         self.labelHeader.text = verse.name
         self.labelText.text = verse.text
         if isExpanded == true {
@@ -38,9 +54,5 @@ class VerseTableViewCell: UITableViewCell {
     
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
-
-    
 }
