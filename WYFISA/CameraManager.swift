@@ -87,8 +87,12 @@ class CameraManager {
     }
     
     func imageFromFrame() -> UIImage? {
-        self.cropFilter.useNextFrameForImageCapture()
-        return cropFilter.imageFromCurrentFramebuffer()
+        do {
+            self.cropFilter.useNextFrameForImageCapture()
+            return try cropFilter.imageFromCurrentFramebuffer()
+        } catch {
+            return nil
+        }
     }
     
     func recognizeFrameFromCamera(fromSession: UInt64) {
