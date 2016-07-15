@@ -33,9 +33,7 @@ class TextMatcher {
             let bookId = String(format: "%02d", Int(Books.patternId(book)))
             let chapterId = String(format: "%03d", Int(chapter)!)
             let verseId = String(format: "%03d", Int(verse)!)
-            let id = "\(bookId)\(chapterId)\(verseId)"
-
-            print(id, matchedText)
+            let id = "\(bookId)\(chapterId)\(verseId)" 
             bookInfo = BookInfo(id: id, name: matchedText, text: "Not Found")
         }
         return bookInfo

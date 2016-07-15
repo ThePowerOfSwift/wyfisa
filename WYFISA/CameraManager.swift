@@ -8,15 +8,18 @@
 
 import Foundation
 import GPUImage
+import TesseractOCR
 
+protocol CameraManagerDelegate: class {
+    func didProcessFrame(sender: CameraManager, withText text: String, fromSession: UInt64)
+}
 
-class CameraManager: NSObject {
+class CameraManager {
     var camera: GPUImageStillCamera
     var cropFilter: GPUImageCropFilter
-    var onAutoFocus: Array<((Void)->Void)> = Array<((Void)->Void)>()
-    var callbackLock: NSLock = NSLock()
-    
-    override init(){
+    weak var delegate:CameraManagerDelegate?
+
+    init(){
         // init a still image camera
         self.camera = GPUImageStillCamera()
         self.camera.outputImageOrientation = .Portrait;
@@ -27,24 +30,17 @@ class CameraManager: NSObject {
         self.camera.addTarget(thresholdFilter)
         self.cropFilter = GPUImageCropFilter(cropRegion: CGRect(x: 0.2, y: 0.2, width: 0.6, height: 0.4))
         thresholdFilter.addTarget(self.cropFilter)
-        
-        super.init()
 
-        // will observe auto focus events
-        if self.camera.inputCamera != nil {
-            self.camera.inputCamera.addObserver(self, forKeyPath: "adjustingFocus", options: .New, context: nil)
-        }
-        
     }
     
-    func focus(){
+    func focus(mode: AVCaptureFocusMode){
         if self.camera.inputCamera == nil {
             return
         }
         // will trigger an autofocus kvo
         do {
             try camera.inputCamera.lockForConfiguration()
-            camera.inputCamera.focusMode = .AutoFocus
+            camera.inputCamera.focusMode = mode
             camera.inputCamera.unlockForConfiguration()
         } catch let error {
             print(error)
@@ -68,14 +64,10 @@ class CameraManager: NSObject {
     // add filters and targets to camera
     func addCameraTarget(target: GPUImageInput!){
         let guassFilter = GPUImageGaussianSelectiveBlurFilter()
-        print(guassFilter)
         guassFilter.excludeCircleRadius = 0.3
-//        guassFilter.excludeCirclePoint = CGPoint(x: <#T##CGFloat#>, y: <#T##CGFloat#>)
         guassFilter.aspectRatio = 1.5
         self.camera.addTarget(guassFilter)
         guassFilter.addTarget(target)
-        
-        //self.camera.addTarget(target)
     }
     
     func addDebugTarget(target: GPUImageInput!){
@@ -99,30 +91,26 @@ class CameraManager: NSObject {
         return cropFilter.imageFromCurrentFramebuffer()
     }
     
-    func addAutoFocusCallback(cbFunc: ((Void)->Void)) {
-        self.callbackLock.lock()
-        self.onAutoFocus.append(cbFunc)
-        self.callbackLock.unlock()
-    }
-
-    // can call autofocus method
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?,
-                                         context ontext: UnsafeMutablePointer<Void>) {
+    func recognizeFrameFromCamera(fromSession: UInt64) {
         
-        // check if focus event changed to done
-        if let path = keyPath {
-            if path == "adjustingFocus" {
-                if let changeTo = change!["new"]  {
-                    if (changeTo as! Int) == 0 {
-                        self.callbackLock.lock()
-                        if self.onAutoFocus.isEmpty == false {
-                            let cbFunc = self.onAutoFocus.removeFirst()
-                            cbFunc()
-                        }
-                        self.callbackLock.unlock()
-                    }
-                }
+        if self.camera.inputCamera.adjustingFocus == true {
+            // is autofocusing
+            return
+        }
+        
+        // grap frame from campera
+        if let image = self.imageFromFrame(){
+            
+            // do image recognition
+            let tesseract:G8Tesseract = G8Tesseract(language:"eng");
+            tesseract.image = image
+            tesseract.maximumRecognitionTime = 3.0
+            if tesseract.recognize() == true {
+                
+                // call delegate
+                self.delegate?.didProcessFrame(self, withText: tesseract.recognizedText, fromSession: fromSession)
             }
         }
     }
+
 }

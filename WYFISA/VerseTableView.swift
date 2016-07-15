@@ -42,18 +42,14 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         let idxSet = NSIndexSet(index: 0)
         UIView.animateWithDuration(0.2, animations: {
             self.deleteSections(idxSet, withRowAnimation: .Top)
-            print("RemoveIdx", self.recentVerses.count-1)
             self.recentVerses.removeAtIndex(self.recentVerses.count-1)
-        })
-        
-        // whenever a remove happens and other elements are
+        })        
     }
     
-    func addSection() -> Int{
+    func addSection() {
         self.nVerses = self.nVerses + 1
         let idxSet = NSIndexSet(index: 0)
         self.insertSections(idxSet, withRowAnimation: .Fade)
-        return self.nVerses
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

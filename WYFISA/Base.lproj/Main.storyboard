@@ -139,7 +139,9 @@
                                 <rect key="frame" x="248" y="476" width="104" height="104"/>
                                 <state key="normal" image="Oval 1"/>
                                 <connections>
-                                    <action selector="addRowForVerse:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YhH-ZD-BcG"/>
+                                    <action selector="didPressCaptureButton:" destination="BYZ-38-t0r" eventType="touchDown" id="Fg8-3j-Nvk"/>
+                                    <action selector="didReleaseCaptureButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="KxD-ki-XNv"/>
+                                    <action selector="didReleaseCaptureButtonOutside:" destination="BYZ-38-t0r" eventType="touchUpOutside" id="jkH-oI-SEU"/>
                                 </connections>
                             </button>
                         </subviews>

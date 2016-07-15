@@ -9,7 +9,7 @@
 import UIKit
 import GPUImage
 
-class ViewController: UIViewController,CaptureHandlerDelegate {
+class ViewController: UIViewController, CameraManagerDelegate {
 
     @IBOutlet var debugWindow: GPUImageView!
     @IBOutlet var verseTable: VerseTableView!
@@ -22,7 +22,8 @@ class ViewController: UIViewController,CaptureHandlerDelegate {
     let stillCamera = CameraManager()
     let db = DBQuery()
     var nVerses = 0
-    var captureLock: NSLock = NSLock()
+    var captureSessionFoundMatches: Bool = false
+    var captureSessionId: UInt64 = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,32 +35,18 @@ class ViewController: UIViewController,CaptureHandlerDelegate {
         
         // camera config
         stillCamera.zoom(1.5)
-        stillCamera.focus()
+        stillCamera.focus(.AutoFocus)
         
         // start capture
         stillCamera.capture()
+        stillCamera.delegate = self
 
     }
 
     @IBAction func handleScreenTap(sender: AnyObject) {
-        stillCamera.focus()
+        stillCamera.focus(.AutoFocus)
     }
     
-    @IBAction func addRowForVerse(sender: AnyObject) {
-        self.captureLock.lock()
-
-        // adds row to verse table
-        let defaultVerse = BookInfo(id: "", name: "...", text: "loading")
-        self.verseTable.appendVerse(defaultVerse)
-        let numSections = self.verseTable.addSection()
-
-        // start a capture event
-        let captureEvent = CaptureHandler(id: numSections, camera: self.stillCamera)
-        captureEvent.delegate = self
-        captureEvent.recognizeFrameFromCamera()
-        self.captureLock.unlock()
-
-    }
     
     @IBAction func didPressExpandButton(sender: AnyObject) {
         // expand|shrink table view
@@ -89,30 +76,81 @@ class ViewController: UIViewController,CaptureHandlerDelegate {
     
     @IBAction func didPressRefreshButton(sender: AnyObject) {
         self.verseTable.clear()
+        self.captureSessionId = 0
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    @IBAction func didPressCaptureButton(sender: AnyObject) {
+        let sessionId = self.captureSessionId
 
-    // when frame has been processed we need to write it back to the cell
-    func didProcessFrame(sender: CaptureHandler, withText text: String, forId id: Int) {
-        self.captureLock.lock()
+        // adds row to verse table
+        let defaultVerse = BookInfo(id: "", name: "...", text: "scanning")
+        self.verseTable.appendVerse(defaultVerse)
+        self.verseTable.addSection()
         
-        print(text)
+       
+        // attempt in Locked Mode
+        stillCamera.focus(.ContinuousAutoFocus)
         
-        if var bookInfo = TextMatcher.findVersesInText(text) {
-            if let verse = db.lookupVerse(bookInfo.id){
-                bookInfo.text = verse
-                self.verseTable.updateVerseAtIndex(id-1, withBookInfo: bookInfo)
+        // capture frames
+        let asyncQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+        dispatch_async(asyncQueue) {
+            while self.captureSessionId == sessionId {
+                self.stillCamera.recognizeFrameFromCamera(sessionId)
             }
         }
-        self.verseTable.reloadData()
-        self.captureLock.unlock()
+
+    }
+
+    func handleCaptureEnd(){
+        stillCamera.focus(.Locked)
+        self.captureSessionId += 1
+        
+        if self.captureSessionFoundMatches == false {
+            self.verseTable.removeFailedVerse()
+        }
+        self.captureSessionFoundMatches = false
+    }
+    
+    @IBAction func didReleaseCaptureButton(sender: AnyObject) {
+        self.handleCaptureEnd()
+    }
+    @IBAction func didReleaseCaptureButtonOutside(sender: AnyObject) {
+        self.handleCaptureEnd()
+
+    }
+    
+    
+    
+    // when frame has been processed we need to write it back to the cell
+    func didProcessFrame(sender: CameraManager, withText text: String, fromSession: UInt64) {
+        
+        if fromSession != self.captureSessionId {
+            return // Ignore: from old capture session
+        }
+        
+        let id = self.verseTable.numberOfSections
+        
+        if var bookInfo = TextMatcher.findVersesInText(text) {
+            if let verse = self.db.lookupVerse(bookInfo.id){
+                self.captureSessionFoundMatches = true
+                bookInfo.text = verse
+                self.verseTable.updateVerseAtIndex(id-1, withBookInfo: bookInfo)
+                self.verseTable.reloadData()
+            }
+        }
+        
+        // reload table on main queue
+        dispatch_async(dispatch_get_main_queue()) {
+            self.verseTable.reloadData()
+        }
     }
     
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
 }
+
 

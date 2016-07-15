@@ -21,7 +21,6 @@
 		C39090D81D2CA67B000DFD15 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C39090D71D2CA67B000DFD15 /* CoreImage.framework */; };
 		C3D506561D37664D00A04C83 /* arrow-expand.png in Resources */ = {isa = PBXBuildFile; fileRef = C3D506551D37664D00A04C83 /* arrow-expand.png */; };
 		C3F53B711D36219400E2F80D /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F53B701D36219400E2F80D /* CameraManager.swift */; };
-		C3F53B731D36221100E2F80D /* CaptureHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F53B721D36221100E2F80D /* CaptureHandler.swift */; };
 		C3F53B761D36945900E2F80D /* VerseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F53B741D36945900E2F80D /* VerseTableViewCell.swift */; };
 		C3F53B771D36945900E2F80D /* VerseTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3F53B751D36945900E2F80D /* VerseTableViewCell.xib */; };
 		C3F53B791D36973D00E2F80D /* VerseTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F53B781D36973D00E2F80D /* VerseTableView.swift */; };
@@ -73,7 +72,6 @@
 		C39090D71D2CA67B000DFD15 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		C3D506551D37664D00A04C83 /* arrow-expand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrow-expand.png"; path = "../../../Downloads/ionicons-2.0.1 3/png/512/arrow-expand.png"; sourceTree = "<group>"; };
 		C3F53B701D36219400E2F80D /* CameraManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
-		C3F53B721D36221100E2F80D /* CaptureHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureHandler.swift; sourceTree = "<group>"; };
 		C3F53B741D36945900E2F80D /* VerseTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseTableViewCell.swift; sourceTree = "<group>"; };
 		C3F53B751D36945900E2F80D /* VerseTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VerseTableViewCell.xib; sourceTree = "<group>"; };
 		C3F53B781D36973D00E2F80D /* VerseTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseTableView.swift; sourceTree = "<group>"; };
@@ -161,7 +159,6 @@
 				C39090781D2C9AF8000DFD15 /* ViewController.swift */,
 				C3F53B781D36973D00E2F80D /* VerseTableView.swift */,
 				C3F53B741D36945900E2F80D /* VerseTableViewCell.swift */,
-				C3F53B721D36221100E2F80D /* CaptureHandler.swift */,
 				C3F53B701D36219400E2F80D /* CameraManager.swift */,
 				C3F53B8F1D372C0200E2F80D /* TextMatcher.swift */,
 				C3F53B951D37499700E2F80D /* DBQuery.swift */,
@@ -477,7 +474,6 @@
 			files = (
 				C39090791D2C9AF8000DFD15 /* ViewController.swift in Sources */,
 				C3F53B761D36945900E2F80D /* VerseTableViewCell.swift in Sources */,
-				C3F53B731D36221100E2F80D /* CaptureHandler.swift in Sources */,
 				C3F53B901D372C0200E2F80D /* TextMatcher.swift in Sources */,
 				C3F53B961D37499700E2F80D /* DBQuery.swift in Sources */,
 				C3F53B711D36219400E2F80D /* CameraManager.swift in Sources */,
