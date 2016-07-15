@@ -9,6 +9,15 @@
 import UIKit
 import GPUImage
 
+struct CaptureSession {
+    var active: Bool = false
+    var currentId: UInt64 = 0
+    var matches: [String]?
+
+    func hasMatches() -> Bool {
+        return self.matches != nil
+    }
+}
 class ViewController: UIViewController, CameraManagerDelegate {
 
     @IBOutlet var debugWindow: GPUImageView!
@@ -21,9 +30,9 @@ class ViewController: UIViewController, CameraManagerDelegate {
     
     let stillCamera = CameraManager()
     let db = DBQuery()
-    var nVerses = 0
-    var captureSessionFoundMatches: Bool = false
-    var captureSessionId: UInt64 = 0
+    var session = CaptureSession()
+    var captureLock = NSLock()
+    var updateLock = NSLock()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,43 +84,56 @@ class ViewController: UIViewController, CameraManagerDelegate {
     }
     
     @IBAction func didPressRefreshButton(sender: AnyObject) {
-        self.verseTable.clear()
-        self.captureSessionId = 0
+        if captureLock.tryLock(){
+            self.session.currentId = 0
+
+            self.verseTable.clear()
+            
+            // unlock safely after clear operation
+            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
+            dispatch_after(delayTime, dispatch_get_main_queue()) {
+                self.captureLock.unlock()
+            }
+        }
+
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
     @IBAction func didPressCaptureButton(sender: AnyObject) {
-        let sessionId = self.captureSessionId
 
-        // adds row to verse table
-        let defaultVerse = VerseInfo(id: "", name: "...", text: "scanning")
-        self.verseTable.appendVerse(defaultVerse)
-        self.verseTable.addSection()
-        
-       
-        // attempt in Locked Mode
-        stillCamera.focus(.ContinuousAutoFocus)
-        
-        // capture frames
-        let asyncQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-        dispatch_async(asyncQueue) {
-            while self.captureSessionId == sessionId {
-                self.stillCamera.recognizeFrameFromCamera(sessionId)
+        if self.captureLock.tryLock() {
+            self.session.active = true
+            let sessionId = self.session.currentId
+            stillCamera.focus(.AutoFocus)
+
+            // adds row to verse table
+            let defaultVerse = VerseInfo(id: "", name: "...", text: "scanning")
+            self.verseTable.appendVerse(defaultVerse)
+            self.verseTable.addSection()
+           
+            // capture frames
+            let asyncQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+            dispatch_async(asyncQueue) {
+                while self.session.currentId == sessionId {
+                    self.stillCamera.recognizeFrameFromCamera(sessionId)
+                }
             }
+            self.captureLock.unlock()
         }
-
+        
     }
 
     func handleCaptureEnd(){
-        stillCamera.focus(.Locked)
-        self.captureSessionId += 1
+        self.session.currentId += 1
         
-        if self.captureSessionFoundMatches == false {
+        if self.session.hasMatches() == false && self.session.active {
             self.verseTable.removeFailedVerse()
         }
-        self.captureSessionFoundMatches = false
+        self.session.matches = nil
+        self.session.active = false
     }
     
     @IBAction func didReleaseCaptureButton(sender: AnyObject) {
@@ -127,25 +149,53 @@ class ViewController: UIViewController, CameraManagerDelegate {
     // when frame has been processed we need to write it back to the cell
     func didProcessFrame(sender: CameraManager, withText text: String, fromSession: UInt64) {
         
-        if fromSession != self.captureSessionId {
+        if fromSession != self.session.currentId {
             return // Ignore: from old capture session
         }
         
+        updateLock.lock()
         let id = self.verseTable.numberOfSections
         
-        if var verseInfo = TextMatcher.findVersesInText(text) {
-            if let verse = self.db.lookupVerse(verseInfo.id){
-                self.captureSessionFoundMatches = true
-                verseInfo.text = verse
-                self.verseTable.updateVerseAtIndex(id-1, withVerseInfo: verseInfo)
-                self.verseTable.reloadData()
+        if let allVerses = TextMatcher.findVersesInText(text) {
+            
+            // we have detection
+            for var verseInfo in allVerses {
+                if let verse = self.db.lookupVerse(verseInfo.id){
+                    verseInfo.text = verse
+                    
+                    // automatically add first match
+                    if self.session.hasMatches() == false {
+                        self.verseTable.updateVerseAtIndex(id-1, withVerseInfo: verseInfo)
+                        self.session.matches = [String]()
+                    } else {
+                        // make sure not repeat match
+                        if self.session.matches?.indexOf(verseInfo.id) == nil {
+                            
+                            // new match
+                            self.verseTable.appendVerse(verseInfo)
+                            dispatch_async(dispatch_get_main_queue()) {
+                                self.verseTable.addSection()
+                            }
+                        } else {
+                            updateLock.unlock()
+                            return
+                        }
+                    }
+                    self.session.matches!.append(verseInfo.id)
+                    self.verseTable.reloadData()
+                }
             }
+        } else {
+            // adjust focus
+            stillCamera.focus(.AutoFocus)
         }
         
         // reload table on main queue
         dispatch_async(dispatch_get_main_queue()) {
             self.verseTable.reloadData()
         }
+        updateLock.unlock()
+
     }
     
     override func prefersStatusBarHidden() -> Bool {

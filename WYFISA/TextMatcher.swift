@@ -18,8 +18,8 @@ struct VerseInfo {
 
 class TextMatcher {
     
-    class func findVersesInText(text: String) -> VerseInfo? {
-        var verseInfo: VerseInfo?
+    class func findVersesInText(text: String) -> [VerseInfo]? {
+        var verseInfos: [VerseInfo]?
         let bookStr = Books.bookPatterns()
         let chapters: Regex = Regex("(\(bookStr))\\w*?.? (\\d{1,3}):(\\d{1,3})",  options: [.IgnoreCase])
         
@@ -34,10 +34,13 @@ class TextMatcher {
             let chapterId = String(format: "%03d", Int(chapter)!)
             let verseId = String(format: "%03d", Int(verse)!)
             let id = "\(bookId)\(chapterId)\(verseId)" 
-            verseInfo = VerseInfo(id: id, name: matchedText, text: "Not Found")
-            print(verseInfo)
+            let info = VerseInfo(id: id, name: matchedText, text: "Not Found")
+            if verseInfos == nil {
+                verseInfos = [VerseInfo]()
+            }
+            verseInfos!.append(info)
         }
-        return verseInfo
+        return verseInfos
     }
 }
 
