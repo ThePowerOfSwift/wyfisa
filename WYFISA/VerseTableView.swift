@@ -12,7 +12,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     var nVerses: Int = 0
     var nVersesOffset: Int = 0
-    var recentVerses: [BookInfo] = [BookInfo]()
+    var recentVerses: [VerseInfo] = [VerseInfo]()
     var isExpanded: Bool = false
     var nLock: NSLock = NSLock()
     
@@ -27,12 +27,12 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     func addToSectionBy(i: Int){
         self.nVerses = self.nVerses + i
     }
-    func appendVerse(book: BookInfo){
-        self.recentVerses.append(book)
+    func appendVerse(verse: VerseInfo){
+        self.recentVerses.append(verse)
     }
     
-    func updateVerseAtIndex(id: Int, withBookInfo book: BookInfo){
-        self.recentVerses[id] = book
+    func updateVerseAtIndex(id: Int, withVerseInfo verse: VerseInfo){
+        self.recentVerses[id] = verse
     }
     
     // when a render fails the section id is 0
@@ -71,7 +71,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         
         if let verseCell = cell {
             let index = self.numberOfSectionsInTableView(tableView) - indexPath.section - 1
-            verseCell.updateWithBookInfo(self.recentVerses[index], isExpanded: self.isExpanded)
+            verseCell.updateWithVerseInfo(self.recentVerses[index], isExpanded: self.isExpanded)
             return verseCell
         } else {
             return VerseTableViewCell(style: .Default, reuseIdentifier: nil)
@@ -135,7 +135,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
         dispatch_after(delayTime, dispatch_get_main_queue()) {
             self.nVerses = 0
-            self.recentVerses = [BookInfo]()
+            self.recentVerses = [VerseInfo]()
             self.reloadData()
             self.alpha = 1
         }

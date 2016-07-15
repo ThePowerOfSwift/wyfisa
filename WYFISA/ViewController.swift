@@ -86,7 +86,7 @@ class ViewController: UIViewController, CameraManagerDelegate {
         let sessionId = self.captureSessionId
 
         // adds row to verse table
-        let defaultVerse = BookInfo(id: "", name: "...", text: "scanning")
+        let defaultVerse = VerseInfo(id: "", name: "...", text: "scanning")
         self.verseTable.appendVerse(defaultVerse)
         self.verseTable.addSection()
         
@@ -133,11 +133,11 @@ class ViewController: UIViewController, CameraManagerDelegate {
         
         let id = self.verseTable.numberOfSections
         
-        if var bookInfo = TextMatcher.findVersesInText(text) {
-            if let verse = self.db.lookupVerse(bookInfo.id){
+        if var verseInfo = TextMatcher.findVersesInText(text) {
+            if let verse = self.db.lookupVerse(verseInfo.id){
                 self.captureSessionFoundMatches = true
-                bookInfo.text = verse
-                self.verseTable.updateVerseAtIndex(id-1, withBookInfo: bookInfo)
+                verseInfo.text = verse
+                self.verseTable.updateVerseAtIndex(id-1, withVerseInfo: verseInfo)
                 self.verseTable.reloadData()
             }
         }

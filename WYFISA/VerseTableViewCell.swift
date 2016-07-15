@@ -18,9 +18,9 @@ class VerseTableViewCell: UITableViewCell {
         // Initialization code
     }
     
-    func updateWithBookInfo(book: BookInfo, isExpanded: Bool) {
-        self.labelHeader.text = book.name
-        self.labelText.text = book.text
+    func updateWithVerseInfo(verse: VerseInfo, isExpanded: Bool) {
+        self.labelHeader.text = verse.name
+        self.labelText.text = verse.text
         if isExpanded == true {
             self.labelText.lineBreakMode = .ByWordWrapping
             self.labelText.numberOfLines = 0

@@ -10,7 +10,7 @@ import Foundation
 import Regex
 
 
-struct BookInfo {
+struct VerseInfo {
     let id: String
     let name: String
     var text: String?
@@ -18,8 +18,8 @@ struct BookInfo {
 
 class TextMatcher {
     
-    class func findVersesInText(text: String) -> BookInfo? {
-        var bookInfo: BookInfo?
+    class func findVersesInText(text: String) -> VerseInfo? {
+        var verseInfo: VerseInfo?
         let bookStr = Books.bookPatterns()
         let chapters: Regex = Regex("(\(bookStr))\\w*?.? (\\d{1,3}):(\\d{1,3})",  options: [.IgnoreCase])
         
@@ -34,9 +34,10 @@ class TextMatcher {
             let chapterId = String(format: "%03d", Int(chapter)!)
             let verseId = String(format: "%03d", Int(verse)!)
             let id = "\(bookId)\(chapterId)\(verseId)" 
-            bookInfo = BookInfo(id: id, name: matchedText, text: "Not Found")
+            verseInfo = VerseInfo(id: id, name: matchedText, text: "Not Found")
+            print(verseInfo)
         }
-        return bookInfo
+        return verseInfo
     }
 }
 
