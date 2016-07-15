@@ -31,6 +31,10 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         self.recentVerses.append(verse)
     }
     
+    func updateVersePending(id: Int){
+        self.recentVerses[id].name = self.recentVerses[id].name+"."
+    }
+    
     func updateVerseAtIndex(id: Int, withVerseInfo verse: VerseInfo){
         self.recentVerses[id] = verse
     }

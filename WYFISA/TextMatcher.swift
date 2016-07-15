@@ -12,7 +12,7 @@ import Regex
 
 struct VerseInfo {
     let id: String
-    let name: String
+    var name: String
     var text: String?
 }
 

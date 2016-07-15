@@ -110,7 +110,7 @@ class ViewController: UIViewController, CameraManagerDelegate {
             stillCamera.focus(.AutoFocus)
 
             // adds row to verse table
-            let defaultVerse = VerseInfo(id: "", name: "...", text: "scanning")
+            let defaultVerse = VerseInfo(id: "", name: "Searching", text: "")
             self.verseTable.appendVerse(defaultVerse)
             self.verseTable.addSection()
            
@@ -187,6 +187,7 @@ class ViewController: UIViewController, CameraManagerDelegate {
             }
         } else {
             // adjust focus
+            self.verseTable.updateVersePending(id-1)
             stillCamera.focus(.AutoFocus)
         }
         

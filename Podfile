@@ -10,6 +10,7 @@ target 'WYFISA' do
   pod 'GPUImage', '0.1.7'
   pod "STRegex", "~> 0.3.1"
   pod 'SQLite.swift', '~> 0.10.1'
+  pod 'Spring', :git => 'https://github.com/MengTo/Spring.git', :branch => 'swift2'
 
   target 'WYFISATests' do
     inherit! :search_paths

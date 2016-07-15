@@ -12,6 +12,7 @@ class VerseTableViewCell: UITableViewCell {
 
     @IBOutlet var labelHeader: UILabel!
     @IBOutlet var labelText: UILabel!
+    @IBOutlet var searchIcon: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -19,6 +20,10 @@ class VerseTableViewCell: UITableViewCell {
     }
     
     func updateWithVerseInfo(verse: VerseInfo, isExpanded: Bool) {
+
+        if verse.id != "" {
+            self.searchIcon.hidden = true
+        }
         self.labelHeader.text = verse.name
         self.labelText.text = verse.text
         if isExpanded == true {
