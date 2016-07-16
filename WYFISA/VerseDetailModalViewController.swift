@@ -111,7 +111,6 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
                 let refInfo = refs[indexPath.section]
                 verseCell.updateWithVerseInfo(refInfo, isExpanded: true)
             }
-            verseCell.allowAccessoryView = false
             return verseCell
         } else {
             return VerseTableViewCell(style: .Default, reuseIdentifier: nil)

@@ -65,6 +65,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         return 1
     }
     
+    // MARK: dataSource
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         
@@ -82,7 +83,6 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
             verseCell.delegate = self.cellDelegate
             let index = self.numberOfSectionsInTableView(tableView) - indexPath.section - 1
             verseCell.updateWithVerseInfo(self.recentVerses[index], isExpanded: self.isExpanded)
-            verseCell.allowAccessoryView = true
             return verseCell
         } else {
             return VerseTableViewCell(style: .Default, reuseIdentifier: nil)
@@ -95,7 +95,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
             // dynamic text sizing
             let index = self.numberOfSectionsInTableView(tableView) - indexPath.section - 1
             if let text = self.recentVerses[index].text {
-                let height = text.heightWithConstrainedWidth(self.frame.size.width*0.80,
+                let height = text.heightWithConstrainedWidth(self.frame.size.width,
                                                              font: UIFont.systemFontOfSize(16))
                 if height  > 30 { // bigger than a loading text
                     return height + 50
@@ -114,10 +114,6 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         view.tintColor = UIColor.clearColor()
-    }
-
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        // code
     }
     
     func expandView(toSize: CGSize) -> Bool {

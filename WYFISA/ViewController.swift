@@ -31,7 +31,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     
     let stillCamera = CameraManager()
     var workingText = "Searching"
-    let db = DBQuery()
+    let db = DBQuery.sharedInstance
     var session = CaptureSession()
     var captureLock = NSLock()
     var updateLock = NSLock()
@@ -56,6 +56,15 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         stillCamera.delegate = self
         
 
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        
+        // if view returned in capture mode
+        // resume camera
+        if self.verseTable.isExpanded == false {
+            stillCamera.resume()
+        }
     }
 
     @IBAction func handleScreenTap(sender: AnyObject) {
@@ -219,6 +228,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     
     // MARK: - Table cell delegate
     func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo){
+        
         performSegueWithIdentifier("VerseDetail", sender: (verse as! AnyObject))
     }
 
@@ -226,6 +236,13 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation
      override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+         // pause camera
+        dispatch_async(dispatch_get_main_queue()) {
+            self.stillCamera.pause()
+        }
+
+        
          // Get the new view controller using segue.destinationViewController.
          // Pass the selected object to the new view controller.
         if segue.identifier == "VerseDetail" {
@@ -235,8 +252,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         }
      }
  
-
-    
 
     override func prefersStatusBarHidden() -> Bool {
         return true

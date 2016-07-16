@@ -25,6 +25,10 @@ struct CrossRefColumns {
 }
 
 class DBQuery {
+    
+    // is singleton
+    static let sharedInstance = DBQuery()
+    
     let conn: Connection
     let bibleTable = Table("t_web")
     let bibleCol = BibleTableColumns()

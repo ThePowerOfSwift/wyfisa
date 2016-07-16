@@ -74,6 +74,7 @@
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <color key="backgroundColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
+                                                <gestureRecognizers/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                         <real key="value" value="0.80000000000000004"/>
@@ -131,9 +132,6 @@
                                         <exclude reference="yKv-fP-VGS"/>
                                     </mask>
                                 </variation>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="LOG-v3-AS5" appends="YES" id="ZLH-Ma-DqO"/>
-                                </connections>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Frh-0b-u19">
                                 <rect key="frame" x="248" y="476" width="104" height="104"/>
@@ -170,11 +168,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer cancelsTouchesInView="NO" id="LOG-v3-AS5">
-                    <connections>
-                        <action selector="handleScreenTap:" destination="BYZ-38-t0r" id="t3a-sy-O1l"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="299" y="284"/>
         </scene>

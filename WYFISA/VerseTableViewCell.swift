@@ -21,8 +21,7 @@ class VerseTableViewCell: UITableViewCell {
 
     weak var delegate:VerseTableViewCellDelegate?
     var verseInfo: VerseInfo?
-    let db = DBQuery()
-    var allowAccessoryView = false
+    let db = DBQuery.sharedInstance
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -58,32 +57,15 @@ class VerseTableViewCell: UITableViewCell {
         if isExpanded == true {
             self.labelText.lineBreakMode = .ByWordWrapping
             self.labelText.numberOfLines = 0
-            if self.allowAccessoryView {
-                self.accessoryView = self.makeAccessoryView()
-            }
+
         } else {
             self.labelText.lineBreakMode = .ByTruncatingTail
             self.labelText.numberOfLines = 1
         }
     }
     
-    // MARK: - accessory view
-
-    func makeAccessoryView() -> UIView {
-        let image: UIImage = UIImage(named: "more")!
-
-        let button: UIButton = UIButton(type: .Custom)
-        let frame: CGRect = CGRectMake(0.0, 0.0, image.size.width, self.frame.size.height)
-        button.frame = frame
-        button.setImage(image, forState: .Normal)
-        button.contentMode = .ScaleAspectFit
-        
-        button.addTarget(self, action: #selector(VerseTableViewCell.didTapMoreButton(_:event:)), forControlEvents: .TouchUpInside)
-
-        return button
-    }
-    
-    func didTapMoreButton(sender: AnyObject, event: AnyObject){
+    // MARK: - delegate
+    @IBAction func didTapCellView(sender: UIButton) {
         // append to cell
         if var verse = verseInfo {
             let chapter = db.chapterForVerse(verse.id)
