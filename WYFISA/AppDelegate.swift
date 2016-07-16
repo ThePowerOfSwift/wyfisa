@@ -3,7 +3,7 @@
 //  WYFISA
 //
 //  Created by Tommie McAfee on 7/5/16.
-//  Copyright © 2016 RISE & RUN LLC. All rights reserved.
+//  Copyright © 2016 RISE & RUN LLC. All rights reserved.3
 //
 
 import UIKit

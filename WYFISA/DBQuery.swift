@@ -84,9 +84,7 @@ class DBQuery {
         
         do {
             for row in try conn.prepare(query) {
-                
-                print(row.get(crossRefCol.rank))
-                
+                                
                 // query start to end verse for reference
                 let startId = String(row.get(crossRefCol.start_verse))
                 var endId = String(row.get(crossRefCol.end_verse))

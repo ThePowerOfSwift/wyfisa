@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		03D9939342D1214AF88170B2 /* Pods_WYFISAUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1EF753F08E13D92347CDF4F /* Pods_WYFISAUITests.framework */; };
 		98D7016DCF5935DB2A5AD85C /* Pods_WYFISATests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231106650F4EB642E443C0B1 /* Pods_WYFISATests.framework */; };
-		C316B6A81D39867100E272A3 /* splash-text.png in Resources */ = {isa = PBXBuildFile; fileRef = C316B6A71D39867100E272A3 /* splash-text.png */; };
 		C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */; };
 		C316B6B61D3A35DE00E272A3 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */; };
 		C39090771D2C9AF8000DFD15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39090761D2C9AF8000DFD15 /* AppDelegate.swift */; };
@@ -21,7 +20,6 @@
 		C39090D01D2C9C88000DFD15 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = C39090CF1D2C9C88000DFD15 /* tessdata */; };
 		C39090D61D2CA66D000DFD15 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C39090D51D2CA66D000DFD15 /* libstdc++.tbd */; };
 		C39090D81D2CA67B000DFD15 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C39090D71D2CA67B000DFD15 /* CoreImage.framework */; };
-		C3D506561D37664D00A04C83 /* arrow-expand.png in Resources */ = {isa = PBXBuildFile; fileRef = C3D506551D37664D00A04C83 /* arrow-expand.png */; };
 		C3D506581D38D56200A04C83 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D506571D38D56200A04C83 /* AVFoundation.framework */; };
 		C3D5065A1D3932FB00A04C83 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D506591D3932FB00A04C83 /* Animations.swift */; };
 		C3F53B711D36219400E2F80D /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F53B701D36219400E2F80D /* CameraManager.swift */; };
@@ -57,7 +55,6 @@
 		3D9BF9E9813626DC314D056D /* Pods-WYFISAUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISAUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISAUITests/Pods-WYFISAUITests.release.xcconfig"; sourceTree = "<group>"; };
 		9A9540C1BF0C453DF155597D /* Pods-WYFISA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISA.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISA/Pods-WYFISA.debug.xcconfig"; sourceTree = "<group>"; };
 		C036CFC08D857FBD0986B028 /* Pods-WYFISATests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISATests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISATests/Pods-WYFISATests.debug.xcconfig"; sourceTree = "<group>"; };
-		C316B6A71D39867100E272A3 /* splash-text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "splash-text.png"; sourceTree = "<group>"; };
 		C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseDetailModalViewController.swift; sourceTree = "<group>"; };
 		C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 		C39090731D2C9AF7000DFD15 /* WYFISA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WYFISA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,7 +73,6 @@
 		C39090D21D2C9DE7000DFD15 /* WYFISA-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WYFISA-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		C39090D51D2CA66D000DFD15 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		C39090D71D2CA67B000DFD15 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
-		C3D506551D37664D00A04C83 /* arrow-expand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrow-expand.png"; path = "../../../Downloads/ionicons-2.0.1 3/png/512/arrow-expand.png"; sourceTree = "<group>"; };
 		C3D506571D38D56200A04C83 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C3D506591D3932FB00A04C83 /* Animations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
 		C3F53B701D36219400E2F80D /* CameraManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
@@ -178,10 +174,8 @@
 				C3F53B751D36945900E2F80D /* VerseTableViewCell.xib */,
 				C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */,
 				C390907D1D2C9AF8000DFD15 /* Assets.xcassets */,
-				C316B6A71D39867100E272A3 /* splash-text.png */,
 				C39090821D2C9AF8000DFD15 /* Info.plist */,
 				C39090D21D2C9DE7000DFD15 /* WYFISA-Bridging-Header.h */,
-				C3D506551D37664D00A04C83 /* arrow-expand.png */,
 				C3F53B911D3741C800E2F80D /* bible-sqlite.db */,
 				C39090CF1D2C9C88000DFD15 /* tessdata */,
 			);
@@ -336,9 +330,7 @@
 				C390907E1D2C9AF8000DFD15 /* Assets.xcassets in Resources */,
 				C3F53B771D36945900E2F80D /* VerseTableViewCell.xib in Resources */,
 				C390907C1D2C9AF8000DFD15 /* Main.storyboard in Resources */,
-				C3D506561D37664D00A04C83 /* arrow-expand.png in Resources */,
 				C3F53B921D3741C800E2F80D /* bible-sqlite.db in Resources */,
-				C316B6A81D39867100E272A3 /* splash-text.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
