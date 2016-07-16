@@ -9,11 +9,13 @@
 /* Begin PBXBuildFile section */
 		03D9939342D1214AF88170B2 /* Pods_WYFISAUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1EF753F08E13D92347CDF4F /* Pods_WYFISAUITests.framework */; };
 		98D7016DCF5935DB2A5AD85C /* Pods_WYFISATests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231106650F4EB642E443C0B1 /* Pods_WYFISATests.framework */; };
+		C316B6A81D39867100E272A3 /* splash-text.png in Resources */ = {isa = PBXBuildFile; fileRef = C316B6A71D39867100E272A3 /* splash-text.png */; };
+		C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */; };
+		C316B6B61D3A35DE00E272A3 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */; };
 		C39090771D2C9AF8000DFD15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39090761D2C9AF8000DFD15 /* AppDelegate.swift */; };
 		C39090791D2C9AF8000DFD15 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39090781D2C9AF8000DFD15 /* ViewController.swift */; };
 		C390907C1D2C9AF8000DFD15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C390907A1D2C9AF8000DFD15 /* Main.storyboard */; };
 		C390907E1D2C9AF8000DFD15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C390907D1D2C9AF8000DFD15 /* Assets.xcassets */; };
-		C39090811D2C9AF8000DFD15 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C390907F1D2C9AF8000DFD15 /* LaunchScreen.storyboard */; };
 		C390908C1D2C9AF8000DFD15 /* WYFISATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C390908B1D2C9AF8000DFD15 /* WYFISATests.swift */; };
 		C39090971D2C9AF8000DFD15 /* WYFISAUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39090961D2C9AF8000DFD15 /* WYFISAUITests.swift */; };
 		C39090D01D2C9C88000DFD15 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = C39090CF1D2C9C88000DFD15 /* tessdata */; };
@@ -55,12 +57,14 @@
 		3D9BF9E9813626DC314D056D /* Pods-WYFISAUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISAUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISAUITests/Pods-WYFISAUITests.release.xcconfig"; sourceTree = "<group>"; };
 		9A9540C1BF0C453DF155597D /* Pods-WYFISA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISA.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISA/Pods-WYFISA.debug.xcconfig"; sourceTree = "<group>"; };
 		C036CFC08D857FBD0986B028 /* Pods-WYFISATests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISATests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISATests/Pods-WYFISATests.debug.xcconfig"; sourceTree = "<group>"; };
+		C316B6A71D39867100E272A3 /* splash-text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "splash-text.png"; sourceTree = "<group>"; };
+		C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseDetailModalViewController.swift; sourceTree = "<group>"; };
+		C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 		C39090731D2C9AF7000DFD15 /* WYFISA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WYFISA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C39090761D2C9AF8000DFD15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C39090781D2C9AF8000DFD15 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C390907B1D2C9AF8000DFD15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C390907D1D2C9AF8000DFD15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		C39090801D2C9AF8000DFD15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C39090821D2C9AF8000DFD15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C39090871D2C9AF8000DFD15 /* WYFISATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WYFISATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C390908B1D2C9AF8000DFD15 /* WYFISATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WYFISATests.swift; sourceTree = "<group>"; };
@@ -170,9 +174,11 @@
 				C3F53B951D37499700E2F80D /* DBQuery.swift */,
 				C3D506591D3932FB00A04C83 /* Animations.swift */,
 				C390907A1D2C9AF8000DFD15 /* Main.storyboard */,
+				C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */,
 				C3F53B751D36945900E2F80D /* VerseTableViewCell.xib */,
+				C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */,
 				C390907D1D2C9AF8000DFD15 /* Assets.xcassets */,
-				C390907F1D2C9AF8000DFD15 /* LaunchScreen.storyboard */,
+				C316B6A71D39867100E272A3 /* splash-text.png */,
 				C39090821D2C9AF8000DFD15 /* Info.plist */,
 				C39090D21D2C9DE7000DFD15 /* WYFISA-Bridging-Header.h */,
 				C3D506551D37664D00A04C83 /* arrow-expand.png */,
@@ -325,13 +331,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C39090811D2C9AF8000DFD15 /* LaunchScreen.storyboard in Resources */,
 				C39090D01D2C9C88000DFD15 /* tessdata in Resources */,
+				C316B6B61D3A35DE00E272A3 /* SplashScreen.storyboard in Resources */,
 				C390907E1D2C9AF8000DFD15 /* Assets.xcassets in Resources */,
 				C3F53B771D36945900E2F80D /* VerseTableViewCell.xib in Resources */,
 				C390907C1D2C9AF8000DFD15 /* Main.storyboard in Resources */,
 				C3D506561D37664D00A04C83 /* arrow-expand.png in Resources */,
 				C3F53B921D3741C800E2F80D /* bible-sqlite.db in Resources */,
+				C316B6A81D39867100E272A3 /* splash-text.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,6 +487,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C39090791D2C9AF8000DFD15 /* ViewController.swift in Sources */,
+				C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */,
 				C3F53B761D36945900E2F80D /* VerseTableViewCell.swift in Sources */,
 				C3F53B901D372C0200E2F80D /* TextMatcher.swift in Sources */,
 				C3F53B961D37499700E2F80D /* DBQuery.swift in Sources */,
@@ -528,14 +536,6 @@
 				C390907B1D2C9AF8000DFD15 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		C390907F1D2C9AF8000DFD15 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C39090801D2C9AF8000DFD15 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

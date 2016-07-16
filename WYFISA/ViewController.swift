@@ -18,7 +18,7 @@ struct CaptureSession {
         return self.matches != nil
     }
 }
-class ViewController: UIViewController, CameraManagerDelegate {
+class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCellDelegate {
 
     @IBOutlet var debugWindow: GPUImageView!
     @IBOutlet var verseTable: VerseTableView!
@@ -38,12 +38,14 @@ class ViewController: UIViewController, CameraManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        verseTable.setCellDelegate(self)
+        
         self.checkCameraAccess()
 
         // send camera to live view
         self.filterView.fillMode = GPUImageFillModeType.init(2)
         self.stillCamera.addCameraTarget(self.filterView)
-        // self.stillCamera.addDebugTarget(self.debugWindow)
+        //self.stillCamera.addDebugTarget(self.debugWindow)
         
         // camera config
         stillCamera.zoom(1.5)
@@ -52,6 +54,7 @@ class ViewController: UIViewController, CameraManagerDelegate {
         // start capture
         stillCamera.capture()
         stillCamera.delegate = self
+        
 
     }
 
@@ -68,7 +71,7 @@ class ViewController: UIViewController, CameraManagerDelegate {
         var buttonImage = UIImage(named: "arrow-expand")
         if didExpand == true {
             self.stillCamera.pause()
-            buttonImage = UIImage(named: "arrow-expand-blue")
+            buttonImage = UIImage(named: "arrow-shrink")
             Animations.start(0.5) {
               self.captureButton.alpha = 0
               self.captureBox.alpha = 0
@@ -136,6 +139,8 @@ class ViewController: UIViewController, CameraManagerDelegate {
     }
 
     func handleCaptureEnd(){
+        updateLock.lock()
+
         self.session.currentId += 1
         
         if self.session.hasMatches() == false && self.session.active {
@@ -144,6 +149,9 @@ class ViewController: UIViewController, CameraManagerDelegate {
         self.session.matches = nil
         self.session.active = false
         stillCamera.focus(.Locked)
+        
+        updateLock.unlock()
+
     }
     
     @IBAction func didReleaseCaptureButton(sender: AnyObject) {
@@ -154,7 +162,7 @@ class ViewController: UIViewController, CameraManagerDelegate {
 
     }
     
-    
+    // MARK: - CameraManagerDelegate
     
     // when frame has been processed we need to write it back to the cell
     func didProcessFrame(sender: CameraManager, withText text: String, fromSession: UInt64) {
@@ -167,7 +175,6 @@ class ViewController: UIViewController, CameraManagerDelegate {
         let id = self.verseTable.numberOfSections
         
         if let allVerses = TextMatcher.findVersesInText(text) {
-            
             // we have detection
             stillCamera.focus(.Locked)
 
@@ -182,7 +189,6 @@ class ViewController: UIViewController, CameraManagerDelegate {
                     } else {
                         // make sure not repeat match
                         if self.session.matches?.indexOf(verseInfo.id) == nil {
-                            
                             // new match
                             self.verseTable.appendVerse(verseInfo)
                             dispatch_async(dispatch_get_main_queue()) {
@@ -193,8 +199,7 @@ class ViewController: UIViewController, CameraManagerDelegate {
                             return
                         }
                     }
-                    self.session.matches!.append(verseInfo.id)
-                    self.verseTable.reloadData()
+                    self.session.matches?.append(verseInfo.id)
                 }
             }
         } else {
@@ -212,6 +217,27 @@ class ViewController: UIViewController, CameraManagerDelegate {
 
     }
     
+    // MARK: - Table cell delegate
+    func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo){
+        performSegueWithIdentifier("VerseDetail", sender: (verse as! AnyObject))
+    }
+
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+         // Get the new view controller using segue.destinationViewController.
+         // Pass the selected object to the new view controller.
+        if segue.identifier == "VerseDetail" {
+            let toVc = segue.destinationViewController as! VerseDetailModalViewController
+            let verse = sender as! VerseInfo
+            toVc.verseInfo = verse
+        }
+     }
+ 
+
+    
+
     override func prefersStatusBarHidden() -> Bool {
         return true
     }

@@ -15,6 +15,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     var recentVerses: [VerseInfo] = [VerseInfo]()
     var isExpanded: Bool = false
     var nLock: NSLock = NSLock()
+    var cellDelegate: VerseTableViewCellDelegate?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -22,6 +23,10 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         // setup tableview
         self.delegate = self
         self.dataSource = self
+    }
+    
+    func setCellDelegate(delegate: VerseTableViewCellDelegate){
+        self.cellDelegate = delegate
     }
     
     func addToSectionBy(i: Int){
@@ -74,13 +79,14 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         }
         
         if let verseCell = cell {
+            verseCell.delegate = self.cellDelegate
             let index = self.numberOfSectionsInTableView(tableView) - indexPath.section - 1
             verseCell.updateWithVerseInfo(self.recentVerses[index], isExpanded: self.isExpanded)
+            verseCell.allowAccessoryView = true
             return verseCell
         } else {
             return VerseTableViewCell(style: .Default, reuseIdentifier: nil)
         }
-
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -89,7 +95,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
             // dynamic text sizing
             let index = self.numberOfSectionsInTableView(tableView) - indexPath.section - 1
             if let text = self.recentVerses[index].text {
-                let height = text.heightWithConstrainedWidth(self.frame.size.width,
+                let height = text.heightWithConstrainedWidth(self.frame.size.width*0.80,
                                                              font: UIFont.systemFontOfSize(16))
                 if height  > 30 { // bigger than a loading text
                     return height + 50

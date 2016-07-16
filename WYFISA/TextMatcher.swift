@@ -10,10 +10,18 @@ import Foundation
 import Regex
 
 
-struct VerseInfo {
+class VerseInfo {
     let id: String
     var name: String
     var text: String?
+    var chapter: String?
+    var refs: [VerseInfo]?
+    
+    init(id: String, name: String, text: String?){
+        self.id = id
+        self.name = name
+        self.text = text
+    }
 }
 
 class TextMatcher {
