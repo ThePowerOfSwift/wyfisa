@@ -77,7 +77,6 @@ class VerseTableViewCell: UITableViewCell {
     }
     
     @IBAction func didTapCellView(sender: UIButton) {
-        
         Animations.start(0.2){
             sender.backgroundColor = UIColor.clearColor()
         }

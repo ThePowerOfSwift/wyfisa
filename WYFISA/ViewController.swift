@@ -190,6 +190,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
 
             for var verseInfo in allVerses {
                 if let verse = self.db.lookupVerse(verseInfo.id){
+
                     verseInfo.text = verse
                     
                     // automatically add first match
@@ -200,6 +201,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                         // make sure not repeat match
                         if self.session.matches?.indexOf(verseInfo.id) == nil {
                             // new match
+
                             self.verseTable.appendVerse(verseInfo)
                             dispatch_async(dispatch_get_main_queue()) {
                                 self.verseTable.addSection()

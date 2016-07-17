@@ -101,7 +101,7 @@ class CameraManager {
     
     func imageFromFrame() -> UIImage? {
         if(IS_SIMULATOR){
-            return UIImage(named: "multiverse")
+            return UIImage(named: "eph5")
         }
         
         do {

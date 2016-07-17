@@ -43,28 +43,28 @@
                                                 <rect key="frame" x="133" y="0.0" width="295" height="253"/>
                                             </imageView>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Eb-dI-Jp5" customClass="VerseTableView" customModule="WYFISA" customModuleProvider="target">
-                                                <rect key="frame" x="56" y="273" width="448" height="189"/>
+                                                <rect key="frame" x="0.0" y="273" width="560" height="189"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="751" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="verseCellPrototype" id="Ud3-r4-uFk" customClass="VerseTableViewCell" customModule="WYFISA" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="28" width="448" height="60"/>
+                                                        <rect key="frame" x="0.0" y="28" width="560" height="60"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ud3-r4-uFk" id="dTC-1C-M3T">
-                                                            <rect key="frame" x="0.0" y="0.0" width="448" height="60"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="560" height="60"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="kdZ-Nj-RdQ">
-                                                                    <rect key="frame" x="8" y="8" width="403" height="39"/>
+                                                                    <rect key="frame" x="8" y="8" width="504" height="39"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oth-o8-Zdv">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="403" height="15"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="504" height="15"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                             <color key="textColor" red="0.68627450980392157" green="0.74901960784313726" blue="0.76470588235294112" alpha="1" colorSpace="calibratedRGB"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Searching" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ont-2k-1H8">
-                                                                            <rect key="frame" x="0.0" y="20" width="403" height="20"/>
+                                                                            <rect key="frame" x="0.0" y="20" width="504" height="20"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                             <nil key="highlightedColor"/>
@@ -108,7 +108,7 @@
                                                             <action selector="didPressRefreshButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="CTb-5w-xdS"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Frh-0b-u19">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Frh-0b-u19">
                                                         <rect key="frame" x="226" y="0.0" width="80" height="80"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="Frh-0b-u19" secondAttribute="height" multiplier="1:1" id="cWB-Gb-zRn"/>
@@ -121,7 +121,7 @@
                                                             <action selector="didReleaseCaptureButtonOutside:" destination="BYZ-38-t0r" eventType="touchUpOutside" id="jkH-oI-SEU"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y8t-np-6PG">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y8t-np-6PG">
                                                         <rect key="frame" x="482" y="0.0" width="22" height="80"/>
                                                         <state key="normal" image="arrow-expand"/>
                                                         <connections>
@@ -135,8 +135,8 @@
                                             </stackView>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="9Eb-dI-Jp5" firstAttribute="width" secondItem="eEa-Gj-aYh" secondAttribute="width" id="2l1-tg-A6S"/>
                                             <constraint firstItem="BcN-jx-f75" firstAttribute="width" secondItem="eEa-Gj-aYh" secondAttribute="width" multiplier="0.9" id="MrS-pf-2eP"/>
-                                            <constraint firstItem="9Eb-dI-Jp5" firstAttribute="width" secondItem="eEa-Gj-aYh" secondAttribute="width" multiplier="0.8" id="XW2-68-drj"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
@@ -207,7 +207,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4et-yh-1i5">
-                                        <rect key="frame" x="217" y="56" width="127" height="29"/>
+                                        <rect key="frame" x="216.5" y="56" width="127" height="29"/>
                                         <segments>
                                             <segment title="Chapter"/>
                                             <segment title="Related"/>
@@ -241,7 +241,11 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </tableView>
                             <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OEX-Xc-Ke8">
-                                <rect key="frame" x="543" y="27" width="17" height="22"/>
+                                <rect key="frame" x="530" y="8" width="60" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="ASD-YS-4JR"/>
+                                    <constraint firstAttribute="width" constant="60" id="I89-Su-lAJ"/>
+                                </constraints>
                                 <state key="normal" image="close"/>
                                 <connections>
                                     <action selector="didPressCloseButton:" destination="MHR-2x-CaL" eventType="touchUpInside" id="xvs-F9-1g4"/>
@@ -258,7 +262,7 @@
                             <constraint firstItem="OEX-Xc-Ke8" firstAttribute="centerY" secondItem="hwY-Ut-19P" secondAttribute="centerY" id="cBH-ES-CdH"/>
                             <constraint firstItem="4my-bg-pw1" firstAttribute="height" secondItem="NAF-BE-PDL" secondAttribute="height" multiplier="0.9" id="feD-5P-eKQ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="4my-bg-pw1" secondAttribute="trailing" id="hJY-x5-O7N"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="OEX-Xc-Ke8" secondAttribute="trailing" constant="20" id="urZ-K9-arm"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="OEX-Xc-Ke8" secondAttribute="trailing" constant="-10" id="urZ-K9-arm"/>
                             <constraint firstItem="4my-bg-pw1" firstAttribute="top" secondItem="K9n-H3-z42" secondAttribute="bottom" constant="20" id="vNi-B7-fcE"/>
                             <constraint firstItem="fCs-7e-QiV" firstAttribute="width" secondItem="u1X-u8-pet" secondAttribute="width" id="wDg-ZM-Wde"/>
                         </constraints>
