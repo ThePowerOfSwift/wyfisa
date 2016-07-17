@@ -49,7 +49,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         // camera config
         stillCamera.zoom(1.5)
-        stillCamera.focus(.AutoFocus)
+        stillCamera.focus(.ContinuousAutoFocus)
         
         // start capture
         stillCamera.capture()
@@ -64,6 +64,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         // resume camera
         if self.verseTable.isExpanded == false {
             stillCamera.resume()
+            stillCamera.focus(.ContinuousAutoFocus)
         }
     }
 
