@@ -59,16 +59,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
 
     }
     
-    override func viewWillAppear(animated: Bool) {
-        
-        // if view returned in capture mode
-        // resume camera
-        /*
-        if self.verseTable.isExpanded == false {
-            stillCamera.focus(.ContinuousAutoFocus)
-        }
- */
-    }
 
     @IBAction func handleScreenTap(sender: AnyObject) {
         stillCamera.focus(.AutoFocus)
@@ -171,7 +161,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         }
         self.session.matches = nil
         self.session.active = false
-      //  stillCamera.focus(.ContinuousAutoFocus)
         
         updateLock.unlock()
 
@@ -229,9 +218,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                 }
             }
         } else {
-            if stillCamera.focusIsLocked() {
-               // stillCamera.focus(.AutoFocus)
-            }
             if self.session.hasMatches() == false {
                 self.verseTable.updateVersePending(id-1)
             }
