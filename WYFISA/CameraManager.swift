@@ -21,6 +21,7 @@ class CameraManager {
     let camera: GPUImageStillCamera
     let cropFilter: GPUImageCropFilter
     weak var delegate:CameraManagerDelegate?
+    static let sharedInstance = CameraManager()
 
     init(){
         
@@ -32,7 +33,7 @@ class CameraManager {
         let thresholdFilter = GPUImageAdaptiveThresholdFilter()
         thresholdFilter.blurRadiusInPixels = 20.0
         self.camera.addTarget(thresholdFilter)
-        self.cropFilter = GPUImageCropFilter(cropRegion: CGRect(x: 0.2, y: 0.2, width: 0.6, height: 0.4))
+        self.cropFilter = GPUImageCropFilter(cropRegion: CGRect(x: 0.1, y: 0.05, width: 0.7, height: 0.4))
         thresholdFilter.addTarget(self.cropFilter)
     }
     
@@ -74,13 +75,14 @@ class CameraManager {
     // add filters and targets to camera
     func addCameraTarget(target: GPUImageInput!){
         
-        let targetWidth = (target as! UIView).frame.size.width
+        let targetView = target as! UIView
         let guassFilter = GPUImageGaussianSelectiveBlurFilter()
-        guassFilter.excludeCircleRadius = targetWidth/2000
-        
+        guassFilter.excludeCircleRadius = targetView.superview!.frame.width/800
+        guassFilter.excludeCirclePoint = CGPoint(x: 0.5, y: 0.15)
         guassFilter.aspectRatio = 1.5
         self.camera.addTarget(guassFilter)
         guassFilter.addTarget(target)
+
     }
     
     func addDebugTarget(target: GPUImageInput!){
@@ -101,7 +103,7 @@ class CameraManager {
     
     func imageFromFrame() -> UIImage? {
         if(IS_SIMULATOR){
-            return UIImage(named: "eph5")
+            return UIImage(named: "multiverse")
         }
         
         do {

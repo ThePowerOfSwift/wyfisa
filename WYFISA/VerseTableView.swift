@@ -14,6 +14,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     var nVersesOffset: Int = 0
     var recentVerses: [VerseInfo] = [VerseInfo]()
     var isExpanded: Bool = false
+    var hasHeader: Bool = true
     var nLock: NSLock = NSLock()
     var cellDelegate: VerseTableViewCellDelegate?
     
@@ -70,6 +71,13 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
     }
     
+    func scrollToEnd(){
+        if self.nVerses > 0 {
+            let path = NSIndexPath(forRow: 0, inSection: self.nVerses)
+            self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
+        }
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
@@ -109,7 +117,8 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         if indexPath.section == 0 {
             // padding row
             let headerHeight = tableView.frame.size.height - 60.0 * CGFloat(self.nVerses)
-            if headerHeight <= 60 {
+            if headerHeight <= 60 || self.isExpanded == true  || self.hasHeader == false{
+                self.hasHeader = false
                 return 0
             } else {
                 return headerHeight
@@ -117,7 +126,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         }
         if self.isExpanded == true {
             // dynamic text sizing
-            let index = self.numberOfSectionsInTableView(tableView) - indexPath.section - 1
+            let index = indexPath.section - 1
             if let text = self.recentVerses[index].text {
                 let height = text.heightWithConstrainedWidth(self.frame.size.width*0.90,
                                                              font: UIFont.systemFontOfSize(16))
@@ -138,11 +147,13 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        let headerHeight = tableView.frame.size.height - 60.0 * CGFloat(self.nVerses)
+        let headerHeight = tableView.frame.size.height - 40.0 * CGFloat(self.nVerses)
         if headerHeight <= 60 {
             tableView.scrollEnabled = true
         } else {
-            tableView.scrollEnabled = false
+            if self.isExpanded == false { // cannot freeze table in expanded view
+                tableView.scrollEnabled = false
+            }
         }
     }
     
@@ -155,24 +166,14 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func expandView(toSize: CGSize) -> Bool {
-        
-        Animations.start(0.2) {
-            if self.isExpanded == false {
-                self.frame.size.width = toSize.width*0.95
-                self.frame.size.height = toSize.height*0.75
-            } else {
-                self.frame.size.width = toSize.width*0.40
-                self.frame.size.height = toSize.height*0.35
-            }
-        }
-        
-
         self.reloadData()
         self.isExpanded = !self.isExpanded
         return self.isExpanded
     }
     
     func clear(){
+        
+        self.hasHeader = true
         
         // fade out table
         Animations.start(0.5) {

@@ -93,10 +93,10 @@
                                                 <rect key="frame" x="28" y="482" width="504" height="80"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bqR-YQ-AJH">
-                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="80"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="60" height="80"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="Rfg-9Q-Zgr"/>
-                                                            <constraint firstAttribute="width" constant="50" id="h1F-zq-Aad"/>
+                                                            <constraint firstAttribute="width" constant="60" id="h1F-zq-Aad"/>
                                                         </constraints>
                                                         <state key="normal" image="refresh"/>
                                                         <variation key="default">
@@ -109,7 +109,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Frh-0b-u19">
-                                                        <rect key="frame" x="226" y="0.0" width="80" height="80"/>
+                                                        <rect key="frame" x="212" y="0.0" width="80" height="80"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="Frh-0b-u19" secondAttribute="height" multiplier="1:1" id="cWB-Gb-zRn"/>
                                                         </constraints>
@@ -122,7 +122,10 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y8t-np-6PG">
-                                                        <rect key="frame" x="482" y="0.0" width="22" height="80"/>
+                                                        <rect key="frame" x="444" y="0.0" width="60" height="80"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="60" id="HcR-Pm-gaB"/>
+                                                        </constraints>
                                                         <state key="normal" image="arrow-expand"/>
                                                         <connections>
                                                             <action selector="didPressExpandButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TVC-St-1fx"/>

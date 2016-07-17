@@ -39,4 +39,8 @@ extension UIColor {
     class func turquoise() -> UIColor {
        return UIColor.init(red: (139/255), green: (225/255), blue: (207/255), alpha: 0.80)
     }
+    
+    class func navy(alpha: CGFloat) -> UIColor {
+        return UIColor.init(red: (64/255), green: (77/255), blue: (82/255), alpha: alpha)
+    }
 }

@@ -20,7 +20,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     
     override func viewDidLoad() {
         super.viewDidLoad() 
-
+        
         // Do any additional setup after loading the view.
         if let verse = verseInfo {
             self.verseLabel.text = verse.name
@@ -37,15 +37,19 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             chapter = String.strip(chapter, of: "\u{293}")
             chapter = String.strip(chapter, of: "\u{297}")
 
-            let length = endIdx! - startIdx!
+            let length = endIdx! - startIdx! - 1
             
             // contextual highlighting for attributed text
             let attrs = [NSForegroundColorAttributeName: UIColor.whiteColor(),
                          NSFontAttributeName: UIFont.systemFontOfSize(18)]
             let attributedText = NSMutableAttributedString.init(string: chapter, attributes: attrs)
-            let contextRange = NSRange.init(location: startIdx!, length: length)
+            var contextRange = NSRange.init(location: startIdx!, length: length)
             let contextAttrs = [NSForegroundColorAttributeName: UIColor.turquoise(),
                                 NSFontAttributeName: UIFont.systemFontOfSize(18)]
+            if (contextRange.location + contextRange.length) > attributedText.length {
+                // some kind of overshoot occured - do not exceed bounds
+                contextRange.location = attributedText.length - contextRange.length
+            }
             attributedText.setAttributes(contextAttrs, range: contextRange)
             self.chapterTextView.attributedText = attributedText
         }
@@ -56,7 +60,9 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     override func viewDidAppear(animated: Bool) {
         if let verse = verseInfo {
             if let text = verse.text {
-                let yPos = text.length + self.startViewPos + 20
+                var yPos = text.length + self.startViewPos
+                // + middle of screen
+                yPos += Int(self.view.frame.height/2)
                 Animations.start(0.3){
                     self.chapterTextView.scrollRangeToVisible(NSMakeRange(yPos, 0))
                 }
@@ -172,7 +178,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo){
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        var destVC = storyboard.instantiateViewControllerWithIdentifier("DetailView")
+        let destVC = storyboard.instantiateViewControllerWithIdentifier("DetailView")
             as! VerseDetailModalViewController
         destVC.verseInfo = verse
         presentViewController(destVC, animated: true, completion: nil)

@@ -68,19 +68,17 @@ class VerseTableViewCell: UITableViewCell {
     
     @IBAction func willSelectCellView(sender: UIButton) {
         sender.backgroundColor = UIColor.turquoise()
+        Animations.startAfter(0.5, forDuration: 0.2){
+            sender.backgroundColor = UIColor.clearColor()
+        }
     }
     
     @IBAction func didCancelCellTap(sender: UIButton) {
-        Animations.start(0.2){
-            sender.backgroundColor = UIColor.clearColor()
-        }
+        // taped outside of cell
     }
     
     @IBAction func didTapCellView(sender: UIButton) {
-        Animations.start(0.2){
-            sender.backgroundColor = UIColor.clearColor()
-        }
-        
+
         // append to cell
         if let verse = verseInfo {
             let chapter = db.chapterForVerse(verse.id)

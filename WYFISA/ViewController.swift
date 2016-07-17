@@ -29,12 +29,12 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     @IBOutlet var captureBox: UIImageView!
     
     
-    let stillCamera = CameraManager()
-    var workingText = "Searching"
+    let stillCamera = CameraManager.sharedInstance
     let db = DBQuery.sharedInstance
     var session = CaptureSession()
     var captureLock = NSLock()
     var updateLock = NSLock()
+    var workingText = "Searching"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,12 +45,13 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         // send camera to live view
         self.filterView.fillMode = GPUImageFillModeType.init(2)
         self.stillCamera.addCameraTarget(self.filterView)
-        //self.stillCamera.addDebugTarget(self.debugWindow)
+        // self.stillCamera.addDebugTarget(self.debugWindow)
         
         // camera config
         stillCamera.zoom(1.5)
-        stillCamera.focus(.ContinuousAutoFocus)
+        stillCamera.focus(.AutoFocus)
         
+
         // start capture
         stillCamera.capture()
         stillCamera.delegate = self
@@ -62,10 +63,11 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         // if view returned in capture mode
         // resume camera
+        /*
         if self.verseTable.isExpanded == false {
-            stillCamera.resume()
             stillCamera.focus(.ContinuousAutoFocus)
         }
+ */
     }
 
     @IBAction func handleScreenTap(sender: AnyObject) {
@@ -74,6 +76,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     
     
     @IBAction func didPressExpandButton(sender: AnyObject) {
+        
         // expand|shrink table view
         let didExpand = self.verseTable.expandView(self.view.frame.size)
         
@@ -81,15 +84,17 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         var buttonImage = UIImage(named: "arrow-expand")
         if didExpand == true {
             self.stillCamera.pause()
-            buttonImage = UIImage(named: "arrow-shrink")
+            buttonImage = UIImage(named: "arrow-expand-blue")
+
             Animations.start(0.5) {
+              self.captureBox.hidden = true
               self.captureButton.alpha = 0
               self.captureBox.alpha = 0
               self.maskView.alpha = 0.8
             }
         } else {
-            self.stillCamera.resume()
             Animations.start(0.5) {
+                self.captureBox.hidden = false
                 self.captureButton.alpha = 1
                 self.captureBox.alpha = 1
                 self.maskView.alpha = 0
@@ -98,6 +103,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         self.expandButton.setImage(buttonImage, forState: .Normal)
 
     }
+    
     
     @IBAction func didPressRefreshButton(sender: AnyObject) {
         if captureLock.tryLock(){
@@ -121,13 +127,19 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         
         if self.captureLock.tryLock() {
+            stillCamera.resume()
+            stillCamera.focus(.AutoFocus)
+            
+            /*
             if  self.session.currentId  == 0 {
                 // establish initial focus
                 self.stillCamera.focus(.AutoFocus)
             }
+ 
 
             self.stillCamera.focus(.Locked)
-
+            */
+            
             self.session.active = true
             let sessionId = self.session.currentId
 
@@ -150,6 +162,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
 
     func handleCaptureEnd(){
         updateLock.lock()
+        stillCamera.pause()
 
         self.session.currentId += 1
         
@@ -158,7 +171,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         }
         self.session.matches = nil
         self.session.active = false
-        stillCamera.focus(.Locked)
+      //  stillCamera.focus(.ContinuousAutoFocus)
         
         updateLock.unlock()
 
@@ -177,6 +190,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     // when frame has been processed we need to write it back to the cell
     func didProcessFrame(sender: CameraManager, withText text: String, fromSession: UInt64) {
         
+        // print(text)
         if fromSession != self.session.currentId {
             return // Ignore: from old capture session
         }
@@ -186,7 +200,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         if let allVerses = TextMatcher.findVersesInText(text) {
             // we have detection
-            stillCamera.focus(.Locked)
+            // stillCamera.focus(.Locked)
 
             for var verseInfo in allVerses {
                 if let verse = self.db.lookupVerse(verseInfo.id){
@@ -216,9 +230,11 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             }
         } else {
             if stillCamera.focusIsLocked() {
-                stillCamera.focus(.AutoFocus)
+               // stillCamera.focus(.AutoFocus)
             }
-            self.verseTable.updateVersePending(id-1)
+            if self.session.hasMatches() == false {
+                self.verseTable.updateVersePending(id-1)
+            }
         }
         
         // reload table on main queue
@@ -250,6 +266,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
          // Pass the selected object to the new view controller.
         if segue.identifier == "VerseDetail" {
             let toVc = segue.destinationViewController as! VerseDetailModalViewController
+
             let verse = sender as! VerseInfo
             toVc.verseInfo = verse
         }
