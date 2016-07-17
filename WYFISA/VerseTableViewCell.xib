@@ -40,7 +40,9 @@
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tiK-xj-sWk">
                         <rect key="frame" x="0.0" y="0.5" width="320" height="59.5"/>
                         <connections>
+                            <action selector="didCancelCellTap:" destination="KGk-i7-Jjw" eventType="touchUpOutside" id="oxg-wl-ghz"/>
                             <action selector="didTapCellView:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="yo0-tn-EBb"/>
+                            <action selector="willSelectCellView:" destination="KGk-i7-Jjw" eventType="touchDown" id="6vX-wS-fLo"/>
                         </connections>
                     </button>
                 </subviews>

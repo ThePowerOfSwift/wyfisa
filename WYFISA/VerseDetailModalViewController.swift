@@ -8,7 +8,7 @@
 
 import UIKit
 
-class VerseDetailModalViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class VerseDetailModalViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, VerseTableViewCellDelegate {
 
     @IBOutlet var segmentBar: UISegmentedControl!
     @IBOutlet var verseLabel: UILabel!
@@ -16,22 +16,53 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     @IBOutlet var referenceTable: UITableView!
     
     var verseInfo: VerseInfo? = nil
+    var startViewPos: Int = 0
     
     override func viewDidLoad() {
-        super.viewDidLoad()
+        super.viewDidLoad() 
 
         // Do any additional setup after loading the view.
         if let verse = verseInfo {
-            self.chapterTextView.text = verse.chapter
             self.verseLabel.text = verse.name
+            
+            if verse.chapter == nil { return } // nothing can be done
+            
+            // find context start position
+            var chapter = verse.chapter!
+            let startIdx = chapter.indexOfCharacter("\u{293}")
+            let endIdx = chapter.indexOfCharacter("\u{297}")
+            if startIdx == nil || endIdx == nil { return } // no context verse
+            
+            startViewPos = startIdx!
+            chapter = String.strip(chapter, of: "\u{293}")
+            chapter = String.strip(chapter, of: "\u{297}")
+
+            let length = endIdx! - startIdx!
+            
+            // contextual highlighting for attributed text
+            let attrs = [NSForegroundColorAttributeName: UIColor.whiteColor(),
+                         NSFontAttributeName: UIFont.systemFontOfSize(18)]
+            let attributedText = NSMutableAttributedString.init(string: chapter, attributes: attrs)
+            let contextRange = NSRange.init(location: startIdx!, length: length)
+            let contextAttrs = [NSForegroundColorAttributeName: UIColor.turquoise(),
+                                NSFontAttributeName: UIFont.systemFontOfSize(18)]
+            attributedText.setAttributes(contextAttrs, range: contextRange)
+            self.chapterTextView.attributedText = attributedText
         }
         self.referenceTable.dataSource = self
         self.referenceTable.delegate = self
-
     }
     
     override func viewDidAppear(animated: Bool) {
-        self.chapterTextView.scrollRangeToVisible(NSMakeRange(0, 0))
+        if let verse = verseInfo {
+            if let text = verse.text {
+                let yPos = text.length + self.startViewPos + 20
+                Animations.start(0.3){
+                    self.chapterTextView.scrollRangeToVisible(NSMakeRange(yPos, 0))
+                }
+            }
+        }
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -111,6 +142,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
                 let refInfo = refs[indexPath.section]
                 verseCell.updateWithVerseInfo(refInfo, isExpanded: true)
             }
+            verseCell.delegate = self
             return verseCell
         } else {
             return VerseTableViewCell(style: .Default, reuseIdentifier: nil)
@@ -134,7 +166,19 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         return 60
     }
     
+    
     // MARK: - navigation
+    // MARK: - Table cell delegate
+    func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo){
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        var destVC = storyboard.instantiateViewControllerWithIdentifier("DetailView")
+            as! VerseDetailModalViewController
+        destVC.verseInfo = verse
+        presentViewController(destVC, animated: true, completion: nil)
+
+    }
+    
     
     @IBAction func didPressCloseButton(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)

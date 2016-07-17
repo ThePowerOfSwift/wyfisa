@@ -65,9 +65,25 @@ class VerseTableViewCell: UITableViewCell {
     }
     
     // MARK: - delegate
+    
+    @IBAction func willSelectCellView(sender: UIButton) {
+        sender.backgroundColor = UIColor.turquoise()
+    }
+    
+    @IBAction func didCancelCellTap(sender: UIButton) {
+        Animations.start(0.2){
+            sender.backgroundColor = UIColor.clearColor()
+        }
+    }
+    
     @IBAction func didTapCellView(sender: UIButton) {
+        
+        Animations.start(0.2){
+            sender.backgroundColor = UIColor.clearColor()
+        }
+        
         // append to cell
-        if var verse = verseInfo {
+        if let verse = verseInfo {
             let chapter = db.chapterForVerse(verse.id)
             let refs = db.crossReferencesForVerse(verse.id)
             verse.chapter = chapter

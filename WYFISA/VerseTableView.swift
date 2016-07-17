@@ -95,7 +95,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
             // dynamic text sizing
             let index = self.numberOfSectionsInTableView(tableView) - indexPath.section - 1
             if let text = self.recentVerses[index].text {
-                let height = text.heightWithConstrainedWidth(self.frame.size.width,
+                let height = text.heightWithConstrainedWidth(self.frame.size.width*0.90,
                                                              font: UIFont.systemFontOfSize(16))
                 if height  > 30 { // bigger than a loading text
                     return height + 50
@@ -152,12 +152,3 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
 }
 
-extension String {
-    func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
-        let constraintRect = CGSize(width: width, height: CGFloat.max)
-        
-        let boundingBox = self.boundingRectWithSize(constraintRect, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)
-        
-        return boundingBox.height
-    }
-}

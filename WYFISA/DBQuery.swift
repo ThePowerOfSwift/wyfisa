@@ -56,19 +56,25 @@ class DBQuery {
         var chapter: String = ""
         
         // get book and chapter
-        var query = bibleTable.select(bibleCol.book, bibleCol.chapter).filter(bibleCol.id == verseId)
+        var query = bibleTable.select(bibleCol.book, bibleCol.chapter, bibleCol.verse).filter(bibleCol.id == verseId)
         if let row = conn.pluck(query) {
             let bookId = row.get(bibleCol.book)
             let chapterId = row.get(bibleCol.chapter)
+            let verseId = row.get(bibleCol.verse)
             
             // query for text
             query = bibleTable.select(bibleCol.text)
                 .filter(bibleCol.book == bookId && bibleCol.chapter == chapterId)
+            
             do {
                 var i = 1
                 for row in try conn.prepare(query) {
                     var rc = self.stripText(row.get(bibleCol.text))
-                    rc = "  \(i) \(rc)"
+                    if (i == verseId){ // this is context verse
+                        rc = "  \u{293}\(i) \(rc)\u{297}"
+                    } else {
+                        rc = "  \(i) \(rc)"
+                    }
                     chapter = chapter.stringByAppendingString(rc)
                     i+=1
                 }
@@ -103,25 +109,38 @@ class DBQuery {
     
                 query = self.bibleTable.filter(bibleCol.id >= startId && bibleCol.id <= endId)
                 var offset = 0
+                var firstVerse = -1
                 for row in try conn.prepare(query) {
 
                     // unpack passage vars
                     let bookNo = row.get(bibleCol.book)
                     let verseNo = row.get(bibleCol.verse)
                     let chapterNo = row.get(bibleCol.chapter)
+                    if firstVerse == -1 {
+                        firstVerse = verseNo
+                    }
                     if let book = Books(rawValue: bookNo){
                         let bookName = book.pattern().componentsSeparatedByString("|")[0]
                         if startId == endId {
                             passage = "\(bookName) \(chapterNo):\(verseNo)"
                         } else {
                             let startVerseNo = verseNo - offset
-                            passage = "\(bookName) \(chapterNo):\(startVerseNo)-\(verseNo)"
+                            if startVerseNo <= 0 { // cross chapters
+                                passage = "\(bookName) \(chapterNo):\(firstVerse)ff"
+                            } else {
+                                passage = "\(bookName) \(chapterNo):\(firstVerse)-\(verseNo)"
+                            }
                         }
                     }
                     
                     // append text
-                    let text = self.stripText(row.get(bibleCol.text))
-                    refText = refText.stringByAppendingString("  \(verseNo) \(text)")
+                    var text = self.stripText(row.get(bibleCol.text))
+                    if startId != endId {
+                        if offset > 0 {
+                            text = "  \(verseNo) ".stringByAppendingString(text)
+                        }
+                    }
+                    refText = refText.stringByAppendingString(text)
                     offset += 1
                 }
                 
