@@ -36,7 +36,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     var captureLock = NSLock()
     var updateLock = NSLock()
     var workingText = "Scanning"
-    var flashEnabled: Bool = true
+    var flashEnabled: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,16 +70,16 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     
     @IBAction func didPressExpandButton(sender: AnyObject) {
         
+        self.hideTut()
+        
         // expand|shrink table view
         let didExpand = self.verseTable.expandView(self.view.frame.size)
         
         // modify button image to represent state
         var buttonImage = UIImage(named: "arrow-expand")
-        var refreshImage = UIImage(named: "flash-fire")
         if didExpand == true {
             self.stillCamera.pause()
             buttonImage = UIImage(named: "arrow-expand-fire")
-            refreshImage = UIImage(named: "minus")
             Animations.start(0.5) {
               self.captureBox.hidden = true
               self.captureButton.alpha = 0
@@ -87,6 +87,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
               self.maskView.alpha = 0.8
             }
         } else {
+            if flashEnabled {
+                
+            }
             Animations.start(0.5) {
                 self.captureBox.hidden = false
                 self.captureButton.alpha = 1
@@ -94,11 +97,25 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                 self.maskView.alpha = 0
             }
         }
+        self.setImageForRefreshButton()
         self.expandButton.setImage(buttonImage, forState: .Normal)
-        self.refeshButton.setImage(refreshImage, forState: .Normal)
 
     }
     
+    func setImageForRefreshButton(){
+        
+        
+        if(self.verseTable.isExpanded){
+            self.refeshButton.setImage(UIImage(named: "minus"), forState: .Normal)
+            return
+        }
+        if self.flashEnabled == true {
+            self.refeshButton.setImage(UIImage(named: "flash-fire"), forState: .Normal)
+
+        } else {
+            self.refeshButton.setImage(UIImage(named: "flash"), forState: .Normal)
+        }
+    }
     
     @IBAction func didPressRefreshButton(sender: AnyObject) {
         
@@ -116,12 +133,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             }
         } else {
             // changing flash mode
-            if self.flashEnabled == true {
-                self.refeshButton.setImage(UIImage(named:"flash"), forState: .Normal)
-            } else {
-                self.refeshButton.setImage(UIImage(named:"flash-fire"), forState: .Normal)
-            }
             self.flashEnabled = !self.flashEnabled
+
+            self.setImageForRefreshButton()
         }
 
     }
@@ -131,8 +145,8 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     }
     
     @IBAction func didPressCaptureButton(sender: AnyObject) {
-        self.capTut.hidden = true
         
+        self.hideTut()
         if self.captureLock.tryLock() {
             stillCamera.resume()
             stillCamera.focus(.ContinuousAutoFocus)
@@ -290,6 +304,12 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         self.capTut.hidden = false
         Animations.startAfter(1, forDuration: 0.5){
             self.capTut.alpha = 1
+        }
+    }
+    
+    func hideTut() {
+        Animations.start(0.2){
+            self.capTut.hidden = true
         }
     }
 }
