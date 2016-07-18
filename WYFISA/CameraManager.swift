@@ -51,12 +51,13 @@ class CameraManager {
         }
     }
     
-    func focusIsLocked() -> Bool {
+    func focusIsMode(mode: AVCaptureFocusMode) -> Bool {
         if self.camera.inputCamera == nil {
             return false
         }
-        return camera.inputCamera.focusMode == .Locked
+        return camera.inputCamera.focusMode == mode
     }
+    
     
     func zoom(by: CGFloat){
         if self.camera.inputCamera  == nil {

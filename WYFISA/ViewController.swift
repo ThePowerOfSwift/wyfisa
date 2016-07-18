@@ -27,6 +27,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     @IBOutlet var captureButton: UIButton!
     @IBOutlet var maskView: UIView!
     @IBOutlet var captureBox: UIImageView!
+    @IBOutlet var refeshButton: UIButton!
     
     
     let stillCamera = CameraManager.sharedInstance
@@ -34,28 +35,29 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     var session = CaptureSession()
     var captureLock = NSLock()
     var updateLock = NSLock()
-    var workingText = "Searching"
+    var workingText = "Scanning"
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        verseTable.setCellDelegate(self)
+        self.firstLaunchTut()
         
-        self.checkCameraAccess()
+        verseTable.setCellDelegate(self)
 
         // send camera to live view
+        self.checkCameraAccess()
         self.filterView.fillMode = GPUImageFillModeType.init(2)
         self.stillCamera.addCameraTarget(self.filterView)
         // self.stillCamera.addDebugTarget(self.debugWindow)
         
         // camera config
         stillCamera.zoom(1.5)
-        stillCamera.focus(.AutoFocus)
+        stillCamera.focus(.ContinuousAutoFocus)
         
 
         // start capture
         stillCamera.capture()
         stillCamera.delegate = self
-        
+        stillCamera.pause()
 
     }
     
@@ -74,13 +76,14 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         var buttonImage = UIImage(named: "arrow-expand")
         if didExpand == true {
             self.stillCamera.pause()
-            buttonImage = UIImage(named: "arrow-expand-blue")
+            buttonImage = UIImage(named: "arrow-expand-fire")
 
             Animations.start(0.5) {
               self.captureBox.hidden = true
               self.captureButton.alpha = 0
               self.captureBox.alpha = 0
               self.maskView.alpha = 0.8
+              self.refeshButton.alpha = 1
             }
         } else {
             Animations.start(0.5) {
@@ -88,6 +91,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                 self.captureButton.alpha = 1
                 self.captureBox.alpha = 1
                 self.maskView.alpha = 0
+                self.refeshButton.alpha = 0
             }
         }
         self.expandButton.setImage(buttonImage, forState: .Normal)
@@ -118,18 +122,8 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         if self.captureLock.tryLock() {
             stillCamera.resume()
-            stillCamera.focus(.AutoFocus)
-            
-            /*
-            if  self.session.currentId  == 0 {
-                // establish initial focus
-                self.stillCamera.focus(.AutoFocus)
-            }
- 
+            stillCamera.focus(.ContinuousAutoFocus)
 
-            self.stillCamera.focus(.Locked)
-            */
-            
             self.session.active = true
             let sessionId = self.session.currentId
 
@@ -188,12 +182,11 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         let id = self.verseTable.numberOfSections
         
         if let allVerses = TextMatcher.findVersesInText(text) {
-            // we have detection
-            // stillCamera.focus(.Locked)
 
             for var verseInfo in allVerses {
                 if let verse = self.db.lookupVerse(verseInfo.id){
 
+                    // we have match
                     verseInfo.text = verse
                     
                     // automatically add first match
@@ -214,12 +207,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                             return
                         }
                     }
+                    stillCamera.focus(.Locked)
                     self.session.matches?.append(verseInfo.id)
                 }
-            }
-        } else {
-            if self.session.hasMatches() == false {
-                self.verseTable.updateVersePending(id-1)
             }
         }
         
@@ -273,6 +263,19 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                     self.workingText = "Camera Disabled!"
                 }
             });
+        }
+    }
+    
+    func firstLaunchTut(){
+        let defaults = NSUserDefaults.standardUserDefaults()
+            
+        if let isAppAlreadyLaunchedOnce = defaults.stringForKey("isAppAlreadyLaunchedOnce"){
+            print(isAppAlreadyLaunchedOnce) // was launched
+            print("beenhere bruh")
+        } else {
+            print("branewdy")
+            // only set to bool when they've seen forecast page
+            defaults.setBool(true, forKey: "isAppAlreadyLaunchedOnce")
         }
     }
 }

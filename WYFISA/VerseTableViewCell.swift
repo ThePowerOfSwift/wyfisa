@@ -26,6 +26,8 @@ class VerseTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        self.labelHeader.textColor = UIColor.teal()
+
     }
     
     func updateWithVerseInfo(verse: VerseInfo, isExpanded: Bool) {
@@ -33,21 +35,29 @@ class VerseTableViewCell: UITableViewCell {
         if  verse.id.characters.count > 0 {
             // cell has a verse
             self.verseInfo = verse
-
-            // hiding icon
-            self.searchIcon.alpha = 0
-            self.labelHeader.alpha = 1
-        } else {
-            // still searching - show
-            self.searchIcon.alpha = 0.6
             
-            // flash searching text
+            self.searchIcon.alpha = 0
+            Animations.startAfter(1, forDuration: 0.2){
+                self.searchIcon.alpha = 0
+            }
+            
+            self.labelHeader.alpha = 1
+            // hiding icon
+            Animations.start(0.2){
+                self.labelHeader.textColor = UIColor.teal()
+            }
+
+        } else {
+            
+            self.labelHeader.textColor = UIColor.fire()
+            
+            // flash search icon
             Animations.start(1){
-                self.labelHeader.alpha = 0.3
+                self.searchIcon.alpha = 0.3
             }
             
             Animations.startAfter(1, forDuration: 1){
-                self.labelHeader.alpha = 1
+                self.searchIcon.alpha = 1
             }
             
         }

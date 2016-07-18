@@ -71,9 +71,17 @@ class DBQuery {
                 for row in try conn.prepare(query) {
                     var rc = self.stripText(row.get(bibleCol.text))
                     if (i == verseId){ // this is context verse
-                        rc = "  \u{293}\(i) \(rc)\u{297}"
+                        if i == 1 {
+                            rc = "\u{293}\(rc)\u{297}"
+                        } else {
+                            rc = "  \u{293}\(i) \(rc)\u{297}"
+                        }
                     } else {
-                        rc = "  \(i) \(rc)"
+                        if i == 1 {
+                            rc = "\(rc)"
+                        } else {
+                            rc = "  \(i) \(rc)"
+                        }
                     }
                     chapter = chapter.stringByAppendingString(rc)
                     i+=1

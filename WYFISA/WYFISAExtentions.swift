@@ -40,7 +40,14 @@ extension UIColor {
        return UIColor.init(red: (139/255), green: (225/255), blue: (207/255), alpha: 0.80)
     }
     
+    class func fire() -> UIColor {
+        return UIColor.init(red: 1, green: (87/255), blue: (34/255), alpha: 1.0)
+    }
+    
     class func navy(alpha: CGFloat) -> UIColor {
         return UIColor.init(red: (64/255), green: (77/255), blue: (82/255), alpha: alpha)
+    }
+    class func teal() ->UIColor {
+        return UIColor.init(red: 175/255, green: 191/255, blue: 195/255, alpha: 1.0)
     }
 }
