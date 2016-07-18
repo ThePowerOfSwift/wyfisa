@@ -28,7 +28,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     @IBOutlet var maskView: UIView!
     @IBOutlet var captureBox: UIImageView!
     @IBOutlet var refeshButton: UIButton!
-    
+    @IBOutlet var capTut: UILabel!
     
     let stillCamera = CameraManager.sharedInstance
     let db = DBQuery.sharedInstance
@@ -118,7 +118,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     }
     
     @IBAction func didPressCaptureButton(sender: AnyObject) {
-        
+        self.capTut.hidden = true
         
         if self.captureLock.tryLock() {
             stillCamera.resume()
@@ -271,11 +271,13 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             
         if let isAppAlreadyLaunchedOnce = defaults.stringForKey("isAppAlreadyLaunchedOnce"){
             print(isAppAlreadyLaunchedOnce) // was launched
-            print("beenhere bruh")
         } else {
-            print("branewdy")
             // only set to bool when they've seen forecast page
             defaults.setBool(true, forKey: "isAppAlreadyLaunchedOnce")
+            self.capTut.hidden = false
+            Animations.startAfter(1, forDuration: 0.5){
+                self.capTut.alpha = 1
+            }
         }
     }
 }
