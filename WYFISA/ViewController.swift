@@ -36,7 +36,8 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     var captureLock = NSLock()
     var updateLock = NSLock()
     var workingText = "Scanning"
-
+    var flashEnabled: Bool = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.firstLaunchTut()
@@ -74,16 +75,16 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         // modify button image to represent state
         var buttonImage = UIImage(named: "arrow-expand")
+        var refreshImage = UIImage(named: "flash-fire")
         if didExpand == true {
             self.stillCamera.pause()
             buttonImage = UIImage(named: "arrow-expand-fire")
-
+            refreshImage = UIImage(named: "minus")
             Animations.start(0.5) {
               self.captureBox.hidden = true
               self.captureButton.alpha = 0
               self.captureBox.alpha = 0
               self.maskView.alpha = 0.8
-              self.refeshButton.alpha = 1
             }
         } else {
             Animations.start(0.5) {
@@ -91,24 +92,36 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                 self.captureButton.alpha = 1
                 self.captureBox.alpha = 1
                 self.maskView.alpha = 0
-                self.refeshButton.alpha = 0
             }
         }
         self.expandButton.setImage(buttonImage, forState: .Normal)
+        self.refeshButton.setImage(refreshImage, forState: .Normal)
 
     }
     
     
     @IBAction func didPressRefreshButton(sender: AnyObject) {
-        if captureLock.tryLock(){
-            self.session.currentId = 0
+        
+        if self.verseTable.isExpanded {
+            // is minus button so clear
+            if captureLock.tryLock(){
+                self.session.currentId = 0
 
-            self.verseTable.clear()
-            
-            // unlock safely after clear operation
-            Timing.runAfter(1){
-                self.captureLock.unlock()
+                self.verseTable.clear()
+                
+                // unlock safely after clear operation
+                Timing.runAfter(1){
+                    self.captureLock.unlock()
+                }
             }
+        } else {
+            // changing flash mode
+            if self.flashEnabled == true {
+                self.refeshButton.setImage(UIImage(named:"flash"), forState: .Normal)
+            } else {
+                self.refeshButton.setImage(UIImage(named:"flash-fire"), forState: .Normal)
+            }
+            self.flashEnabled = !self.flashEnabled
         }
 
     }
@@ -123,6 +136,10 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         if self.captureLock.tryLock() {
             stillCamera.resume()
             stillCamera.focus(.ContinuousAutoFocus)
+            
+            if self.flashEnabled {
+                stillCamera.torch(.On)
+            }
 
             self.session.active = true
             let sessionId = self.session.currentId
@@ -147,6 +164,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     func handleCaptureEnd(){
         updateLock.lock()
         stillCamera.pause()
+        if self.flashEnabled {
+            stillCamera.torch(.Off)
+        }
 
         self.session.currentId += 1
         
@@ -267,17 +287,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     }
     
     func firstLaunchTut(){
-        let defaults = NSUserDefaults.standardUserDefaults()
-            
-        if let isAppAlreadyLaunchedOnce = defaults.stringForKey("isAppAlreadyLaunchedOnce"){
-            print(isAppAlreadyLaunchedOnce) // was launched
-        } else {
-            // only set to bool when they've seen forecast page
-            defaults.setBool(true, forKey: "isAppAlreadyLaunchedOnce")
-            self.capTut.hidden = false
-            Animations.startAfter(1, forDuration: 0.5){
-                self.capTut.alpha = 1
-            }
+        self.capTut.hidden = false
+        Animations.startAfter(1, forDuration: 0.5){
+            self.capTut.alpha = 1
         }
     }
 }

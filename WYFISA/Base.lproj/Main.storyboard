@@ -92,13 +92,13 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="248" verticalCompressionResistancePriority="752" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="BcN-jx-f75">
                                                 <rect key="frame" x="0.0" y="467" width="560" height="95"/>
                                                 <subviews>
-                                                    <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bqR-YQ-AJH">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bqR-YQ-AJH">
                                                         <rect key="frame" x="0.0" y="0.0" width="60" height="95"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="Rfg-9Q-Zgr"/>
                                                             <constraint firstAttribute="width" constant="60" id="h1F-zq-Aad"/>
                                                         </constraints>
-                                                        <state key="normal" image="minus"/>
+                                                        <state key="normal" image="flash-fire"/>
                                                         <variation key="default">
                                                             <mask key="constraints">
                                                                 <exclude reference="Rfg-9Q-Zgr"/>
@@ -299,6 +299,6 @@
         <image name="Oval 1" width="104" height="104"/>
         <image name="arrow-expand" width="22" height="22"/>
         <image name="close-fire" width="19" height="19"/>
-        <image name="minus" width="26" height="6"/>
+        <image name="flash-fire" width="22" height="30"/>
     </resources>
 </document>

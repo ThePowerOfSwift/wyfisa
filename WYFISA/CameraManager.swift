@@ -28,7 +28,6 @@ class CameraManager {
         // init a still image camera
         self.camera = GPUImageStillCamera()
         self.camera.outputImageOrientation = .Portrait;
-        
         // setup camera filters
         let thresholdFilter = GPUImageAdaptiveThresholdFilter()
         thresholdFilter.blurRadiusInPixels = 20.0
@@ -45,6 +44,7 @@ class CameraManager {
         do {
             try camera.inputCamera.lockForConfiguration()
             camera.inputCamera.focusMode = mode
+
             camera.inputCamera.unlockForConfiguration()
         } catch let error {
             print("Focus error", error)
@@ -58,6 +58,16 @@ class CameraManager {
         return camera.inputCamera.focusMode == mode
     }
     
+    func torch(mode: AVCaptureTorchMode){
+        if self.camera.inputCamera == nil {
+            return
+        }
+        do {
+            try camera.inputCamera.lockForConfiguration()
+            self.camera.inputCamera.torchMode = mode
+            camera.inputCamera.unlockForConfiguration()
+        } catch let error { print(error) }
+    }
     
     func zoom(by: CGFloat){
         if self.camera.inputCamera  == nil {
@@ -107,13 +117,9 @@ class CameraManager {
             return UIImage(named: "multiverse")
         }
         
-        do {
-            GPUImageContext.sharedFramebufferCache().purgeAllUnassignedFramebuffers()
-            self.cropFilter.useNextFrameForImageCapture()
-            return try cropFilter.imageFromCurrentFramebuffer()
-        } catch {
-            return nil
-        }
+        GPUImageContext.sharedFramebufferCache().purgeAllUnassignedFramebuffers()
+        self.cropFilter.useNextFrameForImageCapture()
+        return cropFilter.imageFromCurrentFramebuffer()
     }
     
     func recognizeFrameFromCamera(fromSession: UInt64) {
@@ -132,6 +138,8 @@ class CameraManager {
             let tesseract:G8Tesseract = G8Tesseract(language:"eng");
             tesseract.image = image
             tesseract.maximumRecognitionTime = 3.0
+            tesseract.engineMode = .TesseractOnly
+
             if tesseract.recognize() == true {
                 // call delegate
                 self.delegate?.didProcessFrame(self, withText: tesseract.recognizedText, fromSession: fromSession)
