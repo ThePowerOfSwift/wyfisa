@@ -76,10 +76,10 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         let didExpand = self.verseTable.expandView(self.view.frame.size)
         
         // modify button image to represent state
-        var buttonImage = UIImage(named: "arrow-expand")
+        var buttonImage = UIImage(named: "chevron-arrow-up")
         if didExpand == true {
             self.stillCamera.pause()
-            buttonImage = UIImage(named: "arrow-expand-fire")
+            buttonImage = UIImage(named: "chevron-arrow-down")
             Animations.start(0.5) {
               self.captureBox.hidden = true
               self.captureButton.alpha = 0
@@ -231,7 +231,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                         // make sure not repeat match
                         if self.session.matches?.indexOf(verseInfo.id) == nil {
                             // new match
-
                             self.verseTable.appendVerse(verseInfo)
                             dispatch_async(dispatch_get_main_queue()) {
                                 self.verseTable.addSection()

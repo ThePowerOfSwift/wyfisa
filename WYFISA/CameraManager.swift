@@ -30,7 +30,7 @@ class CameraManager {
         self.camera.outputImageOrientation = .Portrait;
         // setup camera filters
         let thresholdFilter = GPUImageAdaptiveThresholdFilter()
-        thresholdFilter.blurRadiusInPixels = 20.0
+        thresholdFilter.blurRadiusInPixels = 40.0
         self.camera.addTarget(thresholdFilter)
         self.cropFilter = GPUImageCropFilter(cropRegion: CGRect(x: 0.1, y: 0.05, width: 0.7, height: 0.4))
         thresholdFilter.addTarget(self.cropFilter)

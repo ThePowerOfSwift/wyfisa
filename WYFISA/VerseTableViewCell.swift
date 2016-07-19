@@ -64,14 +64,9 @@ class VerseTableViewCell: UITableViewCell {
         
         self.labelHeader.text = verse.name
         self.labelText.text = verse.text
-        if isExpanded == true {
-            self.labelText.lineBreakMode = .ByWordWrapping
-            self.labelText.numberOfLines = 0
+        self.labelText.lineBreakMode = .ByWordWrapping
+        self.labelText.numberOfLines = 0
 
-        } else {
-            self.labelText.lineBreakMode = .ByTruncatingTail
-            self.labelText.numberOfLines = 1
-        }
     }
     
     // MARK: - delegate
@@ -85,6 +80,7 @@ class VerseTableViewCell: UITableViewCell {
     
     @IBAction func didCancelCellTap(sender: UIButton) {
         // taped outside of cell
+        sender.backgroundColor = UIColor.clearColor()
     }
     
     @IBAction func didTapCellView(sender: UIButton) {

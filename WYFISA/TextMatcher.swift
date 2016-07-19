@@ -43,6 +43,7 @@ class TextMatcher {
             let verseId = String(format: "%03d", Int(verse)!)
             let id = "\(bookId)\(chapterId)\(verseId)" 
             let info = VerseInfo(id: id, name: matchedText, text: "Not Found")
+
             if verseInfos == nil {
                 verseInfos = [VerseInfo]()
             }
@@ -141,7 +142,7 @@ enum Books: Int {
         case .Lk:
             return "Luke|Luk|Lk"
         case .Jn:
-            return "John|John|Jn|Jhn"
+            return "John|John|Jn|jn|Jhn"
         case .Acts:
             return "Acts|Acts|Ac"
         case .Rom:

@@ -124,15 +124,13 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
                 return headerHeight
             }
         }
-        if self.isExpanded == true {
-            // dynamic text sizing
-            let index = indexPath.section - 1
-            if let text = self.recentVerses[index].text {
-                let height = text.heightWithConstrainedWidth(self.frame.size.width*0.90,
-                                                             font: UIFont.systemFontOfSize(16))
-                if height  > 30 { // bigger than a loading text
-                    return height + 50
-                }
+        // dynamic text sizing
+        let index = indexPath.section - 1
+        if let text = self.recentVerses[index].text {
+            let height = text.heightWithConstrainedWidth(self.frame.size.width*0.90,
+                                                         font: UIFont.systemFontOfSize(16))
+            if height  > 30 { // bigger than a loading text
+                return height + 50
             }
         }
         return 60
@@ -148,13 +146,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
         let headerHeight = tableView.frame.size.height - 40.0 * CGFloat(self.nVerses)
-        if headerHeight <= 60 {
-            tableView.scrollEnabled = true
-        } else {
-            if self.isExpanded == false { // cannot freeze table in expanded view
-                tableView.scrollEnabled = false
-            }
-        }
+
     }
     
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
