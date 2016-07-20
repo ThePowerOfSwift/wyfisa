@@ -30,6 +30,14 @@ extension String {
                                                      range: nil)
     }
     
+    func replace(of: String, with: String) -> String{
+        return self.stringByReplacingOccurrencesOfString(of,
+                                                        withString: with,
+                                                        options: NSStringCompareOptions.LiteralSearch,
+                                                        range: nil)
+    }
+
+    
     var length: Int {
         return characters.count
     }

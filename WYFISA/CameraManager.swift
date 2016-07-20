@@ -17,23 +17,27 @@ protocol CameraManagerDelegate: class {
     func didProcessFrame(sender: CameraManager, withText text: String, fromSession: UInt64)
 }
 
-class CameraManager {
+class CameraManager: NSObject, G8TesseractDelegate {
     let camera: GPUImageStillCamera
-    let cropFilter: GPUImageCropFilter
+    let filter: GPUImageFilter = GPUImageFilter()
     weak var delegate:CameraManagerDelegate?
+    let tesseract:G8Tesseract = G8Tesseract(language:"bib");
+    var tessLock = NSLock()
+
     static let sharedInstance = CameraManager()
 
-    init(){
+    override init(){
         
         // init a still image camera
         self.camera = GPUImageStillCamera()
+        super.init()
+        
+        self.tesseract.delegate = self
+        tesseract.maximumRecognitionTime = 5
+        tesseract.engineMode = .TesseractOnly
+        
+        self.camera.addTarget(filter)
         self.camera.outputImageOrientation = .Portrait;
-        // setup camera filters
-        let thresholdFilter = GPUImageAdaptiveThresholdFilter()
-        thresholdFilter.blurRadiusInPixels = 40.0
-        self.camera.addTarget(thresholdFilter)
-        self.cropFilter = GPUImageCropFilter(cropRegion: CGRect(x: 0.1, y: 0.05, width: 0.7, height: 0.4))
-        thresholdFilter.addTarget(self.cropFilter)
     }
     
     func focus(mode: AVCaptureFocusMode){
@@ -97,7 +101,7 @@ class CameraManager {
     }
     
     func addDebugTarget(target: GPUImageInput!){
-        self.cropFilter.addTarget(target)
+        // self.debugTarget = target
     }
     
     func capture(){
@@ -115,11 +119,12 @@ class CameraManager {
     func imageFromFrame() -> UIImage? {
         if(IS_SIMULATOR){
             return UIImage(named: "multiverse")
+        } else {
+            
         }
         
-        GPUImageContext.sharedFramebufferCache().purgeAllUnassignedFramebuffers()
-        self.cropFilter.useNextFrameForImageCapture()
-        return cropFilter.imageFromCurrentFramebuffer()
+        self.filter.useNextFrameForImageCapture()
+        return  self.filter.imageFromCurrentFramebuffer()
     }
     
     func recognizeFrameFromCamera(fromSession: UInt64) {
@@ -135,16 +140,60 @@ class CameraManager {
         if let image = self.imageFromFrame(){
             
             // do image recognition
-            let tesseract:G8Tesseract = G8Tesseract(language:"eng");
+            self.tessLock.lock()
             tesseract.image = image
-            tesseract.maximumRecognitionTime = 3.0
-            tesseract.engineMode = .TesseractOnly
-
-            if tesseract.recognize() == true {
+            let didRecognize = tesseract.recognize()
+            let recognizedText = tesseract.recognizedText
+            self.tessLock.unlock()
+            if  didRecognize == true {
                 // call delegate
-                self.delegate?.didProcessFrame(self, withText: tesseract.recognizedText, fromSession: fromSession)
+                self.delegate?.didProcessFrame(self, withText: recognizedText, fromSession: fromSession)
             }
         }
+       
+    }
+ 
+    @objc func preprocessedImageForTesseract(tesseract: G8Tesseract!, sourceImage: UIImage!) -> UIImage! {
+        // gpuimge pre-processing
+
+        // crop
+        let cropFilter = GPUImageCropFilter(cropRegion: CGRect(x: 0, y: 0.05, width: 0.8, height: 0.4))
+        let croppedImage = cropFilter.imageByFilteringImage(sourceImage)
+        
+        // re-scale
+        let scaledImage = scaleImage(croppedImage, maxDimension: 640)
+
+        // bw trheshold
+        let thresholdFilter = GPUImageAdaptiveThresholdFilter()
+        thresholdFilter.blurRadiusInPixels = 40.0
+        cropFilter.addTarget(thresholdFilter)
+
+        let image = thresholdFilter.imageByFilteringImage(scaledImage)
+        
+        return image
+    }
+    
+    func scaleImage(image: UIImage, maxDimension: CGFloat) -> UIImage {
+        
+        var scaledSize = CGSize(width: maxDimension, height: maxDimension)
+        var scaleFactor: CGFloat
+        
+        if image.size.width > image.size.height {
+            scaleFactor = image.size.height / image.size.width
+            scaledSize.width = maxDimension
+            scaledSize.height = scaledSize.width * scaleFactor
+        } else {
+            scaleFactor = image.size.width / image.size.height
+            scaledSize.height = maxDimension
+            scaledSize.width = scaledSize.height * scaleFactor
+        }
+        
+        UIGraphicsBeginImageContext(scaledSize)
+        image.drawInRect(CGRectMake(0, 0, scaledSize.width, scaledSize.height))
+        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return scaledImage
     }
     
 

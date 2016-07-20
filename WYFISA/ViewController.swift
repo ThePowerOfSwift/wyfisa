@@ -51,8 +51,8 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         // self.stillCamera.addDebugTarget(self.debugWindow)
         
         // camera config
-        stillCamera.zoom(1.5)
-        stillCamera.focus(.ContinuousAutoFocus)
+        stillCamera.zoom(1)
+        stillCamera.focus(.AutoFocus)
         
 
         // start capture
@@ -76,10 +76,10 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         let didExpand = self.verseTable.expandView(self.view.frame.size)
         
         // modify button image to represent state
-        var buttonImage = UIImage(named: "chevron-arrow-up")
+        var buttonImage = UIImage(named: "chevron-up")
         if didExpand == true {
             self.stillCamera.pause()
-            buttonImage = UIImage(named: "chevron-arrow-down")
+            buttonImage = UIImage(named: "chevron-down")
             Animations.start(0.5) {
               self.captureBox.hidden = true
               self.captureButton.alpha = 0
@@ -148,13 +148,14 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         self.hideTut()
         if self.captureLock.tryLock() {
-            stillCamera.resume()
-            stillCamera.focus(.ContinuousAutoFocus)
             
+            // camera init
+            stillCamera.resume()
             if self.flashEnabled {
                 stillCamera.torch(.On)
             }
 
+            // session init
             self.session.active = true
             let sessionId = self.session.currentId
 
@@ -206,13 +207,13 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     
     // when frame has been processed we need to write it back to the cell
     func didProcessFrame(sender: CameraManager, withText text: String, fromSession: UInt64) {
-        
         // print(text)
         if fromSession != self.session.currentId {
             return // Ignore: from old capture session
         }
         
         updateLock.lock()
+
         let id = self.verseTable.numberOfSections
         
         if let allVerses = TextMatcher.findVersesInText(text) {
@@ -250,6 +251,10 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         dispatch_async(dispatch_get_main_queue()) {
             self.verseTable.reloadData()
         }
+        if self.session.hasMatches() == false {
+            stillCamera.focus(.AutoFocus)
+        }
+        
         updateLock.unlock()
 
     }

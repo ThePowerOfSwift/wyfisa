@@ -30,10 +30,19 @@
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yKv-fP-VGS" customClass="GPUImageView">
                                         <rect key="frame" x="345" y="21" width="240" height="128"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yuv-dp-WoD">
+                                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                            </imageView>
+                                        </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
+                                            <constraint firstItem="Yuv-dp-WoD" firstAttribute="centerX" secondItem="yKv-fP-VGS" secondAttribute="centerX" id="842-F2-vWD"/>
                                             <constraint firstAttribute="width" constant="200" id="9Pv-vo-Opb"/>
                                             <constraint firstAttribute="height" constant="200" id="F2d-Mw-IXB"/>
+                                            <constraint firstItem="Yuv-dp-WoD" firstAttribute="width" secondItem="yKv-fP-VGS" secondAttribute="width" id="WP5-As-cE0"/>
+                                            <constraint firstItem="Yuv-dp-WoD" firstAttribute="centerY" secondItem="yKv-fP-VGS" secondAttribute="centerY" id="o8g-Z2-26g"/>
+                                            <constraint firstItem="Yuv-dp-WoD" firstAttribute="height" secondItem="yKv-fP-VGS" secondAttribute="height" id="xVM-My-xMX"/>
                                         </constraints>
                                     </view>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRESS AND HOLD CAPTURE BUTTON" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="gGX-5F-XhG">
@@ -42,17 +51,17 @@
                                         <color key="textColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Gradient" translatesAutoresizingMaskIntoConstraints="NO" id="0kE-06-jOP">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Gradient" translatesAutoresizingMaskIntoConstraints="NO" id="0kE-06-jOP">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                     </imageView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="eEa-Gj-aYh">
                                         <rect key="frame" x="20" y="20" width="560" height="562"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="252" image="CaptureBox-1" translatesAutoresizingMaskIntoConstraints="NO" id="ggB-0g-XGh">
-                                                <rect key="frame" x="133" y="0.0" width="295" height="283"/>
+                                                <rect key="frame" x="133" y="0.0" width="295" height="0.0"/>
                                             </imageView>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Eb-dI-Jp5" customClass="VerseTableView" customModule="WYFISA" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="303" width="560" height="144"/>
+                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Eb-dI-Jp5" customClass="VerseTableView" customModule="WYFISA" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="20" width="560" height="427"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <prototypes>
@@ -135,7 +144,7 @@
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="60" id="HcR-Pm-gaB"/>
                                                         </constraints>
-                                                        <state key="normal" image="chevron-arrow-up"/>
+                                                        <state key="normal" image="chevron-up"/>
                                                         <connections>
                                                             <action selector="didPressExpandButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TVC-St-1fx"/>
                                                         </connections>
@@ -178,9 +187,13 @@
                             <constraint firstAttribute="trailingMargin" secondItem="eEa-Gj-aYh" secondAttribute="trailing" id="BZZ-Aa-Gg3"/>
                             <constraint firstItem="eEa-Gj-aYh" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Ft1-Gx-qtE"/>
                             <constraint firstItem="HAV-Ay-XOw" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="GBk-Hp-Bmw"/>
+                            <constraint firstItem="0kE-06-jOP" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="KOu-Wg-NGd"/>
                             <constraint firstItem="HAV-Ay-XOw" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="M6e-oC-g74"/>
                             <constraint firstItem="eEa-Gj-aYh" firstAttribute="topMargin" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="20" id="Md1-vA-XMq"/>
+                            <constraint firstItem="0kE-06-jOP" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="SEe-45-Q0b"/>
                             <constraint firstItem="HAV-Ay-XOw" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="bBd-kP-5Ti"/>
+                            <constraint firstItem="0kE-06-jOP" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="nLP-g8-Ilt"/>
+                            <constraint firstItem="0kE-06-jOP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="vFU-7j-Nav"/>
                             <constraint firstItem="HAV-Ay-XOw" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="yRC-9f-F2Y"/>
                         </constraints>
                     </view>
@@ -301,8 +314,8 @@
         <image name="CaptureBox-1" width="295" height="283"/>
         <image name="Gradient" width="375" height="369"/>
         <image name="Oval 1" width="104" height="104"/>
-        <image name="chevron-arrow-up" width="34" height="22"/>
+        <image name="chevron-up" width="30" height="18"/>
         <image name="close-fire" width="19" height="19"/>
-        <image name="flash" width="22" height="30"/>
+        <image name="flash" width="20" height="26"/>
     </resources>
 </document>

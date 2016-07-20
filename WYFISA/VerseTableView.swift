@@ -145,7 +145,6 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        let headerHeight = tableView.frame.size.height - 40.0 * CGFloat(self.nVerses)
 
     }
     
