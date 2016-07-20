@@ -185,6 +185,11 @@ class DBQuery {
         return references
     }
     
+    func clearCache() {
+        self.chapterCache = [String:String]()
+        self.refCache = [String:[VerseInfo]]()
+    }
+    
     func stripText(text: String) -> String {
         
         return text.strip("\\")

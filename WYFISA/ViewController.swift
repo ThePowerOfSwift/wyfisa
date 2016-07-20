@@ -13,7 +13,10 @@ struct CaptureSession {
     var active: Bool = false
     var currentId: UInt64 = 0
     var matches: [String]?
-
+    
+    func clearCache() {
+        DBQuery.sharedInstance.clearCache()
+    }
     func hasMatches() -> Bool {
         return self.matches != nil
     }
@@ -158,6 +161,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             // session init
             self.session.active = true
             let sessionId = self.session.currentId
+            session.clearCache()
 
             // adds row to verse table
             let defaultVerse = VerseInfo(id: "", name: self.workingText, text: "")
