@@ -23,11 +23,8 @@ extension String {
         return nil
     }
     
-    static func strip(str: String, of: String) -> String{
-        return str.stringByReplacingOccurrencesOfString(of,
-                                                     withString: "",
-                                                     options: NSStringCompareOptions.LiteralSearch,
-                                                     range: nil)
+    func strip(of: String) -> String{
+        return self.replace(of, with: "")
     }
     
     func replace(of: String, with: String) -> String{

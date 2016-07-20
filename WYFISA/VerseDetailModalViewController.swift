@@ -34,8 +34,8 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             if startIdx == nil || endIdx == nil { return } // no context verse
             
             startViewPos = startIdx!
-            chapter = String.strip(chapter, of: "\u{293}")
-            chapter = String.strip(chapter, of: "\u{297}")
+            chapter = chapter.strip("\u{293}")
+            chapter = chapter.strip("\u{297}")
 
             let length = endIdx! - startIdx! - 1
             

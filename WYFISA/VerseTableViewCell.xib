@@ -34,7 +34,7 @@
                         </subviews>
                         <gestureRecognizers/>
                     </stackView>
-                    <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="chatbox-working-white" translatesAutoresizingMaskIntoConstraints="NO" id="O57-JO-AUF">
+                    <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chatbox-working-white" translatesAutoresizingMaskIntoConstraints="NO" id="O57-JO-AUF">
                         <rect key="frame" x="8" y="30" width="21" height="17.5"/>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tiK-xj-sWk">
@@ -42,6 +42,8 @@
                         <connections>
                             <action selector="didCancelCellTap:" destination="KGk-i7-Jjw" eventType="touchUpOutside" id="oxg-wl-ghz"/>
                             <action selector="didTapCellView:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="yo0-tn-EBb"/>
+                            <action selector="touchCancel:" destination="KGk-i7-Jjw" eventType="touchCancel" id="437-DC-pnX"/>
+                            <action selector="touchOut:" destination="KGk-i7-Jjw" eventType="touchDragOutside" id="GqC-6C-pBo"/>
                             <action selector="willSelectCellView:" destination="KGk-i7-Jjw" eventType="touchDown" id="6vX-wS-fLo"/>
                         </connections>
                     </button>

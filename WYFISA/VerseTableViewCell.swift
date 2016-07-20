@@ -71,6 +71,14 @@ class VerseTableViewCell: UITableViewCell {
     
     // MARK: - delegate
     
+    @IBAction func touchOut(sender: UIButton) {
+        sender.backgroundColor = UIColor.clearColor()
+    }
+    
+    @IBAction func touchCancel(sender: UIButton) {
+        sender.backgroundColor = UIColor.clearColor()
+    }
+    
     @IBAction func willSelectCellView(sender: UIButton) {
         sender.backgroundColor = UIColor.turquoise()
         Animations.startAfter(0.5, forDuration: 0.2){

@@ -148,7 +148,7 @@ class DBQuery {
                         firstVerse = verseNo
                     }
                     if let book = Books(rawValue: bookNo){
-                        let bookName = book.pattern().componentsSeparatedByString("|")[0]
+                        let bookName = book.name()
                         if startId == endId {
                             passage = "\(bookName) \(chapterNo):\(verseNo)"
                         } else {
@@ -187,16 +187,9 @@ class DBQuery {
     
     func stripText(text: String) -> String {
         
-        var t = text.stringByReplacingOccurrencesOfString("\\",
-                                                         withString: "",
-                                                         options: NSStringCompareOptions.LiteralSearch, range: nil)
-        t =  t.stringByReplacingOccurrencesOfString("{",
-            withString: "(",
-            options: NSStringCompareOptions.LiteralSearch, range: nil)
-        t =  t.stringByReplacingOccurrencesOfString("}",
-                                                    withString: ")",
-                                                    options: NSStringCompareOptions.LiteralSearch, range: nil)
-        return t
+        return text.strip("\\")
+            .replace("{", with: "(").replace("}", with: ")")
+            .strip("&gt; ").strip("&lt; ")
  
     }
     
