@@ -34,9 +34,10 @@ class DBQuery {
     let bibleCol = BibleTableColumns()
     let crossRefTable = Table("cross_reference")
     let crossRefCol = CrossRefColumns()
-    
+    var chapterCache = [String:String]()
+    var refCache = [String:[VerseInfo]]()
     init(){
-        let path = NSBundle.mainBundle().pathForResource("bible-sqlite", ofType: "db")!
+        let path = NSBundle.mainBundle().pathForResource("t_web", ofType: "db")!
         self.conn = try! Connection(path, readonly: true)
     }
     
@@ -47,6 +48,16 @@ class DBQuery {
         if let row = conn.pluck(query) {
             verse = row.get(bibleCol.text)
             verse = self.stripText(verse!)
+            
+            // cache chapter and references in background
+            Timing.runAfterBg(0){
+                if self.chapterCache[verseId] == nil {
+                    self.chapterCache[verseId] = self.chapterForVerse(verseId)
+                }
+                if self.refCache[verseId] == nil {
+                    self.refCache[verseId] = self.crossReferencesForVerse(verseId)
+                }
+            }
         }
         
         return verse
@@ -54,6 +65,10 @@ class DBQuery {
     
     func chapterForVerse(verseId: String) -> String {
         var chapter: String = ""
+        
+        if let cachedChapter = self.chapterCache[verseId] {
+            return cachedChapter
+        }
         
         // get book and chapter
         var query = bibleTable.select(bibleCol.book, bibleCol.chapter, bibleCol.verse).filter(bibleCol.id == verseId)
@@ -93,6 +108,11 @@ class DBQuery {
     }
 
     func crossReferencesForVerse(verseId: String) -> [VerseInfo] {
+        
+        if let cachedReferences = self.refCache[verseId] {
+            return cachedReferences
+        }
+        
         var references = [VerseInfo]()
         
         var query = self.crossRefTable.select(crossRefCol.rank, crossRefCol.start_verse, crossRefCol.end_verse)

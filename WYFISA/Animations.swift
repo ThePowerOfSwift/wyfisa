@@ -13,6 +13,11 @@ class Timing {
         let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(ts * Double(NSEC_PER_SEC)))
         dispatch_after(delayTime, dispatch_get_main_queue(), block)
     }
+    class func runAfterBg(ts: Double, block: dispatch_block_t){
+        let asyncQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(ts * Double(NSEC_PER_SEC)))
+        dispatch_after(delayTime, asyncQueue, block)
+    }
 }
 
 class Animations {
