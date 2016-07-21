@@ -124,6 +124,10 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
                 return headerHeight
             }
         }
+        if self.isExpanded == false {
+            return 80
+        }
+        
         // dynamic text sizing
         let index = indexPath.section - 1
         if let text = self.recentVerses[index].text {

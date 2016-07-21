@@ -64,8 +64,13 @@ class VerseTableViewCell: UITableViewCell {
         
         self.labelHeader.text = verse.name
         self.labelText.text = verse.text
-        self.labelText.lineBreakMode = .ByWordWrapping
-        self.labelText.numberOfLines = 0
+        if isExpanded == true {
+            self.labelText.lineBreakMode = .ByWordWrapping
+            self.labelText.numberOfLines = 0
+        } else {
+            self.labelText.lineBreakMode = .ByTruncatingTail
+            self.labelText.numberOfLines = 2
+        }
 
     }
     

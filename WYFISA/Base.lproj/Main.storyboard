@@ -45,23 +45,23 @@
                                             <constraint firstItem="Yuv-dp-WoD" firstAttribute="height" secondItem="yKv-fP-VGS" secondAttribute="height" id="xVM-My-xMX"/>
                                         </constraints>
                                     </view>
-                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRESS AND HOLD CAPTURE BUTTON" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="gGX-5F-XhG">
-                                        <rect key="frame" x="152.5" y="118.5" width="295" height="86"/>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="PRESS AND HOLD CAPTURE BUTTON" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="gGX-5F-XhG">
+                                        <rect key="frame" x="152" y="118" width="295" height="86"/>
                                         <fontDescription key="fontDescription" type="system" weight="thin" pointSize="36"/>
                                         <color key="textColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Gradient" translatesAutoresizingMaskIntoConstraints="NO" id="0kE-06-jOP">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Gradient" translatesAutoresizingMaskIntoConstraints="NO" id="0kE-06-jOP">
+                                        <rect key="frame" x="0.0" y="-20" width="600" height="600"/>
                                     </imageView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="eEa-Gj-aYh">
                                         <rect key="frame" x="20" y="20" width="560" height="562"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="252" misplaced="YES" image="CaptureBox-1" translatesAutoresizingMaskIntoConstraints="NO" id="ggB-0g-XGh">
-                                                <rect key="frame" x="133" y="0.0" width="295" height="0.0"/>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="254" verticalHuggingPriority="254" misplaced="YES" image="CaptureBox-1" translatesAutoresizingMaskIntoConstraints="NO" id="ggB-0g-XGh">
+                                                <rect key="frame" x="133" y="0.0" width="295" height="270"/>
                                             </imageView>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Eb-dI-Jp5" customClass="VerseTableView" customModule="WYFISA" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="20" width="560" height="427"/>
+                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="753" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Eb-dI-Jp5" customClass="VerseTableView" customModule="WYFISA" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="290" width="560" height="157"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <prototypes>
@@ -168,6 +168,7 @@
                                     <constraint firstItem="gGX-5F-XhG" firstAttribute="centerY" secondItem="ggB-0g-XGh" secondAttribute="centerY" id="9p2-4Y-dHU"/>
                                     <constraint firstAttribute="trailing" secondItem="yKv-fP-VGS" secondAttribute="trailing" id="GJh-CQ-QGp"/>
                                     <constraint firstItem="gGX-5F-XhG" firstAttribute="centerX" secondItem="ggB-0g-XGh" secondAttribute="centerX" id="Lhf-9M-zMd"/>
+                                    <constraint firstItem="9Eb-dI-Jp5" firstAttribute="height" secondItem="HAV-Ay-XOw" secondAttribute="height" multiplier="0.25" id="MwA-TC-pqh"/>
                                     <constraint firstItem="sz8-4h-p7m" firstAttribute="width" secondItem="HAV-Ay-XOw" secondAttribute="width" id="U4j-2E-wO1"/>
                                     <constraint firstAttribute="bottomMargin" secondItem="eEa-Gj-aYh" secondAttribute="bottom" constant="10" id="eBj-qJ-ZNg"/>
                                     <constraint firstItem="yKv-fP-VGS" firstAttribute="top" secondItem="HAV-Ay-XOw" secondAttribute="top" id="jnv-VE-PYj"/>
@@ -178,6 +179,9 @@
                                 <variation key="default">
                                     <mask key="subviews">
                                         <exclude reference="yKv-fP-VGS"/>
+                                    </mask>
+                                    <mask key="constraints">
+                                        <exclude reference="MwA-TC-pqh"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -195,6 +199,7 @@
                             <constraint firstItem="0kE-06-jOP" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="nLP-g8-Ilt"/>
                             <constraint firstItem="0kE-06-jOP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="vFU-7j-Nav"/>
                             <constraint firstItem="HAV-Ay-XOw" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="yRC-9f-F2Y"/>
+                            <constraint firstItem="ggB-0g-XGh" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.45" id="zww-GQ-gBh"/>
                         </constraints>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>

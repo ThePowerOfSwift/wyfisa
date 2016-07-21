@@ -21,10 +21,27 @@ class WYFISATests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testHasAllBooks() {
+
+        // 66 total books
+        for i in 1...66 {
+            let book = Books.init(rawValue: i)
+            XCTAssert(book != nil)
+        }
+        
+        // not 67
+        let book = Books.init(rawValue: 67)
+        XCTAssert(book == nil)
     }
+
+    func testAllBooksHaveName() {
+        
+        for i in 1...66 {
+            let book = Books.init(rawValue: i)
+            XCTAssert(book?.name() != nil)
+        }
+    }
+    
     
     func testPerformanceExample() {
         // This is an example of a performance test case.

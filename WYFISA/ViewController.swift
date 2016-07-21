@@ -57,14 +57,12 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         stillCamera.zoom(1)
         stillCamera.focus(.AutoFocus)
         
-
         // start capture
         stillCamera.capture()
         stillCamera.delegate = self
         stillCamera.pause()
 
     }
-    
 
     @IBAction func handleScreenTap(sender: AnyObject) {
         stillCamera.focus(.AutoFocus)
