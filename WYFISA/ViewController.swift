@@ -21,7 +21,7 @@ struct CaptureSession {
         return self.matches != nil
     }
 }
-class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCellDelegate {
+class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCellDelegate, UIScrollViewDelegate {
 
     @IBOutlet var debugWindow: GPUImageView!
     @IBOutlet var verseTable: VerseTableView!
@@ -32,6 +32,10 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     @IBOutlet var captureBox: UIImageView!
     @IBOutlet var refeshButton: UIButton!
     @IBOutlet var capTut: UILabel!
+    @IBOutlet var tutScrollView: UIScrollView!
+    @IBOutlet var tutPager: UIPageControl!
+    @IBOutlet var tutImage: UIImageView!
+    
     
     let stillCamera = CameraManager.sharedInstance
     let db = DBQuery.sharedInstance
@@ -306,18 +310,89 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         }
     }
     
+
     func firstLaunchTut(){
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if let isAppAlreadyLaunchedOnce = defaults.stringForKey("isAppAlreadyLaunchedOnce"){
+            print(isAppAlreadyLaunchedOnce) // was launched
+        } else {
+            showTut()
+            // only set to bool when they've seen forecast page
+            defaults.setBool(true, forKey: "isAppAlreadyLaunchedOnce")
+        }
+        
         self.capTut.hidden = false
         Animations.startAfter(1, forDuration: 0.5){
             self.capTut.alpha = 1
         }
     }
+
+    @IBAction func didSwipeTut(sender: AnyObject) {
+    }
+    
+    func showTut(){
+   
+        self.tutScrollView.hidden = false
+        self.tutPager.hidden = false
+        self.tutScrollView.contentSize.width = self.view.frame.size.width * 4.0
+        self.tutScrollView.delegate = self
+        self.captureButton.hidden = true
+        self.captureBox.hidden = true
+        self.expandButton.hidden = true
+        self.refeshButton.hidden = true
+    }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        let page =  self.tutScrollView.contentOffset.x/self.view.frame.size.width
+        self.tutPager.currentPage = Int(page)
+        switch page {
+        case 0:
+                self.tutImage.alpha = 0
+            Animations.start(0.2){
+                self.tutImage.alpha = 1
+                self.tutImage.image = UIImage.init(named: "Find")
+            }
+
+        case 1:
+                self.tutImage.alpha = 0
+            Animations.start(0.2){
+                self.tutImage.alpha = 1
+                self.tutImage.image = UIImage.init(named: "Capture")
+            }
+        case 2:
+            self.tutImage.alpha = 0
+            Animations.start(0.2){
+                self.tutImage.alpha = 1
+                self.tutImage.image = UIImage.init(named: "Study")
+            }
+        default:
+            // done
+            self.tutScrollView.delegate = self
+            self.captureButton.hidden = false
+            self.captureBox.hidden = false
+            self.expandButton.hidden = false
+            self.refeshButton.hidden = false
+            Animations.start(0.1){
+                self.tutScrollView.alpha = 0
+                self.tutScrollView.hidden = true
+                self.tutScrollView.delegate = nil
+                self.tutPager.hidden = true
+            }
+
+
+        }
+    }
+
     
     func hideTut() {
         Animations.start(0.2){
             self.capTut.hidden = true
         }
     }
+    
+    // MARK: scrollview delegate
+    
 }
 
 
