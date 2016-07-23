@@ -133,6 +133,7 @@ class WYFISATests: XCTestCase {
         if let verseInfos = tm.findVersesInText("There is only one way to life (See. John 14:6) for the answer"){
             XCTAssert(verseInfos.count == 1)
             XCTAssert(verseInfos[0].name == "John 14:6", verseInfos[0].name)
+            XCTAssert(verseInfos[0].id == "43014006", verseInfos[0].id)
         } else {
             XCTFail("expected match")
         }
@@ -145,11 +146,51 @@ class WYFISATests: XCTestCase {
         }
     }
     
+    // MARK: DBQuery
+    func testDbLookupVerse(){
+        let db = DBQuery()
+        let verseText = db.lookupVerse("43014006") //John 14:6
+        XCTAssert(verseText != nil)
+        let expectedText = "Jesus said to him, \"I am the way, the truth, and the life. No one comes to the Father, except through me."
+        XCTAssert(verseText == expectedText)
+    }
     
-    func testPerformanceExample() {
+    func testDbLookupVerseHasChapter(){
+        let db = DBQuery()
+        let chapterText = db.chapterForVerse("43014006")
+        XCTAssert(chapterText.length > 0)
+        let verseText = "Jesus said to him, \"I am the way, the truth, and the life. No one comes to the Father, except through me."
+        XCTAssert(chapterText.containsString(verseText))
+    }
+    
+    func testDbVerseHasCrossReference(){
+        let db = DBQuery()
+        let crossRefs = db.crossReferencesForVerse("43014006")
+        XCTAssert(crossRefs.count > 0)
+    }
+    
+    // MARK: OCR
+    
+    // MARK: ImageFilter
+    
+    
+    // MARK: Perf
+    func testPerformanceFetchVerse() {
         // This is an example of a performance test case.
         self.measureBlock {
-            // Put the code you want to measure the time of here.
+            DBQuery.sharedInstance.lookupVerse("43014006")
+        }
+    }
+    func testPerformanceFetchChapter() {
+        // This is an example of a performance test case.
+        self.measureBlock {
+            DBQuery.sharedInstance.chapterForVerse("43014006")
+        }
+    }
+    func testPerformanceFetchRferences() {
+        // This is an example of a performance test case.
+        self.measureBlock {
+            DBQuery.sharedInstance.crossReferencesForVerse("43014006")
         }
     }
     

@@ -391,8 +391,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         }
     }
     
-    // MARK: scrollview delegate
-    
 }
 
 
