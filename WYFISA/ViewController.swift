@@ -222,7 +222,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
 
         let id = self.verseTable.numberOfSections
         
-        if let allVerses = TextMatcher.findVersesInText(text) {
+        if let allVerses = TextMatcher().findVersesInText(text) {
 
             for var verseInfo in allVerses {
                 if let verse = self.db.lookupVerse(verseInfo.id){
