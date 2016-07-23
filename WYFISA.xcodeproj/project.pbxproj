@@ -11,6 +11,9 @@
 		98D7016DCF5935DB2A5AD85C /* Pods_WYFISATests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231106650F4EB642E443C0B1 /* Pods_WYFISATests.framework */; };
 		C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */; };
 		C316B6B61D3A35DE00E272A3 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */; };
+		C379515D1D43D5F4003FB4F5 /* books.json in Resources */ = {isa = PBXBuildFile; fileRef = C379515C1D43D5F4003FB4F5 /* books.json */; };
+		C379515E1D43D5F4003FB4F5 /* books.json in Resources */ = {isa = PBXBuildFile; fileRef = C379515C1D43D5F4003FB4F5 /* books.json */; };
+		C37951601D43D62A003FB4F5 /* Books.swift in Sources */ = {isa = PBXBuildFile; fileRef = C379515F1D43D62A003FB4F5 /* Books.swift */; };
 		C37A7E3F1D3ABFF300F37F20 /* WYFISAExtentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37A7E3E1D3ABFF300F37F20 /* WYFISAExtentions.swift */; };
 		C38E6F1D1D3FDD1700833356 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C390907D1D2C9AF8000DFD15 /* Assets.xcassets */; };
 		C38E6F1E1D3FDF1200833356 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C390907D1D2C9AF8000DFD15 /* Assets.xcassets */; };
@@ -59,6 +62,8 @@
 		C036CFC08D857FBD0986B028 /* Pods-WYFISATests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISATests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISATests/Pods-WYFISATests.debug.xcconfig"; sourceTree = "<group>"; };
 		C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseDetailModalViewController.swift; sourceTree = "<group>"; };
 		C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
+		C379515C1D43D5F4003FB4F5 /* books.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = books.json; sourceTree = "<group>"; };
+		C379515F1D43D62A003FB4F5 /* Books.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Books.swift; sourceTree = "<group>"; };
 		C37A7E3E1D3ABFF300F37F20 /* WYFISAExtentions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISAExtentions.swift; sourceTree = "<group>"; };
 		C39090731D2C9AF7000DFD15 /* WYFISA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WYFISA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C39090761D2C9AF8000DFD15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -171,6 +176,7 @@
 				C3F53B741D36945900E2F80D /* VerseTableViewCell.swift */,
 				C3F53B701D36219400E2F80D /* CameraManager.swift */,
 				C3F53B8F1D372C0200E2F80D /* TextMatcher.swift */,
+				C379515F1D43D62A003FB4F5 /* Books.swift */,
 				C3F53B951D37499700E2F80D /* DBQuery.swift */,
 				C3D506591D3932FB00A04C83 /* Animations.swift */,
 				C390907A1D2C9AF8000DFD15 /* Main.storyboard */,
@@ -179,6 +185,7 @@
 				C37A7E3E1D3ABFF300F37F20 /* WYFISAExtentions.swift */,
 				C390907D1D2C9AF8000DFD15 /* Assets.xcassets */,
 				C39090821D2C9AF8000DFD15 /* Info.plist */,
+				C379515C1D43D5F4003FB4F5 /* books.json */,
 				C39090D21D2C9DE7000DFD15 /* WYFISA-Bridging-Header.h */,
 				C3FB946B1D3F0F3E00736196 /* t_web.db */,
 				C39090CF1D2C9C88000DFD15 /* tessdata */,
@@ -330,6 +337,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C379515D1D43D5F4003FB4F5 /* books.json in Resources */,
 				C39090D01D2C9C88000DFD15 /* tessdata in Resources */,
 				C316B6B61D3A35DE00E272A3 /* SplashScreen.storyboard in Resources */,
 				C3FB946C1D3F0FDC00736196 /* t_web.db in Resources */,
@@ -343,6 +351,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C379515E1D43D5F4003FB4F5 /* books.json in Resources */,
 				C38E6F1D1D3FDD1700833356 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -487,6 +496,7 @@
 				C39090791D2C9AF8000DFD15 /* ViewController.swift in Sources */,
 				C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */,
 				C3F53B761D36945900E2F80D /* VerseTableViewCell.swift in Sources */,
+				C37951601D43D62A003FB4F5 /* Books.swift in Sources */,
 				C3F53B901D372C0200E2F80D /* TextMatcher.swift in Sources */,
 				C3F53B961D37499700E2F80D /* DBQuery.swift in Sources */,
 				C37A7E3F1D3ABFF300F37F20 /* WYFISAExtentions.swift in Sources */,
@@ -558,7 +568,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: RISE & RUN LLC (5B5KD5S2Z5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: RISE & RUN LLC (5B5KD5S2Z5)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = NO;
@@ -581,6 +592,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "c4616784-547c-4722-82ca-fdac9e741a4b";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -604,7 +616,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: RISE & RUN LLC (5B5KD5S2Z5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: RISE & RUN LLC (5B5KD5S2Z5)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = NO;
@@ -620,6 +633,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "c4616784-547c-4722-82ca-fdac9e741a4b";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
