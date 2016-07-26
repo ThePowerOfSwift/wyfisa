@@ -13,6 +13,7 @@ struct CaptureSession {
     var active: Bool = false
     var currentId: UInt64 = 0
     var matches: [String]?
+    var newMatches = 0
     
     func clearCache() {
         DBQuery.sharedInstance.clearCache()
@@ -98,7 +99,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             Animations.start(0.5) {
                 self.captureBox.hidden = false
                 self.captureButton.alpha = 1
-                self.captureBox.alpha = 1
+                self.captureBox.alpha = 0
                 self.maskView.alpha = 0
             }
         }
@@ -129,8 +130,12 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             if captureLock.tryLock(){
                 self.session.currentId = 0
 
+                // empty table
                 self.verseTable.clear()
                 
+                // clear matches on session
+                self.session.matches = nil
+
                 // unlock safely after clear operation
                 Timing.runAfter(1){
                     self.captureLock.unlock()
@@ -191,10 +196,11 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
 
         self.session.currentId += 1
         
-        if self.session.hasMatches() == false && self.session.active {
+        if self.session.newMatches == 0 && self.session.active {
+            print("remove", self.verseTable.nVerses)
             self.verseTable.removeFailedVerse()
         }
-        self.session.matches = nil
+        self.session.newMatches = 0
         self.session.active = false
         
         updateLock.unlock()
@@ -231,7 +237,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                     verseInfo.text = verse
                     
                     // automatically add first match
-                    if self.session.hasMatches() == false {
+                    if self.session.newMatches == 0 {
                         self.verseTable.updateVerseAtIndex(id-1, withVerseInfo: verseInfo)
                         self.session.matches = [String]()
                     } else {
@@ -247,6 +253,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                             return
                         }
                     }
+                    self.session.newMatches += 1
                     stillCamera.focus(.Locked)
                     self.session.matches?.append(verseInfo.id)
                 }

@@ -213,9 +213,18 @@ class TextMatcher {
     
     
     // get concatenated list of all book patterns
+    // gives new testamant priority
     func bookPatterns() -> String {
-        var books = self.pattern(Books.Gen)
-        for i in 2...66 {
+        
+        let matt = Books.Mt
+        var books = self.pattern(matt)
+        let ntStart = matt.rawValue+1
+        for i in ntStart...66 {
+            if let book = Books(rawValue: i) {
+                books.appendContentsOf("|\(self.pattern(book))")
+            }
+        }
+        for i in 1..<matt.rawValue {
             if let book = Books(rawValue: i) {
                 books.appendContentsOf("|\(self.pattern(book))")
             }

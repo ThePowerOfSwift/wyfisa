@@ -28,8 +28,10 @@ class WYFISAUITests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
+    func testDidCaptureVerses() {
+        
         // Use recording to get started writing UI tests.
+        XCUIApplication().buttons["Oval 1"].pressForDuration(1.2);
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     

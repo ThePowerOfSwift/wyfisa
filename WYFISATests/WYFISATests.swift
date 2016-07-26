@@ -170,11 +170,37 @@ class WYFISATests: XCTestCase {
     }
     
     // MARK: OCR
+    func testRecognizeMultiverseImage(){
+        let ocr = OCR()
+        let image = UIImage(named: "multiverse")
+        let text = ocr.process(image)
+        XCTAssert(text != nil)
+        if let allVerses = TextMatcher().findVersesInText(text!) {
+            XCTAssert(allVerses.count == 2)
+            XCTAssert(allVerses[0].name == "1 Peter 3:22")
+            XCTAssert(allVerses[1].name == "1 Corinthians 15:28")
+        } else {
+            XCTFail("expected verses")
+        }
+
+    }
+    // MARK: OCR
+    func testRecognizeOneAnotherImage(){
+        let ocr = OCR()
+        let image = UIImage(named: "oneanother")
+        let filteredImage = ocr.cropScaleAndFilter(image!)
+        let text = ocr.process(filteredImage)
+        XCTAssert(text != nil)
+        print("TEXT", text)
+        if let allVerses = TextMatcher().findVersesInText(text!) {
+            print(allVerses.count)
+        } else {
+            XCTFail("expected verses")
+        }
+        
+    }
     
-    // MARK: ImageFilter
-    
-    
-    // MARK: Perf
+    // MARK: DB Perf
     func testPerformanceFetchVerse() {
         // This is an example of a performance test case.
         self.measureBlock {
@@ -191,6 +217,45 @@ class WYFISATests: XCTestCase {
         // This is an example of a performance test case.
         self.measureBlock {
             DBQuery.sharedInstance.crossReferencesForVerse("43014006")
+        }
+    }
+    
+    // MARK: Filter Perf
+    func testPerformanceCropImage() {
+        let image = UIImage(named: "multiverse")
+        let cropFilter = ImageFilter.cropFilter(0, y: 0.05, width: 0.8, height: 0.4)
+        self.measureBlock {
+            // crop
+            cropFilter.imageByFilteringImage(image)
+        }
+    }
+    func testPerformanceScale() {
+        let image = UIImage(named: "multiverse")
+        self.measureBlock {
+            ImageFilter.scaleImage(image!, maxDimension: 640)
+        }
+    }
+    func testPerformanceApplyThresholdImage() {
+        let image = UIImage(named: "multiverse")
+        let thresholdFilter = ImageFilter.thresholdFilter(10.0)
+        self.measureBlock {
+            thresholdFilter.imageByFilteringImage(image)
+        }
+    }
+    func testPermanceScropScaleAndThreshold(){
+        let ocr = OCR()
+        let image = UIImage(named: "multiverse")
+        self.measureBlock {
+            ocr.cropScaleAndFilter(image)
+        }
+    }
+    
+    // MARK: OCR Perf
+    func testPerformanceOCRMultiverse() {
+        let ocr = OCR()
+        let image = UIImage(named: "multiverse")
+        self.measureBlock {
+            ocr.process(image)
         }
     }
     
