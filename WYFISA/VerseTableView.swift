@@ -43,6 +43,14 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     
     func updateVerseAtIndex(id: Int, withVerseInfo verse: VerseInfo){
         self.recentVerses[id-1] = verse
+        let idxSet = NSIndexSet(index: id)
+
+        dispatch_async(dispatch_get_main_queue()) {
+            // self.reloadData()
+             let path = NSIndexPath(forRow: 0, inSection: self.nVerses)
+             self.reloadSections(idxSet, withRowAnimation: .None)
+             self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
+        }
     }
     
     // when a render fails the section id is 0
@@ -67,8 +75,11 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         self.insertSections(idxSet, withRowAnimation: .None)
         let path = NSIndexPath(forRow: 0, inSection: self.nVerses)
         
+        self.reloadSections(idxSet, withRowAnimation: .None)
+
         // scroll down to new section to create a 'scroll up' effect
         self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
+        
     }
     
     func scrollToEnd(){

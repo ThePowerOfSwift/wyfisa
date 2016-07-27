@@ -30,16 +30,15 @@ class TextMatcher {
         
         var verseInfos: [VerseInfo]?
         let bookStr = self.bookPatterns()
-        let chapters: Regex = Regex("(\(bookStr))\\w*?.?\\s?(\\d{1,3})(?:\\s|:|;)\\s?(\\d{1,3})",  options: [.IgnoreCase])
+        let chapters: Regex = Regex("(\(bookStr))(?:\\D{0,2})(\\d{1,3})(?:\\D{1,2})(\\d{1,3})",  options: [.IgnoreCase])
 
-        // replace instances of 'l' and 'i' with 1
-        let parsedText = text.replace("l", with: "1").replace("i", with: "1").replace("I", with: "1")
-        let matches = chapters.allMatches(parsedText)
+        let matches = chapters.allMatches(text)
         for match in matches {
+            
             let bookStr = match.captures[0]!
+            print(bookStr)
             let chapter = match.captures[1]!
             let verse = match.captures[2]!
-            
             let bookId = self.patternId(bookStr)
             let book = Books(rawValue: bookId)!.name()
             let matchedText = "\(book) \(chapter):\(verse)"
@@ -62,19 +61,19 @@ class TextMatcher {
         let bookName = book.name()
         switch book {
         case .Gen:
-            return bookName+"|Genes1s|Gen|Ge|Gn|Gcn"
+            return bookName+"|G\\w{6}|G\\wn|\\wen|Ge\\w"
         case .Ex:
-            return bookName+"|Exo|Ex|Exod"
+            return bookName+"|E\\w{5}|Ex\\w{0,2}"
         case .Lev:
-            return bookName+"|Lev1t1cus|Lev|Le|Lv"
+            return bookName+"|L\\w{8}|L\\wv"
         case .Num:
-            return bookName+"|Num|Nu|Nm|Nb"
+            return bookName+"|N\\w{6}|Nu\\w|N\\wm|\\wum"
         case .Deut:
-            return bookName+"|Deut|Dt"
+            return bookName+"|Deut|Dt "
         case .Josh:
             return bookName+"|Josh|Jos|Jsh"
         case .Judg:
-            return bookName+"|Judg|Jdg|Jg|Jdgs"
+            return bookName+"|Judg|Jdg|Jg |Jdgs"
         case .Ruth:
             return bookName+"|Rth"
         case .Sam1:
@@ -104,7 +103,7 @@ class TextMatcher {
         case .Ecc:
             return bookName+"|Ecc1es1astes|Ecc1es1astes|Ecc1es|Ecc|Ec|Qoh|Qohe1eth"
         case .Song:
-            return bookName+"|Song|of So1omon Song|So|Cant1c1e of Cant1c1es|Cant1c1es|Song of Songs|SOS"
+            return bookName+"|Song|of So1omon Song|Cant1c1e of Cant1c1es|Cant1c1es|Song of Songs|SOS"
         case .Isa:
             return bookName+"|1sa1ah|1sa|1s"
         case .Jer:
@@ -122,7 +121,7 @@ class TextMatcher {
         case .Am:
             return bookName+"|Am"
         case .Ob:
-            return bookName+"|Obad1ah|Obad|Ob"
+            return bookName+"|Obad1ah|Obad|Ob "
         case .Jon:
             return bookName+"|Jnh|Jon"
         case .Mic:
@@ -132,13 +131,13 @@ class TextMatcher {
         case .Hab:
             return bookName+"|Hab"
         case .Zeph:
-            return bookName+"|Zephan1ah|Zeph|Zep|Zp"
+            return bookName+"|Zephan1ah|Zeph|Zep"
         case .Hag:
-            return bookName+"|Hagga1|Hag|Hg"
+            return bookName+"|Hagga1|Hag"
         case .Zech:
-            return bookName+"|Zechar1ah|Zech|Zec|Zc"
+            return bookName+"|Zechar1ah|Zech"
         case .Mal:
-            return bookName+"|Ma1ach1|Ma1|Ma1|M1"
+            return bookName+"|Ma1ach1|Ma1|Ma1"
         case .Mt:
             return bookName+"|Matt|Mt"
         case .Mk:
@@ -146,15 +145,15 @@ class TextMatcher {
         case .Lk:
             return bookName+"|1uke|Luk|Lk"
         case .Jn:
-            return bookName+"|John|Jn|jn|Jhn|1n|1ohn"
+            return bookName+"|John|Dohn|Jn|jn|Jhn|1n|1ohn"
         case .Acts:
             return bookName+"|Ac"
         case .Rom:
             return bookName+"|Rom|Ro|Rm|1om|1Romans"
         case .Cor1:
-            return bookName+"|1 Cor1nth1ans|1 Cor|1 Co|1 Co|1Co|1 Cor|1Cor|1 Cor1nth1ans|1Cor1nth1ans|1st Cor1nth1ans|F1rst Cor1nth1ans"
+            return bookName+"|1 Cor1nth1ans|1 Cor|1 Cor|1Cor|1 Cor1nth1ans|1Cor1nth1ans|1st Cor1nth1ans|F1rst Cor1nth1ans"
         case .Cor2:
-            return bookName+"|2 Cor1nth1ans|2 Cor|2 Co|11 Co|2Co|11 Cor|2Cor|11 Cor1nth1ans|2Cor1nth1ans|2nd Cor1nth1ans|Second Cor1nth1ans"
+            return bookName+"|2 Cor1nth1ans|2 Cor|11 Cor|2Cor|11 Cor1nth1ans|2Cor1nth1ans|2nd Cor1nth1ans|Second Cor1nth1ans"
         case .Gal:
             return bookName+"|Ga1at1ans|Ga1|Ga"
         case .Eph:
@@ -164,13 +163,13 @@ class TextMatcher {
         case .Col:
             return bookName+"|Co1oss1ans|Co1"
         case .Thess1:
-            return bookName+"|1 Thessa1on1ans|1 Thess|1 Th|1 Th|1Th|1 Thes|1Thes|1 Thess|1Thess|1 Thessa1on1ans|1Thessa1on1ans|1st Thessa1on1ans|F1rst Thessa1on1ans"
+            return bookName+"|1 Thessa1on1ans|1 Thess|1 Th|1 Th|1Th|1 Thes|1Thes|1 Thess|1Thess|1 Thessa1on1ans|1Thessa1on1ans|1st Thessa1on1ans|F1rst Thessa1on1ans|1 T\\w{4}"
         case .Thess2:
-            return bookName+"|2 Thessa1on1ans|2 Thess|2 Th|11 Th|2Th|11 Thes|2Thes|11 Thess|2Thess|11 Thessa1on1ans|2Thessa1on1ans|2nd Thessa1on1ans|Second Thessa1on1ans"
+            return bookName+"|2 Thessa1on1ans|2 Thess|2 Th|11 Th|2Th|11 Thes|2Thes|11 Thess|2Thess|11 Thessa1on1ans|2Thessa1on1ans|2nd Thessa1on1ans|Second Thessa1on1ans|2 T\\w{4}"
         case .Tim1:
-            return bookName+"|1 T1mothy|1 T1m|1 T1|1 T1|1T1|1 T1m|1T1m|1 T1mothy|1T1mothy|1st T1mothy|F1rst T1mothy"
+            return bookName+"|1 T1mothy|1 T1m|1 T1|1 T1|1T1|1 T1m|1T1m|1 T1mothy|1T1mothy|1st T1mothy|F1rst T1mothy|1 T\\w{2}|1 T\\w{6}"
         case .Tim2:
-            return bookName+"|2 T1mothy|2 T1m|2 T1|11 T1|2T1|11 T1m|2T1m|11 T1mothy|2T1mothy|2nd T1mothy|Second T1mothy"
+            return bookName+"|2 T1mothy|2 T1m|2 T1|11 T1|2T1|11 T1m|2T1m|11 T1mothy|2T1mothy|2nd T1mothy|Second T1mothy|1 T\\w{2}|1 T\\w{6}"
         case .Titus:
             return bookName+"|T1tus|T1tus|T1t"
         case .Philemon:
@@ -180,7 +179,7 @@ class TextMatcher {
         case .Jas:
             return bookName+"|Jas|Jm"
         case .Pet1:
-            return bookName+"|1 Pet|1 Pe|1 Pe|1Pe|1 Pet|1Pet|1 Pt|1 Pt|1Pt|1 Peter|1Peter|1st Peter|F1rst Peter"
+            return bookName+"|1 Pet|1 Pe|1 Pe|1Pe|1 Pet|1Pet|1 Pt|1 Pt|1Pt|1 Peter|1Peter|1st Peter|F1rst Peter|1 P\\w{2,4}"
         case .Pet2:
             return bookName+"|2 Pet|2 Pe|11 Pe|2Pe|11 Pet|2Pet|11 Pt|2 Pt|2Pt|11 Peter|2Peter|2nd Peter|Second Peter"
         case .Jn1:
@@ -200,9 +199,12 @@ class TextMatcher {
     func patternId(pattern: String) -> Int {
         for i in 1...66 {
             if let book = Books(rawValue: i) {
-                let patterns = self.pattern(book).componentsSeparatedByString("|")
-                for p in patterns {
-                    if pattern.uppercaseString == p.uppercaseString {
+                let bookPatterns = self.pattern(book).componentsSeparatedByString("|")
+                for matchPattern in bookPatterns {
+                    let rx: Regex = Regex("^\(matchPattern)", options: [.IgnoreCase])
+                    
+                    let matches = rx.allMatches(pattern)
+                    if matches.count > 0 {
                         return i
                     }
                 }

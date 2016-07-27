@@ -21,7 +21,7 @@ class CameraManager {
     let camera: GPUImageStillCamera
     let filter = ImageFilter.genericFilter()
     let ocr: OCR = OCR()
-    var simImage: UIImage! = UIImage(named: "multiverse")
+    var simImage: UIImage! = UIImage(named: "oneanother")
     
     weak var delegate:CameraManagerDelegate?
 
@@ -135,6 +135,7 @@ class CameraManager {
             
             // do image recognition
             if let recognizedText = ocr.process(image){
+                print(recognizedText)
                 self.delegate?.didProcessFrame(self, withText: recognizedText, fromSession: fromSession)
             }
         }

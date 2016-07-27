@@ -12,14 +12,14 @@ import GPUImage
 struct CaptureSession {
     var active: Bool = false
     var currentId: UInt64 = 0
-    var matches: [String]?
+    var matches: [String] = [String]()
     var newMatches = 0
     
     func clearCache() {
         DBQuery.sharedInstance.clearCache()
     }
     func hasMatches() -> Bool {
-        return self.matches != nil
+        return self.newMatches > 0
     }
 }
 class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCellDelegate, UIScrollViewDelegate {
@@ -134,7 +134,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                 self.verseTable.clear()
                 
                 // clear matches on session
-                self.session.matches = nil
+                self.session.matches = [String]()
 
                 // unlock safely after clear operation
                 Timing.runAfter(1){
@@ -236,34 +236,33 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                     // we have match
                     verseInfo.text = verse
                     
-                    // automatically add first match
-                    if self.session.newMatches == 0 {
-                        self.verseTable.updateVerseAtIndex(id-1, withVerseInfo: verseInfo)
-                        self.session.matches = [String]()
-                    } else {
-                        // make sure not repeat match
-                        if self.session.matches?.indexOf(verseInfo.id) == nil {
+                    // make sure not repeat match
+                    if self.session.matches.indexOf(verseInfo.id) == nil {
+                        
+                        // first match replaces scanning icon
+                        if self.session.newMatches == 0 {
+                            self.verseTable.updateVerseAtIndex(id-1, withVerseInfo: verseInfo)
+                        } else {
                             // new match
                             self.verseTable.appendVerse(verseInfo)
                             dispatch_async(dispatch_get_main_queue()) {
                                 self.verseTable.addSection()
                             }
-                        } else {
-                            updateLock.unlock()
-                            return
                         }
+                    } else {
+                        // dupe
+                        updateLock.unlock()
+                        return
                     }
+                    
                     self.session.newMatches += 1
                     stillCamera.focus(.Locked)
-                    self.session.matches?.append(verseInfo.id)
+                    self.session.matches.append(verseInfo.id)
                 }
             }
         }
         
         // reload table on main queue
-        dispatch_async(dispatch_get_main_queue()) {
-            self.verseTable.reloadData()
-        }
         if self.session.hasMatches() == false {
             stillCamera.focus(.AutoFocus)
         }
@@ -321,9 +320,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     func firstLaunchTut(){
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        if let isAppAlreadyLaunchedOnce = defaults.stringForKey("isAppAlreadyLaunchedOnce"){
-            print(isAppAlreadyLaunchedOnce) // was launched
-        } else {
+        if defaults.stringForKey("isAppAlreadyLaunchedOnce") == nil {
             showTut()
             // only set to bool when they've seen forecast page
             defaults.setBool(true, forKey: "isAppAlreadyLaunchedOnce")
