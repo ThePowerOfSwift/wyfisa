@@ -69,17 +69,17 @@ class TextMatcher {
         case .Num:
             return bookName+"|N\\w{6}|Nu\\w|N\\wm|\\wum"
         case .Deut:
-            return bookName+"|Deut|Dt "
+            return bookName+"|D\\w{3}|Dt "
         case .Josh:
-            return bookName+"|Josh|Jos|Jsh"
+            return bookName+"|J\\w{4}a|Jo\\w{4}|J\\w{2}h|J\\w{2}b|Jos|J\\wh|J\\wb"
         case .Judg:
-            return bookName+"|Judg|Jdg|Jg |Jdgs"
+            return bookName+"|Ju\\w{4}|J\\w{4}s|Ju\w{2}|Jdg|Jg|Jdgs"
         case .Ruth:
-            return bookName+"|Rth"
+            return bookName+"|R\\w{3}|Rth"
         case .Sam1:
-            return bookName+"|1 Samue1|1 Sam|1 Sa|1Samue1|1 Sa|1 Sm|1 Sam|1Sam|1 Samue1|1st Samue1|F1rst Samue1"
+            return bookName+"|1\\s{0,1}S\\w{5}|1\\s{0,1}S\\w{2}|1\\s{0,1}Sa|1\\s{0,1}Sm|1st S\\w{5}|First S\\w{5}"
         case .Sam2:
-            return bookName+"|2 Samue1|2 Sam|2 Sa|2S|11 Sa|2 Sm|11 Sam|2Sam|11 Samue1|2Samue1|2nd Samue1|Second Samue1"
+            return bookName+"|2\\s{0,1}S\\w{5}|2\\s{0,1}S\\w{2}|2\\s{0,1}Sa|2\\s{0,1}Sm|2nd S\\w{5}|Second S\\w{5}"
         case .Kings1:
             return bookName+"|1 K1ngs|1 Kgs|1 K1|1K|1 Kgs|1Kgs|1 K1|1K1|1 K1ngs|1K1ngs|1st Kgs|1st K1ngs|F1rst K1ngs|F1rst Kgs|1K1n"
         case .Kings2:
@@ -131,21 +131,21 @@ class TextMatcher {
         case .Hab:
             return bookName+"|Hab"
         case .Zeph:
-            return bookName+"|Zephan1ah|Zeph|Zep"
+            return bookName+"|Zep\\w{6}|Zeph|Zep"
         case .Hag:
-            return bookName+"|Hagga1|Hag"
+            return bookName+"|Hag\\w{0,3}"
         case .Zech:
-            return bookName+"|Zechar1ah|Zech"
+            return bookName+"|Zec\\w{1,6}"
         case .Mal:
-            return bookName+"|Ma1ach1|Ma1|Ma1"
+            return bookName+"|Mal\\w{4}|Mal|Ma1"
         case .Mt:
-            return bookName+"|Matt|Mt"
+            return bookName+"|Mat\\w{1,4}|Mt"
         case .Mk:
-            return bookName+"|Mrk|Mk|Mr"
+            return bookName+"|M\\w\\wk|Mrk|Mk|Mr"
         case .Lk:
-            return bookName+"|1uke|Luk|Lk"
+            return bookName+"|Lu\\w{1,2}|Lk"
         case .Jn:
-            return bookName+"|John|Dohn|Jn|jn|Jhn|1n|1ohn"
+            return bookName+"|\\wohn|Jn|Jhn|J\\w{0,2}n|1\\w{0,2}n"
         case .Acts:
             return bookName+"|Ac"
         case .Rom:
