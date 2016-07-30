@@ -11,6 +11,9 @@ import Regex
 
 @testable import WYFISA
 
+
+
+    
 class WYFISATests: XCTestCase {
     
     override func setUp() {
@@ -70,82 +73,7 @@ class WYFISATests: XCTestCase {
         XCTAssert(Books.Rev.name() == "Revelation", Books.Rev.name())
     }
     
-    // MARK: TextMatcher
-    func testEveryBookHasPattern(){
-        let tm = TextMatcher()
-        for i in 1...66 {
-            let book = Books.init(rawValue: i)
-            XCTAssert(book != nil)
-            let pattern = tm.pattern(book!)
-            let patternList = pattern.componentsSeparatedByString("|")
-            XCTAssert(patternList.count > 1) // at least 1 or more patterns per book
-        }
-    }
-    
-    func testEveryPatternMatchesBook(){
-        let tm = TextMatcher()
-        for i in 1...66 {
-            let book = Books.init(rawValue: i)
-            XCTAssert(book != nil)
-            let pattern = tm.pattern(book!)
-            let regex: Regex = Regex(pattern,  options: [])
-            let matches = regex.allMatches(book!.name())
-            XCTAssert(matches.count > 0)
-            XCTAssert(matches[0].matchedString == book!.name())
-        }
-    }
-    
-    func testMatcherHasAllPatterns(){
-        let tm = TextMatcher()
-        let patterns = tm.bookPatterns()
-        XCTAssert(patterns.length > 0)
-        
-        for i in 1...66 {
-            let book = Books.init(rawValue: i)
-            XCTAssert(book != nil)
-            
-            // should be able to find each pattern
-            XCTAssert(patterns.containsString(tm.pattern(book!)),
-                      "missing pattern for \(book!.name())")
-        }
-    }
-    
 
-    
-    func testBookIdForPattern(){
-        let tm = TextMatcher()
-        let patterns = tm.bookPatterns()
-        XCTAssert(patterns.length > 0)
-        
-        for i in 1...66 {
-            let book = Books.init(rawValue: i)
-            XCTAssert(book != nil)
-            // match on 2nd pattern
-            let patternToMatch = tm.pattern(book!).componentsSeparatedByString("|")[1]
-            let bookId = tm.patternId(patternToMatch)
-            XCTAssert(book!.rawValue == bookId,
-                      "Got \(bookId), Expected \(book!.rawValue)")
-        }
-    }
-    
-    func testMatchTextForPattern(){
-        let tm = TextMatcher()
-        if let verseInfos = tm.findVersesInText("There is only one way to life (See. John 14:6) for the answer"){
-            XCTAssert(verseInfos.count == 1)
-            XCTAssert(verseInfos[0].name == "John 14:6", verseInfos[0].name)
-            XCTAssert(verseInfos[0].id == "43014006", verseInfos[0].id)
-        } else {
-            XCTFail("expected match")
-        }
-    }
-    
-    func testNoMatchTextForPattern(){
-        let tm = TextMatcher()
-        if let _ = tm.findVersesInText("There is only one way to life (See. Jorn 14:6) for the answer"){
-            XCTFail("unexpected match detected")
-        }
-    }
-    
     // MARK: DBQuery
     func testDbLookupVerse(){
         let db = DBQuery()
@@ -174,6 +102,7 @@ class WYFISATests: XCTestCase {
         let ocr = OCR()
         let image = UIImage(named: "multiverse")
         let text = ocr.process(image)
+        print(text)
         XCTAssert(text != nil)
         if let allVerses = TextMatcher().findVersesInText(text!) {
             XCTAssert(allVerses.count == 2)
@@ -260,3 +189,173 @@ class WYFISATests: XCTestCase {
     }
     
 }
+
+
+// MARK: TextMatcher
+class TextMatcherTests: WYFISATests{
+    
+    func testMatchTextForGenPatterns(){
+        let tm = TextMatcher()
+        if let verseInfos = tm.findVersesInText("These are Genesis 1:1 verses, like Gcn 2:2 and Gen3:3 or Gen 4:4"){
+            XCTAssert(verseInfos.count == 4)
+            XCTAssert(verseInfos[0].name == "Genesis 1:1", verseInfos[0].name)
+            XCTAssert(verseInfos[1].name == "Genesis 2:2", verseInfos[1].name)
+            XCTAssert(verseInfos[2].name == "Genesis 3:3", verseInfos[2].name)
+            XCTAssert(verseInfos[3].name == "Genesis 4:4", verseInfos[3].name)
+        } else {
+            XCTFail("expected match")
+        }
+        if let verseInfos = tm.findVersesInText("These are not linesis 1:1 verses, lake ocn2:2 and gen vin3:3 or G\new 4:4 iGalesis1:1"){
+            XCTFail("unexpected match \(verseInfos[0].name)")
+        }
+    }
+    
+    
+    func testMatchTextForExPatterns(){
+        let tm = TextMatcher()
+        if let verseInfos = tm.findVersesInText("These are Exodus 1:1 verses, like Ex 2:2"){
+            XCTAssert(verseInfos.count == 2)
+            XCTAssert(verseInfos[0].name == "Exodus 1:1", verseInfos[0].name)
+            XCTAssert(verseInfos[1].name == "Exodus 2:2", verseInfos[1].name)
+        } else {
+            XCTFail("expected match")
+        }
+        if let verseInfos = tm.findVersesInText("These are not vsodus 1:1 verses, like avx2:2 and ex avarioun3:3 or GiX\new 4:4"){
+            XCTFail("unexpected match \(verseInfos[0].name)")
+        }
+    }
+    
+    
+    func testMatchTextForLevPatterns(){
+        let tm = TextMatcher()
+        if let verseInfos = tm.findVersesInText("These are Leviticus 1:1 verses, like Lev 2:2"){
+            XCTAssert(verseInfos.count == 2)
+            XCTAssert(verseInfos[0].name == "Leviticus 1:1", verseInfos[0].name)
+            XCTAssert(verseInfos[1].name == "Leviticus 2:2", verseInfos[1].name)
+        } else {
+            XCTFail("expected match")
+        }
+        if let verseInfos = tm.findVersesInText("These are not Lemation 1:1 verses, like unleavened 2:2 and lavetics:3 "){
+            XCTFail("unexpected match \(verseInfos[0].name)")
+        }
+    }
+    
+    func testMatchTextForNumPatterns(){
+        let tm = TextMatcher()
+        if let verseInfos = tm.findVersesInText("These are Numbers 1:1 verses, like Num 2:2"){
+            XCTAssert(verseInfos.count == 2)
+            XCTAssert(verseInfos[0].name == "Numbers 1:1", verseInfos[0].name)
+            XCTAssert(verseInfos[1].name == "Numbers 2:2", verseInfos[1].name)
+        } else {
+            XCTFail("expected match")
+        }
+        if let verseInfos = tm.findVersesInText("These are not Nermbers 1:1 verses, like NoNumom 2:2 nev3:3 or Natahn"){
+            XCTFail("unexpected match \(verseInfos[0].name)")
+        }
+    }
+    
+    func testMatchTextForDeutPatterns(){
+        let tm = TextMatcher()
+        if let verseInfos = tm.findVersesInText("These are Deuteronomy 1:1 verses, like Deut 2:2 With gouda Spell check like Dart 3:3 and Dunteros 4:4, but definitely not ever Rala1:1 or Cantel2:3"){
+            XCTAssert(verseInfos.count == 3, "\(verseInfos.count)")
+            XCTAssert(verseInfos[0].name == "Deuteronomy 1:1", verseInfos[0].name)
+            XCTAssert(verseInfos[1].name == "Deuteronomy 2:2", verseInfos[1].name)
+            XCTAssert(verseInfos[2].name == "Deuteronomy 3:3", verseInfos[2].name)
+        } else {
+            XCTFail("expected match")
+        }
+    }
+    
+    func testBookIdForPattern(){
+        let tm = TextMatcher()
+        let patterns = tm.bookPatterns()
+        XCTAssert(patterns.length > 0)
+        
+        for i in 1...66 {
+            let book = Books.init(rawValue: i)
+            XCTAssert(book != nil)
+            // match on 2nd pattern
+            let patternToMatch = tm.pattern(book!).componentsSeparatedByString("|")[0]
+            let bookId = tm.patternId(patternToMatch)
+            let gotBook = Books.init(rawValue: bookId)
+
+            XCTAssert(book!.rawValue == bookId,
+                      "Thought \(book!.name())\n\t\(tm.pattern(gotBook!)) \nwas \(gotBook!.name())\n\t\( tm.pattern(book!))")
+        }
+    }
+    
+    func testEveryBookHasPattern(){
+        let tm = TextMatcher()
+        for i in 1...66 {
+            let book = Books.init(rawValue: i)
+            XCTAssert(book != nil)
+            let pattern = tm.pattern(book!)
+            let patternList = pattern.componentsSeparatedByString("|")
+            XCTAssert(patternList.count > 1) // at least 1 or more patterns per book
+        }
+    }
+    
+    func testEveryPatternMatchesBook(){
+        let tm = TextMatcher()
+        for i in 1...66 {
+            let book = Books.init(rawValue: i)
+            XCTAssert(book != nil)
+            let pattern = tm.pattern(book!)
+            let regex: Regex = Regex(pattern,  options: [])
+            let matches = regex.allMatches(book!.name())
+            XCTAssert(matches.count > 0)
+            XCTAssert(matches[0].matchedString == book!.name())
+        }
+    }
+    
+    func testMatcherHasAllPatterns(){
+        let tm = TextMatcher()
+        let patterns = tm.bookPatterns()
+        XCTAssert(patterns.length > 0)
+        
+        for i in 1...66 {
+            let book = Books.init(rawValue: i)
+            XCTAssert(book != nil)
+            
+            // should be able to find each pattern
+            XCTAssert(patterns.containsString(tm.pattern(book!)),
+                      "missing pattern for \(book!.name())")
+        }
+    }
+    
+    
+    func testMatchTextForJohn(){
+        let tm = TextMatcher()
+        if let verseInfos = tm.findVersesInText("There is only one way to life (See. John 14:6) for the answer"){
+            XCTAssert(verseInfos.count == 1)
+            XCTAssert(verseInfos[0].name == "John 14:6", verseInfos[0].name)
+            XCTAssert(verseInfos[0].id == "43014006", verseInfos[0].id)
+        } else {
+            XCTFail("expected match")
+        }
+    }
+    
+    
+    func testMatchTextForIsa(){
+        let tm = TextMatcher()
+        print(tm.pattern(Books.Isa))
+        if let verseInfos = tm.findVersesInText("Behold a lamb (See. Isa: 53:7) was the answer"){
+            XCTAssert(verseInfos.count == 1)
+            XCTAssert(verseInfos[0].name == "Isaiah 53:7", verseInfos[0].name)
+        } else {
+            XCTFail("expected match")
+        }
+    }
+    
+    func testNoMatchTextForPattern(){
+        let tm = TextMatcher()
+        print(tm.pattern(Books.Jn))
+        if let _ = tm.findVersesInText("There is only one way to life (See. Jopv 14:6) for the answer"){
+            XCTFail("unexpected match detected")
+        }
+    }
+
+    
+
+}
+

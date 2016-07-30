@@ -219,7 +219,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     
     // when frame has been processed we need to write it back to the cell
     func didProcessFrame(sender: CameraManager, withText text: String, fromSession: UInt64) {
-        // print(text)
+        print(text)
         if fromSession != self.session.currentId {
             return // Ignore: from old capture session
         }
@@ -231,6 +231,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         if let allVerses = TextMatcher().findVersesInText(text) {
 
             for var verseInfo in allVerses {
+                print("GOT", verseInfo.name, verseInfo.id)
                 if let verse = self.db.lookupVerse(verseInfo.id){
 
                     // we have match
@@ -251,6 +252,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                         }
                     } else {
                         // dupe
+                        print("DUPE JAWN", verseInfo.name, verseInfo.id)
                         updateLock.unlock()
                         return
                     }
@@ -258,6 +260,8 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                     self.session.newMatches += 1
                     stillCamera.focus(.Locked)
                     self.session.matches.append(verseInfo.id)
+                } else {
+                    print("HERESY", verseInfo.name)
                 }
             }
         }

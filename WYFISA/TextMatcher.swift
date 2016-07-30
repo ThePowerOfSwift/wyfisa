@@ -26,22 +26,28 @@ class VerseInfo {
 
 class TextMatcher {
     
+    
     func findVersesInText(text: String) -> [VerseInfo]? {
         
         var verseInfos: [VerseInfo]?
         let bookStr = self.bookPatterns()
-        let chapters: Regex = Regex("(\(bookStr))(?:\\D{0,2})(\\d{1,3})(?:\\D{1,2})(\\d{1,3})",  options: [.IgnoreCase])
+        let chapters: Regex = Regex("\\W(\(bookStr))(?:\\D{0,2})(\\d{1,3})(?:\\D{1,2})(\\d{1,3})",  options: [.IgnoreCase])
 
         let matches = chapters.allMatches(text)
         for match in matches {
             
             let bookStr = match.captures[0]!
-            print(bookStr)
             let chapter = match.captures[1]!
             let verse = match.captures[2]!
+            if startsWithZero(chapter) == true ||
+                startsWithZero(verse) == true {
+                continue // bogus
+            }
+            
             let bookId = self.patternId(bookStr)
             let book = Books(rawValue: bookId)!.name()
             let matchedText = "\(book) \(chapter):\(verse)"
+            print(bookStr, matchedText)
 
             let bookIdStr = String(format: "%02d", bookId)
             let chapterId = String(format: "%03d", Int(chapter)!)
@@ -57,142 +63,237 @@ class TextMatcher {
         return verseInfos
     }
     
+    func startsWithZero(s: String) -> Bool {
+        return s[s.startIndex.advancedBy(0)] == "0"
+    }
+    
+    func isNumber(c: Character) -> Bool {
+        switch c {
+        case "1":
+            return true
+        case "2":
+            return true
+        case "3":
+            return true
+        default:
+            return false
+        }
+    }
+    func isVowel(c: Character) -> Bool {
+        switch c {
+            case "a":
+                return true
+            case "e":
+                return true
+            case "i":
+                return true
+            case "o":
+                return true
+            case "u":
+                return true
+            case "y":
+                return true
+        default:
+            return false
+        }
+    }
+    
+    func allowsFirstTwoCharAbbr(name: String) -> Bool {
+        switch name {
+            case Books.Ex.name():
+                return true
+            case Books.Ps.name():
+                return true
+            case Books.Am.name():
+                return true
+        case Books.Isa.name():
+                return true
+        default:
+            return false
+        }
+    }
+    
+    func allowsThreeLetterAbbr(name: String) -> Bool {
+        switch name {
+        case Books.Jude.name():
+        return false
+        case Books.Judg.name():
+        return false
+        default:
+            return true
+        }
+    }
+    
+    func allowsLooseAbbr(name: String, ofSize: Int) -> Bool {
+        // restrict loose abbreviation accross books
+        // that could possibly conflict
+        if ofSize == 3 {
+            switch name {
+            case Books.Nah.name():
+                return false
+            case Books.Neh.name():
+                return false
+            case Books.Heb.name():
+                    return false
+            case Books.Hab.name():
+                return false
+            case Books.Jude.name():
+                return false
+            case Books.Judg.name():
+                return false
+            case Books.Chr1.name():
+                return false
+            case Books.Chr2.name():
+                return false
+            case Books.Cor1.name():
+                return false
+            case Books.Cor2.name():
+                return false
+            case Books.Jon.name():
+                return false
+            default:
+                return true
+            }
+        } else {
+            switch name {
+            case Books.Zech.name():
+                return false
+            case Books.Zeph.name():
+                return false
+            case Books.Am.name():
+                 return false
+            case Books.Acts.name():
+                 return false
+            case Books.Jude.name():
+                return false
+            case Books.Judg.name():
+                return false
+            default:
+                return true
+            }
+        }
+    }
+    
+    func allowsRangeAbbr(name: String) -> Bool {
+        switch name {
+        case Books.Zech.name():
+            return false
+        case Books.Zeph.name():
+            return false
+        default:
+            return true
+        }
+    }
+    
+    func prefixMatches(pattern: String, c: Character) -> String {
+        let matches = pattern.componentsSeparatedByString("|")
+        
+        switch c {
+        case "1":
+            var _p = matches[0]
+            for i in 1...matches.count-1 {
+                let m = "|1\\s{0,1}\(matches[i])|1st\\s{0,1}\(matches[i])|First\\s{0,1}\(matches[i])"
+                _p = _p.stringByAppendingString(m)
+            }
+            return _p
+        case "2":
+            var _p = matches[0]
+            for i in 1...matches.count-1 {
+                let m = "|2\\s{0,1}\(matches[i])|2nd\\s{0,1}\(matches[i])|Second\\s{0,1}\(matches[i])"
+                _p = _p.stringByAppendingString(m)
+            }
+            return _p
+        case "3":
+            var _p = matches[0]
+            for i in 1...matches.count-1 {
+                let m = "|3\\s{0,1}\(matches[i])|3rd\\s{0,1}\(matches[i])|Third\\s{0,1}\(matches[i])"
+                _p = _p.stringByAppendingString(m)
+            }
+            return _p
+        default:
+            return pattern
+        }
+    }
+    
+    // creates a regex string for matching name
+    func makeRegex(name: String) -> String{
+        /* algorithm:
+         *  1) 1st and last letter
+         *  2) 1st and 2nd Char to end
+         *  3) 1st and 3rd chars
+         *  4) optionally: 1st and 4th chars
+         */
+        let n = name.length
+        var cOffset = 0
+        
+        // get 1,2,3,4 chars
+        let initChar = name[name.startIndex.advancedBy(cOffset)]
+        if isNumber(initChar) == true {
+            cOffset = 2
+        }
+        let firstChar = name[name.startIndex.advancedBy(cOffset)]
+        let secondChar = name[name.startIndex.advancedBy(cOffset+1)]
+        let thirdChar = name[name.startIndex.advancedBy(cOffset+2)]
+        var fourthChar: Character? = nil
+        let lastChar = name[name.endIndex.predecessor()]
+        if n > 3 {
+            fourthChar = name[name.startIndex.advancedBy(cOffset+3)]
+        }
+
+        var pattern = name
+        
+        if allowsRangeAbbr(name) == true {
+            // ie Genesis, G.....s
+            let match = "|\(firstChar)\\w{\(n-2)}\(lastChar)\\W"
+            pattern = pattern.stringByAppendingString(match)
+        }
+
+        if allowsFirstTwoCharAbbr(name){
+            // ie Exodus, Ex
+            let match = "|\(firstChar)\(secondChar)\\W"
+            pattern = pattern.stringByAppendingString(match)
+        }
+        
+        // permutations of 3 letter abbrv
+        if (isVowel(thirdChar) == false && allowsThreeLetterAbbr(name) == true)
+            || name == Books.Isa.name() { // Isa the exception!
+            // ie Genesis, Gn, G.n
+            if allowsLooseAbbr(name, ofSize: 3) == true {
+                let match = "|\(firstChar)\\w{0,1}\(thirdChar)"
+                pattern = pattern.stringByAppendingString(match)
+            } else {
+                let match = "|\(firstChar)\(secondChar)\(thirdChar)"
+                pattern = pattern.stringByAppendingString(match)
+            }
+        }
+
+
+
+        if let c = fourthChar {
+            if isVowel(c) == false && c != "l" { // no 4 letter abbr end in 'l'
+                
+                // ie... Deuteronomy, D..t, Dt
+                if allowsLooseAbbr(name, ofSize: 4) == true {
+                    let match = "|\(firstChar)\\w{2}\(c)"
+                    pattern = pattern.stringByAppendingString(match)
+                } else {
+                    let match = "|\(firstChar)\(secondChar)\(thirdChar)\(c)"
+                    pattern = pattern.stringByAppendingString(match)
+                }
+                let match = "|\(firstChar)\(c)"
+                pattern = pattern.stringByAppendingString(match)
+            }
+        }
+        if (cOffset > 0 ){
+            pattern = prefixMatches(pattern, c: initChar)
+        }
+        return pattern
+
+    }
+    
     func pattern(book: Books) -> String {
         let bookName = book.name()
-        switch book {
-        case .Gen:
-            return bookName+"|G\\w{6}|G\\wn|\\wen|Ge\\w"
-        case .Ex:
-            return bookName+"|E\\w{5}|Ex\\w{0,2}"
-        case .Lev:
-            return bookName+"|L\\w{8}|L\\wv"
-        case .Num:
-            return bookName+"|N\\w{6}|Nu\\w|N\\wm|\\wum"
-        case .Deut:
-            return bookName+"|D\\w{3}|Dt "
-        case .Josh:
-            return bookName+"|J\\w{4}a|Jo\\w{4}|J\\w{2}h|J\\w{2}b|Jos|J\\wh|J\\wb"
-        case .Judg:
-            return bookName+"|Ju\\w{4}|J\\w{4}s|Ju\w{2}|Jdg|Jg|Jdgs"
-        case .Ruth:
-            return bookName+"|R\\w{3}|Rth"
-        case .Sam1:
-            return bookName+"|1\\s{0,1}S\\w{5}|1\\s{0,1}S\\w{2}|1\\s{0,1}Sa|1\\s{0,1}Sm|1st S\\w{5}|First S\\w{5}"
-        case .Sam2:
-            return bookName+"|2\\s{0,1}S\\w{5}|2\\s{0,1}S\\w{2}|2\\s{0,1}Sa|2\\s{0,1}Sm|2nd S\\w{5}|Second S\\w{5}"
-        case .Kings1:
-            return bookName+"|1 K1ngs|1 Kgs|1 K1|1K|1 Kgs|1Kgs|1 K1|1K1|1 K1ngs|1K1ngs|1st Kgs|1st K1ngs|F1rst K1ngs|F1rst Kgs|1K1n"
-        case .Kings2:
-            return bookName+"|2 K1ngs|2 Kgs|2 K1|2K|11 Kgs|2Kgs|11 K1|2K1|11 K1ngs|2K1ngs|2nd Kgs|2nd K1ngs|Second K1ngs|Second Kgs|2K1n"
-        case .Chr1:
-            return bookName+"|1 Chron1c1es|1 Chron|1 Ch|1 Ch|1Ch|1 Chr|1 Chr|1Chr|1 Chron|1Chron|1 Chron1c1es|1Chron1c1es|1st Chron1c1es|F1rst Chron1c1es"
-        case .Chr2:
-            return bookName+"|2 Chron1c1es|2 Chron|2 Ch|11 Ch|2Ch|11 Chr|2Chr|11 Chron|2Chron|11 Chron1c1es|2Chron1c1es|2nd Chron1c1es|Second Chron1c1es"
-        case .Ezra:
-            return bookName+"|Ezr"
-        case .Neh:
-            return bookName+"|Nehem1ah|Neh"
-        case .Esth:
-            return bookName+"|Esth"
-        case .Job:
-            return bookName+"|Jb"
-        case .Ps:
-            return bookName+"|Psa1m|Psa1m|Psa|Ps1m|Ps|Psa1ms|Psa|Psm|Pss|P5"
-        case .Prov:
-            return bookName+"|Prov|Pr|Prv"
-        case .Ecc:
-            return bookName+"|Ecc1es1astes|Ecc1es1astes|Ecc1es|Ecc|Ec|Qoh|Qohe1eth"
-        case .Song:
-            return bookName+"|Song|of So1omon Song|Cant1c1e of Cant1c1es|Cant1c1es|Song of Songs|SOS"
-        case .Isa:
-            return bookName+"|1sa1ah|1sa|1s"
-        case .Jer:
-            return bookName+"|Jerem1ah|Jer|Je|Jr"
-        case .Lam:
-            return bookName+"|Lamentat1ons|Lam|La"
-        case .Ezek:
-            return bookName+"|Ezek1e1|Ezek|Eze|Ezk"
-        case .Dan:
-            return bookName+"|Dan1e1|Dan|Da|Dn"
-        case .Hos:
-            return bookName+"|Hos|Ho"
-        case .Joel:
-            return bookName+"|Joe1|Joe1|Joe|J1"
-        case .Am:
-            return bookName+"|Am"
-        case .Ob:
-            return bookName+"|Obad1ah|Obad|Ob "
-        case .Jon:
-            return bookName+"|Jnh|Jon"
-        case .Mic:
-            return bookName+"|M1cah|M1c"
-        case .Nah:
-            return bookName+"|Nah|Na"
-        case .Hab:
-            return bookName+"|Hab"
-        case .Zeph:
-            return bookName+"|Zep\\w{6}|Zeph|Zep"
-        case .Hag:
-            return bookName+"|Hag\\w{0,3}"
-        case .Zech:
-            return bookName+"|Zec\\w{1,6}"
-        case .Mal:
-            return bookName+"|Mal\\w{4}|Mal|Ma1"
-        case .Mt:
-            return bookName+"|Mat\\w{1,4}|Mt"
-        case .Mk:
-            return bookName+"|M\\w\\wk|Mrk|Mk|Mr"
-        case .Lk:
-            return bookName+"|Lu\\w{1,2}|Lk"
-        case .Jn:
-            return bookName+"|\\wohn|Jn|Jhn|J\\w{0,2}n|1\\w{0,2}n"
-        case .Acts:
-            return bookName+"|Ac"
-        case .Rom:
-            return bookName+"|Rom|Ro|Rm|1om|1Romans"
-        case .Cor1:
-            return bookName+"|1 Cor1nth1ans|1 Cor|1 Cor|1Cor|1 Cor1nth1ans|1Cor1nth1ans|1st Cor1nth1ans|F1rst Cor1nth1ans"
-        case .Cor2:
-            return bookName+"|2 Cor1nth1ans|2 Cor|11 Cor|2Cor|11 Cor1nth1ans|2Cor1nth1ans|2nd Cor1nth1ans|Second Cor1nth1ans"
-        case .Gal:
-            return bookName+"|Ga1at1ans|Ga1|Ga"
-        case .Eph:
-            return bookName+"|Ephes1ans|Ephes|Eph"
-        case .Phil:
-            return bookName+"|Ph111pp1ans|Ph11|Php"
-        case .Col:
-            return bookName+"|Co1oss1ans|Co1"
-        case .Thess1:
-            return bookName+"|1 Thessa1on1ans|1 Thess|1 Th|1 Th|1Th|1 Thes|1Thes|1 Thess|1Thess|1 Thessa1on1ans|1Thessa1on1ans|1st Thessa1on1ans|F1rst Thessa1on1ans|1 T\\w{4}"
-        case .Thess2:
-            return bookName+"|2 Thessa1on1ans|2 Thess|2 Th|11 Th|2Th|11 Thes|2Thes|11 Thess|2Thess|11 Thessa1on1ans|2Thessa1on1ans|2nd Thessa1on1ans|Second Thessa1on1ans|2 T\\w{4}"
-        case .Tim1:
-            return bookName+"|1 T1mothy|1 T1m|1 T1|1 T1|1T1|1 T1m|1T1m|1 T1mothy|1T1mothy|1st T1mothy|F1rst T1mothy|1 T\\w{2}|1 T\\w{6}"
-        case .Tim2:
-            return bookName+"|2 T1mothy|2 T1m|2 T1|11 T1|2T1|11 T1m|2T1m|11 T1mothy|2T1mothy|2nd T1mothy|Second T1mothy|1 T\\w{2}|1 T\\w{6}"
-        case .Titus:
-            return bookName+"|T1tus|T1tus|T1t"
-        case .Philemon:
-            return bookName+"|Ph11emon|Ph11em|Phm"
-        case .Heb:
-            return bookName+"|Hebrews|Heb"
-        case .Jas:
-            return bookName+"|Jas|Jm"
-        case .Pet1:
-            return bookName+"|1 Pet|1 Pe|1 Pe|1Pe|1 Pet|1Pet|1 Pt|1 Pt|1Pt|1 Peter|1Peter|1st Peter|F1rst Peter|1 P\\w{2,4}"
-        case .Pet2:
-            return bookName+"|2 Pet|2 Pe|11 Pe|2Pe|11 Pet|2Pet|11 Pt|2 Pt|2Pt|11 Peter|2Peter|2nd Peter|Second Peter"
-        case .Jn1:
-            return bookName+"|1 1ohn|1 Jn|1 Jn|1Jn|1 Jo|1Jo|1 Joh|1Joh|1 Jhn|1 Jhn|1Jhn|1 John|1John|1st John|F1rst John"
-        case .Jn2:
-            return bookName+"|2 1ohn|2 Jn|11 Jn|2Jn|11 Jo|2Jo|11 Joh|2Joh|11 Jhn|2 Jhn|2Jhn|11 John|2John|2nd John|Second John"
-        case .Jn3:
-            return bookName+"|3 1ohn|3 Jn|111 Jn|3Jn|111 Jo|3Jo|111 Joh|3Joh|111 Jhn|3 Jhn|3Jhn|111 John|3John|3rd John|Th1rd John"
-        case .Jude:
-            return bookName+"|1ude|Jud"
-        case .Rev:
-            return bookName+"|Reve1at1on|Rev|Re|The Reve1at1on"
-        }
+        return makeRegex(bookName)
     }
     
     // gets id of book for the given sub-pattern... ie Rom, or Rev
@@ -215,18 +316,9 @@ class TextMatcher {
     
     
     // get concatenated list of all book patterns
-    // gives new testamant priority
     func bookPatterns() -> String {
-        
-        let matt = Books.Mt
-        var books = self.pattern(matt)
-        let ntStart = matt.rawValue+1
-        for i in ntStart...66 {
-            if let book = Books(rawValue: i) {
-                books.appendContentsOf("|\(self.pattern(book))")
-            }
-        }
-        for i in 1..<matt.rawValue {
+        var books = self.pattern(Books.Gen)
+        for i in 2...66 {
             if let book = Books(rawValue: i) {
                 books.appendContentsOf("|\(self.pattern(book))")
             }

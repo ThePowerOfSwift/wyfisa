@@ -135,7 +135,6 @@ class CameraManager {
             
             // do image recognition
             if let recognizedText = ocr.process(image){
-                print(recognizedText)
                 self.delegate?.didProcessFrame(self, withText: recognizedText, fromSession: fromSession)
             }
         }
