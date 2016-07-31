@@ -291,7 +291,11 @@ class TextMatcherTests: WYFISATests{
             XCTAssert(book != nil)
             let pattern = tm.pattern(book!)
             let patternList = pattern.componentsSeparatedByString("|")
-            XCTAssert(patternList.count > 1) // at least 1 or more patterns per book
+            if book == Books.Jude || book == Books.Philemon {
+                XCTAssert(patternList.count == 1) // only 1 pattern
+            } else {
+                XCTAssert(patternList.count > 1) // at least 1 or more patterns per book
+            }
         }
     }
     
@@ -346,7 +350,17 @@ class TextMatcherTests: WYFISATests{
             XCTFail("expected match")
         }
     }
-    
+ 
+    func testMatchTextForActs(){
+        let tm = TextMatcher()
+        print(tm.pattern(Books.Acts))
+        if let verseInfos = tm.findVersesInText("pride (Acts 12:21-23)"){
+            XCTAssert(verseInfos.count == 1)
+            XCTAssert(verseInfos[0].name == "Acts 12:21", verseInfos[0].name)
+        } else {
+            XCTFail("expected match")
+        }
+    }
     func testNoMatchTextForPattern(){
         let tm = TextMatcher()
         print(tm.pattern(Books.Jn))

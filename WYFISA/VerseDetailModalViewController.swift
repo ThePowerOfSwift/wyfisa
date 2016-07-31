@@ -40,12 +40,17 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             let length = endIdx! - startIdx! - 1
             
             // contextual highlighting for attributed text
+            var font = UIFont.systemFontOfSize(19.0)
+            if let f = UIFont.init(name: "Iowan Old Style", size: 19.0) {
+                font = f
+            }
+            
             let attrs = [NSForegroundColorAttributeName: UIColor.whiteColor(),
-                         NSFontAttributeName: UIFont.systemFontOfSize(18)]
+                         NSFontAttributeName: font]
             let attributedText = NSMutableAttributedString.init(string: chapter, attributes: attrs)
             var contextRange = NSRange.init(location: startIdx!, length: length)
             let contextAttrs = [NSForegroundColorAttributeName: UIColor.turquoise(),
-                                NSFontAttributeName: UIFont.systemFontOfSize(18)]
+                                NSFontAttributeName: font]
             if (contextRange.location + contextRange.length) > attributedText.length {
                 // some kind of overshoot occured - do not exceed bounds
                 contextRange.location = attributedText.length - contextRange.length
@@ -161,15 +166,19 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         // dynamic text sizing
         if let refs = verseInfo!.refs {
             if let text = refs[indexPath.section].text {
+                var font = UIFont.systemFontOfSize(18)
+                if let f = UIFont.init(name: "Iowan Old Style", size: 18.0) {
+                    font = f
+                }
                 let height = text.heightWithConstrainedWidth(self.referenceTable.frame.size.width,
-                                                             font: UIFont.systemFontOfSize(16))
+                                                             font: font)+10
                 
                 if height  > 30  { // bigger than a loading text
                     return height + 50
                 }
             }
         }
-        return 60
+        return 65
     }
     
     

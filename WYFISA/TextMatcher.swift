@@ -168,6 +168,8 @@ class TextMatcher {
                 return false
             case Books.Judg.name():
                 return false
+            case Books.Ps.name():
+                return false
             default:
                 return true
             }
@@ -175,14 +177,11 @@ class TextMatcher {
     }
     
     func allowsRangeAbbr(name: String) -> Bool {
-        switch name {
-        case Books.Zech.name():
+        let lastChar = name[name.endIndex.predecessor()]
+        if lastChar == "s" || isVowel(lastChar) == true {
             return false
-        case Books.Zeph.name():
-            return false
-        default:
-            return true
         }
+        return true
     }
     
     func prefixMatches(pattern: String, c: Character) -> String {
@@ -270,7 +269,7 @@ class TextMatcher {
 
 
         if let c = fourthChar {
-            if isVowel(c) == false && c != "l" { // no 4 letter abbr end in 'l'
+            if isVowel(c) == false { // no 4 letter abbr end in 'l'
                 
                 // ie... Deuteronomy, D..t, Dt
                 if allowsLooseAbbr(name, ofSize: 4) == true {
@@ -280,8 +279,13 @@ class TextMatcher {
                     let match = "|\(firstChar)\(secondChar)\(thirdChar)\(c)"
                     pattern = pattern.stringByAppendingString(match)
                 }
-                let match = "|\(firstChar)\(c)"
-                pattern = pattern.stringByAppendingString(match)
+                
+                if !(n == 4 && allowsRangeAbbr(name) == false){
+                    // ie.. Dt
+                    // avoid 4 letter books that cannot be abbr like 'acts' 'amos'
+                    let match = "|\(firstChar)\(c)"
+                    pattern = pattern.stringByAppendingString(match)
+                }
             }
         }
         if (cOffset > 0 ){
@@ -292,8 +296,19 @@ class TextMatcher {
     }
     
     func pattern(book: Books) -> String {
+        
         let bookName = book.name()
-        return makeRegex(bookName)
+        
+        switch book {
+        case .Jude:
+            return bookName
+        case .Philemon:
+            return bookName
+        case .Phil:
+            return bookName+"|Phil\\W"
+        default:
+            return makeRegex(bookName)
+        }
     }
     
     // gets id of book for the given sub-pattern... ie Rom, or Rev

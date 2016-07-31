@@ -136,19 +136,23 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
             }
         }
         if self.isExpanded == false {
-            return 80
+            return 65
         }
         
         // dynamic text sizing
         let index = indexPath.section - 1
         if let text = self.recentVerses[index].text {
+            var font = UIFont.systemFontOfSize(18)
+            if let f = UIFont.init(name: "Iowan Old Style", size: 18.0) {
+                font = f
+            }
             let height = text.heightWithConstrainedWidth(self.frame.size.width*0.90,
-                                                         font: UIFont.systemFontOfSize(16))
+                                                         font: font)+10
             if height  > 30 { // bigger than a loading text
                 return height + 50
             }
         }
-        return 60
+        return 65
     }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return self.nVerses + 1

@@ -67,9 +67,11 @@ class VerseTableViewCell: UITableViewCell {
         if isExpanded == true {
             self.labelText.lineBreakMode = .ByWordWrapping
             self.labelText.numberOfLines = 0
+            self.labelText.font = UIFont.init(name: "Iowan Old Style", size: 18.0)
         } else {
             self.labelText.lineBreakMode = .ByTruncatingTail
-            self.labelText.numberOfLines = 2
+            self.labelText.numberOfLines = 1
+            self.labelText.font = UIFont.init(name: "Iowan Old Style", size: 16.0)
         }
 
     }
