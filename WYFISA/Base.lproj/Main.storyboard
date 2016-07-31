@@ -46,7 +46,7 @@
                                         </constraints>
                                     </view>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRESS AND HOLD CAPTURE BUTTON" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="gGX-5F-XhG">
-                                        <rect key="frame" x="152.5" y="22" width="295" height="86"/>
+                                        <rect key="frame" x="152" y="97" width="295" height="86"/>
                                         <fontDescription key="fontDescription" type="system" weight="thin" pointSize="36"/>
                                         <color key="textColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -58,10 +58,10 @@
                                         <rect key="frame" x="20" y="20" width="560" height="562"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="254" verticalHuggingPriority="254" image="CaptureBox-1" translatesAutoresizingMaskIntoConstraints="NO" id="ggB-0g-XGh">
-                                                <rect key="frame" x="133" y="0.0" width="295" height="90"/>
+                                                <rect key="frame" x="133" y="0.0" width="295" height="240"/>
                                             </imageView>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="753" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Eb-dI-Jp5" customClass="VerseTableView" customModule="WYFISA" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="110" width="560" height="337"/>
+                                                <rect key="frame" x="0.0" y="260" width="560" height="187"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <prototypes>
@@ -123,7 +123,7 @@
                                                             </mask>
                                                         </variation>
                                                         <connections>
-                                                            <action selector="didPressRefreshButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="CTb-5w-xdS"/>
+                                                            <action selector="didPressFlashButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3ec-Y6-IJf"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Frh-0b-u19">
@@ -144,9 +144,9 @@
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="60" id="HcR-Pm-gaB"/>
                                                         </constraints>
-                                                        <state key="normal" image="chevron-up"/>
+                                                        <state key="normal" image="minus"/>
                                                         <connections>
-                                                            <action selector="didPressExpandButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TVC-St-1fx"/>
+                                                            <action selector="didPressRefreshButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="yDt-TC-RKb"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -224,7 +224,7 @@
                             <constraint firstItem="0kE-06-jOP" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="nLP-g8-Ilt"/>
                             <constraint firstItem="0kE-06-jOP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="vFU-7j-Nav"/>
                             <constraint firstItem="HAV-Ay-XOw" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="yRC-9f-F2Y"/>
-                            <constraint firstItem="ggB-0g-XGh" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.15" id="zww-GQ-gBh"/>
+                            <constraint firstItem="ggB-0g-XGh" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.4" id="zww-GQ-gBh"/>
                         </constraints>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
@@ -233,10 +233,10 @@
                         <outlet property="captureBox" destination="ggB-0g-XGh" id="7M6-OF-BIJ"/>
                         <outlet property="captureButton" destination="Frh-0b-u19" id="2hA-rK-Raq"/>
                         <outlet property="debugWindow" destination="yKv-fP-VGS" id="niX-FU-QZa"/>
-                        <outlet property="expandButton" destination="y8t-np-6PG" id="QP3-D1-avK"/>
                         <outlet property="filterView" destination="HAV-Ay-XOw" id="I1V-KO-weU"/>
+                        <outlet property="flashButton" destination="bqR-YQ-AJH" id="9qE-tl-BxX"/>
                         <outlet property="maskView" destination="sz8-4h-p7m" id="wLS-E5-R8i"/>
-                        <outlet property="refeshButton" destination="bqR-YQ-AJH" id="VGx-Wz-q0n"/>
+                        <outlet property="refeshButton" destination="y8t-np-6PG" id="e7m-bO-x2q"/>
                         <outlet property="tutImage" destination="1dm-qo-dWz" id="PGH-zL-SaF"/>
                         <outlet property="tutPager" destination="07w-TD-baU" id="bkl-Gh-kbQ"/>
                         <outlet property="tutScrollView" destination="2Yc-wc-NL4" id="33j-l1-EPK"/>
@@ -348,8 +348,8 @@
         <image name="Find" width="375" height="667"/>
         <image name="Gradient" width="375" height="369"/>
         <image name="Oval 1" width="104" height="104"/>
-        <image name="chevron-up" width="30" height="18"/>
         <image name="close-fire" width="19" height="19"/>
         <image name="flash" width="20" height="26"/>
+        <image name="minus" width="26" height="6"/>
     </resources>
 </document>

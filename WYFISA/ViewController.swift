@@ -27,7 +27,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     @IBOutlet var debugWindow: GPUImageView!
     @IBOutlet var verseTable: VerseTableView!
     @IBOutlet var filterView: GPUImageView!
-    @IBOutlet var expandButton: UIButton!
     @IBOutlet var captureButton: UIButton!
     @IBOutlet var maskView: UIView!
     @IBOutlet var captureBox: UIImageView!
@@ -36,7 +35,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     @IBOutlet var tutScrollView: UIScrollView!
     @IBOutlet var tutPager: UIPageControl!
     @IBOutlet var tutImage: UIImageView!
-    
+    @IBOutlet var flashButton: UIButton!
     
     let stillCamera = CameraManager.sharedInstance
     let db = DBQuery.sharedInstance
@@ -69,95 +68,59 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
 
     }
 
-    @IBAction func handleScreenTap(sender: AnyObject) {
-        stillCamera.focus(.AutoFocus)
-    }
     
-    
-    @IBAction func didPressExpandButton(sender: AnyObject) {
-        
+    @IBAction func didPressRefreshButton(sender: AnyObject){
         self.hideTut()
-        
-        // expand|shrink table view
-        let didExpand = self.verseTable.expandView(self.view.frame.size)
-        
-        // modify button image to represent state
-        var buttonImage = UIImage(named: "chevron-up")
-        if didExpand == true {
-            self.stillCamera.pause()
-            buttonImage = UIImage(named: "chevron-down")
-            Animations.start(0.5) {
-              self.captureBox.hidden = true
-              self.captureButton.alpha = 0
-              self.captureBox.alpha = 0
-              self.maskView.alpha = 0.8
-            }
-        } else {
-            if flashEnabled {
-                
-            }
-            Animations.start(0.5) {
-                self.captureBox.hidden = false
-                self.captureButton.alpha = 1
-                self.captureBox.alpha = 0
-                self.maskView.alpha = 0
+        // is minus button so clear
+        if captureLock.tryLock(){
+            self.session.currentId = 0
+
+            // empty table
+            self.verseTable.clear()
+            
+            // clear matches on session
+            self.session.matches = [String]()
+
+            // unlock safely after clear operation
+            Timing.runAfter(1){
+                self.captureLock.unlock()
             }
         }
-        self.setImageForRefreshButton()
-        self.expandButton.setImage(buttonImage, forState: .Normal)
+        
 
     }
-    
-    func setImageForRefreshButton(){
+    @IBAction func didPressFlashButton(sender: AnyObject) {
+        self.flashEnabled = !self.flashEnabled
         
-        
-        if(self.verseTable.isExpanded){
-            self.refeshButton.setImage(UIImage(named: "minus"), forState: .Normal)
-            return
-        }
         if self.flashEnabled == true {
-            self.refeshButton.setImage(UIImage(named: "flash-fire"), forState: .Normal)
-
+            self.flashButton.setImage(UIImage(named: "flash-fire"), forState: .Normal)
+            
         } else {
-            self.refeshButton.setImage(UIImage(named: "flash"), forState: .Normal)
+            self.flashButton.setImage(UIImage(named: "flash"), forState: .Normal)
         }
-    }
-    
-    @IBAction func didPressRefreshButton(sender: AnyObject) {
-        
-        if self.verseTable.isExpanded {
-            // is minus button so clear
-            if captureLock.tryLock(){
-                self.session.currentId = 0
-
-                // empty table
-                self.verseTable.clear()
-                
-                // clear matches on session
-                self.session.matches = [String]()
-
-                // unlock safely after clear operation
-                Timing.runAfter(1){
-                    self.captureLock.unlock()
-                }
-            }
-        } else {
-            // changing flash mode
-            self.flashEnabled = !self.flashEnabled
-
-            self.setImageForRefreshButton()
-        }
-
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
+    // MARK: - Capture
     @IBAction func didPressCaptureButton(sender: AnyObject) {
         
         self.hideTut()
         if self.captureLock.tryLock() {
+            
+            // show capture box
+            self.captureBox.hidden = false
+
+            self.verseTable.isExpanded = false
+            self.verseTable.reloadData()
+            self.verseTable.setContentToCollapsedEnd()
+
+            Animations.start(0.3) {
+                self.captureBox.alpha = 0
+                self.maskView.alpha = 0
+            }
             
             // camera init
             stillCamera.resume()
@@ -174,7 +137,11 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             let defaultVerse = VerseInfo(id: "", name: self.workingText, text: "")
             self.verseTable.appendVerse(defaultVerse)
             self.verseTable.addSection()
-           
+            
+            Timing.runAfter(0.2){
+                self.verseTable.scrollToEnd()
+            }
+            
             // capture frames
             let asyncQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
             dispatch_async(asyncQueue) {
@@ -193,15 +160,29 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         if self.flashEnabled {
             stillCamera.torch(.Off)
         }
-
-        self.session.currentId += 1
         
+
+        // remove scanning box
         if self.session.newMatches == 0 && self.session.active {
-            print("remove", self.verseTable.nVerses)
             self.verseTable.removeFailedVerse()
         }
+        
+        // hide capture box
+        self.verseTable.isExpanded = true
+        Animations.start(0.3) {
+            self.captureBox.hidden = true
+            self.captureBox.alpha = 0
+            self.maskView.alpha = 0.8
+        }
+        
+        self.session.currentId += 1
+        
+
         self.session.newMatches = 0
         self.session.active = false
+        
+        self.verseTable.reloadData()
+        self.verseTable.setContentToExpandedEnd()
         
         updateLock.unlock()
 
@@ -212,26 +193,23 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     }
     @IBAction func didReleaseCaptureButtonOutside(sender: AnyObject) {
         self.handleCaptureEnd()
-
     }
     
-    // MARK: - CameraManagerDelegate
+    // MARK: - Process
     
     // when frame has been processed we need to write it back to the cell
     func didProcessFrame(sender: CameraManager, withText text: String, fromSession: UInt64) {
-        print(text)
+        // print(text)
         if fromSession != self.session.currentId {
             return // Ignore: from old capture session
         }
         
         updateLock.lock()
 
-        let id = self.verseTable.numberOfSections
-        
+        let id = self.verseTable.nVerses+1
         if let allVerses = TextMatcher().findVersesInText(text) {
 
             for var verseInfo in allVerses {
-                print("GOT", verseInfo.name, verseInfo.id)
                 if let verse = self.db.lookupVerse(verseInfo.id){
 
                     // we have match
@@ -252,7 +230,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                         }
                     } else {
                         // dupe
-                        print("DUPE JAWN", verseInfo.name, verseInfo.id)
                         updateLock.unlock()
                         return
                     }
@@ -260,8 +237,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                     self.session.newMatches += 1
                     stillCamera.focus(.Locked)
                     self.session.matches.append(verseInfo.id)
-                } else {
-                    print("HERESY", verseInfo.name)
                 }
             }
         }
@@ -347,7 +322,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         self.tutScrollView.delegate = self
         self.captureButton.hidden = true
         self.captureBox.hidden = true
-        self.expandButton.hidden = true
         self.refeshButton.hidden = true
     }
     
@@ -379,7 +353,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             self.tutScrollView.delegate = self
             self.captureButton.hidden = false
             self.captureBox.hidden = false
-            self.expandButton.hidden = false
             self.refeshButton.hidden = false
             Animations.start(0.1){
                 self.tutScrollView.alpha = 0

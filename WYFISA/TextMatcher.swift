@@ -47,7 +47,6 @@ class TextMatcher {
             let bookId = self.patternId(bookStr)
             let book = Books(rawValue: bookId)!.name()
             let matchedText = "\(book) \(chapter):\(verse)"
-            print(bookStr, matchedText)
 
             let bookIdStr = String(format: "%02d", bookId)
             let chapterId = String(format: "%03d", Int(chapter)!)

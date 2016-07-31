@@ -40,10 +40,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             let length = endIdx! - startIdx! - 1
             
             // contextual highlighting for attributed text
-            var font = UIFont.systemFontOfSize(19.0)
-            if let f = UIFont.init(name: "Iowan Old Style", size: 19.0) {
-                font = f
-            }
+            let font = BodyFont.iowan(19.0)
             
             let attrs = [NSForegroundColorAttributeName: UIColor.whiteColor(),
                          NSFontAttributeName: font]
@@ -166,10 +163,8 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         // dynamic text sizing
         if let refs = verseInfo!.refs {
             if let text = refs[indexPath.section].text {
-                var font = UIFont.systemFontOfSize(18)
-                if let f = UIFont.init(name: "Iowan Old Style", size: 18.0) {
-                    font = f
-                }
+                let font = BodyFont.iowan(18.0)
+
                 let height = text.heightWithConstrainedWidth(self.referenceTable.frame.size.width,
                                                              font: font)+10
                 

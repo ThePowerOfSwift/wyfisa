@@ -12,8 +12,10 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
     var nVerses: Int = 0
     var nVersesOffset: Int = 0
+    var expandedCellHeights: CGFloat = 0.0
     var recentVerses: [VerseInfo] = [VerseInfo]()
     var isExpanded: Bool = false
+    var initHeaderHeight: CGFloat = 0
     var hasHeader: Bool = true
     var nLock: NSLock = NSLock()
     var cellDelegate: VerseTableViewCellDelegate?
@@ -24,6 +26,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         // setup tableview
         self.delegate = self
         self.dataSource = self
+        self.initHeaderHeight = self.frame.size.height
     }
     
     func setCellDelegate(delegate: VerseTableViewCellDelegate){
@@ -33,8 +36,19 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     func addToSectionBy(i: Int){
         self.nVerses = self.nVerses + i
     }
+    
+    func updateCellHeightVal(verse: VerseInfo){
+        if let text = verse.text {
+            let height = cellHeightForText(text)
+            expandedCellHeights += height
+        }
+    }
+    
     func appendVerse(verse: VerseInfo){
         self.recentVerses.append(verse)
+        if(verse.id != ""){
+            updateCellHeightVal(verse)
+        }
     }
     
     func updateVersePending(id: Int){
@@ -42,11 +56,14 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func updateVerseAtIndex(id: Int, withVerseInfo verse: VerseInfo){
+        if(id==0){
+            return
+        }
         self.recentVerses[id-1] = verse
         let idxSet = NSIndexSet(index: id)
-
+        updateCellHeightVal(verse)
+        
         dispatch_async(dispatch_get_main_queue()) {
-            // self.reloadData()
              let path = NSIndexPath(forRow: 0, inSection: self.nVerses)
              self.reloadSections(idxSet, withRowAnimation: .None)
              self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
@@ -59,7 +76,6 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
         let idxSet = NSIndexSet(index: self.nVerses)
         self.nVerses = self.nVerses - 1
-
         Animations.start(0.2) {
             self.deleteSections(idxSet, withRowAnimation: .Top)
             self.recentVerses.removeAtIndex(self.recentVerses.count-1)
@@ -79,7 +95,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
         // scroll down to new section to create a 'scroll up' effect
         self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
-        
+
     }
     
     func scrollToEnd(){
@@ -123,37 +139,51 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         return VerseTableViewCell(style: .Default, reuseIdentifier: nil)
     }
     
+    // MARK: Header
+    func heightForHeaderSection() -> CGFloat {
+        var headerHeight = self.initHeaderHeight
+        if self.isExpanded == true {
+            if self.expandedCellHeights < self.frame.height {
+                headerHeight = self.frame.height - self.expandedCellHeights
+            } else {
+                headerHeight = 0
+            }
+        }
+        return headerHeight
+    }
+    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
 
+        var sectionHeight:CGFloat = 65.0 // default height of collapsed cell
+        
         if indexPath.section == 0 {
-            // padding row
-            let headerHeight = tableView.frame.size.height - 60.0 * CGFloat(self.nVerses)
-            if headerHeight <= 60 || self.isExpanded == true  || self.hasHeader == false{
-                self.hasHeader = false
-                return 0
-            } else {
-                return headerHeight
+            
+            // height of header section
+            sectionHeight = heightForHeaderSection()
+            
+        }  else if self.isExpanded == true {
+            
+            // is expanded, so base height on size of text
+            let index = indexPath.section - 1
+            if let text = self.recentVerses[index].text {
+                sectionHeight = cellHeightForText(text)
             }
-        }
-        if self.isExpanded == false {
-            return 65
         }
         
-        // dynamic text sizing
-        let index = indexPath.section - 1
-        if let text = self.recentVerses[index].text {
-            var font = UIFont.systemFontOfSize(18)
-            if let f = UIFont.init(name: "Iowan Old Style", size: 18.0) {
-                font = f
-            }
-            let height = text.heightWithConstrainedWidth(self.frame.size.width*0.90,
-                                                         font: font)+10
-            if height  > 30 { // bigger than a loading text
-                return height + 50
-            }
-        }
-        return 65
+        return sectionHeight
     }
+    
+    func cellHeightForText(text: String) -> CGFloat {
+        let font = BodyFont.iowan(18.0)
+        var height = text.heightWithConstrainedWidth(self.frame.size.width*0.90,
+                                                     font: font)+10
+        if height  > 30 { // bigger than a loading text
+            height+=50
+        }
+        
+        return height
+    }
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return self.nVerses + 1
     }
@@ -181,17 +211,34 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         return self.isExpanded
     }
     
+    func setContentToExpandedEnd() {
+        if self.recentVerses.count > 0 {
+            var yOffset = self.contentSize.height - self.frame.size.height
+            if yOffset < 0 {
+                yOffset = 0
+            }
+            self.setContentOffset(CGPointMake(0, yOffset), animated: false)
+
+        }
+    }
+    
+    func setContentToCollapsedEnd() {
+        let yOffset: CGFloat = CGFloat(self.nVerses)*65.0
+        self.setContentOffset(CGPointMake(0, yOffset), animated: false)
+    }
+    
     func clear(){
         
         self.hasHeader = true
+        self.expandedCellHeights = 0.0
         
         // fade out table
-        Animations.start(0.5) {
+        Animations.start(0.3) {
             self.alpha = 0
         }
         
         // clear table rows
-        Timing.runAfter(1) {
+        Timing.runAfter(0.5) {
             self.nVerses = 0
             self.recentVerses = [VerseInfo]()
             self.reloadData()
