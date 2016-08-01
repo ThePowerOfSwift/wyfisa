@@ -31,7 +31,7 @@ class VerseTableViewCell: UITableViewCell {
     }
 
     func highlightText() {
-        let font = BodyFont.iowan(19.0)
+        let font = BodyFont.iowan(18.0)
         
         let attrs = [NSForegroundColorAttributeName: UIColor.turquoise(),
                      NSFontAttributeName: font]

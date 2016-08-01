@@ -263,14 +263,38 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="4my-bg-pw1">
                                 <rect key="frame" x="20" y="20" width="560" height="540"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" misplaced="YES" text="Eph 5:23" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="hwY-Ut-19P">
-                                        <rect key="frame" x="112" y="0.0" width="336" height="4"/>
-                                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="30"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="3wr-4G-kpu">
+                                        <rect key="frame" x="0.0" y="0.0" width="560" height="60"/>
+                                        <subviews>
+                                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="252" horizontalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sf8-X6-AXi">
+                                                <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="60" id="7Ct-Ta-Mjf"/>
+                                                    <constraint firstAttribute="height" constant="60" id="9RT-Kk-Frc"/>
+                                                </constraints>
+                                                <state key="normal" image="chevron-left"/>
+                                            </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="753" text="Eph 5:23" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="hwY-Ut-19P">
+                                                <rect key="frame" x="60" y="12" width="440" height="36"/>
+                                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="30"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OEX-Xc-Ke8">
+                                                <rect key="frame" x="500" y="0.0" width="60" height="60"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="60" id="ASD-YS-4JR"/>
+                                                    <constraint firstAttribute="width" constant="60" id="I89-Su-lAJ"/>
+                                                </constraints>
+                                                <state key="normal" image="close-fire"/>
+                                                <connections>
+                                                    <action selector="didPressCloseButton:" destination="MHR-2x-CaL" eventType="touchUpInside" id="xvs-F9-1g4"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4et-yh-1i5">
-                                        <rect key="frame" x="217" y="24" width="127" height="29"/>
+                                        <rect key="frame" x="217" y="80" width="127" height="21"/>
                                         <segments>
                                             <segment title="Chapter"/>
                                             <segment title="Related"/>
@@ -280,11 +304,11 @@
                                             <action selector="didTapBarSegment:" destination="MHR-2x-CaL" eventType="valueChanged" id="g3f-9y-Jgd"/>
                                         </connections>
                                     </segmentedControl>
-                                    <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Xmx-oq-V3j">
-                                        <rect key="frame" x="0.0" y="72" width="560" height="468"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Xmx-oq-V3j">
+                                        <rect key="frame" x="0.0" y="120" width="560" height="420"/>
                                         <subviews>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" misplaced="YES" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u1X-u8-pet">
-                                                <rect key="frame" x="0.0" y="0.0" width="560" height="436"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="560" height="420"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Agape Philaeo">
@@ -296,13 +320,6 @@
                                                 </attributedString>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
-                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lo9-st-pme">
-                                                <rect key="frame" x="0.0" y="446" width="560" height="22"/>
-                                                <state key="normal" image="navicon"/>
-                                                <connections>
-                                                    <action selector="didPressSplitButton:" destination="MHR-2x-CaL" eventType="touchUpInside" id="3ya-AI-Fo2"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="u1X-u8-pet" firstAttribute="width" secondItem="Xmx-oq-V3j" secondAttribute="width" id="0Wb-YB-di1"/>
@@ -310,54 +327,61 @@
                                     </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="hwY-Ut-19P" firstAttribute="width" secondItem="4my-bg-pw1" secondAttribute="width" multiplier="0.6" id="L9o-HP-f9Y"/>
+                                    <constraint firstItem="3wr-4G-kpu" firstAttribute="width" secondItem="4my-bg-pw1" secondAttribute="width" id="0Xe-ah-L39"/>
                                     <constraint firstItem="Xmx-oq-V3j" firstAttribute="width" secondItem="4my-bg-pw1" secondAttribute="width" id="UJ3-17-RK6"/>
                                 </constraints>
                             </stackView>
-                            <tableView clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fCs-7e-QiV">
+                            <tableView clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fCs-7e-QiV">
                                 <rect key="frame" x="20" y="124" width="560" height="436"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </tableView>
                             <tableView clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="uX5-vI-3LW">
-                                <rect key="frame" x="20" y="82" width="560" height="436"/>
+                                <rect key="frame" x="20" y="124" width="560" height="436"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </tableView>
-                            <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OEX-Xc-Ke8">
-                                <rect key="frame" x="530" y="8" width="60" height="60"/>
+                            <imageView userInteractionEnabled="NO" alpha="0.90000000000000002" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="footer-mask" translatesAutoresizingMaskIntoConstraints="NO" id="YAU-Ng-BQl">
+                                <rect key="frame" x="0.0" y="510" width="600" height="50"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="ASD-YS-4JR"/>
-                                    <constraint firstAttribute="width" constant="60" id="I89-Su-lAJ"/>
+                                    <constraint firstAttribute="height" constant="50" id="xdI-4K-h9u"/>
                                 </constraints>
-                                <state key="normal" image="close-fire"/>
+                            </imageView>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Znv-hn-BmV">
+                                <rect key="frame" x="275" y="519" width="51" height="31"/>
+                                <color key="onTintColor" red="0.31372549019607843" green="0.8901960784313725" blue="0.76078431372549016" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
-                                    <action selector="didPressCloseButton:" destination="MHR-2x-CaL" eventType="touchUpInside" id="xvs-F9-1g4"/>
+                                    <action selector="didToggleSplitSwitch:" destination="MHR-2x-CaL" eventType="valueChanged" id="6l8-kg-5SB"/>
                                 </connections>
-                            </button>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="fCs-7e-QiV" firstAttribute="centerY" secondItem="Xmx-oq-V3j" secondAttribute="centerY" id="3pk-eV-vX3"/>
+                            <constraint firstItem="Znv-hn-BmV" firstAttribute="centerY" secondItem="YAU-Ng-BQl" secondAttribute="centerY" id="2OW-BB-pOd"/>
                             <constraint firstItem="uX5-vI-3LW" firstAttribute="height" secondItem="u1X-u8-pet" secondAttribute="height" id="5O6-ab-z50"/>
+                            <constraint firstItem="fCs-7e-QiV" firstAttribute="centerY" secondItem="u1X-u8-pet" secondAttribute="centerY" id="6Eo-Ew-KFA"/>
                             <constraint firstItem="uX5-vI-3LW" firstAttribute="centerY" secondItem="u1X-u8-pet" secondAttribute="centerY" id="7V7-Gp-XdD"/>
-                            <constraint firstItem="fCs-7e-QiV" firstAttribute="centerX" secondItem="Xmx-oq-V3j" secondAttribute="centerX" id="KUl-hX-0iA"/>
+                            <constraint firstItem="fCs-7e-QiV" firstAttribute="centerX" secondItem="u1X-u8-pet" secondAttribute="centerX" id="IVf-gQ-ixf"/>
+                            <constraint firstItem="YAU-Ng-BQl" firstAttribute="bottom" secondItem="u1X-u8-pet" secondAttribute="bottom" id="JkN-Wk-Y8v"/>
                             <constraint firstItem="uX5-vI-3LW" firstAttribute="centerX" secondItem="u1X-u8-pet" secondAttribute="centerX" id="M29-48-sQ1"/>
                             <constraint firstItem="4my-bg-pw1" firstAttribute="leading" secondItem="NAF-BE-PDL" secondAttribute="leadingMargin" id="PI5-Ta-Lcc"/>
-                            <constraint firstItem="fCs-7e-QiV" firstAttribute="width" secondItem="Xmx-oq-V3j" secondAttribute="width" id="aSd-rO-8Qa"/>
-                            <constraint firstItem="OEX-Xc-Ke8" firstAttribute="centerY" secondItem="hwY-Ut-19P" secondAttribute="centerY" id="cBH-ES-CdH"/>
-                            <constraint firstItem="fCs-7e-QiV" firstAttribute="height" secondItem="Xmx-oq-V3j" secondAttribute="height" id="fdW-Qo-feu"/>
+                            <constraint firstItem="Znv-hn-BmV" firstAttribute="centerX" secondItem="YAU-Ng-BQl" secondAttribute="centerX" id="Rnt-1y-EqV"/>
+                            <constraint firstItem="fCs-7e-QiV" firstAttribute="width" secondItem="u1X-u8-pet" secondAttribute="width" id="UIO-GZ-w7d"/>
                             <constraint firstItem="4my-bg-pw1" firstAttribute="height" secondItem="NAF-BE-PDL" secondAttribute="height" multiplier="0.9" id="feD-5P-eKQ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="4my-bg-pw1" secondAttribute="trailing" id="hJY-x5-O7N"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="OEX-Xc-Ke8" secondAttribute="trailing" constant="-10" id="urZ-K9-arm"/>
+                            <constraint firstItem="fCs-7e-QiV" firstAttribute="height" secondItem="u1X-u8-pet" secondAttribute="height" id="ieY-7M-SKb"/>
+                            <constraint firstItem="YAU-Ng-BQl" firstAttribute="centerX" secondItem="NAF-BE-PDL" secondAttribute="centerX" id="lpu-ZV-wqD"/>
                             <constraint firstItem="4my-bg-pw1" firstAttribute="top" secondItem="K9n-H3-z42" secondAttribute="bottom" constant="20" id="vNi-B7-fcE"/>
+                            <constraint firstItem="YAU-Ng-BQl" firstAttribute="width" secondItem="NAF-BE-PDL" secondAttribute="width" id="xny-W7-Kdf"/>
                             <constraint firstItem="uX5-vI-3LW" firstAttribute="width" secondItem="u1X-u8-pet" secondAttribute="width" id="ylX-QD-zcd"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="chapterTextView" destination="u1X-u8-pet" id="4BJ-7i-FKF"/>
+                        <outlet property="footerMask" destination="YAU-Ng-BQl" id="dxF-xO-pev"/>
                         <outlet property="referenceTable" destination="fCs-7e-QiV" id="9Eg-zo-mPV"/>
                         <outlet property="segmentBar" destination="4et-yh-1i5" id="PYe-Sf-4ek"/>
-                        <outlet property="splitButton" destination="lo9-st-pme" id="Y7h-iT-Obe"/>
+                        <outlet property="splitSwitch" destination="Znv-hn-BmV" id="Exp-b0-lHc"/>
                         <outlet property="verseLabel" destination="hwY-Ut-19P" id="vaM-QI-oQ7"/>
                         <outlet property="versesTable" destination="uX5-vI-3LW" id="qkd-rz-voO"/>
                     </connections>
@@ -372,9 +396,10 @@
         <image name="Find" width="375" height="667"/>
         <image name="Gradient" width="375" height="369"/>
         <image name="Oval 1" width="104" height="104"/>
+        <image name="chevron-left" width="13" height="23"/>
         <image name="close-fire" width="19" height="19"/>
         <image name="flash" width="20" height="26"/>
+        <image name="footer-mask" width="375" height="50"/>
         <image name="minus" width="26" height="6"/>
-        <image name="navicon" width="22" height="16"/>
     </resources>
 </document>

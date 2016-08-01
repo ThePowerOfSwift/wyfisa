@@ -199,7 +199,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     
     // when frame has been processed we need to write it back to the cell
     func didProcessFrame(sender: CameraManager, withText text: String, fromSession: UInt64) {
-        // print(text)
+        //print(text)
         if fromSession != self.session.currentId {
             return // Ignore: from old capture session
         }

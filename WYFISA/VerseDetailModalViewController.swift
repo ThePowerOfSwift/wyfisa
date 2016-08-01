@@ -8,18 +8,22 @@
 
 import UIKit
 
-class VerseDetailModalViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, VerseTableViewCellDelegate {
+class VerseDetailModalViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, VerseTableViewCellDelegate {
 
     @IBOutlet var segmentBar: UISegmentedControl!
     @IBOutlet var verseLabel: UILabel!
     @IBOutlet var chapterTextView: UITextView!
     @IBOutlet var referenceTable: UITableView!
     @IBOutlet var versesTable: UITableView!
-    @IBOutlet var splitButton: UIButton!
-
+    @IBOutlet var footerMask: UIImageView!
+    @IBOutlet var splitSwitch: UISwitch!
+    
     var verseInfo: VerseInfo? = nil
     var startViewPos: Int = 0
     var splitMode: Bool = false
+    var lastScrollPos: CGFloat = 0
+    var footerIsHidden: Bool = false
+    var didShowSplitVerseOnce: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad() 
@@ -63,6 +67,8 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         
         self.versesTable.dataSource = self
         self.versesTable.delegate = self
+        
+        self.chapterTextView.delegate = self
     }
     
     // scroll to middle of screen when view appears
@@ -71,6 +77,10 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         yPos += Int(self.view.frame.height/2)
         Animations.start(0.3){
             self.chapterTextView.scrollRangeToVisible(NSMakeRange(yPos, 0))
+        }
+        
+        Timing.runAfter(0.5){
+            self.showFooterMask()
         }
     }
     
@@ -110,25 +120,24 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
                               animations: self.setChapterVerseShowAlpha)
     }
     
-    @IBAction func didPressSplitButton(sender: UIButton) {
+
+    
+    @IBAction func didToggleSplitSwitch(sender: UISwitch) {
         // toggles between showing chapter or split view of verses
         self.splitMode = !self.splitMode
         
-
-        // call to reload table so that cells can be populated
-        // with verse data
-        if self.splitMode == true {
+        // go to highligted verse on first time triggered
+        if self.splitMode == true && self.didShowSplitVerseOnce == false{
             
-            self.splitButton.setImage(UIImage(named: "navicon-fire"), forState: .Normal)
-            
-            self.versesTable.reloadData()
             // scroll to verse
             if let activeVerse = self.verseInfo?.verse {
                 let path = NSIndexPath.init(forRow: 0, inSection: activeVerse)
                 self.versesTable.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
+                Timing.runAfter(0.5){
+                    self.showFooterMask()
+                }
+                self.didShowSplitVerseOnce = true
             }
-        } else {
-            self.splitButton.setImage(UIImage(named: "navicon"), forState: .Normal)
         }
         
         // hide unlreated views
@@ -140,16 +149,18 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         
         if sender.selectedSegmentIndex == 0 {
             self.fadeOutInChapterVerseStack()
+            self.showFooterMask()
         }
         
         if sender.selectedSegmentIndex == 1 {
             self.referenceTable.reloadData()
-
+            
             // hide chapter and verses
             Animations.start(0.2){
                 self.chapterTextView.alpha = 0
                 self.versesTable.alpha = 0
             }
+            self.hideFooterMask()
             
             // show related
             Animations.startAfter(0.2, forDuration: 0.2){
@@ -256,6 +267,51 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
 
     }
     
+    
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        
+        // save current possition of scrolling view
+        lastScrollPos = scrollView.contentOffset.y
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        if self.footerMaskEnabled() == false {
+            return
+        }
+        
+        // hide scroll when dragging down
+        if lastScrollPos < scrollView.contentOffset.y {
+            if self.footerIsHidden == false {
+                self.hideFooterMask()
+            }
+        } else {  // show when dragging up
+            if self.footerIsHidden == true {
+                self.showFooterMask()
+            }
+        }
+        
+    }
+    
+    
+    func hideFooterMask(){
+        Animations.start(0.2){
+            self.footerMask.alpha = 0
+            self.splitSwitch.alpha = 0
+        }
+        self.footerIsHidden = true
+    }
+    
+    func showFooterMask(){
+        Animations.start(0.2){
+            self.footerMask.alpha = 0.90
+            self.splitSwitch.alpha = 1
+        }
+        self.footerIsHidden = false
+    }
+    func footerMaskEnabled() -> Bool {
+        return self.segmentBar.selectedSegmentIndex == 0
+    }
     
     @IBAction func didPressCloseButton(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
