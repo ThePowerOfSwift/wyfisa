@@ -210,6 +210,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         if let allVerses = TextMatcher().findVersesInText(text) {
 
             for var verseInfo in allVerses {
+                
                 if let verse = self.db.lookupVerse(verseInfo.id){
 
                     // we have match
@@ -230,8 +231,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                         }
                     } else {
                         // dupe
-                        updateLock.unlock()
-                        return
+                        continue
                     }
                     
                     self.session.newMatches += 1

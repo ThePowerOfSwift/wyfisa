@@ -31,7 +31,7 @@ class TextMatcher {
         
         var verseInfos: [VerseInfo]?
         let bookStr = self.bookPatterns()
-        let chapters: Regex = Regex("\\W(\(bookStr))(?:\\D{0,2})(\\d{1,3})(?:\\D{1,2})(\\d{1,3})",  options: [.IgnoreCase])
+        let chapters: Regex = Regex("(?:\\W|^)(\(bookStr))(?:\\D{0,2})(\\d{1,3})(?:\\D{1,2})(\\d{1,3})",  options: [.IgnoreCase])
 
         let matches = chapters.allMatches(text)
         for match in matches {
@@ -89,8 +89,6 @@ class TextMatcher {
             case "o":
                 return true
             case "u":
-                return true
-            case "y":
                 return true
         default:
             return false
@@ -180,7 +178,31 @@ class TextMatcher {
         if lastChar == "s" || isVowel(lastChar) == true {
             return false
         }
-        return true
+        switch name {
+        case Books.Zech.name():
+            return false
+        case Books.Zeph.name():
+            return false
+        default:
+            return true
+        }
+    }
+    
+    func allowsRightRangeMatching(name: String) -> Bool {
+        
+        // rRange is often suspectible to dupes
+        switch name {
+        case Books.Zech.name():
+            return false
+        case Books.Zeph.name():
+            return false
+        case Books.Jer.name():
+            return false
+        case Books.Neh.name():
+            return false
+        default:
+            return true
+        }
     }
     
     func prefixMatches(pattern: String, c: Character) -> String {
@@ -190,7 +212,7 @@ class TextMatcher {
         case "1":
             var _p = matches[0]
             for i in 1...matches.count-1 {
-                let m = "|1\\s{0,1}\(matches[i])|1st\\s{0,1}\(matches[i])|First\\s{0,1}\(matches[i])"
+                let m = "|[1l]\\s{0,1}\(matches[i])|[1l]st\\s{0,1}\(matches[i])|First\\s{0,1}\(matches[i])"
                 _p = _p.stringByAppendingString(m)
             }
             return _p
@@ -242,8 +264,24 @@ class TextMatcher {
         
         if allowsRangeAbbr(name) == true {
             // ie Genesis, G.....s
-            let match = "|\(firstChar)\\w{\(n-2)}\(lastChar)\\W"
+            var match = "|\(firstChar)\\w{\(n-2-cOffset)}\(lastChar)\\W"
             pattern = pattern.stringByAppendingString(match)
+            
+            if lastChar == "y" { // often y becomes v
+                match = "|\(firstChar)\\w{\(n-2-cOffset)}v\\W"
+                pattern = pattern.stringByAppendingString(match)
+            }
+        }
+        
+        if (n-cOffset) > 5 { // better gap matching on big words
+            let lRange = name[name.startIndex.advancedBy(cOffset)...name.startIndex.advancedBy(cOffset+4)]
+            let rRange = name[name.startIndex.advancedBy(n-5)...name.startIndex.advancedBy(n-1)]
+            let lmatch = "|\(lRange)\\w{0,\(n-5)}\\W"
+            let rmatch = "|\\w{0,\(n-5)}\(rRange)\\W"
+            pattern = pattern.stringByAppendingString(lmatch)
+            if allowsRightRangeMatching(name){
+                pattern = pattern.stringByAppendingString(rmatch)
+            }
         }
 
         if allowsFirstTwoCharAbbr(name){
@@ -287,6 +325,10 @@ class TextMatcher {
                 }
             }
         }
+        
+        // TODO: learn fuzzy char replacements, ie
+        // pattern = pattern.replace("l", with: "[1l]")
+        
         if (cOffset > 0 ){
             pattern = prefixMatches(pattern, c: initChar)
         }
@@ -298,13 +340,18 @@ class TextMatcher {
         
         let bookName = book.name()
         
+        // in general makeRegex will provide sufficient pattern
+        // to match book. 'switch' here on special cases
         switch book {
         case .Jude:
             return bookName
         case .Philemon:
-            return bookName
+            return "\(bookName)|P\\w{5}n"
         case .Phil:
             return bookName+"|Phil\\W"
+        case .Mt:
+            let rx = makeRegex(bookName)
+            return "\(rx)|Ma\\w{4,5}v"  // when w becomes 'v'
         default:
             return makeRegex(bookName)
         }

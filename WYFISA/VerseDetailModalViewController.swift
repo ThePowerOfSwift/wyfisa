@@ -59,18 +59,13 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         self.referenceTable.delegate = self
     }
     
+    // scroll to middle of screen when view appears
     override func viewDidAppear(animated: Bool) {
-        if let verse = verseInfo {
-            if let text = verse.text {
-                var yPos = text.length + self.startViewPos
-                // + middle of screen
-                yPos += Int(self.view.frame.height/2)
-                Animations.start(0.3){
-                    self.chapterTextView.scrollRangeToVisible(NSMakeRange(yPos, 0))
-                }
-            }
+        var yPos = self.startViewPos
+        yPos += Int(self.view.frame.height/2)
+        Animations.start(0.3){
+            self.chapterTextView.scrollRangeToVisible(NSMakeRange(yPos, 0))
         }
-
     }
     
     override func didReceiveMemoryWarning() {

@@ -91,6 +91,24 @@ class WYFISATests: XCTestCase {
         XCTAssert(chapterText.containsString(verseText))
     }
     
+    func testDbLookupVerseFromMatch(){
+        let db = DBQuery()
+        let tm = TextMatcher()
+        
+        print(tm.pattern(Books.Ezek))
+        if let verseInfos = tm.findVersesInText("Sus said in Ezekiel 1:3 -) 'In the resurrection"){
+            XCTAssert(verseInfos.count == 1)
+            XCTAssert(verseInfos[0].name == "Ezekiel 1:3", verseInfos[0].name)
+            let chapterText = db.chapterForVerse(verseInfos[0].id)
+            XCTAssert(chapterText.length > 0)
+            
+        } else {
+            XCTFail("expected match")
+        }
+        
+
+    }
+    
     func testDbVerseHasCrossReference(){
         let db = DBQuery()
         let crossRefs = db.crossReferencesForVerse("43014006")
@@ -205,7 +223,7 @@ class TextMatcherTests: WYFISATests{
         } else {
             XCTFail("expected match")
         }
-        if let verseInfos = tm.findVersesInText("These are not linesis 1:1 verses, lake ocn2:2 and gen vin3:3 or G\new 4:4 iGalesis1:1"){
+        if let verseInfos = tm.findVersesInText("These are not linevis 1:1 verses, lake ocn2:2 and gen vin3:3 or G\new 4:4 ipalevis1:1"){
             XCTFail("unexpected match \(verseInfos[0].name)")
         }
     }
@@ -235,7 +253,7 @@ class TextMatcherTests: WYFISATests{
         } else {
             XCTFail("expected match")
         }
-        if let verseInfos = tm.findVersesInText("These are not Lemation 1:1 verses, like unleavened 2:2 and lavetics:3 "){
+        if let verseInfos = tm.findVersesInText("These are not Lematipn 1:1 verses, like unleavened 2:2 and laveyics:3 "){
             XCTFail("unexpected match \(verseInfos[0].name)")
         }
     }
@@ -291,7 +309,7 @@ class TextMatcherTests: WYFISATests{
             XCTAssert(book != nil)
             let pattern = tm.pattern(book!)
             let patternList = pattern.componentsSeparatedByString("|")
-            if book == Books.Jude || book == Books.Philemon {
+            if book == Books.Jude {
                 XCTAssert(patternList.count == 1) // only 1 pattern
             } else {
                 XCTAssert(patternList.count > 1) // at least 1 or more patterns per book
@@ -361,6 +379,96 @@ class TextMatcherTests: WYFISATests{
             XCTFail("expected match")
         }
     }
+    
+    func testMatchTextForMatthew(){
+        let tm = TextMatcher()
+        print(tm.pattern(Books.Mt))
+        if let verseInfos = tm.findVersesInText("Sus said in Marthcvv 22:30) 'In the resurrection"){
+            XCTAssert(verseInfos.count == 1)
+            XCTAssert(verseInfos[0].name == "Matthew 22:30", verseInfos[0].name)
+        } else {
+            XCTFail("expected match")
+        }
+    }
+    
+    func testMatchTextForEzekiel(){
+        let tm = TextMatcher()
+        print(tm.pattern(Books.Ezek))
+        if let verseInfos = tm.findVersesInText("Sus said in Ezekiel 1:3 -) 'In the resurrection"){
+            XCTAssert(verseInfos.count == 1)
+            XCTAssert(verseInfos[0].name == "Ezekiel 1:3", verseInfos[0].name)
+        } else {
+            XCTFail("expected match")
+        }
+    }
+    
+    func testMatchTextForCol(){
+        let tm = TextMatcher()
+        print(tm.pattern(Books.Col))
+        if let verseInfos = tm.findVersesInText("Colossians 1:3"){
+            XCTAssert(verseInfos.count == 1)
+            XCTAssert(verseInfos[0].name == "Colossians 1:3", verseInfos[0].name)
+        } else {
+            XCTFail("expected match")
+        }
+    }
+    
+    func testMatchTextForZech(){
+        let tm = TextMatcher()
+        print(tm.pattern(Books.Zech))
+        if let verseInfos = tm.findVersesInText("Zechariah 1:3 1-"){
+            XCTAssert(verseInfos.count == 1)
+            XCTAssert(verseInfos[0].name == "Zechariah 1:3", verseInfos[0].name)
+        } else {
+            XCTFail("expected match")
+        }
+    }
+    
+    
+    func testMatchTextForTim1(){
+        let tm = TextMatcher()
+        print(tm.pattern(Books.Tim1))
+        if let verseInfos = tm.findVersesInText("1 Timothv 1:3"){
+            XCTAssert(verseInfos.count == 1)
+            XCTAssert(verseInfos[0].name == "1 Timothy 1:3", verseInfos[0].name)
+        } else {
+            XCTFail("expected match")
+        }
+    }
+   
+    func testMatchTextForHeb(){
+        let tm = TextMatcher()
+        print(tm.pattern(Books.Heb))
+        if let verseInfos = tm.findVersesInText("Hebrens 1:3 -"){
+            XCTAssert(verseInfos.count == 1)
+            XCTAssert(verseInfos[0].name == "Hebrews 1:3", verseInfos[0].name)
+        } else {
+            XCTFail("expected match")
+        }
+    }
+    
+    func testMatchTextForJer(){
+        let tm = TextMatcher()
+        print(tm.pattern(Books.Jer))
+        if let verseInfos = tm.findVersesInText(" Jeremiah 1:3 -"){
+            XCTAssert(verseInfos.count == 1)
+            XCTAssert(verseInfos[0].name == "Jeremiah 1:3", verseInfos[0].name)
+        } else {
+            XCTFail("expected match")
+        }
+    }
+    
+    func testMatchTextForPet1(){
+        let tm = TextMatcher()
+        print(tm.pattern(Books.Pet1))
+        if let verseInfos = tm.findVersesInText("l Peter 1:3"){
+            XCTAssert(verseInfos.count == 1)
+            XCTAssert(verseInfos[0].name == "1 Peter 1:3", verseInfos[0].name)
+        } else {
+            XCTFail("expected match")
+        }
+    }
+    
     func testNoMatchTextForPattern(){
         let tm = TextMatcher()
         print(tm.pattern(Books.Jn))

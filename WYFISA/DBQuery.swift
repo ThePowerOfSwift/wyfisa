@@ -48,16 +48,6 @@ class DBQuery {
         if let row = conn.pluck(query) {
             verse = row.get(bibleCol.text)
             verse = self.stripText(verse!)
-            
-            // cache chapter and references in background
-            Timing.runAfterBg(0){
-                if self.chapterCache[verseId] == nil {
-                    self.chapterCache[verseId] = self.chapterForVerse(verseId)
-                }
-                if self.refCache[verseId] == nil {
-                    self.refCache[verseId] = self.crossReferencesForVerse(verseId)
-                }
-            }
         }
         
         return verse
@@ -104,6 +94,7 @@ class DBQuery {
             } catch { print("query error") }
 
         }
+        self.chapterCache[verseId] = chapter
         return chapter
     }
 
@@ -182,6 +173,7 @@ class DBQuery {
             }
         } catch { print("query error") }
         
+        self.refCache[verseId] = references
         return references
     }
     
