@@ -74,6 +74,9 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     }
     
     @IBAction func didTapBarSegment(sender: UISegmentedControl) {
+        
+        self.referenceTable.reloadData()
+        
         if sender.selectedSegmentIndex == 0 {
             // hide related
             Animations.start(0.2){
@@ -85,7 +88,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             }
         }
         
-        if sender.selectedSegmentIndex == 1 {
+        if sender.selectedSegmentIndex == 1 || sender.selectedSegmentIndex == 2 {
             // hide chapter
             Animations.start(0.2){
                 self.chapterTextView.alpha = 0
@@ -109,12 +112,22 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         return 1
     }
     
+    func versesForCell() -> [VerseInfo]? {
+        
+        // can either be verses or cross references
+        switch  self.segmentBar.selectedSegmentIndex {
+        case 1:
+            return self.verseInfo?.verses
+        case 2:
+            return self.verseInfo?.refs
+        default:
+            return nil
+        }
+    }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         var nsec = 0
-        if let verse = self.verseInfo {
-            if let refs = verse.refs {
-                nsec = refs.count
-            }
+        if let refs = self.versesForCell() {
+            nsec = refs.count
         }
         return nsec
     }
@@ -141,7 +154,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         }
         
         if let verseCell = cell {
-            if let refs = verseInfo!.refs {
+            if let refs = self.versesForCell() {
                 let refInfo = refs[indexPath.section]
                 verseCell.updateWithVerseInfo(refInfo, isExpanded: true)
             }
@@ -156,7 +169,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
         // dynamic text sizing
-        if let refs = verseInfo!.refs {
+        if let refs = self.versesForCell() {
             if let text = refs[indexPath.section].text {
                 let font = BodyFont.iowan(18.0)
 

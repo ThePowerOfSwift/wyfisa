@@ -16,6 +16,7 @@ class VerseInfo {
     var text: String?
     var chapter: String?
     var refs: [VerseInfo]?
+    var verses: [VerseInfo]?
     
     init(id: String, name: String, text: String?){
         self.id = id

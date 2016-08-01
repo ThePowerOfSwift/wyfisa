@@ -104,8 +104,10 @@ class VerseTableViewCell: UITableViewCell {
         if let verse = verseInfo {
             let chapter = db.chapterForVerse(verse.id)
             let refs = db.crossReferencesForVerse(verse.id)
+            let verses = db.versesForChapter(verse.id)
             verse.chapter = chapter
             verse.refs = refs
+            verse.verses = verses
             self.delegate?.didTapMoreButtonForCell(self, withVerseInfo: verse)
         }
     }

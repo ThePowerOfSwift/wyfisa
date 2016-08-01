@@ -270,9 +270,10 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4et-yh-1i5">
-                                        <rect key="frame" x="216.5" y="56" width="127" height="29"/>
+                                        <rect key="frame" x="185" y="56" width="191" height="29"/>
                                         <segments>
                                             <segment title="Chapter"/>
+                                            <segment title="Verses"/>
                                             <segment title="Related"/>
                                         </segments>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

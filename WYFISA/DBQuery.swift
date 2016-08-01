@@ -36,6 +36,8 @@ class DBQuery {
     let crossRefCol = CrossRefColumns()
     var chapterCache = [String:String]()
     var refCache = [String:[VerseInfo]]()
+    var verseCache = [String:[VerseInfo]]()
+
     init(){
         let path = NSBundle.mainBundle().pathForResource("t_web", ofType: "db")!
         self.conn = try! Connection(path, readonly: true)
@@ -53,8 +55,24 @@ class DBQuery {
         return verse
     }
     
+    func versesForChapter(verseId: String) -> [VerseInfo] {
+        
+        if let cachedVerses = self.verseCache[verseId] {
+            return cachedVerses
+        }
+        
+        // chapterForVerse builds the verse cache
+        self.chapterForVerse(verseId)
+        if let cachedVerses = self.verseCache[verseId] {
+            return cachedVerses
+        } else {
+            return [VerseInfo]()
+        }
+    }
+    
     func chapterForVerse(verseId: String) -> String {
         var chapter: String = ""
+        var chapterVerses = [VerseInfo]()
         
         if let cachedChapter = self.chapterCache[verseId] {
             return cachedChapter
@@ -71,10 +89,22 @@ class DBQuery {
             query = bibleTable.select(bibleCol.text)
                 .filter(bibleCol.book == bookId && bibleCol.chapter == chapterId)
             
+            let bookName = Books(rawValue: bookId)!.name()
+            
             do {
                 var i = 1
                 for row in try conn.prepare(query) {
                     var rc = self.stripText(row.get(bibleCol.text))
+                    
+                    // create verse singleton
+                    let verseName = "\(bookName) \(chapterId):\(i)"
+                    let bookIdStr = String(format: "%02d", bookId)
+                    let chapterId = String(format: "%03d", chapterId)
+                    let vid = String(format: "%03d", i)
+                    let id = "\(bookIdStr)\(chapterId)\(vid)"
+                    let verseInfo = VerseInfo.init(id: id, name: verseName, text: rc)
+                    chapterVerses.append(verseInfo)
+
                     if (i == verseId){ // this is context verse
                         if i == 1 {
                             rc = "\u{293}\(rc)\u{297}"
@@ -89,11 +119,14 @@ class DBQuery {
                         }
                     }
                     chapter = chapter.stringByAppendingString(rc)
+
                     i+=1
+                    
                 }
             } catch { print("query error") }
 
         }
+        self.verseCache[verseId] = chapterVerses
         self.chapterCache[verseId] = chapter
         return chapter
     }
