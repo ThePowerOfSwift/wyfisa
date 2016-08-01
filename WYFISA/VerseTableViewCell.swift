@@ -29,7 +29,16 @@ class VerseTableViewCell: UITableViewCell {
         self.labelHeader.textColor = UIColor.teal()
 
     }
-    
+
+    func highlightText() {
+        let font = BodyFont.iowan(19.0)
+        
+        let attrs = [NSForegroundColorAttributeName: UIColor.turquoise(),
+                     NSFontAttributeName: font]
+        let attributedText = NSMutableAttributedString.init(string: self.labelText.text!, attributes: attrs)
+        self.labelText.attributedText = attributedText
+    }
+
     func updateWithVerseInfo(verse: VerseInfo, isExpanded: Bool) {
 
         if  verse.id.characters.count > 0 {

@@ -14,9 +14,12 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     @IBOutlet var verseLabel: UILabel!
     @IBOutlet var chapterTextView: UITextView!
     @IBOutlet var referenceTable: UITableView!
-    
+    @IBOutlet var versesTable: UITableView!
+    @IBOutlet var splitButton: UIButton!
+
     var verseInfo: VerseInfo? = nil
     var startViewPos: Int = 0
+    var splitMode: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad() 
@@ -57,6 +60,9 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         }
         self.referenceTable.dataSource = self
         self.referenceTable.delegate = self
+        
+        self.versesTable.dataSource = self
+        self.versesTable.delegate = self
     }
     
     // scroll to middle of screen when view appears
@@ -73,26 +79,78 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func didTapBarSegment(sender: UISegmentedControl) {
+    
+    func setChapterVerseHideAlpha(){
+        // hide reference table
+        self.referenceTable.alpha = 0
+        if self.splitMode == true {
+            // hide chapter box
+            self.chapterTextView.alpha = 0
+        } else {
+            self.versesTable.alpha = 0
+        }
+    }
+    
+    func setChapterVerseShowAlpha(){
+        // hide reference table
+        self.referenceTable.alpha = 0
+        if self.splitMode == true {
+            self.versesTable.alpha = 1
+        } else {
+            self.chapterTextView.alpha = 1
+        }
+    }
+    
+    func fadeOutInChapterVerseStack(){
+        Animations.start(0.2, animations: self.setChapterVerseHideAlpha)
         
-        self.referenceTable.reloadData()
+        // show related
+        Animations.startAfter(0.2,
+                              forDuration: 0.2,
+                              animations: self.setChapterVerseShowAlpha)
+    }
+    
+    @IBAction func didPressSplitButton(sender: UIButton) {
+        // toggles between showing chapter or split view of verses
+        self.splitMode = !self.splitMode
         
-        if sender.selectedSegmentIndex == 0 {
-            // hide related
-            Animations.start(0.2){
-                self.referenceTable.alpha = 0
+
+        // call to reload table so that cells can be populated
+        // with verse data
+        if self.splitMode == true {
+            
+            self.splitButton.setImage(UIImage(named: "navicon-fire"), forState: .Normal)
+            
+            self.versesTable.reloadData()
+            // scroll to verse
+            if let activeVerse = self.verseInfo?.verse {
+                let path = NSIndexPath.init(forRow: 0, inSection: activeVerse)
+                self.versesTable.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
             }
-            // show chapter
-            Animations.startAfter(0.2, forDuration: 0.2){
-                self.chapterTextView.alpha = 1
-            }
+        } else {
+            self.splitButton.setImage(UIImage(named: "navicon"), forState: .Normal)
         }
         
-        if sender.selectedSegmentIndex == 1 || sender.selectedSegmentIndex == 2 {
-            // hide chapter
+        // hide unlreated views
+        self.fadeOutInChapterVerseStack()
+    }
+    
+    
+    @IBAction func didTapBarSegment(sender: UISegmentedControl) {
+        
+        if sender.selectedSegmentIndex == 0 {
+            self.fadeOutInChapterVerseStack()
+        }
+        
+        if sender.selectedSegmentIndex == 1 {
+            self.referenceTable.reloadData()
+
+            // hide chapter and verses
             Animations.start(0.2){
                 self.chapterTextView.alpha = 0
+                self.versesTable.alpha = 0
             }
+            
             // show related
             Animations.startAfter(0.2, forDuration: 0.2){
                 self.referenceTable.alpha = 1
@@ -115,14 +173,10 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     func versesForCell() -> [VerseInfo]? {
         
         // can either be verses or cross references
-        switch  self.segmentBar.selectedSegmentIndex {
-        case 1:
-            return self.verseInfo?.verses
-        case 2:
+        if self.segmentBar.selectedSegmentIndex == 1 {
             return self.verseInfo?.refs
-        default:
-            return nil
         }
+        return  self.verseInfo?.verses
     }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         var nsec = 0
@@ -157,6 +211,11 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             if let refs = self.versesForCell() {
                 let refInfo = refs[indexPath.section]
                 verseCell.updateWithVerseInfo(refInfo, isExpanded: true)
+                if let activeVerse = self.verseInfo?.verse {
+                    if activeVerse == indexPath.section+1 {
+                        verseCell.highlightText()
+                    }
+                }
             }
             verseCell.delegate = self
             return verseCell

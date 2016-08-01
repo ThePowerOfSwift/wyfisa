@@ -15,6 +15,7 @@ class VerseInfo {
     var name: String
     var text: String?
     var chapter: String?
+    var verse: Int?
     var refs: [VerseInfo]?
     var verses: [VerseInfo]?
     
@@ -54,6 +55,7 @@ class TextMatcher {
             let verseId = String(format: "%03d", Int(verse)!)
             let id = "\(bookIdStr)\(chapterId)\(verseId)"
             let info = VerseInfo(id: id, name: matchedText, text: "Not Found")
+            info.verse = Int(verse)
 
             if verseInfos == nil {
                 verseInfos = [VerseInfo]()

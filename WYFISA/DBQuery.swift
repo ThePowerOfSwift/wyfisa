@@ -103,6 +103,7 @@ class DBQuery {
                     let vid = String(format: "%03d", i)
                     let id = "\(bookIdStr)\(chapterId)\(vid)"
                     let verseInfo = VerseInfo.init(id: id, name: verseName, text: rc)
+                    verseInfo.verse = i
                     chapterVerses.append(verseInfo)
 
                     if (i == verseId){ // this is context verse
@@ -199,6 +200,7 @@ class DBQuery {
                 if passage != nil {
                     verseInfo.name = passage!
                     verseInfo.text = refText
+                    verseInfo.verse = firstVerse
                     references.append(verseInfo)
                 }
 
