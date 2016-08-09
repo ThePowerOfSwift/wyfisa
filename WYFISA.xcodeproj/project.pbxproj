@@ -660,7 +660,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: RISE & RUN LLC (5B5KD5S2Z5)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Tommie McAfee (FYYPPK2H2M)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: RISE & RUN LLC (5B5KD5S2Z5)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = WYFISA/Info.plist;
@@ -668,7 +668,7 @@
 				OTHER_LDFLAGS = " -lstdc++";
 				PRODUCT_BUNDLE_IDENTIFIER = com.riserunllc.WYFISA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c4616784-547c-4722-82ca-fdac9e741a4b";
+				PROVISIONING_PROFILE = "f76874b9-f307-41c8-9498-7d76e75434a6";
 				SWIFT_OBJC_BRIDGING_HEADER = "WYFISA-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -681,7 +681,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: RISE & RUN LLC (5B5KD5S2Z5)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Tommie McAfee (FYYPPK2H2M)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: RISE & RUN LLC (5B5KD5S2Z5)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = WYFISA/Info.plist;
@@ -689,7 +689,7 @@
 				OTHER_LDFLAGS = " -lstdc++";
 				PRODUCT_BUNDLE_IDENTIFIER = com.riserunllc.WYFISA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c4616784-547c-4722-82ca-fdac9e741a4b";
+				PROVISIONING_PROFILE = "f76874b9-f307-41c8-9498-7d76e75434a6";
 				SWIFT_OBJC_BRIDGING_HEADER = "WYFISA-Bridging-Header.h";
 			};
 			name = Release;

@@ -49,11 +49,11 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             // contextual highlighting for attributed text
             let font = BodyFont.iowan(19.0)
             
-            let attrs = [NSForegroundColorAttributeName: UIColor.whiteColor(),
+            let attrs = [NSForegroundColorAttributeName: UIColor.navy(1.0),
                          NSFontAttributeName: font]
             let attributedText = NSMutableAttributedString.init(string: chapter, attributes: attrs)
             var contextRange = NSRange.init(location: startIdx!, length: length)
-            let contextAttrs = [NSForegroundColorAttributeName: UIColor.turquoise(),
+            let contextAttrs = [NSForegroundColorAttributeName: UIColor.fire(),
                                 NSFontAttributeName: font]
             if (contextRange.location + contextRange.length) > attributedText.length {
                 // some kind of overshoot occured - do not exceed bounds

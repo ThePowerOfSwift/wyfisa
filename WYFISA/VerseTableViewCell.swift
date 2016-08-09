@@ -26,14 +26,14 @@ class VerseTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.labelHeader.textColor = UIColor.teal()
+        self.labelHeader.textColor = UIColor.navy(1.0)
 
     }
 
     func highlightText() {
         let font = BodyFont.iowan(18.0)
         
-        let attrs = [NSForegroundColorAttributeName: UIColor.turquoise(),
+        let attrs = [NSForegroundColorAttributeName: UIColor.fire(),
                      NSFontAttributeName: font]
         let attributedText = NSMutableAttributedString.init(string: self.labelText.text!, attributes: attrs)
         self.labelText.attributedText = attributedText
@@ -53,7 +53,7 @@ class VerseTableViewCell: UITableViewCell {
             self.labelHeader.alpha = 1
             // hiding icon
             Animations.start(0.2){
-                self.labelHeader.textColor = UIColor.teal()
+                self.labelHeader.textColor = UIColor.navy(1.0)
             }
 
         } else {
