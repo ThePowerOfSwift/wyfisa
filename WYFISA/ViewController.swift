@@ -36,10 +36,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     @IBOutlet var tutPager: UIPageControl!
     @IBOutlet var tutImage: UIImageView!
     @IBOutlet var flashButton: UIButton!
-    @IBOutlet var stackHeight: NSLayoutConstraint!
     @IBOutlet var moonButton: UIButton!
     @IBOutlet var settingsButton: UIButton!
-
+    @IBOutlet var settingsBar: UIView!
     
     let stillCamera = CameraManager.sharedInstance
     let db = DBQuery.sharedInstance
@@ -100,24 +99,14 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         self.settingsEnabled = !self.settingsEnabled
         
         if self.settingsEnabled == true {
-            Animations.start(0.1){
-                self.flashButton.alpha = 1
-                self.moonButton.alpha = 1
-            }
-            Animations.startAfter(0.1, forDuration: 0.3){
-                self.stackHeight.constant = 160
-                self.flashButton.hidden = false
-                self.moonButton.hidden = false
+            Animations.start(0.3){
+                self.settingsBar.hidden = false
+                self.settingsButton.setImage(UIImage(named: "ios7-gear-fire"), forState: .Normal)
             }
         } else {
-            Animations.start(0.1){
-                self.flashButton.alpha = 0
-                self.moonButton.alpha = 0
-            }
-            Animations.startAfter(0.1, forDuration: 0.3){
-                self.stackHeight.constant = 100
-                self.flashButton.hidden = true
-                self.moonButton.hidden = true
+            Animations.start(0.3){
+                self.settingsBar.hidden = true
+                self.settingsButton.setImage(UIImage(named: "ios7-gear"), forState: .Normal)
             }
         }
     }
@@ -126,10 +115,12 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
          self.flashEnabled = !self.flashEnabled
          
          if self.flashEnabled == true {
-             self.flashButton.setImage(UIImage(named: "flash-fire"), forState: .Normal)
+            self.flashButton.setTitleColor(UIColor.fire(), forState: .Normal)
+            self.flashButton.setImage(UIImage(named: "flash-fire"), forState: .Normal)
          
          } else {
-             self.flashButton.setImage(UIImage(named: "flash-white"), forState: .Normal)
+            self.flashButton.setImage(UIImage(named: "flash-white"), forState: .Normal)
+            self.flashButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
          }
         
  
@@ -140,8 +131,10 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         if self.nightEnabled == true {
             self.moonButton.setImage(UIImage(named: "ios7-moon-fire"), forState: .Normal)
+            self.moonButton.setTitleColor(UIColor.fire(), forState: .Normal)
         } else {
             self.moonButton.setImage(UIImage(named: "ios7-moon"), forState: .Normal)
+            self.moonButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             
         }
     }
@@ -154,9 +147,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     @IBAction func didPressCaptureButton(sender: AnyObject) {
         
         self.hideTut()
-        if self.settingsEnabled == true {
-            self.didPressSettingsButton(sender)
-        }
         
         if self.captureLock.tryLock() {
             

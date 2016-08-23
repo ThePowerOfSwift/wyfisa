@@ -46,7 +46,7 @@
                                         </constraints>
                                     </view>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRESS AND HOLD CAPTURE BUTTON" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="gGX-5F-XhG">
-                                        <rect key="frame" x="152" y="97" width="295" height="86"/>
+                                        <rect key="frame" x="152.5" y="97" width="295" height="86"/>
                                         <fontDescription key="fontDescription" type="system" weight="thin" pointSize="36"/>
                                         <color key="textColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -60,7 +60,7 @@
                                             <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="254" verticalHuggingPriority="254" image="CaptureBox-1" translatesAutoresizingMaskIntoConstraints="NO" id="ggB-0g-XGh">
                                                 <rect key="frame" x="133" y="0.0" width="295" height="240"/>
                                             </imageView>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="753" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Eb-dI-Jp5" customClass="VerseTableView" customModule="WYFISA" customModuleProvider="target">
+                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="753" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9Eb-dI-Jp5" customClass="VerseTableView" customModule="WYFISA" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="260" width="560" height="182"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -107,61 +107,26 @@
                                                 </prototypes>
                                                 <sections/>
                                             </tableView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="248" verticalCompressionResistancePriority="752" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="BcN-jx-f75">
+                                            <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="248" verticalCompressionResistancePriority="752" misplaced="YES" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="BcN-jx-f75">
                                                 <rect key="frame" x="0.0" y="462" width="560" height="100"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="YfI-e6-taF">
+                                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bqR-YQ-AJH">
                                                         <rect key="frame" x="0.0" y="37" width="60" height="26"/>
-                                                        <subviews>
-                                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CDB-uF-N9d">
-                                                                <rect key="frame" x="0.0" y="0.0" width="60" height="0.0"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="60" id="Usr-UT-dny"/>
-                                                                </constraints>
-                                                                <fontDescription key="fontDescription" name="Kailasa" family="Kailasa" pointSize="12"/>
-                                                                <inset key="titleEdgeInsets" minX="10" minY="13" maxX="0.0" maxY="0.0"/>
-                                                                <state key="normal" title="Flash" image="flash-white"/>
-                                                                <connections>
-                                                                    <action selector="didPressFlashButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fwq-Ik-hHo"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bqR-YQ-AJH">
-                                                                <rect key="frame" x="0.0" y="0.0" width="60" height="26"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="50" id="Rfg-9Q-Zgr"/>
-                                                                    <constraint firstAttribute="width" constant="60" id="h1F-zq-Aad"/>
-                                                                </constraints>
-                                                                <state key="normal" image="ios7-gear"/>
-                                                                <variation key="default">
-                                                                    <mask key="constraints">
-                                                                        <exclude reference="Rfg-9Q-Zgr"/>
-                                                                    </mask>
-                                                                </variation>
-                                                                <connections>
-                                                                    <action selector="didPressSettingsButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="HeV-cy-2BB"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vRc-XV-rf0">
-                                                                <rect key="frame" x="0.0" y="26" width="60" height="0.0"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="60" id="Ali-ha-oPD"/>
-                                                                    <constraint firstAttribute="width" constant="60" id="qHj-cW-fmb"/>
-                                                                </constraints>
-                                                                <fontDescription key="fontDescription" name="Kailasa" family="Kailasa" pointSize="12"/>
-                                                                <inset key="titleEdgeInsets" minX="10" minY="12" maxX="0.0" maxY="0.0"/>
-                                                                <state key="normal" title="Night" image="ios7-moon"/>
-                                                                <variation key="default">
-                                                                    <mask key="constraints">
-                                                                        <exclude reference="Ali-ha-oPD"/>
-                                                                    </mask>
-                                                                </variation>
-                                                                <connections>
-                                                                    <action selector="didPressMoonButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GFF-oZ-XAz"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                    </stackView>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Frh-0b-u19">
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="50" id="Rfg-9Q-Zgr"/>
+                                                            <constraint firstAttribute="width" constant="60" id="h1F-zq-Aad"/>
+                                                        </constraints>
+                                                        <state key="normal" image="ios7-gear"/>
+                                                        <variation key="default">
+                                                            <mask key="constraints">
+                                                                <exclude reference="Rfg-9Q-Zgr"/>
+                                                            </mask>
+                                                        </variation>
+                                                        <connections>
+                                                            <action selector="didPressSettingsButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="HeV-cy-2BB"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Frh-0b-u19">
                                                         <rect key="frame" x="230" y="0.0" width="100" height="100"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="Frh-0b-u19" secondAttribute="height" multiplier="1:1" id="cWB-Gb-zRn"/>
@@ -174,7 +139,7 @@
                                                             <action selector="didReleaseCaptureButtonOutside:" destination="BYZ-38-t0r" eventType="touchUpOutside" id="jkH-oI-SEU"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y8t-np-6PG">
+                                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y8t-np-6PG">
                                                         <rect key="frame" x="500" y="39" width="60" height="22"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="60" id="HcR-Pm-gaB"/>
@@ -185,14 +150,52 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="100" id="evh-wX-Gsm"/>
-                                                </constraints>
                                             </stackView>
+                                            <view hidden="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="glg-aa-jU8">
+                                                <rect key="frame" x="0.0" y="562" width="560" height="0.0"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="tUB-yJ-6U5">
+                                                        <rect key="frame" x="0.0" y="0.0" width="560" height="0.0"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CDB-uF-N9d">
+                                                                <rect key="frame" x="0.0" y="0.0" width="289" height="0.0"/>
+                                                                <fontDescription key="fontDescription" name="Kailasa" family="Kailasa" pointSize="12"/>
+                                                                <inset key="titleEdgeInsets" minX="10" minY="2" maxX="0.0" maxY="0.0"/>
+                                                                <state key="normal" title="Flash" image="flash-white"/>
+                                                                <connections>
+                                                                    <action selector="didPressFlashButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fwq-Ik-hHo"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="751" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vRc-XV-rf0">
+                                                                <rect key="frame" x="289" y="0.0" width="272" height="0.0"/>
+                                                                <fontDescription key="fontDescription" name="Kailasa" family="Kailasa" pointSize="12"/>
+                                                                <inset key="titleEdgeInsets" minX="10" minY="2" maxX="0.0" maxY="0.0"/>
+                                                                <state key="normal" title="Night" image="ios7-moon"/>
+                                                                <connections>
+                                                                    <action selector="didPressMoonButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GFF-oZ-XAz"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="3hw-pS-8gi"/>
+                                                    <constraint firstItem="tUB-yJ-6U5" firstAttribute="height" secondItem="glg-aa-jU8" secondAttribute="height" id="Mno-h3-fSz"/>
+                                                    <constraint firstItem="tUB-yJ-6U5" firstAttribute="centerX" secondItem="glg-aa-jU8" secondAttribute="centerX" id="ZXd-V4-27z"/>
+                                                    <constraint firstItem="tUB-yJ-6U5" firstAttribute="width" secondItem="glg-aa-jU8" secondAttribute="width" id="f80-3U-Zdq"/>
+                                                    <constraint firstItem="tUB-yJ-6U5" firstAttribute="centerY" secondItem="glg-aa-jU8" secondAttribute="centerY" id="xb5-wU-Zvo"/>
+                                                </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="3hw-pS-8gi"/>
+                                                    </mask>
+                                                </variation>
+                                            </view>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="9Eb-dI-Jp5" firstAttribute="width" secondItem="eEa-Gj-aYh" secondAttribute="width" id="2l1-tg-A6S"/>
                                             <constraint firstItem="BcN-jx-f75" firstAttribute="width" secondItem="eEa-Gj-aYh" secondAttribute="width" id="MrS-pf-2eP"/>
+                                            <constraint firstItem="glg-aa-jU8" firstAttribute="width" secondItem="eEa-Gj-aYh" secondAttribute="width" id="u2y-RN-ehZ"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
@@ -273,8 +276,8 @@
                         <outlet property="maskView" destination="sz8-4h-p7m" id="wLS-E5-R8i"/>
                         <outlet property="moonButton" destination="vRc-XV-rf0" id="L1a-Tk-qJ2"/>
                         <outlet property="refeshButton" destination="y8t-np-6PG" id="e7m-bO-x2q"/>
+                        <outlet property="settingsBar" destination="glg-aa-jU8" id="B8a-OV-oWT"/>
                         <outlet property="settingsButton" destination="bqR-YQ-AJH" id="abZ-KL-DOG"/>
-                        <outlet property="stackHeight" destination="evh-wX-Gsm" id="ugv-gW-cZz"/>
                         <outlet property="tutImage" destination="1dm-qo-dWz" id="PGH-zL-SaF"/>
                         <outlet property="tutPager" destination="07w-TD-baU" id="bkl-Gh-kbQ"/>
                         <outlet property="tutScrollView" destination="2Yc-wc-NL4" id="33j-l1-EPK"/>
