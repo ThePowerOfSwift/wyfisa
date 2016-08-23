@@ -18,6 +18,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     @IBOutlet var footerMask: UIImageView!
     @IBOutlet var splitSwitch: UISwitch!
     
+    var themer = WYFISATheme.sharedInstance
     var verseInfo: VerseInfo? = nil
     var startViewPos: Int = 0
     var splitMode: Bool = false
@@ -27,6 +28,9 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     
     override func viewDidLoad() {
         super.viewDidLoad() 
+        
+        // apply color schema
+        self.applyColorSchema()
         
         // Do any additional setup after loading the view.
         if let verse = verseInfo {
@@ -49,7 +53,8 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             // contextual highlighting for attributed text
             let font = BodyFont.iowan(19.0)
             
-            let attrs = [NSForegroundColorAttributeName: UIColor.navy(1.0),
+            let fontColor = themer.navyForLightOrWhite(1.0)
+            let attrs = [NSForegroundColorAttributeName: fontColor,
                          NSFontAttributeName: font]
             let attributedText = NSMutableAttributedString.init(string: chapter, attributes: attrs)
             var contextRange = NSRange.init(location: startIdx!, length: length)
@@ -317,4 +322,15 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 
+    func applyColorSchema(){
+        let contentBackground = themer.whiteForLightOrNavy(1.0)
+        self.view.backgroundColor = contentBackground
+        self.chapterTextView.backgroundColor = contentBackground
+        self.verseLabel.textColor = themer.navyForLightOrWhite(1.0)
+        if themer.isLight() {
+            self.footerMask.image = UIImage(named: "footer-mask-white")
+        } else {
+            self.footerMask.image = UIImage(named: "footer-mask")
+        }
+    }
 }

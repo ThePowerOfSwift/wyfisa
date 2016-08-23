@@ -42,6 +42,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     
     let stillCamera = CameraManager.sharedInstance
     let db = DBQuery.sharedInstance
+    let themer = WYFISATheme.sharedInstance
     var session = CaptureSession()
     var captureLock = NSLock()
     var updateLock = NSLock()
@@ -73,7 +74,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
 
     }
 
-    
+    // MARK: Button Handlers
     @IBAction func didPressRefreshButton(sender: AnyObject){
         self.hideTut()
         // is minus button so clear
@@ -130,13 +131,17 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         self.nightEnabled = !self.nightEnabled
         
         if self.nightEnabled == true {
+            self.themer.setMode(Scheme.Dark)
             self.moonButton.setImage(UIImage(named: "ios7-moon-fire"), forState: .Normal)
             self.moonButton.setTitleColor(UIColor.fire(), forState: .Normal)
         } else {
+            self.themer.setMode(Scheme.Light)
             self.moonButton.setImage(UIImage(named: "ios7-moon"), forState: .Normal)
             self.moonButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             
         }
+        
+        self.verseTable.reloadData()
     }
     
     override func didReceiveMemoryWarning() {
@@ -300,10 +305,15 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation
      override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
+
          // pause camera
         dispatch_async(dispatch_get_main_queue()) {
             self.stillCamera.pause()
+        }
+        
+        // hide settings bar
+        if self.settingsEnabled == true {
+            self.didPressSettingsButton(self)
         }
 
         

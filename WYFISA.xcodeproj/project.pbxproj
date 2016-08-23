@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		03D9939342D1214AF88170B2 /* Pods_WYFISAUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1EF753F08E13D92347CDF4F /* Pods_WYFISAUITests.framework */; };
 		98D7016DCF5935DB2A5AD85C /* Pods_WYFISATests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231106650F4EB642E443C0B1 /* Pods_WYFISATests.framework */; };
+		C312DE531D6C5A5E0098D0C5 /* WYFISATheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C312DE521D6C5A5E0098D0C5 /* WYFISATheme.swift */; };
 		C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */; };
 		C316B6B61D3A35DE00E272A3 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */; };
 		C34C52341D472E1A001E5F1A /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = C39090CF1D2C9C88000DFD15 /* tessdata */; };
@@ -64,6 +65,7 @@
 		3D9BF9E9813626DC314D056D /* Pods-WYFISAUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISAUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISAUITests/Pods-WYFISAUITests.release.xcconfig"; sourceTree = "<group>"; };
 		9A9540C1BF0C453DF155597D /* Pods-WYFISA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISA.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISA/Pods-WYFISA.debug.xcconfig"; sourceTree = "<group>"; };
 		C036CFC08D857FBD0986B028 /* Pods-WYFISATests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISATests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISATests/Pods-WYFISATests.debug.xcconfig"; sourceTree = "<group>"; };
+		C312DE521D6C5A5E0098D0C5 /* WYFISATheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISATheme.swift; sourceTree = "<group>"; };
 		C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseDetailModalViewController.swift; sourceTree = "<group>"; };
 		C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 		C379515C1D43D5F4003FB4F5 /* books.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = books.json; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				C3F53B781D36973D00E2F80D /* VerseTableView.swift */,
 				C3E0712B1D4DB54900097D01 /* WYFISAFont.swift */,
 				C3F53B741D36945900E2F80D /* VerseTableViewCell.swift */,
+				C312DE521D6C5A5E0098D0C5 /* WYFISATheme.swift */,
 				C3F53B701D36219400E2F80D /* CameraManager.swift */,
 				C37951651D44306C003FB4F5 /* ImageFilter.swift */,
 				C37951611D442023003FB4F5 /* OCR.swift */,
@@ -511,6 +514,7 @@
 				C3F53B761D36945900E2F80D /* VerseTableViewCell.swift in Sources */,
 				C3E0712C1D4DB54900097D01 /* WYFISAFont.swift in Sources */,
 				C37951601D43D62A003FB4F5 /* Books.swift in Sources */,
+				C312DE531D6C5A5E0098D0C5 /* WYFISATheme.swift in Sources */,
 				C3F53B901D372C0200E2F80D /* TextMatcher.swift in Sources */,
 				C3F53B961D37499700E2F80D /* DBQuery.swift in Sources */,
 				C37A7E3F1D3ABFF300F37F20 /* WYFISAExtentions.swift in Sources */,

@@ -22,11 +22,12 @@ class VerseTableViewCell: UITableViewCell {
     weak var delegate:VerseTableViewCellDelegate?
     var verseInfo: VerseInfo?
     let db = DBQuery.sharedInstance
+    let themer = WYFISATheme.sharedInstance
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.labelHeader.textColor = UIColor.navy(1.0)
+        self.labelHeader.textColor = self.themer.navyForLightOrTeal(1.0)
 
     }
 
@@ -41,6 +42,8 @@ class VerseTableViewCell: UITableViewCell {
 
     func updateWithVerseInfo(verse: VerseInfo, isExpanded: Bool) {
 
+        self.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+
         if  verse.id.characters.count > 0 {
             // cell has a verse
             self.verseInfo = verse
@@ -53,12 +56,17 @@ class VerseTableViewCell: UITableViewCell {
             self.labelHeader.alpha = 1
             // hiding icon
             Animations.start(0.2){
-                self.labelHeader.textColor = UIColor.navy(1.0)
+                self.labelHeader.textColor = self.themer.navyForLightOrTeal(1.0)
             }
 
         } else {
             
             self.labelHeader.textColor = UIColor.fire()
+            if self.themer.isLight() {
+                self.searchIcon.image = UIImage(named: "chatbox-working-navy")
+            } else {
+                self.searchIcon.image = UIImage(named: "chatbox-working-white")
+            }
             
             // flash search icon
             Animations.start(1){
@@ -73,6 +81,8 @@ class VerseTableViewCell: UITableViewCell {
         
         self.labelHeader.text = verse.name
         self.labelText.text = verse.text
+        self.labelText.textColor = self.themer.navyForLightOrWhite(1.0)
+        
         if isExpanded == true {
             self.labelText.lineBreakMode = .ByWordWrapping
             self.labelText.numberOfLines = 0
