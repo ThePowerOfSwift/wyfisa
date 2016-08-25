@@ -14,6 +14,7 @@ struct CaptureSession {
     var currentId: UInt64 = 0
     var matches: [String] = [String]()
     var newMatches = 0
+    var misses = 0
     
     func clearCache() {
         DBQuery.sharedInstance.clearCache()
@@ -65,7 +66,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         // camera config
         stillCamera.zoom(1)
-        stillCamera.focus(.AutoFocus)
+        stillCamera.focus(.ContinuousAutoFocus)
         
         // start capture
         stillCamera.capture()
@@ -206,7 +207,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             stillCamera.torch(.Off)
         }
         
-
         // remove scanning box
         if self.session.newMatches == 0 && self.session.active {
             self.verseTable.removeFailedVerse()
@@ -221,14 +221,15 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         }
         
         self.session.currentId += 1
-        
-
         self.session.newMatches = 0
         self.session.active = false
+        self.session.misses = 0
         
+        // resort verse table by priority
+        self.verseTable.sortByPriority()
         self.verseTable.reloadData()
         self.verseTable.setContentToExpandedEnd()
-        
+
         updateLock.unlock()
 
     }
@@ -260,6 +261,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
 
                     // we have match
                     verseInfo.text = verse
+                    verseInfo.session = fromSession
+
+                    self.verseTable.updateVersePriority(verseInfo.id, priority: verseInfo.priority)
                     
                     // make sure not repeat match
                     if self.session.matches.indexOf(verseInfo.id) == nil {
@@ -280,17 +284,11 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                     }
                     
                     self.session.newMatches += 1
-                    stillCamera.focus(.Locked)
                     self.session.matches.append(verseInfo.id)
                 }
             }
         }
-        
-        // reload table on main queue
-        if self.session.hasMatches() == false {
-            stillCamera.focus(.AutoFocus)
-        }
-        
+
         updateLock.unlock()
 
     }

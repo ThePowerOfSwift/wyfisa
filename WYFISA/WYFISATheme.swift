@@ -52,5 +52,13 @@ class WYFISATheme {
         }
     }
     
+    func fireForLightOrTurquoise() -> UIColor {
+        switch  self.mode {
+        case .Light:
+            return UIColor.fire()
+        default:
+            return UIColor.turquoise()
+        }
+    }
     
 }

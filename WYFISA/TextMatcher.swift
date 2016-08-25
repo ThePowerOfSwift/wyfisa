@@ -13,12 +13,14 @@ import Regex
 class VerseInfo {
     let id: String
     var name: String
+    var priority: Float = -1.0
+    var session: UInt64 = 0
     var text: String?
     var chapter: String?
     var verse: Int?
     var refs: [VerseInfo]?
     var verses: [VerseInfo]?
-    
+
     init(id: String, name: String, text: String?){
         self.id = id
         self.name = name
@@ -34,8 +36,11 @@ class TextMatcher {
         var verseInfos: [VerseInfo]?
         let bookStr = self.bookPatterns()
         let chapters: Regex = Regex("(?:\\W|^)(\(bookStr))(?:\\D{0,2})(\\d{1,3})(?:\\D{1,2})(\\d{1,3})",  options: [.IgnoreCase])
+        let textUpdate = text.replace("\n", with: "99") // prevent linebreak matches
+        var textPriority = text.replace("\n", with: "^^") // newline detection
 
-        let matches = chapters.allMatches(text)
+        let matches = chapters.allMatches(textUpdate)
+        var priority: Float = 0.0
         for match in matches {
             
             let bookStr = match.captures[0]!
@@ -60,6 +65,25 @@ class TextMatcher {
             if verseInfos == nil {
                 verseInfos = [VerseInfo]()
             }
+            // set priority based on line verse occurs
+            let charsToBookStr: Regex = Regex("(.*)\(bookStr)",  options: [])
+            let charMatches = charsToBookStr.allMatches(textPriority)
+            if charMatches.count > 0 {
+                let lMatch = charMatches[0].captures[0]!
+                textPriority = textPriority.strip(lMatch)
+                if lMatch.indexOfCharacter("^") != nil {
+                    // new line detected, increase the priority
+                    priority += 1.0
+                } else {
+                    // match was on same line
+                    priority += 0.001
+                }
+            }
+            
+            if priority == 0 {
+                priority = 1
+            }
+            info.priority = priority
             verseInfos!.append(info)
         }
         return verseInfos

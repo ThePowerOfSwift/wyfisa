@@ -105,6 +105,26 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func sortByPriority(){
+        self.recentVerses.sortInPlace {
+            if ($0.session != $1.session){
+                return $0.session < $1.session
+            }
+            return $0.priority > $1.priority
+        }
+    }
+    
+    func updateVersePriority(id: String, priority: Float){
+        print(id, priority)
+        var i = 0
+        for var v in self.recentVerses {
+            if v.id == id {
+                self.recentVerses[i].priority = priority
+            }
+            i+=1
+        }
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }

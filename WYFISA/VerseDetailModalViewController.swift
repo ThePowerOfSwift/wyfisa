@@ -58,7 +58,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
                          NSFontAttributeName: font]
             let attributedText = NSMutableAttributedString.init(string: chapter, attributes: attrs)
             var contextRange = NSRange.init(location: startIdx!, length: length)
-            let contextAttrs = [NSForegroundColorAttributeName: UIColor.fire(),
+            let contextAttrs = [NSForegroundColorAttributeName: self.themer.fireForLightOrTurquoise(),
                                 NSFontAttributeName: font]
             if (contextRange.location + contextRange.length) > attributedText.length {
                 // some kind of overshoot occured - do not exceed bounds

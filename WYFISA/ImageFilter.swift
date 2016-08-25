@@ -18,11 +18,11 @@ class ImageFilter {
         return GPUImageFilter()
     }
     
-    class func guassianBlur(radius: CGFloat) -> GPUImageGaussianSelectiveBlurFilter {
+    class func guassianBlur(x: CGFloat, y: CGFloat, radius: CGFloat) -> GPUImageGaussianSelectiveBlurFilter {
         
         let guassFilter = GPUImageGaussianSelectiveBlurFilter()
         guassFilter.excludeCircleRadius = radius
-        guassFilter.excludeCirclePoint = CGPoint(x: 0.5, y: 0.15)
+        guassFilter.excludeCirclePoint = CGPoint(x: x, y: y)
         guassFilter.aspectRatio = 1.5
         return guassFilter
     }

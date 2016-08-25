@@ -151,13 +151,13 @@
                                                     </button>
                                                 </subviews>
                                             </stackView>
-                                            <view hidden="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="glg-aa-jU8">
+                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="glg-aa-jU8">
                                                 <rect key="frame" x="0.0" y="562" width="560" height="0.0"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="tUB-yJ-6U5">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="tUB-yJ-6U5">
                                                         <rect key="frame" x="0.0" y="0.0" width="560" height="0.0"/>
                                                         <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CDB-uF-N9d">
+                                                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CDB-uF-N9d">
                                                                 <rect key="frame" x="0.0" y="0.0" width="289" height="0.0"/>
                                                                 <fontDescription key="fontDescription" name="Kailasa" family="Kailasa" pointSize="12"/>
                                                                 <inset key="titleEdgeInsets" minX="10" minY="2" maxX="0.0" maxY="0.0"/>
@@ -166,7 +166,7 @@
                                                                     <action selector="didPressFlashButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fwq-Ik-hHo"/>
                                                                 </connections>
                                                             </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="751" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vRc-XV-rf0">
+                                                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vRc-XV-rf0">
                                                                 <rect key="frame" x="289" y="0.0" width="272" height="0.0"/>
                                                                 <fontDescription key="fontDescription" name="Kailasa" family="Kailasa" pointSize="12"/>
                                                                 <inset key="titleEdgeInsets" minX="10" minY="2" maxX="0.0" maxY="0.0"/>

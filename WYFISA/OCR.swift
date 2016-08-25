@@ -11,14 +11,14 @@ import TesseractOCR
 import GPUImage
 
 class OCR: NSObject, G8TesseractDelegate {
-    let tesseract:G8Tesseract = G8Tesseract(language:"bib");
+    let tesseract:G8Tesseract = G8Tesseract(language:"eng");
     var ocrLock = NSLock()
 
     override init(){
         super.init()
-        tesseract.maximumRecognitionTime = 5
+        tesseract.maximumRecognitionTime = 20
         tesseract.engineMode = .TesseractOnly
-        tesseract.pageSegmentationMode = .SingleBlock
+        tesseract.pageSegmentationMode = .AutoOSD
         tesseract.delegate = self
     }
     
@@ -32,7 +32,7 @@ class OCR: NSObject, G8TesseractDelegate {
         if tesseract.recognize() == true {
             recognizedText = tesseract.recognizedText
         }
-
+        
         self.ocrLock.unlock()
         return recognizedText
 
@@ -41,17 +41,18 @@ class OCR: NSObject, G8TesseractDelegate {
     func cropScaleAndFilter(sourceImage: UIImage!) -> UIImage {
         
         // crop
-        let cropFilter = ImageFilter.cropFilter(0.02, y: 0.05, width: 0.96, height: 0.60)
+        let cropFilter = ImageFilter.cropFilter(0.05, y: 0.05, width: 0.90, height: 0.30)
         let croppedImage = cropFilter.imageByFilteringImage(sourceImage)
         
         // re-scale
         let scaledImage = ImageFilter.scaleImage(croppedImage, maxDimension: 640)
         
         // threshold
-        let thresholdFilter = ImageFilter.thresholdFilter(27.0)
+        let thresholdFilter = ImageFilter.thresholdFilter(40.0)
         cropFilter.addTarget(thresholdFilter)
         let image = thresholdFilter.imageByFilteringImage(scaledImage)
         
+        //self.imageToFile(image, named: "processed.jpg")
         return image
     }
     
@@ -63,6 +64,7 @@ class OCR: NSObject, G8TesseractDelegate {
     func imageToFile(image: UIImage, named: String){
         if let data = UIImageJPEGRepresentation(image, 0.8) {
             let filename = getDocumentsDirectory().stringByAppendingPathComponent(named)
+            print(filename)
             data.writeToFile(filename, atomically: true)
         }
     }

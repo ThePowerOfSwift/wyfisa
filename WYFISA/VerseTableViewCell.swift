@@ -34,7 +34,7 @@ class VerseTableViewCell: UITableViewCell {
     func highlightText() {
         let font = BodyFont.iowan(18.0)
         
-        let attrs = [NSForegroundColorAttributeName: UIColor.fire(),
+        let attrs = [NSForegroundColorAttributeName: self.themer.fireForLightOrTurquoise(),
                      NSFontAttributeName: font]
         let attributedText = NSMutableAttributedString.init(string: self.labelText.text!, attributes: attrs)
         self.labelText.attributedText = attributedText
@@ -42,7 +42,7 @@ class VerseTableViewCell: UITableViewCell {
 
     func updateWithVerseInfo(verse: VerseInfo, isExpanded: Bool) {
 
-        self.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+        self.backgroundColor = self.themer.whiteForLightOrNavy(0.8)
 
         if  verse.id.characters.count > 0 {
             // cell has a verse
