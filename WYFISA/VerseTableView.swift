@@ -115,7 +115,6 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func updateVersePriority(id: String, priority: Float){
-        print(id, priority)
         var i = 0
         for var v in self.recentVerses {
             if v.id == id {

@@ -16,7 +16,7 @@ class OCR: NSObject, G8TesseractDelegate {
 
     override init(){
         super.init()
-        tesseract.maximumRecognitionTime = 20
+        tesseract.maximumRecognitionTime = 5
         tesseract.engineMode = .TesseractOnly
         tesseract.pageSegmentationMode = .AutoOSD
         tesseract.delegate = self
@@ -27,12 +27,12 @@ class OCR: NSObject, G8TesseractDelegate {
         // do image recognition
         self.ocrLock.lock()
         var recognizedText: String?
-
         tesseract.image = image
+        
         if tesseract.recognize() == true {
             recognizedText = tesseract.recognizedText
         }
-        
+
         self.ocrLock.unlock()
         return recognizedText
 
@@ -40,8 +40,7 @@ class OCR: NSObject, G8TesseractDelegate {
     
     func cropScaleAndFilter(sourceImage: UIImage!) -> UIImage {
         
-        // crop
-        let cropFilter = ImageFilter.cropFilter(0.05, y: 0.05, width: 0.90, height: 0.30)
+        let cropFilter = ImageFilter.cropFilter(0.05, y: 0.05, width: 0.90, height: 0.50)
         let croppedImage = cropFilter.imageByFilteringImage(sourceImage)
         
         // re-scale
@@ -49,10 +48,8 @@ class OCR: NSObject, G8TesseractDelegate {
         
         // threshold
         let thresholdFilter = ImageFilter.thresholdFilter(40.0)
-        cropFilter.addTarget(thresholdFilter)
         let image = thresholdFilter.imageByFilteringImage(scaledImage)
         
-        //self.imageToFile(image, named: "processed.jpg")
         return image
     }
     
