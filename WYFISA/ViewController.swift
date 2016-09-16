@@ -23,7 +23,7 @@ struct CaptureSession {
         return self.newMatches > 0
     }
 }
-class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCellDelegate, UIScrollViewDelegate {
+class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCellDelegate, UIScrollViewDelegate, UISearchBarDelegate {
 
     @IBOutlet var debugWindow: GPUImageView!
     @IBOutlet var verseTable: VerseTableView!
@@ -41,6 +41,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     @IBOutlet var settingsButton: UIButton!
     @IBOutlet var settingsBar: UIView!
     
+    @IBOutlet var escapeMask: UIView!
+    @IBOutlet var searchView: UIView!
+    @IBOutlet var searchBar: UISearchBar!
     let stillCamera = CameraManager.sharedInstance
     let db = DBQuery.sharedInstance
     let themer = WYFISATheme.sharedInstance
@@ -54,7 +57,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.firstLaunchTut()
+        //self.firstLaunchTut()
         
         verseTable.setCellDelegate(self)
 
@@ -72,7 +75,11 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         stillCamera.capture()
         stillCamera.delegate = self
         stillCamera.pause()
-
+        
+        // warmup
+        Timing.runAfterBg(0.5){
+            self.stillCamera.recognizeFrameFromCamera(100)
+        }
     }
 
     // MARK: Button Handlers
@@ -164,7 +171,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             self.verseTable.setContentToCollapsedEnd()
 
             Animations.start(0.3) {
-                self.captureBox.alpha = 0
+               // self.captureBox.alpha = 0
                 self.maskView.alpha = 0
             }
             
@@ -216,7 +223,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         self.verseTable.isExpanded = true
         Animations.start(0.3) {
             self.captureBox.hidden = true
-            self.captureBox.alpha = 0
+           // self.captureBox.alpha = 0
             self.maskView.alpha = 0.6
         }
         
@@ -323,12 +330,59 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             let verse = sender as! VerseInfo
             toVc.verseInfo = verse
         }
+        
+        if segue.identifier == "searchsegue" {
+            let toVc = segue.destinationViewController as! SearchBarViewController
+            toVc.escapeMask = self.escapeMask
+            toVc.searchView = self.searchView
+            self.searchBar.delegate = toVc
+        }
+        
      }
- 
 
-    override func prefersStatusBarHidden() -> Bool {
-        return true
+    func closeSearchView(){
+        // clean up search results
+        Animations.start(0.3){
+            self.searchView.alpha = 0
+            self.searchBar.text = nil
+        }
+        
+        Timing.runAfter(0.3){
+            self.searchBar.endEditing(true)
+        }
+        
     }
+    
+    @IBAction func unwindFromSearch(segue: UIStoryboardSegue) {
+        
+        self.closeSearchView()
+        
+        // add verse if matched
+        let fromVC = segue.sourceViewController as! SearchBarViewController
+        if let verseInfo = fromVC.resultInfo {
+                verseInfo.session = self.session.currentId
+
+            
+                // new match
+                self.verseTable.appendVerse(verseInfo)
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.verseTable.addSection()
+                }
+                self.session.newMatches += 1
+                self.session.matches.append(verseInfo.id)
+        }
+    
+        // end session
+        self.handleCaptureEnd()
+
+        
+    }
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return false
+    }
+    
+    
     
     func checkCameraAccess() {
         
@@ -363,7 +417,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     }
     
     func showTut(){
-   
+        /*
         self.tutScrollView.hidden = false
         self.tutPager.hidden = false
         self.tutScrollView.contentSize.width = self.view.frame.size.width * 4.0
@@ -371,6 +425,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         self.captureButton.hidden = true
         self.captureBox.hidden = true
         self.refeshButton.hidden = true
+        */
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
@@ -413,13 +468,20 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         }
     }
 
+    @IBAction func didTapView(sender: UITapGestureRecognizer) {
+        // if we are showing search view
+        // tell delegate that editing ended
+        if let delegate = self.searchBar.delegate {
+           delegate.searchBarTextDidEndEditing!(self.searchBar)
+        }
+    }
     
     func hideTut() {
         Animations.start(0.2){
             self.capTut.hidden = true
         }
     }
-    
+
 }
 
 

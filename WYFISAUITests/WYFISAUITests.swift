@@ -28,6 +28,20 @@ class WYFISAUITests: XCTestCase {
         super.tearDown()
     }
     
+    
+
+    func testDidSearchForVerse() {
+        
+        let app = XCUIApplication()
+        app.tabBars.childrenMatchingType(.Button).elementBoundByIndex(1).tap()
+        
+        let searchSearchField = app.searchFields["search"]
+        searchSearchField.tap()
+        app.searchFields["search"].typeText("mark")
+        searchSearchField.buttons["Clear text"].tap()
+        
+    }
+    
     func testDidCaptureVerses() {
         
         // Use recording to get started writing UI tests.

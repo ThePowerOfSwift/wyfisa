@@ -37,4 +37,10 @@ enum Books: Int {
         let bookName = data[self.rawValue-1]["n"] as! String
         return bookName
     }
+    
+    func chapters() -> Int {
+        let data = BooksData.sharedInstance.data
+        let n = data[self.rawValue-1]["c"] as! Int
+        return n
+    }
 }

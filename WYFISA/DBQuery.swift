@@ -70,6 +70,17 @@ class DBQuery {
         }
     }
     
+    func numChapterVerses(bookId: Int, chapterId: Int) -> Int {
+        var n:Int = 0
+        let query = bibleTable.select(bibleCol.verse)
+            .filter(bibleCol.book == bookId && bibleCol.chapter == chapterId)
+        do {
+            let all = Array(try conn.prepare(query))
+            n = all.count
+        } catch {}
+        return n
+    }
+    
     func chapterForVerse(verseId: String) -> String {
         var chapter: String = ""
         var chapterVerses = [VerseInfo]()

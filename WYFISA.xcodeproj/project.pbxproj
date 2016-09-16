@@ -12,6 +12,9 @@
 		C312DE531D6C5A5E0098D0C5 /* WYFISATheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C312DE521D6C5A5E0098D0C5 /* WYFISATheme.swift */; };
 		C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */; };
 		C316B6B61D3A35DE00E272A3 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */; };
+		C31A7BC61D7FB4D400654753 /* WYFISATutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31A7BC41D7FB4D400654753 /* WYFISATutViewController.swift */; };
+		C31A7BC71D7FB4D400654753 /* WYFISATutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31A7BC51D7FB4D400654753 /* WYFISATutViewController.xib */; };
+		C323F3D71D86EE5B00A7EC95 /* SearchBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */; };
 		C34C52341D472E1A001E5F1A /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = C39090CF1D2C9C88000DFD15 /* tessdata */; };
 		C371D0931D44623F00F944CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C390907D1D2C9AF8000DFD15 /* Assets.xcassets */; };
 		C379515D1D43D5F4003FB4F5 /* books.json in Resources */ = {isa = PBXBuildFile; fileRef = C379515C1D43D5F4003FB4F5 /* books.json */; };
@@ -29,6 +32,7 @@
 		C39090D01D2C9C88000DFD15 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = C39090CF1D2C9C88000DFD15 /* tessdata */; };
 		C39090D61D2CA66D000DFD15 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C39090D51D2CA66D000DFD15 /* libstdc++.tbd */; };
 		C39090D81D2CA67B000DFD15 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C39090D71D2CA67B000DFD15 /* CoreImage.framework */; };
+		C3AE3AD81D89FBDD0039AE3E /* WYFISATabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AE3AD71D89FBDD0039AE3E /* WYFISATabBarController.swift */; };
 		C3D506581D38D56200A04C83 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D506571D38D56200A04C83 /* AVFoundation.framework */; };
 		C3D5065A1D3932FB00A04C83 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D506591D3932FB00A04C83 /* Animations.swift */; };
 		C3E0712C1D4DB54900097D01 /* WYFISAFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E0712B1D4DB54900097D01 /* WYFISAFont.swift */; };
@@ -68,12 +72,15 @@
 		C312DE521D6C5A5E0098D0C5 /* WYFISATheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISATheme.swift; sourceTree = "<group>"; };
 		C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseDetailModalViewController.swift; sourceTree = "<group>"; };
 		C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
+		C31A7BC41D7FB4D400654753 /* WYFISATutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISATutViewController.swift; sourceTree = "<group>"; };
+		C31A7BC51D7FB4D400654753 /* WYFISATutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WYFISATutViewController.xib; sourceTree = "<group>"; };
+		C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchBarViewController.swift; path = ../SearchBarViewController.swift; sourceTree = "<group>"; };
 		C379515C1D43D5F4003FB4F5 /* books.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = books.json; sourceTree = "<group>"; };
 		C379515F1D43D62A003FB4F5 /* Books.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Books.swift; sourceTree = "<group>"; };
 		C37951611D442023003FB4F5 /* OCR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OCR.swift; sourceTree = "<group>"; };
 		C37951651D44306C003FB4F5 /* ImageFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageFilter.swift; sourceTree = "<group>"; };
 		C37A7E3E1D3ABFF300F37F20 /* WYFISAExtentions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISAExtentions.swift; sourceTree = "<group>"; };
-		C39090731D2C9AF7000DFD15 /* WYFISA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WYFISA.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C39090731D2C9AF7000DFD15 /* Turnto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Turnto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C39090761D2C9AF8000DFD15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C39090781D2C9AF8000DFD15 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C390907B1D2C9AF8000DFD15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -89,6 +96,7 @@
 		C39090D21D2C9DE7000DFD15 /* WYFISA-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WYFISA-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		C39090D51D2CA66D000DFD15 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		C39090D71D2CA67B000DFD15 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		C3AE3AD71D89FBDD0039AE3E /* WYFISATabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISATabBarController.swift; sourceTree = "<group>"; };
 		C3D506571D38D56200A04C83 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C3D506591D3932FB00A04C83 /* Animations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
 		C3E0712B1D4DB54900097D01 /* WYFISAFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISAFont.swift; sourceTree = "<group>"; };
@@ -168,7 +176,7 @@
 		C39090741D2C9AF7000DFD15 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C39090731D2C9AF7000DFD15 /* WYFISA.app */,
+				C39090731D2C9AF7000DFD15 /* Turnto.app */,
 				C39090871D2C9AF8000DFD15 /* WYFISATests.xctest */,
 				C39090921D2C9AF8000DFD15 /* WYFISAUITests.xctest */,
 			);
@@ -179,6 +187,8 @@
 			isa = PBXGroup;
 			children = (
 				C39090761D2C9AF8000DFD15 /* AppDelegate.swift */,
+				C31A7BC41D7FB4D400654753 /* WYFISATutViewController.swift */,
+				C31A7BC51D7FB4D400654753 /* WYFISATutViewController.xib */,
 				C39090781D2C9AF8000DFD15 /* ViewController.swift */,
 				C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */,
 				C3F53B781D36973D00E2F80D /* VerseTableView.swift */,
@@ -191,7 +201,9 @@
 				C3F53B8F1D372C0200E2F80D /* TextMatcher.swift */,
 				C379515F1D43D62A003FB4F5 /* Books.swift */,
 				C3F53B951D37499700E2F80D /* DBQuery.swift */,
+				C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */,
 				C3D506591D3932FB00A04C83 /* Animations.swift */,
+				C3AE3AD71D89FBDD0039AE3E /* WYFISATabBarController.swift */,
 				C390907A1D2C9AF8000DFD15 /* Main.storyboard */,
 				C3F53B751D36945900E2F80D /* VerseTableViewCell.xib */,
 				C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */,
@@ -240,9 +252,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C39090721D2C9AF7000DFD15 /* WYFISA */ = {
+		C39090721D2C9AF7000DFD15 /* Turnto */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C390909B1D2C9AF8000DFD15 /* Build configuration list for PBXNativeTarget "WYFISA" */;
+			buildConfigurationList = C390909B1D2C9AF8000DFD15 /* Build configuration list for PBXNativeTarget "Turnto" */;
 			buildPhases = (
 				4CA02A7352C49D622A5985CA /* [CP] Check Pods Manifest.lock */,
 				C390906F1D2C9AF7000DFD15 /* Sources */,
@@ -255,9 +267,9 @@
 			);
 			dependencies = (
 			);
-			name = WYFISA;
+			name = Turnto;
 			productName = WYFISA;
-			productReference = C39090731D2C9AF7000DFD15 /* WYFISA.app */;
+			productReference = C39090731D2C9AF7000DFD15 /* Turnto.app */;
 			productType = "com.apple.product-type.application";
 		};
 		C39090861D2C9AF8000DFD15 /* WYFISATests */ = {
@@ -338,7 +350,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C39090721D2C9AF7000DFD15 /* WYFISA */,
+				C39090721D2C9AF7000DFD15 /* Turnto */,
 				C39090861D2C9AF8000DFD15 /* WYFISATests */,
 				C39090911D2C9AF8000DFD15 /* WYFISAUITests */,
 			);
@@ -353,6 +365,7 @@
 				C379515D1D43D5F4003FB4F5 /* books.json in Resources */,
 				C39090D01D2C9C88000DFD15 /* tessdata in Resources */,
 				C316B6B61D3A35DE00E272A3 /* SplashScreen.storyboard in Resources */,
+				C31A7BC71D7FB4D400654753 /* WYFISATutViewController.xib in Resources */,
 				C3FB946C1D3F0FDC00736196 /* t_web.db in Resources */,
 				C371D0931D44623F00F944CC /* Assets.xcassets in Resources */,
 				C3F53B771D36945900E2F80D /* VerseTableViewCell.xib in Resources */,
@@ -508,18 +521,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				C37951621D442023003FB4F5 /* OCR.swift in Sources */,
+				C3AE3AD81D89FBDD0039AE3E /* WYFISATabBarController.swift in Sources */,
 				C37951661D44306C003FB4F5 /* ImageFilter.swift in Sources */,
 				C39090791D2C9AF8000DFD15 /* ViewController.swift in Sources */,
 				C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */,
 				C3F53B761D36945900E2F80D /* VerseTableViewCell.swift in Sources */,
 				C3E0712C1D4DB54900097D01 /* WYFISAFont.swift in Sources */,
 				C37951601D43D62A003FB4F5 /* Books.swift in Sources */,
+				C31A7BC61D7FB4D400654753 /* WYFISATutViewController.swift in Sources */,
 				C312DE531D6C5A5E0098D0C5 /* WYFISATheme.swift in Sources */,
 				C3F53B901D372C0200E2F80D /* TextMatcher.swift in Sources */,
 				C3F53B961D37499700E2F80D /* DBQuery.swift in Sources */,
 				C37A7E3F1D3ABFF300F37F20 /* WYFISAExtentions.swift in Sources */,
 				C3F53B711D36219400E2F80D /* CameraManager.swift in Sources */,
 				C39090771D2C9AF8000DFD15 /* AppDelegate.swift in Sources */,
+				C323F3D71D86EE5B00A7EC95 /* SearchBarViewController.swift in Sources */,
 				C3D5065A1D3932FB00A04C83 /* Animations.swift in Sources */,
 				C3F53B791D36973D00E2F80D /* VerseTableView.swift in Sources */,
 			);
@@ -546,12 +562,12 @@
 /* Begin PBXTargetDependency section */
 		C39090891D2C9AF8000DFD15 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C39090721D2C9AF7000DFD15 /* WYFISA */;
+			target = C39090721D2C9AF7000DFD15 /* Turnto */;
 			targetProxy = C39090881D2C9AF8000DFD15 /* PBXContainerItemProxy */;
 		};
 		C39090941D2C9AF8000DFD15 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C39090721D2C9AF7000DFD15 /* WYFISA */;
+			target = C39090721D2C9AF7000DFD15 /* Turnto */;
 			targetProxy = C39090931D2C9AF8000DFD15 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -760,7 +776,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C390909B1D2C9AF8000DFD15 /* Build configuration list for PBXNativeTarget "WYFISA" */ = {
+		C390909B1D2C9AF8000DFD15 /* Build configuration list for PBXNativeTarget "Turnto" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C390909C1D2C9AF8000DFD15 /* Debug */,

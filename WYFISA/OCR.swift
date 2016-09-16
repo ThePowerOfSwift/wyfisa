@@ -1,4 +1,4 @@
-//
+ //
 //  OCR.swift
 //  WYFISA
 //
@@ -28,7 +28,6 @@ class OCR: NSObject, G8TesseractDelegate {
         self.ocrLock.lock()
         var recognizedText: String?
         tesseract.image = image
-        
         if tesseract.recognize() == true {
             recognizedText = tesseract.recognizedText
         }
@@ -40,7 +39,7 @@ class OCR: NSObject, G8TesseractDelegate {
     
     func cropScaleAndFilter(sourceImage: UIImage!) -> UIImage {
         
-        let cropFilter = ImageFilter.cropFilter(0.05, y: 0.05, width: 0.90, height: 0.50)
+        let cropFilter = ImageFilter.cropFilter(0.05, y: 0.05, width: 0.90, height: 0.35)
         let croppedImage = cropFilter.imageByFilteringImage(sourceImage)
         
         // re-scale

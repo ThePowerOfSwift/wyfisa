@@ -21,7 +21,7 @@ class CameraManager {
     let camera: GPUImageStillCamera
     let filter = ImageFilter.genericFilter()
     let ocr: OCR = OCR()
-    var simImage: UIImage! = UIImage(named: "oneanother")
+    var simImage: UIImage! = UIImage(named: "multiverse")
     
     weak var delegate:CameraManagerDelegate?
 

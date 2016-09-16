@@ -30,6 +30,40 @@ class VerseInfo {
 
 class TextMatcher {
     
+    func findBookInText(text: String) -> Books? {
+        
+        var match: Books?
+
+        // create a regex to match book pattern
+        let bookRegex: Regex = Regex("(\\d\\s)?\\w+",  options: [.IgnoreCase])
+        if let result = bookRegex.match(text){
+            let bookText = result.matchedString
+        
+            // loop through books to find one that matches book pattern
+            for i in 1...66 {
+                if let book = Books(rawValue: 66-i) {
+                    let matchRegex = Regex("^\(bookText)",  options: [.IgnoreCase])
+                    if matchRegex.matches(book.name()){
+                        match = book
+                        break
+                    }
+                }
+            }
+        }
+        return match
+    }
+    
+    func findChapterInText(text:String) -> String? {
+        var match: String?
+        let chapters: Regex = Regex("\\w+\\s+(\\d{1,3}):?",  options: [.IgnoreCase])
+        let matches = chapters.allMatches(text)
+        if matches.count > 0 {
+            if let m = matches[0].captures[0] {
+                match = m
+            }
+        }
+        return match
+    }
     
     func findVersesInText(text: String) -> [VerseInfo]? {
         
@@ -54,14 +88,13 @@ class TextMatcher {
             let bookId = self.patternId(bookStr)
             let book = Books(rawValue: bookId)!.name()
             let matchedText = "\(book) \(chapter):\(verse)"
-
             let bookIdStr = String(format: "%02d", bookId)
             let chapterId = String(format: "%03d", Int(chapter)!)
             let verseId = String(format: "%03d", Int(verse)!)
             let id = "\(bookIdStr)\(chapterId)\(verseId)"
             let info = VerseInfo(id: id, name: matchedText, text: "Not Found")
             info.verse = Int(verse)
-
+    
             if verseInfos == nil {
                 verseInfos = [VerseInfo]()
             }
@@ -414,3 +447,5 @@ class TextMatcher {
         return books
     }
 }
+
+
