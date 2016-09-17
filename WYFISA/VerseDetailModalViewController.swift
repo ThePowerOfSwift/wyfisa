@@ -128,6 +128,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
 
     
     @IBAction func didToggleSplitSwitch(sender: UISwitch) {
+        
         // toggles between showing chapter or split view of verses
         self.splitMode = !self.splitMode
         
@@ -136,7 +137,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             
             // scroll to verse
             if let activeVerse = self.verseInfo?.verse {
-                let path = NSIndexPath.init(forRow: 0, inSection: activeVerse)
+                let path = NSIndexPath.init(forRow: 0, inSection: activeVerse-1)
                 self.versesTable.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
                 Timing.runAfter(0.5){
                     self.showFooterMask()
@@ -175,7 +176,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         
     }
     override func prefersStatusBarHidden() -> Bool {
-        return true
+        return false
     }
     override func viewDidLayoutSubviews() {
         self.chapterTextView.setContentOffset(CGPointZero, animated: false)

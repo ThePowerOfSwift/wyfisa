@@ -22,8 +22,10 @@ class WYFISATabBarController: UITabBarController {
     }
     
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewWillAppear(animated: Bool) {
         self.selectedIndex = 1
+    }
+    override func viewDidAppear(animated: Bool) {
     }
     
     /*

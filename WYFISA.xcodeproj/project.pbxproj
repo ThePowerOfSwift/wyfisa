@@ -17,6 +17,7 @@
 		C323F3D71D86EE5B00A7EC95 /* SearchBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */; };
 		C34C52341D472E1A001E5F1A /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = C39090CF1D2C9C88000DFD15 /* tessdata */; };
 		C371D0931D44623F00F944CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C390907D1D2C9AF8000DFD15 /* Assets.xcassets */; };
+		C374B4A01D8CF4600083366E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C374B49F1D8CF4600083366E /* SettingsViewController.swift */; };
 		C379515D1D43D5F4003FB4F5 /* books.json in Resources */ = {isa = PBXBuildFile; fileRef = C379515C1D43D5F4003FB4F5 /* books.json */; };
 		C379515E1D43D5F4003FB4F5 /* books.json in Resources */ = {isa = PBXBuildFile; fileRef = C379515C1D43D5F4003FB4F5 /* books.json */; };
 		C37951601D43D62A003FB4F5 /* Books.swift in Sources */ = {isa = PBXBuildFile; fileRef = C379515F1D43D62A003FB4F5 /* Books.swift */; };
@@ -75,6 +76,7 @@
 		C31A7BC41D7FB4D400654753 /* WYFISATutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISATutViewController.swift; sourceTree = "<group>"; };
 		C31A7BC51D7FB4D400654753 /* WYFISATutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WYFISATutViewController.xib; sourceTree = "<group>"; };
 		C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchBarViewController.swift; path = ../SearchBarViewController.swift; sourceTree = "<group>"; };
+		C374B49F1D8CF4600083366E /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C379515C1D43D5F4003FB4F5 /* books.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = books.json; sourceTree = "<group>"; };
 		C379515F1D43D62A003FB4F5 /* Books.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Books.swift; sourceTree = "<group>"; };
 		C37951611D442023003FB4F5 /* OCR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OCR.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				C3D506591D3932FB00A04C83 /* Animations.swift */,
 				C3AE3AD71D89FBDD0039AE3E /* WYFISATabBarController.swift */,
 				C390907A1D2C9AF8000DFD15 /* Main.storyboard */,
+				C374B49F1D8CF4600083366E /* SettingsViewController.swift */,
 				C3F53B751D36945900E2F80D /* VerseTableViewCell.xib */,
 				C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */,
 				C37A7E3E1D3ABFF300F37F20 /* WYFISAExtentions.swift */,
@@ -525,6 +528,7 @@
 				C37951661D44306C003FB4F5 /* ImageFilter.swift in Sources */,
 				C39090791D2C9AF8000DFD15 /* ViewController.swift in Sources */,
 				C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */,
+				C374B4A01D8CF4600083366E /* SettingsViewController.swift in Sources */,
 				C3F53B761D36945900E2F80D /* VerseTableViewCell.swift in Sources */,
 				C3E0712C1D4DB54900097D01 /* WYFISAFont.swift in Sources */,
 				C37951601D43D62A003FB4F5 /* Books.swift in Sources */,
