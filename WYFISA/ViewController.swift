@@ -41,6 +41,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     @IBOutlet var settingsButton: UIButton!
     @IBOutlet var settingsBar: UIView!
     
+    @IBOutlet var trashIcon: UIButton!
     @IBOutlet var escapeMask: UIView!
     @IBOutlet var searchView: UIView!
     @IBOutlet var searchBar: UISearchBar!
@@ -54,6 +55,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     var flashEnabled: Bool = false
     var settingsEnabled: Bool = false
     var nightEnabled: Bool = false
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -161,6 +163,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         self.hideTut()
         
+        // make sure not in editing mode
+        self.exitEditingMode()
+        
         if self.captureLock.tryLock() {
             
             // show capture box
@@ -208,6 +213,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     }
 
     func handleCaptureEnd(){
+        
         updateLock.lock()
         stillCamera.pause()
         if self.flashEnabled {
@@ -356,6 +362,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     @IBAction func unwindFromSearch(segue: UIStoryboardSegue) {
         
         self.closeSearchView()
+        self.exitEditingMode()
         
         // add verse if matched
         let fromVC = segue.sourceViewController as! SearchBarViewController
@@ -473,6 +480,56 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         // tell delegate that editing ended
         if let delegate = self.searchBar.delegate {
            delegate.searchBarTextDidEndEditing!(self.searchBar)
+        }
+    }
+    
+    func updateEditingView(){
+        if self.verseTable.editing == true { // enter editing mode
+            Animations.start(0.5){
+                self.refeshButton.alpha = 1
+                self.trashIcon.setImage(UIImage(named: "ios7-trash-fire"), forState: .Normal)
+            }
+        } else {
+            Animations.start(0.5){
+                self.refeshButton.alpha = 0
+                self.trashIcon.setImage(UIImage(named: "ios7-trash-outline"), forState: .Normal)
+            }
+        }
+    }
+    
+    @IBAction func didTapTrashIcon(sender: AnyObject) {
+
+        let mode = !self.verseTable.editing
+        self.verseTable.setEditing(mode, animated: true)
+        self.updateEditingView()
+        if mode == false { // finished an edit
+             self.session.matches = self.verseTable.currentMatches()
+        }
+    }
+    
+    @IBAction func didTapClearAllButton(sender: UIButton) {
+        self.exitEditingMode()
+        if captureLock.tryLock(){
+            self.session.currentId = 0
+            
+            // empty table
+            self.verseTable.clear()
+            
+            // clear matches on session
+            self.session.matches = [String]()
+            
+            // unlock safely after clear operation
+            Timing.runAfter(1){
+                self.captureLock.unlock()
+            }
+        }
+        
+    }
+    
+    func exitEditingMode(){
+        if self.verseTable.editing == true {
+            self.verseTable.setEditing(false, animated: true)
+            self.updateEditingView()
         }
     }
     

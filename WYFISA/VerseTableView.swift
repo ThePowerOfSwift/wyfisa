@@ -264,6 +264,25 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
             self.alpha = 1
         }
     }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            
+            let idxSet = NSIndexSet(index: indexPath.row)
+            self.nVerses -= 1
+            self.recentVerses.removeAtIndex(indexPath.row)
+            tableView.deleteSections(idxSet, withRowAnimation: .Automatic)
+            self.reloadData()
+        }
+    }
+    
+    func currentMatches() -> [String]{
+        var matches = [String]()
+        for m in self.recentVerses {
+            matches.append(m.id)
+        }
+        return matches
+    }
 
 }
 
