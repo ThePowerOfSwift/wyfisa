@@ -21,10 +21,10 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     var escapeMask: UIView?
     var resultInfo: VerseInfo?
     var isVisible: Bool = false
+    let themer = WYFISATheme.sharedInstance
     
     @IBOutlet var matchLabel: UILabel!
     @IBOutlet var chapterCollection: UICollectionView!
-    @IBOutlet var verseCollection: UICollectionView!
     @IBOutlet var chapterLabel: UILabel!
     
     override func viewDidLoad() {
@@ -53,6 +53,12 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.chapterCollection.reloadData()
         self.isVisible = true
         self.escapeMask?.hidden = false
+        
+        // theme
+        self.matchLabel.textColor = self.themer.navyForLightOrWhite(1.0)
+        self.chapterLabel.textColor = self.themer.navyForLightOrWhite(1.0)
+        self.searchView?.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+        self.chapterCollection.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
     }
     
     
@@ -216,6 +222,13 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     
         let labelView = cell.viewWithTag(1) as! UILabel
         labelView.text = "\(item+1)"
+        
+        // do some themeing
+        if self.selectedChapter == nil || section == 1 {
+            // change item color if not a fire cell
+            labelView.textColor = self.themer.navyForLightOrWhite(1.0)
+        }
+        cell.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
 
         return cell
     }

@@ -36,10 +36,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     @IBOutlet var tutScrollView: UIScrollView!
     @IBOutlet var tutPager: UIPageControl!
     @IBOutlet var tutImage: UIImageView!
-    @IBOutlet var flashButton: UIButton!
-    @IBOutlet var moonButton: UIButton!
-    @IBOutlet var settingsButton: UIButton!
-    @IBOutlet var settingsBar: UIView!
     
     @IBOutlet var trashIcon: UIButton!
     @IBOutlet var escapeMask: UIView!
@@ -48,11 +44,11 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     let stillCamera = CameraManager.sharedInstance
     let db = DBQuery.sharedInstance
     let themer = WYFISATheme.sharedInstance
+    let settings = SettingsManager.sharedInstance
     var session = CaptureSession()
     var captureLock = NSLock()
     var updateLock = NSLock()
     var workingText = "Scanning"
-    var flashEnabled: Bool = false
     var settingsEnabled: Bool = false
     var nightEnabled: Bool = false
 
@@ -83,76 +79,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             self.stillCamera.recognizeFrameFromCamera(100)
         }
     }
-
-    // MARK: Button Handlers
-    @IBAction func didPressRefreshButton(sender: AnyObject){
-        self.hideTut()
-        // is minus button so clear
-        if captureLock.tryLock(){
-            self.session.currentId = 0
-
-            // empty table
-            self.verseTable.clear()
-            
-            // clear matches on session
-            self.session.matches = [String]()
-
-            // unlock safely after clear operation
-            Timing.runAfter(1){
-                self.captureLock.unlock()
-            }
-        }
-        
-
-    }
-    @IBAction func didPressSettingsButton(sender: AnyObject) {
-        
-        self.settingsEnabled = !self.settingsEnabled
-        
-        if self.settingsEnabled == true {
-            Animations.start(0.3){
-                self.settingsBar.hidden = false
-                self.settingsButton.setImage(UIImage(named: "ios7-gear-fire"), forState: .Normal)
-            }
-        } else {
-            Animations.start(0.3){
-                self.settingsBar.hidden = true
-                self.settingsButton.setImage(UIImage(named: "ios7-gear"), forState: .Normal)
-            }
-        }
-    }
-    
-    @IBAction func didPressFlashButton(sender: AnyObject) {
-         self.flashEnabled = !self.flashEnabled
-         
-         if self.flashEnabled == true {
-            self.flashButton.setTitleColor(UIColor.fire(), forState: .Normal)
-            self.flashButton.setImage(UIImage(named: "flash-fire"), forState: .Normal)
-         
-         } else {
-            self.flashButton.setImage(UIImage(named: "flash-white"), forState: .Normal)
-            self.flashButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-         }
-        
- 
-    }
-    
-    @IBAction func didPressMoonButton(sender: AnyObject) {
-        self.nightEnabled = !self.nightEnabled
-        
-        if self.nightEnabled == true {
-            self.themer.setMode(Scheme.Dark)
-            self.moonButton.setImage(UIImage(named: "ios7-moon-fire"), forState: .Normal)
-            self.moonButton.setTitleColor(UIColor.fire(), forState: .Normal)
-        } else {
-            self.themer.setMode(Scheme.Light)
-            self.moonButton.setImage(UIImage(named: "ios7-moon"), forState: .Normal)
-            self.moonButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            
-        }
-        
-        self.verseTable.reloadData()
-    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -182,7 +108,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             
             // camera init
             stillCamera.resume()
-            if self.flashEnabled {
+            if self.settings.useFlash == true {
                 stillCamera.torch(.On)
             }
 
@@ -216,7 +142,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         updateLock.lock()
         stillCamera.pause()
-        if self.flashEnabled {
+        if self.settings.useFlash == true {
             stillCamera.torch(.Off)
         }
         
@@ -321,12 +247,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         dispatch_async(dispatch_get_main_queue()) {
             self.stillCamera.pause()
         }
-        
-        // hide settings bar
-        if self.settingsEnabled == true {
-            self.didPressSettingsButton(self)
-        }
-
         
          // Get the new view controller using segue.destinationViewController.
          // Pass the selected object to the new view controller.
@@ -499,6 +419,16 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     
     @IBAction func didTapTrashIcon(sender: AnyObject) {
 
+        
+        // if search bar is up, close it
+        // this is not a true editing mode
+        if self.escapeMask.hidden == false {
+            if let delegate = self.searchBar.delegate {
+                delegate.searchBarTextDidEndEditing!(self.searchBar)
+            }
+            return
+        }
+
         let mode = !self.verseTable.editing
         self.verseTable.setEditing(mode, animated: true)
         self.updateEditingView()
@@ -527,6 +457,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     }
     
     func exitEditingMode(){
+        
         if self.verseTable.editing == true {
             self.verseTable.setEditing(false, animated: true)
             self.updateEditingView()

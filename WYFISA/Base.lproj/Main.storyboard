@@ -21,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ESw-YY-Ohq">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ESw-YY-Ohq">
                                 <rect key="frame" x="0.0" y="64" width="600" height="300"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -281,51 +281,10 @@
                                                     <action selector="didReleaseCaptureButtonOutside:" destination="BYZ-38-t0r" eventType="touchUpOutside" id="jkH-oI-SEU"/>
                                                 </connections>
                                             </button>
-                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="glg-aa-jU8">
-                                                <rect key="frame" x="0.0" y="466" width="560" height="0.0"/>
-                                                <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="tUB-yJ-6U5">
-                                                        <rect key="frame" x="0.0" y="0.0" width="560" height="0.0"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CDB-uF-N9d">
-                                                                <rect key="frame" x="0.0" y="0.0" width="289" height="0.0"/>
-                                                                <fontDescription key="fontDescription" name="Kailasa" family="Kailasa" pointSize="12"/>
-                                                                <inset key="titleEdgeInsets" minX="10" minY="2" maxX="0.0" maxY="0.0"/>
-                                                                <state key="normal" title="Flash" image="flash-white"/>
-                                                                <connections>
-                                                                    <action selector="didPressFlashButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fwq-Ik-hHo"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vRc-XV-rf0">
-                                                                <rect key="frame" x="289" y="0.0" width="272" height="0.0"/>
-                                                                <fontDescription key="fontDescription" name="Kailasa" family="Kailasa" pointSize="12"/>
-                                                                <inset key="titleEdgeInsets" minX="10" minY="2" maxX="0.0" maxY="0.0"/>
-                                                                <state key="normal" title="Night" image="ios7-moon"/>
-                                                                <connections>
-                                                                    <action selector="didPressMoonButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GFF-oZ-XAz"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                    </stackView>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="30" id="3hw-pS-8gi"/>
-                                                    <constraint firstItem="tUB-yJ-6U5" firstAttribute="height" secondItem="glg-aa-jU8" secondAttribute="height" id="Mno-h3-fSz"/>
-                                                    <constraint firstItem="tUB-yJ-6U5" firstAttribute="centerX" secondItem="glg-aa-jU8" secondAttribute="centerX" id="ZXd-V4-27z"/>
-                                                    <constraint firstItem="tUB-yJ-6U5" firstAttribute="width" secondItem="glg-aa-jU8" secondAttribute="width" id="f80-3U-Zdq"/>
-                                                    <constraint firstItem="tUB-yJ-6U5" firstAttribute="centerY" secondItem="glg-aa-jU8" secondAttribute="centerY" id="xb5-wU-Zvo"/>
-                                                </constraints>
-                                                <variation key="default">
-                                                    <mask key="constraints">
-                                                        <exclude reference="3hw-pS-8gi"/>
-                                                    </mask>
-                                                </variation>
-                                            </view>
                                         </subviews>
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstItem="9Eb-dI-Jp5" firstAttribute="width" secondItem="eEa-Gj-aYh" secondAttribute="width" id="2l1-tg-A6S"/>
-                                            <constraint firstItem="glg-aa-jU8" firstAttribute="width" secondItem="eEa-Gj-aYh" secondAttribute="width" id="u2y-RN-ehZ"/>
                                         </constraints>
                                     </stackView>
                                     <button opaque="NO" alpha="0.0" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SJP-k0-lmB">
@@ -423,13 +382,10 @@
                         <outlet property="debugWindow" destination="yKv-fP-VGS" id="niX-FU-QZa"/>
                         <outlet property="escapeMask" destination="UXp-1N-n9r" id="pYc-Yk-LDH"/>
                         <outlet property="filterView" destination="HAV-Ay-XOw" id="I1V-KO-weU"/>
-                        <outlet property="flashButton" destination="CDB-uF-N9d" id="gRx-W7-l84"/>
                         <outlet property="maskView" destination="sz8-4h-p7m" id="wLS-E5-R8i"/>
-                        <outlet property="moonButton" destination="vRc-XV-rf0" id="L1a-Tk-qJ2"/>
                         <outlet property="refeshButton" destination="SJP-k0-lmB" id="taD-TX-x6o"/>
                         <outlet property="searchBar" destination="3pT-Pi-2Je" id="LCc-mK-Lgn"/>
                         <outlet property="searchView" destination="IMO-Os-QpI" id="ur7-ZE-LXH"/>
-                        <outlet property="settingsBar" destination="glg-aa-jU8" id="B8a-OV-oWT"/>
                         <outlet property="trashIcon" destination="EMA-9O-eBy" id="BZ4-1T-dWZ"/>
                         <outlet property="verseTable" destination="9Eb-dI-Jp5" id="09h-TB-rea"/>
                         <segue destination="MHR-2x-CaL" kind="presentation" identifier="VerseDetail" id="ZoV-u5-9R6"/>
@@ -618,7 +574,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="362.5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="UJe-Fr-mk1">
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="UJe-Fr-mk1">
                                 <rect key="frame" x="20" y="20" width="600" height="290"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" misplaced="YES" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="a6B-TI-6TD">
@@ -637,9 +593,8 @@
                                             </label>
                                         </subviews>
                                     </stackView>
-                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="751" misplaced="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="FOK-eH-CKb">
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="751" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="FOK-eH-CKb">
                                         <rect key="frame" x="0.0" y="0.0" width="540" height="290"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="rYh-IU-07b">
                                             <size key="itemSize" width="50" height="50"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -664,7 +619,6 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         </view>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -713,12 +667,10 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         </view>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </view>
-                                                <color key="backgroundColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                                 <size key="customSize" width="30" height="30"/>
                                             </collectionViewCell>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" reuseIdentifier="numcellsmallfire" id="j9s-Ry-BW2">
@@ -738,7 +690,6 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         </view>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -753,7 +704,6 @@
                                 </constraints>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="leadingMargin" secondItem="UJe-Fr-mk1" secondAttribute="leading" id="6Cg-8a-9W6"/>
                             <constraint firstItem="UJe-Fr-mk1" firstAttribute="height" secondItem="MLZ-gH-kWC" secondAttribute="height" multiplier="0.8" id="C6J-8Z-u1T"/>
@@ -799,11 +749,9 @@
         <image name="Oval 1" width="84" height="84"/>
         <image name="chevron-left" width="13" height="23"/>
         <image name="close-fire" width="19" height="19"/>
-        <image name="flash-white" width="20" height="26"/>
         <image name="footer-mask-white" width="375" height="50"/>
         <image name="ios7-bookmarks-outline" width="29" height="27"/>
         <image name="ios7-gear-outline" width="26" height="26"/>
-        <image name="ios7-moon" width="18" height="19"/>
         <image name="ios7-photos-outline" width="31" height="26"/>
         <image name="ios7-refresh-empty" width="19" height="21"/>
         <image name="ios7-trash-outline" width="21" height="27"/>

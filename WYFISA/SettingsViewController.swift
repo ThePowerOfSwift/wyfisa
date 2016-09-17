@@ -8,9 +8,20 @@
 
 import UIKit
 
+class SettingsManager {
+    // is singleton
+    static let sharedInstance = SettingsManager()
+    var nightMode: Bool = false
+    var useFlash: Bool = false
+}
+
+
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet var settingsTable: UITableView!
+    let settings = SettingsManager.sharedInstance
+    let themer = WYFISATheme.sharedInstance
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -19,6 +30,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         // Do any additional setup after loading the view.
         self.settingsTable.dataSource = self
         self.settingsTable.delegate = self
+        
+        self.themeView()
+    }
+    
+    func themeView(){
+        self.view.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+        self.settingsTable.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+        self.settingsTable.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -48,12 +67,20 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             detail.text = "Iowan"
         case 2:
             label.text = "Night Mode"
+            let nightSwitch = cell.viewWithTag(2) as! UISwitch
+            nightSwitch.addTarget(self, action:  #selector(self.toggleNightMode), forControlEvents: .ValueChanged)
         case 3:
             label.text = "Use Flash"
+            let flashSwitch = cell.viewWithTag(2) as! UISwitch
+            flashSwitch.addTarget(self, action:  #selector(self.toggleUseFlash), forControlEvents: .ValueChanged)
         default:
             (cell.viewWithTag(2) as! UISwitch).hidden = true
             label.text = nil
         }
+        
+        // theme
+        cell.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+        label.textColor = self.themer.navyForLightOrWhite(1.0)
         
         return cell
     }
@@ -83,6 +110,21 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if indexPath.row == 1 {
             self.performSegueWithIdentifier("fontsegue", sender: self)
         }
+    }
+    
+    // MARK: - targets
+    func toggleNightMode(){
+        self.settings.nightMode = !self.settings.nightMode
+        if self.settings.nightMode == true {
+            self.themer.setMode(Scheme.Dark)
+        } else {
+            self.themer.setMode(Scheme.Light)
+        }
+        self.themeView()
+    }
+
+    func toggleUseFlash(){
+        self.settings.useFlash = !self.settings.useFlash
     }
     /*
     // MARK: - Navigation
