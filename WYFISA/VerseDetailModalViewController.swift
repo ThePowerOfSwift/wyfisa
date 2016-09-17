@@ -84,8 +84,10 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             self.chapterTextView.scrollRangeToVisible(NSMakeRange(yPos, 0))
         }
         
-        Timing.runAfter(0.5){
-            self.showFooterMask()
+        if self.segmentBar.selectedSegmentIndex == 0 {
+            Timing.runAfter(0.5){
+                self.showFooterMask()
+            }
         }
     }
     

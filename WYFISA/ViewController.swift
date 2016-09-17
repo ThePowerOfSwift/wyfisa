@@ -80,6 +80,11 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         }
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.verseTable.reloadData()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }

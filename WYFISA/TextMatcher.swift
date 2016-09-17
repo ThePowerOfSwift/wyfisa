@@ -41,7 +41,11 @@ class TextMatcher {
         
             // loop through books to find one that matches book pattern
             for i in 1...66 {
-                if let book = Books(rawValue: 66-i) {
+                var v = i + 39 // NT start
+                if v > 66 {
+                    v -= 66
+                }
+                if let book = Books(rawValue: v) {
                     let matchRegex = Regex("^\(bookText)",  options: [.IgnoreCase])
                     if matchRegex.matches(book.name()){
                         match = book
