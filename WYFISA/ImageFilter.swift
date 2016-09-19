@@ -27,6 +27,12 @@ class ImageFilter {
         return guassFilter
     }
     
+    class func darkenFilter(brightness: CGFloat) -> GPUImageBrightnessFilter {
+        let filter =  GPUImageBrightnessFilter()
+        filter.brightness = brightness
+        return filter
+    }
+    
     class func magnify(size: CGSize, by: CGFloat) -> GPUImageLanczosResamplingFilter {
         let filter = GPUImageLanczosResamplingFilter()
         let newSize = CGSize.init(width: size.width*by, height: size.height*by)
@@ -35,7 +41,6 @@ class ImageFilter {
     }
 
     class func cropFilter(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) -> GPUImageCropFilter {
-        //upscale then crop
         let cropArea = CGRect(x: x, y: y, width: width, height: height)
         return GPUImageCropFilter(cropRegion: cropArea)
     }

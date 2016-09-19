@@ -87,6 +87,8 @@ class CameraManager {
         
         let targetView = target as! UIView
         let guassFilter = ImageFilter.guassianBlur(0.5, y: 0.0, radius: targetView.superview!.frame.width/800)
+
+        // chain filters
         self.camera.addTarget(guassFilter)
         guassFilter.addTarget(target)
 

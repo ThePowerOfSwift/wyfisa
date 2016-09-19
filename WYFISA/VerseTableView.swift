@@ -185,12 +185,13 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
 
-        var sectionHeight:CGFloat = 65.0 // default height of collapsed cell
+        // default height of collapsed cell
+        var sectionHeight:CGFloat = 65
         
         if indexPath.section == 0 {
             
             // height of header section
-            sectionHeight = 0 // heightForHeaderSection()/2
+            sectionHeight = 0
             
         }  else if self.isExpanded == true {
             
@@ -207,7 +208,8 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     func cellHeightForText(text: String) -> CGFloat {
         let font = themer.currentFont()
         var height = text.heightWithConstrainedWidth(self.frame.size.width*0.90,
-                                                     font: font)+10
+                                                     font: font)+font.pointSize
+        
         if height  > 30 { // bigger than a loading text
             height+=50
         }

@@ -33,7 +33,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.settingsTable.dataSource = self
         self.settingsTable.delegate = self
         
+        // style
         self.themeView()
+        
     }
     
     func themeView(){
@@ -76,7 +78,31 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return cell
     }
     
+    
+    func fontSliderCell() -> UITableViewCell {
+        // customize slider cell
+        let cell = self.settingsTable.dequeueReusableCellWithIdentifier("cellslider")!
+        let label = cell.viewWithTag(1) as! UILabel
+        let slider = cell.viewWithTag(2) as! UISlider
+
+        // style
+        let currentVal = Float(themer.fontSize)
+        slider.value = currentVal
+        label.text = "\(Int(currentVal))px"
+        
+        // theme
+        cell.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+        label.textColor = self.themer.navyForLightOrWhite(1.0)
+        
+        return cell
+    }
+
     func cellForFontSection(row: Int) -> UITableViewCell {
+        
+        if row == 4 { // is slider
+            return fontSliderCell()
+        }
+        
         let cell = self.settingsTable.dequeueReusableCellWithIdentifier("cellselect")!
         let label = cell.viewWithTag(1) as! UILabel
         
@@ -113,7 +139,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         if indexPath.section == 1 {  // selected a font
             if let newFont = ThemeFont(rawValue: indexPath.row) {
-                self.themer.setFont(newFont)
+                self.themer.setFontStyle(newFont)
             }
         }
         
@@ -154,6 +180,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             label.text = "Font"
         }
         label.font = ThemeFont.system(14, weight: UIFontWeightLight)
+        label.textColor = themer.navyForLightOrOffWhite(0.8)
         view.addSubview(label)
         return view
     }
@@ -173,6 +200,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.settings.useFlash = !self.settings.useFlash
     }
     
+    @IBAction func didChangeFontSizeSlider(sender: UISlider) {
+        let value = CGFloat(sender.value)
+        self.themer.setFontSize(value)
+        let path = NSIndexPath.init(forRow: 4, inSection: 1)
+        self.settingsTable.reloadRowsAtIndexPaths([path], withRowAnimation: .None)
+    }
     
     /*
     // MARK: - Navigation

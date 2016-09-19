@@ -41,8 +41,12 @@ class WYFISATheme {
         return f.fontWithSize(f.pointSize+size)
     }
     
-    func setFont(font: ThemeFont){
+    func setFontStyle(font: ThemeFont){
         self.fontType = font
+    }
+    
+    func setFontSize(size: CGFloat){
+        self.fontSize = size
     }
     
     // colors
@@ -78,6 +82,15 @@ class WYFISATheme {
             return UIColor.navy(alpha)
         default:
             return UIColor.whiteColor()
+        }
+    }
+    
+    func navyForLightOrOffWhite(alpha: CGFloat) -> UIColor {
+        switch  self.mode {
+        case .Light:
+            return UIColor.navy(alpha)
+        default:
+            return UIColor.offWhite(alpha)
         }
     }
     

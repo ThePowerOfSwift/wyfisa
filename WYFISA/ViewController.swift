@@ -62,8 +62,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         // send camera to live view
         self.checkCameraAccess()
         self.filterView.fillMode = GPUImageFillModeType.init(2)
+        
+        // put a gaussian blur on the live view
         self.stillCamera.addCameraTarget(self.filterView)
-        // self.stillCamera.addDebugTarget(self.debugWindow)
         
         // camera config
         stillCamera.zoom(1)
@@ -196,6 +197,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         updateLock.lock()
 
+        Animations.fadeInOut(0.3, tsFadeOut: 0.3, view: self.captureBox, alpha: 0.6)
+        
+        
         let id = self.verseTable.nVerses+1
         if let allVerses = TextMatcher().findVersesInText(text) {
 
@@ -247,6 +251,10 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     func didRemoveCell(sender: VerseTableViewCell) {
         // update session matches to reflect new set of cells
         self.session.matches = self.verseTable.currentMatches()
+        if self.session.matches.count == 0 {
+            // removed all cells, exit editing mode
+            self.exitEditingMode()
+        }
     }
 
      // MARK: - Navigation
@@ -424,8 +432,8 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         }
     }
     
-    func updateEditingView(){
-        if self.verseTable.editing == true { // enter editing mode
+    func updateEditingView(toMode: Bool){
+        if toMode == true { // enter editing mode
             Animations.start(0.5){
                 self.refeshButton.alpha = 1
                 self.trashIcon.setImage(UIImage(named: "ios7-trash-fire"), forState: .Normal)
@@ -452,7 +460,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
 
         let mode = !self.verseTable.editing
         self.verseTable.setEditing(mode, animated: true)
-        self.updateEditingView()
+        self.updateEditingView(mode)
     }
     
     @IBAction func didTapClearAllButton(sender: UIButton) {
@@ -475,10 +483,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     }
     
     func exitEditingMode(){
-        
         if self.verseTable.editing == true {
             self.verseTable.setEditing(false, animated: true)
-            self.updateEditingView()
+            self.updateEditingView(false)
         }
     }
     
