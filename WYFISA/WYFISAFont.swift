@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct BodyFont {
+struct ThemeFonts {
     static func iowan(size: CGFloat) -> UIFont {
         if let f = UIFont.init(name: "Iowan Old Style", size: size) {
             return f

@@ -19,7 +19,8 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     var hasHeader: Bool = true
     var nLock: NSLock = NSLock()
     var cellDelegate: VerseTableViewCellDelegate?
-    
+    var themer = WYFISATheme.sharedInstance
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -204,7 +205,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func cellHeightForText(text: String) -> CGFloat {
-        let font = BodyFont.iowan(18.0)
+        let font = themer.currentFont()
         var height = text.heightWithConstrainedWidth(self.frame.size.width*0.90,
                                                      font: font)+10
         if height  > 30 { // bigger than a loading text

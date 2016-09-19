@@ -51,7 +51,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             let length = endIdx! - startIdx! - 1
             
             // contextual highlighting for attributed text
-            let font = BodyFont.iowan(19.0)
+            let font = themer.currentFontAdjustedBy(1)
             
             let fontColor = themer.navyForLightOrWhite(1.0)
             let attrs = [NSForegroundColorAttributeName: fontColor,
@@ -249,7 +249,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         // dynamic text sizing
         if let refs = self.versesForCell() {
             if let text = refs[indexPath.section].text {
-                let font = BodyFont.iowan(18.0)
+                let font = themer.currentFont()
 
                 let height = text.heightWithConstrainedWidth(self.referenceTable.frame.size.width,
                                                              font: font)+10

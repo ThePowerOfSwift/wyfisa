@@ -8,6 +8,8 @@
 
 import Foundation
 
+let DEFAULT_FONT_SIZE: CGFloat = 18.0
+
 enum Scheme: Int {
     case Light = 1, Dark
 }
@@ -15,6 +17,7 @@ enum Scheme: Int {
 class WYFISATheme {
 
     var mode: Scheme = .Light
+    var font: UIFont = ThemeFonts.iowan(DEFAULT_FONT_SIZE)
     static let sharedInstance = WYFISATheme()
     
     func setMode(mode: Scheme) {
@@ -25,6 +28,17 @@ class WYFISATheme {
         return self.mode == .Light
     }
     
+    // font
+    func currentFont() -> UIFont {
+        return self.font
+    }
+    
+    func currentFontAdjustedBy(size: CGFloat) -> UIFont {
+        let f = self.font
+        return f.fontWithSize(f.pointSize+size)
+    }
+    
+    // colors
     func navyForLightOrTeal(alpha: CGFloat) -> UIColor {
         switch  self.mode {
         case .Light:

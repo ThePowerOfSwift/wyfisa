@@ -32,7 +32,7 @@ class VerseTableViewCell: UITableViewCell {
     }
 
     func highlightText() {
-        let font = BodyFont.iowan(18.0)
+        let font = themer.currentFont()
         
         let attrs = [NSForegroundColorAttributeName: self.themer.fireForLightOrTurquoise(),
                      NSFontAttributeName: font]
@@ -86,11 +86,11 @@ class VerseTableViewCell: UITableViewCell {
         if isExpanded == true {
             self.labelText.lineBreakMode = .ByWordWrapping
             self.labelText.numberOfLines = 0
-            self.labelText.font = UIFont.init(name: "Iowan Old Style", size: 18.0)
+            self.labelText.font = themer.currentFont()
         } else {
             self.labelText.lineBreakMode = .ByTruncatingTail
             self.labelText.numberOfLines = 1
-            self.labelText.font = UIFont.init(name: "Iowan Old Style", size: 16.0)
+            self.labelText.font = themer.currentFontAdjustedBy(-4)
         }
 
     }
