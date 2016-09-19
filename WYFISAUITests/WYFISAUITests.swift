@@ -30,23 +30,65 @@ class WYFISAUITests: XCTestCase {
     
     
 
-    func testDidSearchForVerse() {
+    func testDidSearchForVerse(){
         
         let app = XCUIApplication()
-        app.tabBars.childrenMatchingType(.Button).elementBoundByIndex(1).tap()
+        var verseSearchField = app.searchFields["verse"]
+        verseSearchField.tap()
+        app.searchFields["verse"].typeText("ep")
+        let collectionViewsQuery2 = app.collectionViews
+        let collectionViewsQuery = collectionViewsQuery2
+        collectionViewsQuery.staticTexts["2"].tap()
+        collectionViewsQuery.staticTexts["11"].tap()
         
-        let searchSearchField = app.searchFields["search"]
-        searchSearchField.tap()
-        app.searchFields["search"].typeText("mark")
-        searchSearchField.buttons["Clear text"].tap()
+        
+        // another verse
+        verseSearchField = app.searchFields["verse"]
+        verseSearchField.tap()
+        app.searchFields["verse"].typeText("jo")
+        collectionViewsQuery2.childrenMatchingType(.Cell).elementBoundByIndex(4).staticTexts["3"].tap()
+        collectionViewsQuery2.childrenMatchingType(.Cell).elementBoundByIndex(38).staticTexts["16"].tap()
+        app.buttons["Oval 1"].pressForDuration(1.7);
+        
+    }
+    
+    func testSearchAfterCapture(){
+        
+        let app = XCUIApplication()
+        let oval1Button = app.buttons["Oval 1"]
+        oval1Button.pressForDuration(6.0)
+        
+        // expecting 5 labels with header
+        let cells = app.cells
+        let count = NSPredicate(format: "count == 6")
+        expectationForPredicate(count, evaluatedWithObject: cells, handler: nil)
+        waitForExpectationsWithTimeout(1, handler: nil)
+        
+        let verseSearchField = app.searchFields["verse"]
+        verseSearchField.tap()
+        app.searchFields["verse"].typeText("ep")
+        
+        let collectionViewsQuery = app.collectionViews
+        collectionViewsQuery.staticTexts["2"].tap()
+        collectionViewsQuery.childrenMatchingType(.Cell).elementBoundByIndex(7).staticTexts["3"].tap()
+        
+        verseSearchField.tap()
+        app.searchFields["verse"].typeText("jo")
+        collectionViewsQuery.childrenMatchingType(.Cell).elementBoundByIndex(4).staticTexts["3"].tap()
+        collectionViewsQuery.childrenMatchingType(.Cell).elementBoundByIndex(38).staticTexts["16"].tap()
+        oval1Button.pressForDuration(1.1);
         
     }
     
     func testDidCaptureVerses() {
         
-        // Use recording to get started writing UI tests.
-        XCUIApplication().buttons["Oval 1"].pressForDuration(3.2);
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        let app = XCUIApplication()
+        let oval1Button = app.buttons["Oval 1"]
+        oval1Button.pressForDuration(6.0)
+        
+
+        oval1Button.pressForDuration(6.0)
+        
     }
     
 }

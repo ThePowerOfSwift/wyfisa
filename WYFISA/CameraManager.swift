@@ -21,7 +21,7 @@ class CameraManager {
     let camera: GPUImageStillCamera
     let filter = ImageFilter.genericFilter()
     let ocr: OCR = OCR()
-    var simImage: UIImage! = UIImage(named: "multiverse")
+    var simImage: UIImage! = UIImage(named: "oneanother")
     
     weak var delegate:CameraManagerDelegate?
 
@@ -86,7 +86,7 @@ class CameraManager {
     func addCameraTarget(target: GPUImageInput!){
         
         let targetView = target as! UIView
-        let guassFilter = ImageFilter.guassianBlur(0.5, y: 0.22, radius: targetView.superview!.frame.width/640)
+        let guassFilter = ImageFilter.guassianBlur(0.5, y: 0.0, radius: targetView.superview!.frame.width/800)
         self.camera.addTarget(guassFilter)
         guassFilter.addTarget(target)
 

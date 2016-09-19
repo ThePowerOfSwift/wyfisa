@@ -275,6 +275,9 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
 
     }
     
+    func didRemoveCell(sender: VerseTableViewCell){
+        //
+    }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         

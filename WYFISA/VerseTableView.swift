@@ -168,9 +168,20 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
                 headerHeight = 0
             }
         }
+        
         return headerHeight
     }
     
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        if self.isExpanded == false {
+            // fade in new cells
+            cell.alpha = 0
+            Animations.start(0.3){
+                cell.alpha = 1
+            }
+        }
+        
+    }
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
 
         var sectionHeight:CGFloat = 65.0 // default height of collapsed cell
@@ -178,7 +189,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         if indexPath.section == 0 {
             
             // height of header section
-            sectionHeight = heightForHeaderSection()
+            sectionHeight = 0 // heightForHeaderSection()/2
             
         }  else if self.isExpanded == true {
             
@@ -265,14 +276,24 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
+
             
+            // delete cell from datasource
             let idxSet = NSIndexSet(index: indexPath.row)
             self.nVerses -= 1
             self.recentVerses.removeAtIndex(indexPath.row)
+            
+            // notify cell delegate of removed content
+            let cell = tableView.cellForRowAtIndexPath(indexPath) as! VerseTableViewCell
+            cell.delegate?.didRemoveCell(cell)
+            
+            // drop celll from section
             tableView.deleteSections(idxSet, withRowAnimation: .Automatic)
             self.reloadData()
+            
         }
     }
     

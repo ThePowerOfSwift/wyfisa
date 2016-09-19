@@ -10,7 +10,7 @@ import UIKit
 
 protocol VerseTableViewCellDelegate: class {
     func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo)
-
+    func didRemoveCell(sender: VerseTableViewCell)
 }
 
 class VerseTableViewCell: UITableViewCell {
@@ -23,7 +23,7 @@ class VerseTableViewCell: UITableViewCell {
     var verseInfo: VerseInfo?
     let db = DBQuery.sharedInstance
     let themer = WYFISATheme.sharedInstance
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -129,6 +129,7 @@ class VerseTableViewCell: UITableViewCell {
             verse.verses = verses
             self.delegate?.didTapMoreButtonForCell(self, withVerseInfo: verse)
         }
+        
     }
     
     override func setSelected(selected: Bool, animated: Bool) {

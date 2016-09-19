@@ -18,6 +18,7 @@ class SettingsManager {
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    @IBOutlet var navBar: UINavigationBar!
     @IBOutlet var settingsTable: UITableView!
     let settings = SettingsManager.sharedInstance
     let themer = WYFISATheme.sharedInstance
@@ -35,6 +36,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func themeView(){
+        self.navBar.barTintColor = self.themer.whiteForLightOrNavy(1.0)
         self.view.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
         self.settingsTable.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
         self.settingsTable.reloadData()
@@ -47,32 +49,22 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell: UITableViewCell
-        if indexPath.row < 2 {
-            cell = tableView.dequeueReusableCellWithIdentifier("cellsubnav")!
-        } else {
-            cell = tableView.dequeueReusableCellWithIdentifier("cellchoice")!
-        }
+        var cell = tableView.dequeueReusableCellWithIdentifier("cellchoice")!
+
         
         let label = cell.viewWithTag(1) as! UILabel
 
         switch indexPath.row {
         case 0:
-            label.text = "Version"
-            let detail = cell.viewWithTag(2) as! UILabel
-            detail.text = "ASV"
-        case 1:
-            label.text = "Font"
-            let detail = cell.viewWithTag(2) as! UILabel
-            detail.text = "Iowan"
-        case 2:
             label.text = "Night Mode"
             let nightSwitch = cell.viewWithTag(2) as! UISwitch
             nightSwitch.addTarget(self, action:  #selector(self.toggleNightMode), forControlEvents: .ValueChanged)
-        case 3:
+            nightSwitch.setOn(settings.nightMode, animated: false)
+            case 1:
             label.text = "Use Flash"
             let flashSwitch = cell.viewWithTag(2) as! UISwitch
             flashSwitch.addTarget(self, action:  #selector(self.toggleUseFlash), forControlEvents: .ValueChanged)
+            flashSwitch.setOn(settings.useFlash, animated: false)
         default:
             (cell.viewWithTag(2) as! UISwitch).hidden = true
             label.text = nil
@@ -86,7 +78,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 3
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -99,9 +91,19 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
+        return 10.0
+    }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        var view = UIView()
+        view.backgroundColor = themer.offWhiteForLightOrNavy(0.1)
+        return view
     }
 
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return ""
+    }
+    
     // MARK: - UITableView Delegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0 {
@@ -126,6 +128,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func toggleUseFlash(){
         self.settings.useFlash = !self.settings.useFlash
     }
+    
+    
     /*
     // MARK: - Navigation
 

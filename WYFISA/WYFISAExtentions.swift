@@ -68,4 +68,7 @@ extension UIColor {
     class func teal() ->UIColor {
         return UIColor.init(red: 175/255, green: 191/255, blue: 195/255, alpha: 1.0)
     }
+    class func offWhite(alpha: CGFloat) -> UIColor {
+        return UIColor.init(white: 0.95, alpha: alpha)
+    }
 }

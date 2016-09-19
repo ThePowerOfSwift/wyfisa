@@ -97,8 +97,8 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         // make sure not in editing mode
         self.exitEditingMode()
         
+
         if self.captureLock.tryLock() {
-            
             // show capture box
             self.captureBox.hidden = false
 
@@ -158,9 +158,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         // hide capture box
         self.verseTable.isExpanded = true
+        self.captureBox.hidden = true
+
         Animations.start(0.3) {
-            self.captureBox.hidden = true
-           // self.captureBox.alpha = 0
             self.maskView.alpha = 0.6
         }
         
@@ -239,8 +239,14 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     
     // MARK: - Table cell delegate
     func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo){
-        
-        performSegueWithIdentifier("VerseDetail", sender: (verse as! AnyObject))
+        if sender.editing == false {
+            performSegueWithIdentifier("VerseDetail", sender: (verse as! AnyObject))
+        }
+    }
+    
+    func didRemoveCell(sender: VerseTableViewCell) {
+        // update session matches to reflect new set of cells
+        self.session.matches = self.verseTable.currentMatches()
     }
 
      // MARK: - Navigation
@@ -267,6 +273,11 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             toVc.escapeMask = self.escapeMask
             toVc.searchView = self.searchView
             self.searchBar.delegate = toVc
+            
+        }
+        
+        if segue.identifier == "settingsegue" {
+            self.exitEditingMode()
         }
         
      }
@@ -302,11 +313,16 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                 }
                 self.session.newMatches += 1
                 self.session.matches.append(verseInfo.id)
+                self.verseTable.updateCellHeightVal(verseInfo)
         }
     
         // end session
         self.handleCaptureEnd()
-
+        
+        
+    }
+    
+    @IBAction func unwindFromSettings(segue: UIStoryboardSegue) {
         
     }
     
@@ -437,9 +453,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         let mode = !self.verseTable.editing
         self.verseTable.setEditing(mode, animated: true)
         self.updateEditingView()
-        if mode == false { // finished an edit
-             self.session.matches = self.verseTable.currentMatches()
-        }
     }
     
     @IBAction func didTapClearAllButton(sender: UIButton) {

@@ -16,7 +16,7 @@ class OCR: NSObject, G8TesseractDelegate {
 
     override init(){
         super.init()
-        tesseract.maximumRecognitionTime = 5
+        tesseract.maximumRecognitionTime = 10
         tesseract.engineMode = .TesseractOnly
         tesseract.pageSegmentationMode = .AutoOSD
         tesseract.delegate = self
@@ -24,12 +24,16 @@ class OCR: NSObject, G8TesseractDelegate {
     
     func process(image: UIImage!) -> String? {
 
+        print("process")
         // do image recognition
         self.ocrLock.lock()
         var recognizedText: String?
         tesseract.image = image
         if tesseract.recognize() == true {
             recognizedText = tesseract.recognizedText
+            print(recognizedText)
+        } else {
+            print("TIME OUTTIE")
         }
 
         self.ocrLock.unlock()
