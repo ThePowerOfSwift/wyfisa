@@ -17,7 +17,8 @@ enum Scheme: Int {
 class WYFISATheme {
 
     var mode: Scheme = .Light
-    var font: UIFont = ThemeFonts.iowan(DEFAULT_FONT_SIZE)
+    var fontType: ThemeFont = .Iowan
+    var fontSize: CGFloat = DEFAULT_FONT_SIZE
     static let sharedInstance = WYFISATheme()
     
     func setMode(mode: Scheme) {
@@ -30,12 +31,18 @@ class WYFISATheme {
     
     // font
     func currentFont() -> UIFont {
-        return self.font
+        let s = self.fontSize
+        return self.fontType.styleWithSize(s)
     }
     
     func currentFontAdjustedBy(size: CGFloat) -> UIFont {
-        let f = self.font
+        let s = self.fontSize
+        let f = self.fontType.styleWithSize(s)
         return f.fontWithSize(f.pointSize+size)
+    }
+    
+    func setFont(font: ThemeFont){
+        self.fontType = font
     }
     
     // colors
