@@ -36,14 +36,16 @@ class WYFISATutViewController: UIViewController, UIScrollViewDelegate {
         self.fadeOutTut()
     }
     
-    func firstLaunchTut(){
+    func firstLaunchTut() -> Bool{
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        if defaults.stringForKey("isAppAlreadyLaunchedOnce") != nil {
+        if defaults.stringForKey("isAppAlreadyLaunchedOnce") == nil {
             // only set to bool when they've seen forecast page
             self.tutScrollView.hidden = false
             defaults.setBool(true, forKey: "isAppAlreadyLaunchedOnce")
+            return true
         }
+        return false
     }
     
     
@@ -70,6 +72,9 @@ class WYFISATutViewController: UIViewController, UIScrollViewDelegate {
         Timing.runAfter(1){
             self.tutScrollView.hidden = true
         }
+        
+        // when tut fades out init camera
+        self.destVC?.initCamera()
     }
     
     // MARK: - Navigation
@@ -79,6 +84,7 @@ class WYFISATutViewController: UIViewController, UIScrollViewDelegate {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         self.destVC = segue.destinationViewController as! ViewController
+        self.destVC?.firstLaunch = firstLaunchTut()
     }
 
     

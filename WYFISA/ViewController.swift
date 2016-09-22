@@ -52,9 +52,21 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         verseTable.setCellDelegate(self)
 
+        if self.firstLaunch == false {
+            self.initCamera()
+        }
+    }
+    
+    func initCamera(){
+        
+        if self.firstLaunch == false {
+            return
+        }
+        
+        self.firstLaunch = false
+        
         // send camera to live view
         self.checkCameraAccess()
         self.filterView.fillMode = GPUImageFillModeType.init(2)
@@ -70,11 +82,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         stillCamera.capture()
         stillCamera.delegate = self
         stillCamera.pause()
-        
-        // warmup
-        Timing.runAfterBg(0.5){
-            self.stillCamera.recognizeFrameFromCamera(100)
-        }
     }
     
     override func viewWillAppear(animated: Bool) {
