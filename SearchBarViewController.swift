@@ -59,6 +59,10 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.chapterLabel.textColor = self.themer.navyForLightOrWhite(1.0)
         self.searchView?.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
         self.chapterCollection.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+        
+        self.matchLabel.font = self.themer.currentFontAdjustedBy(10)
+        self.chapterLabel.font = self.themer.currentFontAdjustedBy(10)
+        
     }
     
     
@@ -216,8 +220,6 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
                 cell = collectionView.dequeueReusableCellWithReuseIdentifier("numcellsmallfire", forIndexPath: indexPath)
                 item = ch
             }
-        } else {
-            cell = collectionView.dequeueReusableCellWithReuseIdentifier("numcellsmall", forIndexPath: indexPath)
         }
     
         let labelView = cell.viewWithTag(1) as! UILabel
@@ -230,15 +232,20 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         }
         cell.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
 
+        if section == 0 {
+            labelView.font = themer.currentFontAdjustedBy(5)
+        } else {
+            // verse numbers
+            labelView.font = themer.currentFont()
+            labelView.alpha = 0.80
+        }
+        
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        var size = CGSize.init(width: 50, height: 50)
-        if indexPath.section == 1 {
-            size.width = 30
-            size.height = 30
-        }
+        let offset = themer.fontSize
+        let size = CGSize.init(width: 40+offset/2, height: 30+offset)
         return size
     }
     

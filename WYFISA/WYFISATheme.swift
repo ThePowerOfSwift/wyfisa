@@ -8,7 +8,7 @@
 
 import Foundation
 
-let DEFAULT_FONT_SIZE: CGFloat = 18.0
+let DEFAULT_FONT_SIZE: CGFloat = 20.0
 
 enum Scheme: Int {
     case Light = 1, Dark
@@ -17,7 +17,7 @@ enum Scheme: Int {
 class WYFISATheme {
 
     var mode: Scheme = .Light
-    var fontType: ThemeFont = .Iowan
+    var fontType: ThemeFont = .Avenir
     var fontSize: CGFloat = DEFAULT_FONT_SIZE
     static let sharedInstance = WYFISATheme()
     

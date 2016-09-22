@@ -251,8 +251,8 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             if let text = refs[indexPath.section].text {
                 let font = themer.currentFont()
 
-                let height = text.heightWithConstrainedWidth(self.referenceTable.frame.size.width,
-                                                             font: font)+10
+                let height = text.heightWithConstrainedWidth(self.referenceTable.frame.size.width*0.90,
+                                                             font: font)+font.pointSize
                 
                 if height  > 30  { // bigger than a loading text
                     return height + 50

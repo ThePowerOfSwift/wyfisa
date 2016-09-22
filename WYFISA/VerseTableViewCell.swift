@@ -92,6 +92,7 @@ class VerseTableViewCell: UITableViewCell {
             self.labelText.lineBreakMode = .ByTruncatingTail
             self.labelText.numberOfLines = 1
             self.labelText.font = themer.fontType.styleWithSize(16)
+            self.labelHeader.font = self.labelHeader.font.fontWithSize(13)
         }
 
     }

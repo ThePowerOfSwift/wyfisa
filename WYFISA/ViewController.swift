@@ -32,11 +32,8 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     @IBOutlet var maskView: UIView!
     @IBOutlet var captureBox: UIImageView!
     @IBOutlet var refeshButton: UIButton!
-    @IBOutlet var capTut: UILabel!
-    @IBOutlet var tutScrollView: UIScrollView!
-    @IBOutlet var tutPager: UIPageControl!
-    @IBOutlet var tutImage: UIImageView!
     
+    @IBOutlet var capTut: UILabel!
     @IBOutlet var trashIcon: UIButton!
     @IBOutlet var escapeMask: UIView!
     @IBOutlet var searchView: UIView!
@@ -51,11 +48,10 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     var workingText = "Scanning"
     var settingsEnabled: Bool = false
     var nightEnabled: Bool = false
-
+    var firstLaunch: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //self.firstLaunchTut()
         
         verseTable.setCellDelegate(self)
 
@@ -84,6 +80,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.verseTable.reloadData()
+        if firstLaunch == true {
+            self.capTut.hidden = false
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -92,11 +91,10 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     
     // MARK: - Capture
     @IBAction func didPressCaptureButton(sender: AnyObject) {
-        
-        self.hideTut()
-        
+                
         // make sure not in editing mode
         self.exitEditingMode()
+        self.capTut.hidden = true
         
 
         if self.captureLock.tryLock() {
@@ -283,12 +281,24 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             self.searchBar.delegate = toVc
             
         }
-        
-        if segue.identifier == "settingsegue" {
-            self.exitEditingMode()
-        }
+
         
      }
+    
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+        
+        if identifier == "settingsegue" {
+            // if search bar is up, close it
+            // this is not a true editing mode
+            if self.escapeMask.hidden == false {
+                if let delegate = self.searchBar.delegate {
+                    delegate.searchBarTextDidEndEditing!(self.searchBar)
+                }
+                return false
+            }
+        }
+        return true
+    }
 
     func closeSearchView(){
         // clean up search results
@@ -338,8 +348,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         return false
     }
     
-    
-    
     func checkCameraAccess() {
         
         if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) !=  AVAuthorizationStatus.Authorized
@@ -350,77 +358,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                     self.workingText = "Camera Disabled!"
                 }
             });
-        }
-    }
-    
-
-    func firstLaunchTut(){
-        
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if defaults.stringForKey("isAppAlreadyLaunchedOnce") == nil {
-            showTut()
-            // only set to bool when they've seen forecast page
-            defaults.setBool(true, forKey: "isAppAlreadyLaunchedOnce")
-        }
-        
-        self.capTut.hidden = false
-        Animations.startAfter(1, forDuration: 0.5){
-            self.capTut.alpha = 1
-        }
-    }
-
-    @IBAction func didSwipeTut(sender: AnyObject) {
-    }
-    
-    func showTut(){
-        /*
-        self.tutScrollView.hidden = false
-        self.tutPager.hidden = false
-        self.tutScrollView.contentSize.width = self.view.frame.size.width * 4.0
-        self.tutScrollView.delegate = self
-        self.captureButton.hidden = true
-        self.captureBox.hidden = true
-        self.refeshButton.hidden = true
-        */
-    }
-    
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        let page =  self.tutScrollView.contentOffset.x/self.view.frame.size.width
-        self.tutPager.currentPage = Int(page)
-        switch page {
-        case 0:
-                self.tutImage.alpha = 0
-            Animations.start(0.2){
-                self.tutImage.alpha = 1
-                self.tutImage.image = UIImage.init(named: "Find")
-            }
-
-        case 1:
-                self.tutImage.alpha = 0
-            Animations.start(0.2){
-                self.tutImage.alpha = 1
-                self.tutImage.image = UIImage.init(named: "Capture")
-            }
-        case 2:
-            self.tutImage.alpha = 0
-            Animations.start(0.2){
-                self.tutImage.alpha = 1
-                self.tutImage.image = UIImage.init(named: "Study")
-            }
-        default:
-            // done
-            self.tutScrollView.delegate = self
-            self.captureButton.hidden = false
-            self.captureBox.hidden = false
-            self.refeshButton.hidden = false
-            Animations.start(0.1){
-                self.tutScrollView.alpha = 0
-                self.tutScrollView.hidden = true
-                self.tutScrollView.delegate = nil
-                self.tutPager.hidden = true
-            }
-
-
         }
     }
 
@@ -486,12 +423,6 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         if self.verseTable.editing == true {
             self.verseTable.setEditing(false, animated: true)
             self.updateEditingView(false)
-        }
-    }
-    
-    func hideTut() {
-        Animations.start(0.2){
-            self.capTut.hidden = true
         }
     }
 
