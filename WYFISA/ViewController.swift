@@ -55,6 +55,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         verseTable.setCellDelegate(self)
 
         if self.firstLaunch == false {
+            self.firstLaunch = true
             self.initCamera()
         }
     }
@@ -194,7 +195,8 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     // MARK: - Process
     
     // when frame has been processed we need to write it back to the cell
-    func didProcessFrame(sender: CameraManager, withText text: String, fromSession: UInt64) {
+    func didProcessFrame(sender: CameraManager, withText text: String, image: UIImage, fromSession: UInt64) {
+        
         //print(text)
         if fromSession != self.session.currentId {
             return // Ignore: from old capture session
@@ -215,6 +217,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                     // we have match
                     verseInfo.text = verse
                     verseInfo.session = fromSession
+                    verseInfo.image = image
 
                     self.verseTable.updateVersePriority(verseInfo.id, priority: verseInfo.priority)
                     

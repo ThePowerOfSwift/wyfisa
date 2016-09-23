@@ -30,6 +30,7 @@ class OCR: NSObject, G8TesseractDelegate {
         tesseract.image = image
         if tesseract.recognize() == true {
             recognizedText = tesseract.recognizedText
+            print(recognizedText)
         }
 
         self.ocrLock.unlock()

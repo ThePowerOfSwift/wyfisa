@@ -14,14 +14,14 @@ import TesseractOCR
 let IS_SIMULATOR = TARGET_OS_SIMULATOR != 0
 
 protocol CameraManagerDelegate: class {
-    func didProcessFrame(sender: CameraManager, withText text: String, fromSession: UInt64)
+    func didProcessFrame(sender: CameraManager, withText text: String, image: UIImage, fromSession: UInt64)
 }
 
 class CameraManager {
     let camera: GPUImageStillCamera
     let filter = ImageFilter.genericFilter()
     let ocr: OCR = OCR()
-    var simImage: UIImage! = UIImage(named: "oneanother")
+    var simImage: UIImage! = UIImage(named: "multiverse")
     
     weak var delegate:CameraManagerDelegate?
 
@@ -137,7 +137,7 @@ class CameraManager {
             
             // do image recognition
             if let recognizedText = ocr.process(image){
-                self.delegate?.didProcessFrame(self, withText: recognizedText, fromSession: fromSession)
+                self.delegate?.didProcessFrame(self, withText: recognizedText, image: image, fromSession: fromSession)
             }
         }
        

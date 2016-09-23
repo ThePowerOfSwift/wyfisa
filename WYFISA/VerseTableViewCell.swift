@@ -60,7 +60,7 @@ class VerseTableViewCell: UITableViewCell {
             }
 
         } else {
-            
+            // still searching
             self.labelHeader.textColor = UIColor.fire()
             if self.themer.isLight() {
                 self.searchIcon.image = UIImage(named: "chatbox-working-navy")
@@ -84,10 +84,14 @@ class VerseTableViewCell: UITableViewCell {
         self.labelText.textColor = self.themer.navyForLightOrWhite(1.0)
         
         if isExpanded == true {
+            
+            // show full text
             self.labelText.lineBreakMode = .ByWordWrapping
             self.labelText.numberOfLines = 0
             self.labelText.font = themer.currentFont()
             self.labelHeader.font = self.labelHeader.font.fontWithSize(themer.fontSize-3)
+
+            
         } else {
             self.labelText.lineBreakMode = .ByTruncatingTail
             self.labelText.numberOfLines = 1

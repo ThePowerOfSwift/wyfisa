@@ -18,6 +18,7 @@ class VerseInfo {
     var text: String?
     var chapter: String?
     var verse: Int?
+    var image: UIImage?
     var refs: [VerseInfo]?
     var verses: [VerseInfo]?
 

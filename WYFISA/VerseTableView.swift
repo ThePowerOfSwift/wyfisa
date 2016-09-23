@@ -152,7 +152,8 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
             verseCell.delegate = self.cellDelegate
             let index = indexPath.section - 1
             if self.recentVerses.count != 0 {
-                verseCell.updateWithVerseInfo(self.recentVerses[index], isExpanded: self.isExpanded)
+                let verse = self.recentVerses[index]
+                verseCell.updateWithVerseInfo(verse, isExpanded: self.isExpanded)
                 return verseCell
             }
         }
@@ -225,11 +226,6 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         view.tintColor = UIColor.clearColor()
     }
     
-    func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        
-
-    }
-    
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 10.0
     }
@@ -298,6 +294,10 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
             self.reloadData()
             
         }
+    }
+    
+    func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
+        print("WHO DAT!")
     }
     
     func currentMatches() -> [String]{
