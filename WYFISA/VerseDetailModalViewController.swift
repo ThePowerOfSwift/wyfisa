@@ -18,7 +18,6 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     @IBOutlet var versesTable: UITableView!
     @IBOutlet var footerMask: UIImageView!
     @IBOutlet var splitSwitch: UISwitch!
-    @IBOutlet var shareButton: UIButton!
     
     var themer = WYFISATheme.sharedInstance
     var verseInfo: VerseInfo? = nil
@@ -76,6 +75,8 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         self.versesTable.delegate = self
         
         self.chapterTextView.delegate = self
+        
+
     }
     
     // scroll to middle of screen when view appears
@@ -277,10 +278,14 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
 
     }
     
-    func didRemoveCell(sender: VerseTableViewCell){
+    func didTapInfoButtonForVerse(verse: VerseInfo){
         //
     }
     
+    func didRemoveCell(sender: VerseTableViewCell){
+        //
+    }
+        
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         
         // save current possition of scrolling view
@@ -311,7 +316,6 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         Animations.start(0.2){
             self.footerMask.alpha = 0
             self.splitSwitch.alpha = 0
-            self.shareButton.alpha = 0
         }
         self.footerIsHidden = true
     }
@@ -320,7 +324,6 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         Animations.start(0.2){
             self.footerMask.alpha = 0.90
             self.splitSwitch.alpha = 1
-            self.shareButton.alpha = 1
         }
         self.footerIsHidden = false
     }
@@ -342,43 +345,6 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         } else {
             self.footerMask.image = UIImage(named: "footer-mask")
         }
-    }
-    
-    // sharing
-    @IBAction func didPressShareButton(sender: AnyObject) {
-        
-        /*
-        // set up activity view controller
-        let objectsToShare = [verseInfo?.text as! AnyObject]
-        
-        let activityViewController = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-        activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
-        
-        // exclude some activity types from the list (optional)
-        activityViewController.excludedActivityTypes = [ UIActivityTypeAirDrop, UIActivityTypePostToFacebook ]
-        
-        // present the view controller
-        self.presentViewController(activityViewController, animated: true, completion: nil)
-
-         */
-        
-        if let vc = SLComposeViewController(forServiceType: SLServiceTypeTwitter) {
-
-            if let verse = self.verseInfo {
-                vc.setInitialText(verse.text)
-                if let image = verse.image {
-                    vc.addImage(image)
-                }
-            }
-            
-            presentViewController(vc, animated: true, completion: nil)
-
-            /*vc.setInitialText("Look at this great picture!")
-            vc.add(UIImage(named: "myImage.jpg")!)
-            vc.add(URL(string: "https://www.hackingwithswift.com"))
-            present(vc, animated: true)*/
-        }
-
     }
     
 }

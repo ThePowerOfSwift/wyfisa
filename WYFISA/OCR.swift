@@ -30,7 +30,6 @@ class OCR: NSObject, G8TesseractDelegate {
         tesseract.image = image
         if tesseract.recognize() == true {
             recognizedText = tesseract.recognizedText
-            print(recognizedText)
         }
 
         self.ocrLock.unlock()
@@ -39,6 +38,7 @@ class OCR: NSObject, G8TesseractDelegate {
     }
     
     func cropScaleAndFilter(sourceImage: UIImage!) -> UIImage {
+        return sourceImage
         
         let cropFilter = ImageFilter.cropFilter(0.05, y: 0.05, width: 0.90, height: 0.35)
         let croppedImage = cropFilter.imageByFilteringImage(sourceImage)
@@ -48,7 +48,13 @@ class OCR: NSObject, G8TesseractDelegate {
         
         // threshold
         let thresholdFilter = ImageFilter.thresholdFilter(40.0)
-        let image = thresholdFilter.imageByFilteringImage(scaledImage)
+        var image = thresholdFilter.imageByFilteringImage(scaledImage)
+        
+        // when filtering fails just use source image
+        if image == nil {
+            print("NO IMAGE")
+            image = sourceImage
+        }
         
         return image
     }

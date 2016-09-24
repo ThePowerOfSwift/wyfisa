@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		03D9939342D1214AF88170B2 /* Pods_WYFISAUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1EF753F08E13D92347CDF4F /* Pods_WYFISAUITests.framework */; };
+		954FFDB866B56F5FF0C0573C /* Pods_TurnTo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B32BF3A7CEE94D0D2A728939 /* Pods_TurnTo.framework */; };
 		98D7016DCF5935DB2A5AD85C /* Pods_WYFISATests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231106650F4EB642E443C0B1 /* Pods_WYFISATests.framework */; };
 		C312DE531D6C5A5E0098D0C5 /* WYFISATheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C312DE521D6C5A5E0098D0C5 /* WYFISATheme.swift */; };
 		C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */; };
@@ -15,6 +16,7 @@
 		C31A7BC61D7FB4D400654753 /* WYFISATutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31A7BC41D7FB4D400654753 /* WYFISATutViewController.swift */; };
 		C31A7BC71D7FB4D400654753 /* WYFISATutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31A7BC51D7FB4D400654753 /* WYFISATutViewController.xib */; };
 		C323F3D71D86EE5B00A7EC95 /* SearchBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */; };
+		C338AF381D964B2F004E5E97 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C338AF371D964B2F004E5E97 /* InfoViewController.swift */; };
 		C34C52341D472E1A001E5F1A /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = C39090CF1D2C9C88000DFD15 /* tessdata */; };
 		C371D0931D44623F00F944CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C390907D1D2C9AF8000DFD15 /* Assets.xcassets */; };
 		C374B4A01D8CF4600083366E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C374B49F1D8CF4600083366E /* SettingsViewController.swift */; };
@@ -69,6 +71,8 @@
 		231106650F4EB642E443C0B1 /* Pods_WYFISATests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WYFISATests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9BF9E9813626DC314D056D /* Pods-WYFISAUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISAUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISAUITests/Pods-WYFISAUITests.release.xcconfig"; sourceTree = "<group>"; };
 		9A9540C1BF0C453DF155597D /* Pods-WYFISA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISA.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISA/Pods-WYFISA.debug.xcconfig"; sourceTree = "<group>"; };
+		B32BF3A7CEE94D0D2A728939 /* Pods_TurnTo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TurnTo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7CA6EF516FA081AC3336C39 /* Pods-TurnTo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TurnTo.release.xcconfig"; path = "Pods/Target Support Files/Pods-TurnTo/Pods-TurnTo.release.xcconfig"; sourceTree = "<group>"; };
 		C036CFC08D857FBD0986B028 /* Pods-WYFISATests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISATests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISATests/Pods-WYFISATests.debug.xcconfig"; sourceTree = "<group>"; };
 		C312DE521D6C5A5E0098D0C5 /* WYFISATheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISATheme.swift; sourceTree = "<group>"; };
 		C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseDetailModalViewController.swift; sourceTree = "<group>"; };
@@ -76,6 +80,7 @@
 		C31A7BC41D7FB4D400654753 /* WYFISATutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISATutViewController.swift; sourceTree = "<group>"; };
 		C31A7BC51D7FB4D400654753 /* WYFISATutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WYFISATutViewController.xib; sourceTree = "<group>"; };
 		C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchBarViewController.swift; path = ../SearchBarViewController.swift; sourceTree = "<group>"; };
+		C338AF371D964B2F004E5E97 /* InfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoViewController.swift; path = ../InfoViewController.swift; sourceTree = "<group>"; };
 		C374B49F1D8CF4600083366E /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C379515C1D43D5F4003FB4F5 /* books.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = books.json; sourceTree = "<group>"; };
 		C379515F1D43D62A003FB4F5 /* Books.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Books.swift; sourceTree = "<group>"; };
@@ -111,6 +116,7 @@
 		C3F53B951D37499700E2F80D /* DBQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBQuery.swift; sourceTree = "<group>"; };
 		C3FB946B1D3F0F3E00736196 /* t_web.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = t_web.db; sourceTree = "<group>"; };
 		D1EF753F08E13D92347CDF4F /* Pods_WYFISAUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WYFISAUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2F27709CA69FB9B452B1096 /* Pods-TurnTo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TurnTo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TurnTo/Pods-TurnTo.debug.xcconfig"; sourceTree = "<group>"; };
 		DFB37D9B6C6699CDF4F5D6A3 /* Pods-WYFISATests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISATests.release.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISATests/Pods-WYFISATests.release.xcconfig"; sourceTree = "<group>"; };
 		E61390F4B2C52154413DE31F /* Pods-WYFISAUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISAUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISAUITests/Pods-WYFISAUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		E9F4F8F88AD130A5788730D0 /* Pods-WYFISA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISA.release.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISA/Pods-WYFISA.release.xcconfig"; sourceTree = "<group>"; };
@@ -127,6 +133,7 @@
 				C39090D81D2CA67B000DFD15 /* CoreImage.framework in Frameworks */,
 				C39090D61D2CA66D000DFD15 /* libstdc++.tbd in Frameworks */,
 				E9F216893D0E1E4547F5A8C2 /* Pods_WYFISA.framework in Frameworks */,
+				954FFDB866B56F5FF0C0573C /* Pods_TurnTo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,6 +164,7 @@
 				FAB717778A049EF575F54BB1 /* Pods_WYFISA.framework */,
 				231106650F4EB642E443C0B1 /* Pods_WYFISATests.framework */,
 				D1EF753F08E13D92347CDF4F /* Pods_WYFISAUITests.framework */,
+				B32BF3A7CEE94D0D2A728939 /* Pods_TurnTo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -194,6 +202,7 @@
 				C3F53B701D36219400E2F80D /* CameraManager.swift */,
 				C3F53B951D37499700E2F80D /* DBQuery.swift */,
 				C37951651D44306C003FB4F5 /* ImageFilter.swift */,
+				C338AF371D964B2F004E5E97 /* InfoViewController.swift */,
 				C37951611D442023003FB4F5 /* OCR.swift */,
 				C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */,
 				C374B49F1D8CF4600083366E /* SettingsViewController.swift */,
@@ -248,6 +257,8 @@
 				DFB37D9B6C6699CDF4F5D6A3 /* Pods-WYFISATests.release.xcconfig */,
 				E61390F4B2C52154413DE31F /* Pods-WYFISAUITests.debug.xcconfig */,
 				3D9BF9E9813626DC314D056D /* Pods-WYFISAUITests.release.xcconfig */,
+				D2F27709CA69FB9B452B1096 /* Pods-TurnTo.debug.xcconfig */,
+				B7CA6EF516FA081AC3336C39 /* Pods-TurnTo.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -329,6 +340,7 @@
 					C39090721D2C9AF7000DFD15 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = 5B5KD5S2Z5;
+						ProvisioningStyle = Automatic;
 					};
 					C39090861D2C9AF8000DFD15 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -438,7 +450,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WYFISA/Pods-WYFISA-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TurnTo/Pods-TurnTo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		88E0BA67B097546918105B8E /* [CP] Copy Pods Resources */ = {
@@ -453,7 +465,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WYFISA/Pods-WYFISA-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TurnTo/Pods-TurnTo-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C5F260872C3E7F8FC098B02E /* [CP] Copy Pods Resources */ = {
@@ -537,6 +549,7 @@
 				C3F53B901D372C0200E2F80D /* TextMatcher.swift in Sources */,
 				C3F53B961D37499700E2F80D /* DBQuery.swift in Sources */,
 				C37A7E3F1D3ABFF300F37F20 /* WYFISAExtentions.swift in Sources */,
+				C338AF381D964B2F004E5E97 /* InfoViewController.swift in Sources */,
 				C3F53B711D36219400E2F80D /* CameraManager.swift in Sources */,
 				C39090771D2C9AF8000DFD15 /* AppDelegate.swift in Sources */,
 				C323F3D71D86EE5B00A7EC95 /* SearchBarViewController.swift in Sources */,
@@ -633,6 +646,7 @@
 				PROVISIONING_PROFILE = "c4616784-547c-4722-82ca-fdac9e741a4b";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -673,26 +687,29 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE = "c4616784-547c-4722-82ca-fdac9e741a4b";
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 2.3;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 		C390909C1D2C9AF8000DFD15 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9A9540C1BF0C453DF155597D /* Pods-WYFISA.debug.xcconfig */;
+			baseConfigurationReference = D2F27709CA69FB9B452B1096 /* Pods-TurnTo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Tommie McAfee (FYYPPK2H2M)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Tommie McAfee (FYYPPK2H2M)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = WYFISA/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = " -lstdc++";
 				PRODUCT_BUNDLE_IDENTIFIER = com.riserunllc.WYFISA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f76874b9-f307-41c8-9498-7d76e75434a6";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "WYFISA-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -700,20 +717,22 @@
 		};
 		C390909D1D2C9AF8000DFD15 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E9F4F8F88AD130A5788730D0 /* Pods-WYFISA.release.xcconfig */;
+			baseConfigurationReference = B7CA6EF516FA081AC3336C39 /* Pods-TurnTo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Tommie McAfee (FYYPPK2H2M)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Tommie McAfee (FYYPPK2H2M)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = WYFISA/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = " -lstdc++";
 				PRODUCT_BUNDLE_IDENTIFIER = com.riserunllc.WYFISA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f76874b9-f307-41c8-9498-7d76e75434a6";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "WYFISA-Bridging-Header.h";
 			};
 			name = Release;

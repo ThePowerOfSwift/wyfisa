@@ -72,3 +72,20 @@ extension UIColor {
         return UIColor.init(white: 0.95, alpha: alpha)
     }
 }
+
+class UnderlinedLabel: UILabel {
+    var isUnderlined: Bool = true
+    override var text: String! {
+        
+        didSet {
+            let textRange = NSMakeRange(0, text.length)
+            let attributedText = NSMutableAttributedString(string: text)
+            if self.isUnderlined == true {
+                attributedText.addAttribute(NSUnderlineStyleAttributeName , value:NSUnderlineStyle.StyleSingle.rawValue, range: textRange)
+                attributedText.addAttribute(NSUnderlineColorAttributeName , value:UIColor.teal(), range: textRange)
+            }
+            
+            self.attributedText = attributedText
+        }
+    }
+}

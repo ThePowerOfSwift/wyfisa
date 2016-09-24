@@ -160,6 +160,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         return VerseTableViewCell(style: .Default, reuseIdentifier: nil)
     }
     
+    
     // MARK: Header
     func heightForHeaderSection() -> CGFloat {
         var headerHeight = self.initHeaderHeight
@@ -295,6 +296,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
             
         }
     }
+    
     
     func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
         print("WHO DAT!")

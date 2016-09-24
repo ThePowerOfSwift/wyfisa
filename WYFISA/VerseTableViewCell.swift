@@ -10,6 +10,7 @@ import UIKit
 
 protocol VerseTableViewCellDelegate: class {
     func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo)
+    func didTapInfoButtonForVerse(verse: VerseInfo)
     func didRemoveCell(sender: VerseTableViewCell)
 }
 
@@ -19,6 +20,7 @@ class VerseTableViewCell: UITableViewCell {
     @IBOutlet var labelText: UILabel!
     @IBOutlet var searchIcon: UIImageView!
 
+    @IBOutlet var moreButton: UIButton!
     weak var delegate:VerseTableViewCellDelegate?
     var verseInfo: VerseInfo?
     let db = DBQuery.sharedInstance
@@ -127,6 +129,13 @@ class VerseTableViewCell: UITableViewCell {
 
         // append to cell
         if let verse = verseInfo {
+            self.delegate?.didTapInfoButtonForVerse(verse)
+        }
+        
+    }
+    @IBAction func didTapMoreButton(sender: AnyObject) {
+        // append to cell
+        if let verse = verseInfo {
             let chapter = db.chapterForVerse(verse.id)
             let refs = db.crossReferencesForVerse(verse.id)
             let verses = db.versesForChapter(verse.id)
@@ -135,7 +144,6 @@ class VerseTableViewCell: UITableViewCell {
             verse.verses = verses
             self.delegate?.didTapMoreButtonForCell(self, withVerseInfo: verse)
         }
-        
     }
     
     override func setSelected(selected: Bool, animated: Bool) {

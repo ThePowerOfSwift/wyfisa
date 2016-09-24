@@ -23,7 +23,7 @@ struct CaptureSession {
         return self.newMatches > 0
     }
 }
-class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCellDelegate, UIScrollViewDelegate, UISearchBarDelegate {
+class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCellDelegate, UIScrollViewDelegate, UISearchBarDelegate, UIPopoverPresentationControllerDelegate {
 
     @IBOutlet var debugWindow: GPUImageView!
     @IBOutlet var verseTable: VerseTableView!
@@ -256,6 +256,10 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         }
     }
     
+    func didTapInfoButtonForVerse(verse: VerseInfo){
+        performSegueWithIdentifier("infosegue", sender: (verse as! AnyObject))
+    }
+    
     func didRemoveCell(sender: VerseTableViewCell) {
         // update session matches to reflect new set of cells
         self.session.matches = self.verseTable.currentMatches()
@@ -284,6 +288,33 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             toVc.verseInfo = verse
         }
         
+        if segue.identifier == "infosegue" {
+            let toVc = segue.destinationViewController as! InfoViewController
+            
+            // make a partial controller
+            let width = self.view.frame.width
+            toVc.preferredContentSize = CGSize(width:width, height: 460)
+            let controller = toVc.popoverPresentationController
+            controller?.delegate = self
+            controller?.sourceView = self.captureBox
+            controller?.sourceRect = CGRect(x:CGRectGetMidX(self.view.bounds),
+                                            y: CGRectGetMidY(self.view.bounds)*0.70,
+                                            width: width,
+                                            height: 420)
+            controller?.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
+
+            self.escapeMask.alpha = 0
+            self.escapeMask.hidden = false
+            
+            Animations.start(0.3){
+                self.escapeMask.backgroundColor = UIColor.navy(1.0)
+                self.escapeMask.alpha = 0.7
+            }
+            let verse = sender as! VerseInfo
+            toVc.verseInfo = verse
+            toVc.doneCallback = self.hideEscapeMask
+        }
+        
         if segue.identifier == "searchsegue" {
             let toVc = segue.destinationViewController as! SearchBarViewController
             toVc.escapeMask = self.escapeMask
@@ -294,6 +325,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
 
         
      }
+    
     
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         
@@ -354,6 +386,12 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
     }
     
+    @IBAction func unwindFromInfo(segue: UIStoryboardSegue) {
+        self.escapeMask.backgroundColor = UIColor.clearColor()
+        self.escapeMask.hidden = true
+    }
+    
+
     override func prefersStatusBarHidden() -> Bool {
         return false
     }
@@ -377,6 +415,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         if let delegate = self.searchBar.delegate {
            delegate.searchBarTextDidEndEditing!(self.searchBar)
         }
+        
     }
     
     func updateEditingView(toMode: Bool){
@@ -434,6 +473,19 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             self.verseTable.setEditing(false, animated: true)
             self.updateEditingView(false)
         }
+    }
+    
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.None
+    }
+    
+    func popoverPresentationControllerDidDismissPopover(popoverPresentationController: UIPopoverPresentationController) {
+        self.hideEscapeMask()
+    }
+    
+    func hideEscapeMask(){
+        self.escapeMask.backgroundColor = UIColor.clearColor()
+        self.escapeMask.hidden = true
     }
 
 }
