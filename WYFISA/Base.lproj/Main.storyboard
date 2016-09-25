@@ -535,69 +535,61 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="4my-bg-pw1">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u1X-u8-pet">
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <gestureRecognizers/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Agape Philaeo">
+                                        <attributes>
+                                            <color key="NSColor" red="0.16862745098039217" green="0.20784313725490197" blue="0.22352941176470589" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="19" name="IowanOldStyle-Roman"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="3Wt-Yc-yyG" appends="YES" id="bG8-jH-BuU"/>
+                                </connections>
+                            </textView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Prk-Vd-cIZ">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="3wr-4G-kpu">
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="3wr-4G-kpu">
-                                        <subviews>
-                                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="252" horizontalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sf8-X6-AXi">
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="60" id="7Ct-Ta-Mjf"/>
-                                                    <constraint firstAttribute="height" constant="60" id="9RT-Kk-Frc"/>
-                                                </constraints>
-                                                <state key="normal" image="ios7-upload-outline"/>
-                                            </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="753" text="Eph 5:23" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="hwY-Ut-19P">
-                                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="30"/>
-                                                <color key="textColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OEX-Xc-Ke8">
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="60" id="ASD-YS-4JR"/>
-                                                    <constraint firstAttribute="width" constant="60" id="I89-Su-lAJ"/>
-                                                </constraints>
-                                                <state key="normal" image="close-fire"/>
-                                                <connections>
-                                                    <action selector="didPressCloseButton:" destination="MHR-2x-CaL" eventType="touchUpInside" id="xvs-F9-1g4"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                    </stackView>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4et-yh-1i5">
-                                        <segments>
-                                            <segment title="Chapter"/>
-                                            <segment title="Related"/>
-                                        </segments>
-                                        <color key="tintColor" red="0.68627450980392157" green="0.74901960784313726" blue="0.76470588235294112" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <connections>
-                                            <action selector="didTapBarSegment:" destination="MHR-2x-CaL" eventType="valueChanged" id="g3f-9y-Jgd"/>
-                                        </connections>
-                                    </segmentedControl>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Xmx-oq-V3j">
-                                        <subviews>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u1X-u8-pet">
-                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <attributedString key="attributedText">
-                                                    <fragment content="Agape Philaeo">
-                                                        <attributes>
-                                                            <color key="NSColor" red="0.16862745098039217" green="0.20784313725490197" blue="0.22352941176470589" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <font key="NSFont" size="19" name="IowanOldStyle-Roman"/>
-                                                        </attributes>
-                                                    </fragment>
-                                                </attributedString>
-                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                            </textView>
-                                        </subviews>
+                                    <button opaque="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="252" horizontalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sf8-X6-AXi">
                                         <constraints>
-                                            <constraint firstItem="u1X-u8-pet" firstAttribute="width" secondItem="Xmx-oq-V3j" secondAttribute="width" id="0Wb-YB-di1"/>
+                                            <constraint firstAttribute="width" constant="60" id="7Ct-Ta-Mjf"/>
+                                            <constraint firstAttribute="height" constant="60" id="9RT-Kk-Frc"/>
                                         </constraints>
-                                    </stackView>
+                                        <state key="normal" image="ios7-upload-outline"/>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="753" text="Eph 5:23" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="hwY-Ut-19P">
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="30"/>
+                                        <color key="textColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OEX-Xc-Ke8">
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="ASD-YS-4JR"/>
+                                            <constraint firstAttribute="width" constant="60" id="I89-Su-lAJ"/>
+                                        </constraints>
+                                        <state key="normal" image="close-fire"/>
+                                        <connections>
+                                            <action selector="didPressCloseButton:" destination="MHR-2x-CaL" eventType="touchUpInside" id="xvs-F9-1g4"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstItem="3wr-4G-kpu" firstAttribute="width" secondItem="4my-bg-pw1" secondAttribute="width" id="0Xe-ah-L39"/>
-                                    <constraint firstItem="Xmx-oq-V3j" firstAttribute="width" secondItem="4my-bg-pw1" secondAttribute="width" id="UJ3-17-RK6"/>
-                                </constraints>
                             </stackView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4et-yh-1i5">
+                                <segments>
+                                    <segment title="Chapter"/>
+                                    <segment title="Related"/>
+                                </segments>
+                                <color key="tintColor" red="0.68627450980392157" green="0.74901960784313726" blue="0.76470588235294112" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="didTapBarSegment:" destination="MHR-2x-CaL" eventType="valueChanged" id="g3f-9y-Jgd"/>
+                                </connections>
+                            </segmentedControl>
                             <tableView clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fCs-7e-QiV">
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                             </tableView>
@@ -621,21 +613,31 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="Znv-hn-BmV" firstAttribute="centerY" secondItem="YAU-Ng-BQl" secondAttribute="centerY" id="2OW-BB-pOd"/>
-                            <constraint firstItem="fCs-7e-QiV" firstAttribute="centerY" secondItem="u1X-u8-pet" secondAttribute="centerY" id="6Eo-Ew-KFA"/>
-                            <constraint firstItem="uX5-vI-3LW" firstAttribute="centerY" secondItem="u1X-u8-pet" secondAttribute="centerY" id="7Xx-Cu-9NN"/>
-                            <constraint firstItem="uX5-vI-3LW" firstAttribute="height" secondItem="u1X-u8-pet" secondAttribute="height" id="Gb3-qO-Jy5"/>
-                            <constraint firstItem="fCs-7e-QiV" firstAttribute="centerX" secondItem="u1X-u8-pet" secondAttribute="centerX" id="IVf-gQ-ixf"/>
-                            <constraint firstItem="uX5-vI-3LW" firstAttribute="width" secondItem="u1X-u8-pet" secondAttribute="width" id="Ixq-xs-wyZ"/>
-                            <constraint firstItem="YAU-Ng-BQl" firstAttribute="bottom" secondItem="u1X-u8-pet" secondAttribute="bottom" id="JkN-Wk-Y8v"/>
-                            <constraint firstItem="4my-bg-pw1" firstAttribute="leading" secondItem="NAF-BE-PDL" secondAttribute="leadingMargin" id="PI5-Ta-Lcc"/>
+                            <constraint firstItem="uX5-vI-3LW" firstAttribute="centerX" secondItem="NAF-BE-PDL" secondAttribute="centerX" id="5XH-Sa-ahM"/>
+                            <constraint firstItem="Prk-Vd-cIZ" firstAttribute="bottom" secondItem="4et-yh-1i5" secondAttribute="bottom" constant="20" id="7ZL-VK-4UY"/>
+                            <constraint firstItem="4et-yh-1i5" firstAttribute="centerX" secondItem="3wr-4G-kpu" secondAttribute="centerX" id="BH7-n7-kbY"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="3wr-4G-kpu" secondAttribute="leading" id="BUx-10-C4i"/>
+                            <constraint firstItem="Prk-Vd-cIZ" firstAttribute="width" secondItem="NAF-BE-PDL" secondAttribute="width" id="Fhd-ok-14v"/>
+                            <constraint firstItem="uX5-vI-3LW" firstAttribute="top" secondItem="4et-yh-1i5" secondAttribute="bottom" constant="20" id="G6a-JT-vug"/>
+                            <constraint firstItem="dn5-VG-3di" firstAttribute="top" secondItem="u1X-u8-pet" secondAttribute="bottom" id="GBZ-vb-tdQ"/>
+                            <constraint firstItem="u1X-u8-pet" firstAttribute="width" secondItem="NAF-BE-PDL" secondAttribute="width" id="HoX-rC-l1r"/>
+                            <constraint firstItem="Prk-Vd-cIZ" firstAttribute="centerX" secondItem="NAF-BE-PDL" secondAttribute="centerX" id="JF8-Zz-A3p"/>
+                            <constraint firstItem="u1X-u8-pet" firstAttribute="centerX" secondItem="NAF-BE-PDL" secondAttribute="centerX" id="KBH-5e-0zf"/>
+                            <constraint firstItem="fCs-7e-QiV" firstAttribute="width" secondItem="uX5-vI-3LW" secondAttribute="width" id="KTu-9B-hhw"/>
+                            <constraint firstItem="dn5-VG-3di" firstAttribute="top" secondItem="uX5-vI-3LW" secondAttribute="bottom" id="Qbm-Ie-aPN"/>
                             <constraint firstItem="Znv-hn-BmV" firstAttribute="centerX" secondItem="YAU-Ng-BQl" secondAttribute="centerX" id="Rnt-1y-EqV"/>
-                            <constraint firstItem="fCs-7e-QiV" firstAttribute="width" secondItem="u1X-u8-pet" secondAttribute="width" id="UIO-GZ-w7d"/>
-                            <constraint firstItem="4my-bg-pw1" firstAttribute="height" secondItem="NAF-BE-PDL" secondAttribute="height" multiplier="0.9" id="feD-5P-eKQ"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="4my-bg-pw1" secondAttribute="trailing" id="hJY-x5-O7N"/>
-                            <constraint firstItem="fCs-7e-QiV" firstAttribute="height" secondItem="u1X-u8-pet" secondAttribute="height" id="ieY-7M-SKb"/>
+                            <constraint firstItem="u1X-u8-pet" firstAttribute="centerY" secondItem="NAF-BE-PDL" secondAttribute="centerY" id="TqG-tr-V3c"/>
+                            <constraint firstItem="4et-yh-1i5" firstAttribute="top" secondItem="3wr-4G-kpu" secondAttribute="bottom" id="Xrf-DR-aTG"/>
+                            <constraint firstItem="uX5-vI-3LW" firstAttribute="width" secondItem="NAF-BE-PDL" secondAttribute="width" id="ZCE-mv-Akd"/>
+                            <constraint firstItem="fCs-7e-QiV" firstAttribute="centerX" secondItem="uX5-vI-3LW" secondAttribute="centerX" id="ZMf-AP-9Fa"/>
+                            <constraint firstItem="3wr-4G-kpu" firstAttribute="top" secondItem="K9n-H3-z42" secondAttribute="bottom" id="a2o-k6-DKf"/>
+                            <constraint firstItem="Prk-Vd-cIZ" firstAttribute="top" secondItem="K9n-H3-z42" secondAttribute="bottom" id="did-Hg-CrX"/>
                             <constraint firstItem="YAU-Ng-BQl" firstAttribute="centerX" secondItem="NAF-BE-PDL" secondAttribute="centerX" id="lpu-ZV-wqD"/>
-                            <constraint firstItem="uX5-vI-3LW" firstAttribute="centerX" secondItem="u1X-u8-pet" secondAttribute="centerX" id="uz4-qD-4MN"/>
-                            <constraint firstItem="4my-bg-pw1" firstAttribute="top" secondItem="K9n-H3-z42" secondAttribute="bottom" constant="20" id="vNi-B7-fcE"/>
+                            <constraint firstItem="u1X-u8-pet" firstAttribute="top" secondItem="K9n-H3-z42" secondAttribute="bottom" id="mI3-Qi-zMg"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="3wr-4G-kpu" secondAttribute="trailing" id="pea-30-8j9"/>
+                            <constraint firstItem="fCs-7e-QiV" firstAttribute="centerY" secondItem="uX5-vI-3LW" secondAttribute="centerY" id="sQd-aB-1fe"/>
+                            <constraint firstItem="dn5-VG-3di" firstAttribute="top" secondItem="YAU-Ng-BQl" secondAttribute="bottom" constant="20" id="t2Z-Zj-ZSg"/>
+                            <constraint firstItem="fCs-7e-QiV" firstAttribute="height" secondItem="uX5-vI-3LW" secondAttribute="height" id="toh-XF-WpS"/>
                             <constraint firstItem="YAU-Ng-BQl" firstAttribute="width" secondItem="NAF-BE-PDL" secondAttribute="width" id="xny-W7-Kdf"/>
                         </constraints>
                     </view>
@@ -643,6 +645,8 @@
                     <connections>
                         <outlet property="chapterTextView" destination="u1X-u8-pet" id="4BJ-7i-FKF"/>
                         <outlet property="footerMask" destination="YAU-Ng-BQl" id="dxF-xO-pev"/>
+                        <outlet property="navBackgroundView" destination="Prk-Vd-cIZ" id="bsW-EB-55U"/>
+                        <outlet property="navStackView" destination="3wr-4G-kpu" id="3jE-LT-rG8"/>
                         <outlet property="referenceTable" destination="fCs-7e-QiV" id="9Eg-zo-mPV"/>
                         <outlet property="segmentBar" destination="4et-yh-1i5" id="PYe-Sf-4ek"/>
                         <outlet property="splitSwitch" destination="Znv-hn-BmV" id="Exp-b0-lHc"/>
@@ -651,6 +655,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aHf-VD-Hmb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="3Wt-Yc-yyG">
+                    <connections>
+                        <action selector="didTapChapterText:" destination="MHR-2x-CaL" id="bTj-Dx-d5O"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-679" y="3036"/>
         </scene>

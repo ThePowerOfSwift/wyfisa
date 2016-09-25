@@ -18,6 +18,8 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     @IBOutlet var versesTable: UITableView!
     @IBOutlet var footerMask: UIImageView!
     @IBOutlet var splitSwitch: UISwitch!
+    @IBOutlet var navStackView: UIStackView!
+    @IBOutlet var navBackgroundView: UIView!
     
     var themer = WYFISATheme.sharedInstance
     var verseInfo: VerseInfo? = nil
@@ -26,6 +28,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     var lastScrollPos: CGFloat = 0
     var footerIsHidden: Bool = false
     var didShowSplitVerseOnce: Bool = false
+    var navIsHidden: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad() 
@@ -153,6 +156,9 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         
         // hide unlreated views
         self.fadeOutInChapterVerseStack()
+        
+        // make sure nav is showing
+        self.showNavArea()
     }
     
     
@@ -312,12 +318,21 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     }
     
     
+    @IBAction func didTapChapterText(sender: UITapGestureRecognizer) {
+        self.toggleNavArea()
+    }
+    
     func hideFooterMask(){
         Animations.start(0.2){
             self.footerMask.alpha = 0
             self.splitSwitch.alpha = 0
         }
         self.footerIsHidden = true
+        
+        if self.navIsHidden == false {
+            self.hideNavArea()
+        }
+        
     }
     
     func showFooterMask(){
@@ -326,7 +341,36 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             self.splitSwitch.alpha = 1
         }
         self.footerIsHidden = false
+        if self.navIsHidden == true {
+            self.showNavArea()
+        }
     }
+    
+    func showNavArea(){
+        self.navIsHidden = false
+        Animations.start(0.5){
+            self.navStackView.alpha = 1.0
+            self.segmentBar.alpha = 1.0
+            self.navBackgroundView.alpha = 1.0
+        }
+    }
+    
+    func hideNavArea(){
+        self.navIsHidden = true
+        Animations.start(0.5){
+            self.navStackView.alpha = 0.0
+            self.segmentBar.alpha = 0.0
+            self.navBackgroundView.alpha = 0.0
+        }
+    }
+    func toggleNavArea(){
+        if self.navIsHidden == true {
+            self.showNavArea()
+        } else {
+            self.hideNavArea()
+        }
+    }
+    
     func footerMaskEnabled() -> Bool {
         return self.segmentBar.selectedSegmentIndex == 0
     }
