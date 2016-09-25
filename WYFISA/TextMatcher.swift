@@ -17,6 +17,8 @@ class VerseInfo {
     var session: UInt64 = 0
     var text: String?
     var chapter: String?
+    var chapterNo: Int?
+    var bookNo: Int?
     var verse: Int?
     var image: UIImage?
     var refs: [VerseInfo]?
@@ -98,6 +100,8 @@ class TextMatcher {
             let verseId = String(format: "%03d", Int(verse)!)
             let id = "\(bookIdStr)\(chapterId)\(verseId)"
             let info = VerseInfo(id: id, name: matchedText, text: "Not Found")
+            info.bookNo = bookId
+            info.chapterNo = Int(chapter)
             info.verse = Int(verse)
     
             if verseInfos == nil {

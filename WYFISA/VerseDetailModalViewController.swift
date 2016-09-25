@@ -20,8 +20,12 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     @IBOutlet var splitSwitch: UISwitch!
     @IBOutlet var navStackView: UIStackView!
     @IBOutlet var navBackgroundView: UIView!
+    @IBOutlet var nextChapterButton: UIButton!
+    @IBOutlet var prevChapterButton: UIButton!
+    
     
     var themer = WYFISATheme.sharedInstance
+    var db = DBQuery.sharedInstance
     var verseInfo: VerseInfo? = nil
     var startViewPos: Int = 0
     var splitMode: Bool = false
@@ -29,13 +33,22 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     var footerIsHidden: Bool = false
     var didShowSplitVerseOnce: Bool = false
     var navIsHidden: Bool = false
+    var nextVerse: VerseInfo? = nil
+    var prevVerse: VerseInfo? = nil
     
     override func viewDidLoad() {
-        super.viewDidLoad() 
-        
+        super.viewDidLoad()
+        initView()
+    }
+    
+    func initView() {
+
         // apply color schema
         self.applyColorSchema()
-        
+
+        // show hide next/prev buttons
+        self.setupNextPrevButtons()
+
         // Do any additional setup after loading the view.
         if let verse = verseInfo {
             self.verseLabel.text = verse.name
@@ -325,13 +338,24 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     }
     
     func hideFooterMask(){
+        
+        if self.splitSwitch.on == true && self.segmentBar.selectedSegmentIndex == 0 {
+            return // cannot be in split mode on screen 0
+        }
+        
         Animations.start(0.2){
             self.footerMask.alpha = 0
             self.splitSwitch.alpha = 0
+            if self.nextVerse != nil {
+                self.nextChapterButton.alpha = 0
+            }
+            if self.prevVerse != nil {
+                self.prevChapterButton.alpha = 0
+            }
         }
         self.footerIsHidden = true
         
-        if self.navIsHidden == false {
+        if self.navIsHidden == false && self.segmentBar.selectedSegmentIndex == 0 {
             self.hideNavArea()
         }
         
@@ -341,6 +365,12 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         Animations.start(0.2){
             self.footerMask.alpha = 0.90
             self.splitSwitch.alpha = 1
+            if self.nextVerse != nil {
+                self.nextChapterButton.alpha = 1
+            }
+            if self.prevVerse != nil {
+                self.prevChapterButton.alpha = 1
+            }
         }
         self.footerIsHidden = false
         if self.navIsHidden == true {
@@ -381,6 +411,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         }
     }
     
+    
     func footerMaskEnabled() -> Bool {
         return self.segmentBar.selectedSegmentIndex == 0
     }
@@ -389,6 +420,52 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 
+    @IBAction func didPressNextChapterButton(sender: AnyObject) {
+        self.verseInfo = self.nextVerse
+        self.initView()
+        self.versesTable.reloadData()
+    }
+    
+    @IBAction func didPressPrevChapterButton(sender: AnyObject) {
+        self.verseInfo = self.prevVerse
+        self.initView()
+        self.versesTable.reloadData()
+
+    }
+    
+    func setupNextPrevButtons(){
+        var bookNo = -1
+        var chapterNo = -1
+        
+        if let b = self.verseInfo?.bookNo {
+            bookNo = b
+        }
+        if let c = self.verseInfo?.chapterNo {
+            chapterNo = c
+        }
+        if bookNo == -1 || chapterNo == -1 {
+            return
+        }
+        
+        if let nextVerse = db.nextChapter(bookNo, chapterId: chapterNo){
+            // has next chapter
+            self.nextVerse = nextVerse
+            self.nextChapterButton.alpha = 1.0
+        } else {
+            self.prevChapterButton.alpha = 0.0
+        }
+        
+        if let prevVerse = db.prevChapter(bookNo, chapterId: chapterNo){
+            // has next chapter
+            self.prevVerse = prevVerse
+            self.prevChapterButton.alpha = 1.0
+        } else {
+            self.prevChapterButton.alpha = 0.0
+        }
+
+        
+        
+    }
     func applyColorSchema(){
         let contentBackground = themer.whiteForLightOrNavy(1.0)
         self.view.backgroundColor = contentBackground
@@ -400,6 +477,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         } else {
             self.footerMask.image = UIImage(named: "footer-mask")
         }
+        
     }
     
 }

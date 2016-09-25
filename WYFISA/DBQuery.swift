@@ -81,6 +81,48 @@ class DBQuery {
         return n
     }
     
+    func nextChapter(bookId: Int, chapterId: Int) -> VerseInfo? {
+        
+        // check if next chapter has verses
+        var chapterNo = chapterId+1
+        var bookNo = bookId
+        if let book = Books(rawValue: bookNo) {
+            if chapterNo > book.chapters() {// check if next book has verses
+                chapterNo = 1
+                bookNo = bookId+1
+                let n = self.numChapterVerses(bookNo, chapterId: chapterNo)
+                if n == 0 { // end of bible!
+                    return nil
+                }
+            }
+        }
+
+        // create verseInfo
+        return self.createVerseInfo(bookNo, chapterNo: chapterNo, verseNo: 1)
+
+    }
+    
+    func prevChapter(bookId: Int, chapterId: Int) -> VerseInfo? {
+        
+        // check if next chapter has verses
+        var bookNo = bookId
+        var chapterNo = chapterId - 1
+        if let book = Books(rawValue: bookNo) {
+            if chapterNo == 0 { // check if previous book has verses
+                chapterNo = book.chapters()-1
+                bookNo = bookId-1
+                let n = self.numChapterVerses(bookNo, chapterId: chapterNo)
+                if n == 0 {
+                    return nil
+                }
+            }
+        }
+        
+        // create verseInfo
+        return self.createVerseInfo(bookNo, chapterNo: chapterNo, verseNo: 1)
+
+    }
+    
     func chapterForVerse(verseId: String) -> String {
         var chapter: String = ""
         var chapterVerses = [VerseInfo]()
@@ -108,12 +150,12 @@ class DBQuery {
                     var rc = self.stripText(row.get(bibleCol.text))
                     
                     // create verse singleton
-                    let verseName = "\(bookName) \(chapterId):\(i)"
-                    let bookIdStr = String(format: "%02d", bookId)
-                    let chapterId = String(format: "%03d", chapterId)
-                    let vid = String(format: "%03d", i)
-                    let id = "\(bookIdStr)\(chapterId)\(vid)"
+                    let verseName = self.createVerseName(bookId, chapterNo: chapterId, verseNo: i)!
+                    let id = self.createVerseId(bookId, chapterNo: chapterId, verseNo: i)
                     let verseInfo = VerseInfo.init(id: id, name: verseName, text: rc)
+                    verseInfo.verse = i
+                    verseInfo.bookNo = bookId
+                    verseInfo.chapterNo = chapterId
                     verseInfo.verse = i
                     chapterVerses.append(verseInfo)
 
@@ -183,6 +225,9 @@ class DBQuery {
                     if firstVerse == -1 {
                         firstVerse = verseNo
                     }
+                    verseInfo.bookNo = bookNo
+                    verseInfo.chapterNo = chapterNo
+                    verseInfo.verse = firstVerse
                     if let book = Books(rawValue: bookNo){
                         let bookName = book.name()
                         if startId == endId {
@@ -196,6 +241,7 @@ class DBQuery {
                             }
                         }
                     }
+                    
                     
                     // append text
                     var text = self.stripText(row.get(bibleCol.text))
@@ -234,6 +280,40 @@ class DBQuery {
             .replace("{", with: "(").replace("}", with: ")")
             .strip("&gt; ").strip("&lt; ")
  
+    }
+    
+    func createVerseId(bookNo: Int, chapterNo: Int, verseNo: Int) -> String {
+        let bookIdStr = String(format: "%02d", bookNo)
+        let chapterId = String(format: "%03d", chapterNo)
+        let vid = String(format: "%03d", verseNo)
+        return "\(bookIdStr)\(chapterId)\(vid)"
+    }
+    
+    func createVerseName(bookNo: Int, chapterNo: Int, verseNo: Int) -> String? {
+        var name:String? = nil
+        if let book = Books(rawValue: bookNo) {
+            let bookName = book.name()
+            name = "\(bookName) \(chapterNo):\(verseNo)"
+        }
+        return name
+    }
+    
+    func createVerseInfo(bookNo: Int, chapterNo: Int, verseNo: Int) -> VerseInfo {
+        
+        let verseName = self.createVerseName(bookNo, chapterNo: chapterNo, verseNo: 1)!
+        let id = self.createVerseId(bookNo, chapterNo: chapterNo, verseNo: 1)
+        let verse = VerseInfo.init(id: id, name: verseName, text: nil)
+        
+        let chapter = self.chapterForVerse(verse.id)
+        let refs = self.crossReferencesForVerse(verse.id)
+        let verses = self.versesForChapter(verse.id)
+        verse.chapter = chapter
+        verse.refs = refs
+        verse.verses = verses
+        verse.bookNo = bookNo
+        verse.chapterNo = chapterNo
+        verse.verse = verseNo
+        return verse
     }
     
 }

@@ -134,6 +134,8 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
             let text = self.db.lookupVerse(resultId)
             
             self.resultInfo = VerseInfo(id: resultId, name:name, text: text)
+            self.resultInfo?.bookNo = self.selectedBook
+            self.resultInfo?.chapterNo = self.selectedChapter!+1
 
             self.performSegueWithIdentifier("unwindToMain", sender: self)
             return
