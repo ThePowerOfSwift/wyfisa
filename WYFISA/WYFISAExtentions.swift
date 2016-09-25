@@ -51,6 +51,14 @@ extension String {
     var length: Int {
         return characters.count
     }
+    
+    func trunc(length: Int, trailing: String? = "...") -> String {
+        if self.characters.count > length {
+            return self.substringToIndex(self.startIndex.advancedBy(length)) + (trailing ?? "")
+        } else {
+            return self
+        }
+    }
 }
 
 extension UIColor {

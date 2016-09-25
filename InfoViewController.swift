@@ -58,8 +58,14 @@ class InfoViewController: UIViewController {
     
     @IBAction func didPressShareButton(sender: AnyObject) {
         // set up activity view controller
-        var objectsToShare = [verseInfo?.text as! AnyObject]
-        if let image = verseInfo?.image {
+        var objectsToShare = [AnyObject]()
+        if let text = verseInfo!.text {
+            let textTruncated = text.trunc(80)
+            let shareText = "\(textTruncated) (\(verseInfo!.name)) @turn2app!"
+            objectsToShare.append(shareText)
+        }
+        
+        if let image = self.makeShareImage() {
             objectsToShare.append(image)
         }
         
@@ -74,6 +80,18 @@ class InfoViewController: UIViewController {
         
     }
     
+    func makeShareImage() -> UIImage? {
+        let viewSize = self.view.bounds.size
+        UIGraphicsBeginImageContext(viewSize);
+        self.view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        let screenShot = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        let navOffset = self.navigationBar.frame.height/viewSize.height
+        let cropFilter = ImageFilter.cropFilter(0, y: navOffset, width: 1, height: 0.9)
+        let croppedImage = cropFilter.imageByFilteringImage(screenShot)
+        return croppedImage
+    }
 
     // MARK: - Navigation
 

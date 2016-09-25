@@ -388,6 +388,7 @@
                                         </subviews>
                                         <gestureRecognizers/>
                                         <constraints>
+                                            <constraint firstItem="ggB-0g-XGh" firstAttribute="width" secondItem="eEa-Gj-aYh" secondAttribute="width" multiplier="0.85" id="1oS-Pk-4i4"/>
                                             <constraint firstItem="9Eb-dI-Jp5" firstAttribute="width" secondItem="eEa-Gj-aYh" secondAttribute="width" id="2l1-tg-A6S"/>
                                         </constraints>
                                     </stackView>
@@ -665,9 +666,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="400"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oWP-3t-aXX"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="120 - iPhone Copy 2" translatesAutoresizingMaskIntoConstraints="NO" id="oWP-3t-aXX"/>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Gradient-navy" translatesAutoresizingMaskIntoConstraints="NO" id="kRY-vF-c7s"/>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="UTg-Tz-e7Z">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UTg-Tz-e7Z">
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -694,7 +695,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="5bh-a0-BKO" firstAttribute="top" secondItem="UTg-Tz-e7Z" secondAttribute="bottom" id="45D-IJ-SHc"/>
+                            <constraint firstItem="5bh-a0-BKO" firstAttribute="top" secondItem="UTg-Tz-e7Z" secondAttribute="bottom" constant="20" id="45D-IJ-SHc"/>
                             <constraint firstItem="kRY-vF-c7s" firstAttribute="height" secondItem="oWP-3t-aXX" secondAttribute="height" multiplier="0.6" id="9N5-Fs-qUV"/>
                             <constraint firstItem="qUM-Dg-kMu" firstAttribute="leading" secondItem="Gb6-3N-3A7" secondAttribute="leading" id="9rp-tL-zoC"/>
                             <constraint firstItem="oWP-3t-aXX" firstAttribute="height" secondItem="Gb6-3N-3A7" secondAttribute="height" id="CBf-oN-aKo"/>
@@ -705,7 +706,7 @@
                             <constraint firstItem="qUM-Dg-kMu" firstAttribute="width" secondItem="Gb6-3N-3A7" secondAttribute="width" id="Q8k-kE-S4p"/>
                             <constraint firstItem="qUM-Dg-kMu" firstAttribute="top" secondItem="VjE-CH-34m" secondAttribute="bottom" id="X5N-Gu-5PR"/>
                             <constraint firstItem="oWP-3t-aXX" firstAttribute="centerX" secondItem="Gb6-3N-3A7" secondAttribute="centerX" id="ap0-jY-NSg"/>
-                            <constraint firstItem="UTg-Tz-e7Z" firstAttribute="height" secondItem="oWP-3t-aXX" secondAttribute="height" multiplier="0.25" id="eDg-nq-jbn"/>
+                            <constraint firstItem="UTg-Tz-e7Z" firstAttribute="height" secondItem="oWP-3t-aXX" secondAttribute="height" multiplier="0.3" id="eDg-nq-jbn"/>
                             <constraint firstItem="UTg-Tz-e7Z" firstAttribute="width" secondItem="oWP-3t-aXX" secondAttribute="width" id="lAQ-7d-aVP"/>
                             <constraint firstItem="kRY-vF-c7s" firstAttribute="centerX" secondItem="oWP-3t-aXX" secondAttribute="centerX" id="mzL-7v-5be"/>
                             <constraint firstItem="kRY-vF-c7s" firstAttribute="width" secondItem="oWP-3t-aXX" secondAttribute="width" id="nyk-E4-Cce"/>
@@ -910,6 +911,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="120 - iPhone Copy 2" width="120" height="120"/>
         <image name="Capture" width="375" height="667"/>
         <image name="Find" width="375" height="667"/>
         <image name="Gradient" width="375" height="369"/>

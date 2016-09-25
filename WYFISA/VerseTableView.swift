@@ -154,6 +154,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
             if self.recentVerses.count != 0 {
                 let verse = self.recentVerses[index]
                 verseCell.updateWithVerseInfo(verse, isExpanded: self.isExpanded)
+                verseCell.enableMore = true
                 return verseCell
             }
         }
@@ -210,7 +211,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     func cellHeightForText(text: String) -> CGFloat {
         let font = themer.currentFont()
         var height = text.heightWithConstrainedWidth(self.frame.size.width*0.90,
-                                                     font: font)+font.pointSize
+                                                     font: font)+font.pointSize+15
         
         if height  > 30 { // bigger than a loading text
             height+=50
@@ -282,9 +283,9 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
 
             
             // delete cell from datasource
-            let idxSet = NSIndexSet(index: indexPath.row)
+            let idxSet = NSIndexSet(index: indexPath.section)
             self.nVerses -= 1
-            self.recentVerses.removeAtIndex(indexPath.row)
+            self.recentVerses.removeAtIndex(indexPath.section-1)
             
             // notify cell delegate of removed content
             let cell = tableView.cellForRowAtIndexPath(indexPath) as! VerseTableViewCell
@@ -297,10 +298,6 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    
-    func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
-        print("WHO DAT!")
-    }
     
     func currentMatches() -> [String]{
         var matches = [String]()

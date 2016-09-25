@@ -23,6 +23,7 @@ class VerseTableViewCell: UITableViewCell {
     @IBOutlet var moreButton: UIButton!
     weak var delegate:VerseTableViewCellDelegate?
     var verseInfo: VerseInfo?
+    var enableMore: Bool = false
     let db = DBQuery.sharedInstance
     let themer = WYFISATheme.sharedInstance
 
@@ -45,7 +46,9 @@ class VerseTableViewCell: UITableViewCell {
     func updateWithVerseInfo(verse: VerseInfo, isExpanded: Bool) {
 
         self.backgroundColor = self.themer.whiteForLightOrNavy(0.8)
-
+        if self.enableMore == true {
+            self.moreButton.hidden = false
+        }
         if  verse.id.characters.count > 0 {
             // cell has a verse
             self.verseInfo = verse
@@ -129,13 +132,6 @@ class VerseTableViewCell: UITableViewCell {
 
         // append to cell
         if let verse = verseInfo {
-            self.delegate?.didTapInfoButtonForVerse(verse)
-        }
-        
-    }
-    @IBAction func didTapMoreButton(sender: AnyObject) {
-        // append to cell
-        if let verse = verseInfo {
             let chapter = db.chapterForVerse(verse.id)
             let refs = db.crossReferencesForVerse(verse.id)
             let verses = db.versesForChapter(verse.id)
@@ -143,6 +139,13 @@ class VerseTableViewCell: UITableViewCell {
             verse.refs = refs
             verse.verses = verses
             self.delegate?.didTapMoreButtonForCell(self, withVerseInfo: verse)
+        }
+        
+    }
+    @IBAction func didTapMoreButton(sender: AnyObject) {
+        // append to cell
+        if let verse = verseInfo {
+            self.delegate?.didTapInfoButtonForVerse(verse)
         }
     }
     
