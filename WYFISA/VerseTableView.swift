@@ -153,8 +153,8 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
             let index = indexPath.section - 1
             if self.recentVerses.count != 0 {
                 let verse = self.recentVerses[index]
-                verseCell.updateWithVerseInfo(verse, isExpanded: self.isExpanded)
                 verseCell.enableMore = true
+                verseCell.updateWithVerseInfo(verse, isExpanded: self.isExpanded)
                 return verseCell
             }
         }

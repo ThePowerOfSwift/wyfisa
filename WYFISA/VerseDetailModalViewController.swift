@@ -44,6 +44,8 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             
             // find context start position
             var chapter = verse.chapter!
+            chapter = "\n\n\n\n\(chapter)"
+
             let startIdx = chapter.indexOfCharacter("\u{293}")
             let endIdx = chapter.indexOfCharacter("\u{297}")
             if startIdx == nil || endIdx == nil { return } // no context verse
@@ -51,7 +53,6 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             startViewPos = startIdx!
             chapter = chapter.strip("\u{293}")
             chapter = chapter.strip("\u{297}")
-
             let length = endIdx! - startIdx! - 1
             
             // contextual highlighting for attributed text
@@ -320,6 +321,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     
     @IBAction func didTapChapterText(sender: UITapGestureRecognizer) {
         self.toggleNavArea()
+        self.toggleFooterMask()
     }
     
     func hideFooterMask(){
@@ -343,6 +345,14 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         self.footerIsHidden = false
         if self.navIsHidden == true {
             self.showNavArea()
+        }
+    }
+    
+    func toggleFooterMask(){
+        if self.footerIsHidden == true {
+            self.showFooterMask()
+        } else {
+            self.hideFooterMask()
         }
     }
     
@@ -384,6 +394,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         self.view.backgroundColor = contentBackground
         self.chapterTextView.backgroundColor = contentBackground
         self.verseLabel.textColor = themer.navyForLightOrWhite(1.0)
+        self.navBackgroundView.backgroundColor = themer.whiteForLightOrNavy(1.0)
         if themer.isLight() {
             self.footerMask.image = UIImage(named: "footer-mask-white")
         } else {

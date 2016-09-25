@@ -636,7 +636,7 @@
                             <constraint firstItem="u1X-u8-pet" firstAttribute="top" secondItem="K9n-H3-z42" secondAttribute="bottom" id="mI3-Qi-zMg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3wr-4G-kpu" secondAttribute="trailing" id="pea-30-8j9"/>
                             <constraint firstItem="fCs-7e-QiV" firstAttribute="centerY" secondItem="uX5-vI-3LW" secondAttribute="centerY" id="sQd-aB-1fe"/>
-                            <constraint firstItem="dn5-VG-3di" firstAttribute="top" secondItem="YAU-Ng-BQl" secondAttribute="bottom" constant="20" id="t2Z-Zj-ZSg"/>
+                            <constraint firstItem="dn5-VG-3di" firstAttribute="top" secondItem="YAU-Ng-BQl" secondAttribute="bottom" id="t2Z-Zj-ZSg"/>
                             <constraint firstItem="fCs-7e-QiV" firstAttribute="height" secondItem="uX5-vI-3LW" secondAttribute="height" id="toh-XF-WpS"/>
                             <constraint firstItem="YAU-Ng-BQl" firstAttribute="width" secondItem="NAF-BE-PDL" secondAttribute="width" id="xny-W7-Kdf"/>
                         </constraints>
