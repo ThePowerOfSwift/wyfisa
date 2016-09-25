@@ -38,11 +38,11 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     @IBOutlet var escapeMask: UIView!
     @IBOutlet var searchView: UIView!
     @IBOutlet var searchBar: UISearchBar!
-    let stillCamera = CameraManager.sharedInstance
     let db = DBQuery.sharedInstance
     let themer = WYFISATheme.sharedInstance
     let settings = SettingsManager.sharedInstance
     var session = CaptureSession()
+    var cam: CameraManager? = nil
     var captureLock = NSLock()
     var updateLock = NSLock()
     var workingText = "Scanning"
@@ -67,24 +67,24 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         }
         
         self.firstLaunch = false
+        self.cam = CameraManager()
         
         // send camera to live view
         self.checkCameraAccess()
         self.filterView.fillMode = GPUImageFillModeType.init(2)
         
         // put a gaussian blur on the live view
-        self.stillCamera.addCameraTarget(self.filterView)
+        self.cam?.addCameraTarget(self.filterView)
         
         // camera config
-        stillCamera.zoom(1)
-        stillCamera.focus(.ContinuousAutoFocus)
+        self.cam?.zoom(1)
+        self.cam?.focus(.ContinuousAutoFocus)
         
         // start capture
-        stillCamera.capture()
-        stillCamera.delegate = self
-        stillCamera.pause()
+        self.cam?.delegate = self
     }
     
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.verseTable.reloadData()
@@ -106,6 +106,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
 
         if self.captureLock.tryLock() {
+
             // show capture box
             self.captureBox.hidden = false
 
@@ -119,9 +120,9 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             }
             
             // camera init
-            stillCamera.resume()
+            self.cam?.resume()
             if self.settings.useFlash == true {
-                stillCamera.torch(.On)
+                self.cam?.torch(.On)
             }
 
             // session init
@@ -142,7 +143,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             let asyncQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
             dispatch_async(asyncQueue) {
                 while self.session.currentId == sessionId {
-                    self.stillCamera.recognizeFrameFromCamera(sessionId)
+                    self.cam?.recognizeFrameFromCamera(sessionId)
                 }
             }
             self.captureLock.unlock()
@@ -153,9 +154,10 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     func handleCaptureEnd(){
         
         updateLock.lock()
-        stillCamera.pause()
+        
+        self.cam?.pause()
         if self.settings.useFlash == true {
-            stillCamera.torch(.Off)
+            self.cam?.torch(.Off)
         }
         
         // remove scanning box
@@ -276,7 +278,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
 
          // pause camera
         dispatch_async(dispatch_get_main_queue()) {
-            self.stillCamera.pause()
+            self.cam?.pause()
         }
         
          // Get the new view controller using segue.destinationViewController.
@@ -323,6 +325,8 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             
         }
 
+        // make sure tutorial is gone if we're pressing buttons!
+        self.capTut.hidden = true
         
      }
     
@@ -378,7 +382,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     
         // end session
         self.handleCaptureEnd()
-        
+        self.capTut.hidden = true
         
     }
     

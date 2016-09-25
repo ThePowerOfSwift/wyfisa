@@ -48,7 +48,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
 
         // show hide next/prev buttons
         self.setupNextPrevButtons()
-
+        
         // Do any additional setup after loading the view.
         if let verse = verseInfo {
             self.verseLabel.text = verse.name
@@ -198,8 +198,8 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
                 self.referenceTable.alpha = 1
             }
         }
-        
     }
+
     override func prefersStatusBarHidden() -> Bool {
         return false
     }
@@ -332,9 +332,9 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     }
     
     
-    @IBAction func didTapChapterText(sender: UITapGestureRecognizer) {
-        self.toggleNavArea()
-        self.toggleFooterMask()
+    @IBAction func didTapChapterText(sender: AnyObject) {
+        self.showFooterMask()
+        self.showNavArea()
     }
     
     func hideFooterMask(){
@@ -422,17 +422,34 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
 
     @IBAction func didPressNextChapterButton(sender: AnyObject) {
         self.verseInfo = self.nextVerse
-        self.initView()
-        self.versesTable.reloadData()
+        self.handleChapterChange()
     }
     
     @IBAction func didPressPrevChapterButton(sender: AnyObject) {
         self.verseInfo = self.prevVerse
-        self.initView()
-        self.versesTable.reloadData()
-
+        self.handleChapterChange()
     }
     
+    func handleChapterChange(){
+        
+        // reset state
+        self.nextVerse = nil
+        self.prevVerse = nil
+        
+        // redraw views
+        self.initView()
+        self.versesTable.reloadData()
+        
+        // scroll up to top
+        self.chapterTextView.scrollRectToVisible(CGRect.init(x: 0, y: 0, width: 100, height: 10), animated: false)
+        let path = NSIndexPath.init(forRow: 0, inSection: 0)
+        self.versesTable.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
+     
+        Timing.runAfter(0.5){
+            self.showNavArea()
+            self.showFooterMask()
+        }
+    }
     func setupNextPrevButtons(){
         var bookNo = -1
         var chapterNo = -1
@@ -462,8 +479,6 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         } else {
             self.prevChapterButton.alpha = 0.0
         }
-
-        
         
     }
     func applyColorSchema(){

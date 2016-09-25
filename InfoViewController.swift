@@ -10,7 +10,7 @@ import UIKit
 
 func defaultDoneCallback(){}
 
-class InfoViewController: UIViewController {
+class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet var capturedImage: UIImageView!
     @IBOutlet var textView: UITextView!
@@ -19,7 +19,6 @@ class InfoViewController: UIViewController {
     var doneCallback: ()->Void = defaultDoneCallback
     
     @IBOutlet var navigationBar: UINavigationBar!
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,6 +92,28 @@ class InfoViewController: UIViewController {
         return croppedImage
     }
 
+    @IBAction func didPressCameraButton(sender: AnyObject) {
+    
+        
+        if UIImagePickerController.isSourceTypeAvailable(.PhotoLibrary) == true {
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+            imagePicker.allowsEditing = false
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }
+        
+    }
+
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        let image = info[UIImagePickerControllerOriginalImage] as? UIImage
+        self.verseInfo?.image = image
+        self.capturedImage.image = image
+        picker.dismissViewControllerAnimated(true, completion: nil)
+
+ 
+    }
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation

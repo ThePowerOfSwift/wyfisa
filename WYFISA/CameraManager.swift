@@ -22,10 +22,9 @@ class CameraManager {
     let filter = ImageFilter.genericFilter()
     let ocr: OCR = OCR()
     var simImage: UIImage! = UIImage(named: "oneanother")
+    var captureStarted: Bool = false
     
     weak var delegate:CameraManagerDelegate?
-
-    static let sharedInstance = CameraManager()
 
     init(){
         
@@ -107,7 +106,12 @@ class CameraManager {
     }
     
     func resume(){
-        self.camera.resumeCameraCapture()
+        if self.captureStarted == false {
+            self.capture()
+            self.captureStarted = true
+        } else {
+            self.camera.resumeCameraCapture()
+        }
     }
     
     func setSimImage(image: UIImage){

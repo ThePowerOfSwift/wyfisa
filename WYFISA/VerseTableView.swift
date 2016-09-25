@@ -211,7 +211,7 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     func cellHeightForText(text: String) -> CGFloat {
         let font = themer.currentFont()
         var height = text.heightWithConstrainedWidth(self.frame.size.width*0.90,
-                                                     font: font)+font.pointSize+15
+                                                     font: font)+font.pointSize+25
         
         if height  > 30 { // bigger than a loading text
             height+=50

@@ -31,6 +31,9 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button hidden="YES" opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="imh-a7-jXi">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="0Dy-lh-iHk"/>
+                                </constraints>
                                 <state key="normal" image="ios7-more-outline"/>
                                 <connections>
                                     <action selector="didTapMoreButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Dij-MR-Mmz"/>
