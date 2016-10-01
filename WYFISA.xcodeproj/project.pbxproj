@@ -35,6 +35,9 @@
 		C39090D01D2C9C88000DFD15 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = C39090CF1D2C9C88000DFD15 /* tessdata */; };
 		C39090D61D2CA66D000DFD15 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C39090D51D2CA66D000DFD15 /* libstdc++.tbd */; };
 		C39090D81D2CA67B000DFD15 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C39090D71D2CA67B000DFD15 /* CoreImage.framework */; };
+		C3A5A73C1D9A1F6D00A22FDB /* t_kjv.db in Resources */ = {isa = PBXBuildFile; fileRef = C3A5A73B1D9A1F6D00A22FDB /* t_kjv.db */; };
+		C3A5A73E1D9A22FF00A22FDB /* cross_ref.db in Resources */ = {isa = PBXBuildFile; fileRef = C3A5A73D1D9A22FF00A22FDB /* cross_ref.db */; };
+		C3A5A7401D9A249E00A22FDB /* t_web.db in Resources */ = {isa = PBXBuildFile; fileRef = C3A5A73F1D9A249E00A22FDB /* t_web.db */; };
 		C3AE3AD81D89FBDD0039AE3E /* WYFISATabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AE3AD71D89FBDD0039AE3E /* WYFISATabBarController.swift */; };
 		C3D506581D38D56200A04C83 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D506571D38D56200A04C83 /* AVFoundation.framework */; };
 		C3D5065A1D3932FB00A04C83 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D506591D3932FB00A04C83 /* Animations.swift */; };
@@ -46,7 +49,6 @@
 		C3F53B901D372C0200E2F80D /* TextMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F53B8F1D372C0200E2F80D /* TextMatcher.swift */; };
 		C3F53B941D3741E900E2F80D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C3F53B931D3741E900E2F80D /* libsqlite3.tbd */; };
 		C3F53B961D37499700E2F80D /* DBQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F53B951D37499700E2F80D /* DBQuery.swift */; };
-		C3FB946C1D3F0FDC00736196 /* t_web.db in Resources */ = {isa = PBXBuildFile; fileRef = C3FB946B1D3F0F3E00736196 /* t_web.db */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +104,9 @@
 		C39090D21D2C9DE7000DFD15 /* WYFISA-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WYFISA-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		C39090D51D2CA66D000DFD15 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		C39090D71D2CA67B000DFD15 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		C3A5A73B1D9A1F6D00A22FDB /* t_kjv.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = t_kjv.db; sourceTree = "<group>"; };
+		C3A5A73D1D9A22FF00A22FDB /* cross_ref.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = cross_ref.db; sourceTree = "<group>"; };
+		C3A5A73F1D9A249E00A22FDB /* t_web.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = t_web.db; sourceTree = "<group>"; };
 		C3AE3AD71D89FBDD0039AE3E /* WYFISATabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISATabBarController.swift; sourceTree = "<group>"; };
 		C3D506571D38D56200A04C83 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C3D506591D3932FB00A04C83 /* Animations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
@@ -113,7 +118,6 @@
 		C3F53B8F1D372C0200E2F80D /* TextMatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextMatcher.swift; sourceTree = "<group>"; };
 		C3F53B931D3741E900E2F80D /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		C3F53B951D37499700E2F80D /* DBQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBQuery.swift; sourceTree = "<group>"; };
-		C3FB946B1D3F0F3E00736196 /* t_web.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = t_web.db; sourceTree = "<group>"; };
 		D1EF753F08E13D92347CDF4F /* Pods_WYFISAUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WYFISAUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2F27709CA69FB9B452B1096 /* Pods-TurnTo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TurnTo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TurnTo/Pods-TurnTo.debug.xcconfig"; sourceTree = "<group>"; };
 		DFB37D9B6C6699CDF4F5D6A3 /* Pods-WYFISATests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISATests.release.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISATests/Pods-WYFISATests.release.xcconfig"; sourceTree = "<group>"; };
@@ -222,7 +226,9 @@
 				C39090821D2C9AF8000DFD15 /* Info.plist */,
 				C379515C1D43D5F4003FB4F5 /* books.json */,
 				C39090D21D2C9DE7000DFD15 /* WYFISA-Bridging-Header.h */,
-				C3FB946B1D3F0F3E00736196 /* t_web.db */,
+				C3A5A73D1D9A22FF00A22FDB /* cross_ref.db */,
+				C3A5A73F1D9A249E00A22FDB /* t_web.db */,
+				C3A5A73B1D9A1F6D00A22FDB /* t_kjv.db */,
 				C39090CF1D2C9C88000DFD15 /* tessdata */,
 			);
 			path = WYFISA;
@@ -375,13 +381,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3A5A73C1D9A1F6D00A22FDB /* t_kjv.db in Resources */,
 				C379515D1D43D5F4003FB4F5 /* books.json in Resources */,
 				C39090D01D2C9C88000DFD15 /* tessdata in Resources */,
 				C316B6B61D3A35DE00E272A3 /* SplashScreen.storyboard in Resources */,
 				C31A7BC71D7FB4D400654753 /* WYFISATutViewController.xib in Resources */,
-				C3FB946C1D3F0FDC00736196 /* t_web.db in Resources */,
+				C3A5A7401D9A249E00A22FDB /* t_web.db in Resources */,
 				C371D0931D44623F00F944CC /* Assets.xcassets in Resources */,
 				C3F53B771D36945900E2F80D /* VerseTableViewCell.xib in Resources */,
+				C3A5A73E1D9A22FF00A22FDB /* cross_ref.db in Resources */,
 				C390907C1D2C9AF8000DFD15 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -699,7 +707,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Tommie McAfee (FYYPPK2H2M)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 5B5KD5S2Z5;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = WYFISA/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -722,7 +730,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Tommie McAfee (FYYPPK2H2M)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 5B5KD5S2Z5;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = WYFISA/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

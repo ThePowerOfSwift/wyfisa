@@ -97,8 +97,9 @@ class CameraManager {
         // self.debugTarget = target
     }
     
-    func capture(){
+    func start(){
         self.camera.startCameraCapture()
+        self.captureStarted = true
     }
     
     func pause(){
@@ -106,12 +107,7 @@ class CameraManager {
     }
     
     func resume(){
-        if self.captureStarted == false {
-            self.capture()
-            self.captureStarted = true
-        } else {
-            self.camera.resumeCameraCapture()
-        }
+        self.camera.resumeCameraCapture()
     }
     
     func setSimImage(image: UIImage){

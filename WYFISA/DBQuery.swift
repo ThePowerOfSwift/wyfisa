@@ -30,7 +30,8 @@ class DBQuery {
     static let sharedInstance = DBQuery()
     
     let conn: Connection
-    let bibleTable = Table("t_web")
+    let refconn: Connection
+    let bibleTable = Table("t_kjv")
     let bibleCol = BibleTableColumns()
     let crossRefTable = Table("cross_reference")
     let crossRefCol = CrossRefColumns()
@@ -39,8 +40,10 @@ class DBQuery {
     var verseCache = [String:[VerseInfo]]()
 
     init(){
-        let path = NSBundle.mainBundle().pathForResource("t_web", ofType: "db")!
+        var path = NSBundle.mainBundle().pathForResource("t_kjv", ofType: "db")!
         self.conn = try! Connection(path, readonly: true)
+        path = NSBundle.mainBundle().pathForResource("cross_ref", ofType: "db")!
+        self.refconn = try! Connection(path, readonly: true)
     }
     
     func lookupVerse(verseId: String) -> String? {
@@ -201,7 +204,7 @@ class DBQuery {
             .limit(10)
         
         do {
-            for row in try conn.prepare(query) {
+            for row in try refconn.prepare(query) {
                                 
                 // query start to end verse for reference
                 let startId = String(row.get(crossRefCol.start_verse))

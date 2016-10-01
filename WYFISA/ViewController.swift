@@ -69,6 +69,11 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         self.firstLaunch = false
         self.cam = CameraManager()
         
+        if self.cam?.captureStarted == false {
+            self.cam?.start()
+            self.cam?.pause()
+        }
+        
         // send camera to live view
         self.checkCameraAccess()
         self.filterView.fillMode = GPUImageFillModeType.init(2)
@@ -106,7 +111,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
 
         if self.captureLock.tryLock() {
-
+            
             // show capture box
             self.captureBox.hidden = false
 
@@ -121,6 +126,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
             
             // camera init
             self.cam?.resume()
+
             if self.settings.useFlash == true {
                 self.cam?.torch(.On)
             }

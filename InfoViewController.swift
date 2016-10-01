@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Social
 
 func defaultDoneCallback(){}
 
@@ -56,14 +57,23 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     @IBAction func didPressShareButton(sender: AnyObject) {
+        /*
+         if let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook) {
+             vc.setInitialText("Look at this great picture!")
+             if let image = self.makeShareImage() {
+                 vc.addImage(image)
+             }
+             self.presentViewController(vc, animated: true, completion: nil)
+         }
+
         // set up activity view controller
-        var objectsToShare = [AnyObject]()
         if let text = verseInfo!.text {
             let textTruncated = text.trunc(80)
             let shareText = "\(textTruncated) (\(verseInfo!.name)) @turn2app!"
             objectsToShare.append(shareText)
-        }
-        
+        }*/
+
+        var objectsToShare = [AnyObject]()
         if let image = self.makeShareImage() {
             objectsToShare.append(image)
         }
@@ -76,6 +86,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         // present the view controller
         self.presentViewController(activityViewController, animated: true, completion: nil)
+ 
         
     }
     

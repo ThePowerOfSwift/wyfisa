@@ -77,7 +77,7 @@ class TextMatcher {
         var verseInfos: [VerseInfo]?
         let bookStr = self.bookPatterns()
         let chapters: Regex = Regex("(?:\\W|^)(\(bookStr))(?:\\D{0,2})(\\d{1,3})(?:\\D{1,2})(\\d{1,3})",  options: [.IgnoreCase])
-        let textUpdate = text.replace("\n", with: "99") // prevent linebreak matches
+        let textUpdate = text.replace("\n", with: " ") // prevent linebreak matches
         var textPriority = text.replace("\n", with: "^^") // newline detection
 
         let matches = chapters.allMatches(textUpdate)
