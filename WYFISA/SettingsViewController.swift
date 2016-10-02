@@ -23,7 +23,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet var settingsTable: UITableView!
     let settings = SettingsManager.sharedInstance
     let themer = WYFISATheme.sharedInstance
-
+    var configDB: CBLDatabase? = nil
+    var settingsDoc: CBLDocument? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,6 +37,33 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // style
         self.themeView()
+        
+        // settings db
+        do {
+            self.configDB = try CBLManager.sharedInstance().databaseNamed("config")
+            if let doc = self.configDB?.existingDocumentWithID("settings") {
+                // restore settings
+                self.settingsDoc = doc
+                let fontID = doc.propertyForKey("font") as! Int
+                let fontSize = doc.propertyForKey("fontSize") as! CGFloat
+                if let font = ThemeFont(rawValue: fontID) {
+                    self.themer.setFontStyle(font)
+                    self.themer.setFontSize(fontSize)
+                }
+                self.settings.nightMode = doc.propertyForKey("night") as! Bool
+                self.settings.useFlash = doc.propertyForKey("flash") as! Bool
+                self.setNightMode(self.settings.nightMode)
+                
+            } else {
+                self.settingsDoc = self.configDB?.documentWithID("settings")
+                let properties = ["night": false,
+                                  "flash": false,
+                                  "font": themer.fontType.rawValue,
+                                  "fontSize": themer.fontSize]
+                try self.settingsDoc?.putProperties(properties as! [String : AnyObject])
+            }
+            
+        } catch { print("No db") }
         
     }
     
@@ -61,11 +90,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let nightSwitch = cell.viewWithTag(2) as! UISwitch
             nightSwitch.addTarget(self, action:  #selector(self.toggleNightMode), forControlEvents: .ValueChanged)
             nightSwitch.setOn(settings.nightMode, animated: false)
+            self.updateSettings("night", value: settings.nightMode)
         case 1:
             label.text = "Use Flash"
             let flashSwitch = cell.viewWithTag(2) as! UISwitch
             flashSwitch.addTarget(self, action:  #selector(self.toggleUseFlash), forControlEvents: .ValueChanged)
             flashSwitch.setOn(settings.useFlash, animated: false)
+            self.updateSettings("flash", value: settings.useFlash)
+
+            
         default:
             (cell.viewWithTag(2) as! UISwitch).hidden = true
             label.text = nil
@@ -140,6 +173,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if indexPath.section == 1 {  // selected a font
             if let newFont = ThemeFont(rawValue: indexPath.row) {
                 self.themer.setFontStyle(newFont)
+                self.updateSettings("font", value: indexPath.row)
             }
         }
         
@@ -188,16 +222,21 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     // MARK: - targets
     func toggleNightMode(){
         self.settings.nightMode = !self.settings.nightMode
-        if self.settings.nightMode == true {
+        self.setNightMode(self.settings.nightMode)
+
+    }
+
+    func toggleUseFlash(){
+        self.settings.useFlash = !self.settings.useFlash
+    }
+    
+    func setNightMode(on: Bool){
+        if on == true {
             self.themer.setMode(Scheme.Dark)
         } else {
             self.themer.setMode(Scheme.Light)
         }
         self.themeView()
-    }
-
-    func toggleUseFlash(){
-        self.settings.useFlash = !self.settings.useFlash
     }
     
     @IBAction func didChangeFontSizeSlider(sender: UISlider) {
@@ -205,8 +244,19 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.themer.setFontSize(value)
         let path = NSIndexPath.init(forRow: 4, inSection: 1)
         self.settingsTable.reloadRowsAtIndexPaths([path], withRowAnimation: .None)
+        self.updateSettings("fontSize", value: value)
+
     }
     
+    func updateSettings(_ key: String, value: AnyObject){
+        do {
+            try self.settingsDoc?.update({
+                    (newRevision) -> Bool in
+                    newRevision[key] = value
+                    return true
+                })
+        } catch { print("update doc failed") }
+    }
     /*
     // MARK: - Navigation
 

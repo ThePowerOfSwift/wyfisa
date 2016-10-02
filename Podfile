@@ -10,6 +10,7 @@ target 'TurnTo' do
   pod 'GPUImage', '0.1.7'
   pod "STRegex", "~> 0.3.1"
   pod 'SQLite.swift', '~> 0.10.1'
+  pod 'couchbase-lite-ios', '1.3.1'
 
   target 'WYFISATests' do
     inherit! :search_paths

@@ -9,6 +9,7 @@
 import Foundation
 import SQLite
 
+
 struct BibleTableColumns {
     let id = Expression<String>("id")
     let text = Expression<String>("t")
@@ -28,7 +29,6 @@ class DBQuery {
     
     // is singleton
     static let sharedInstance = DBQuery()
-    
     let conn: Connection
     let refconn: Connection
     let bibleTable = Table("t_kjv")

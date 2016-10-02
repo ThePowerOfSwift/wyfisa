@@ -10,6 +10,7 @@ import Foundation
 import TesseractOCR
 import GPUImage
 
+
 class OCR: NSObject, G8TesseractDelegate {
     let tesseract:G8Tesseract = G8Tesseract(language:"eng");
     var ocrLock = NSLock()
@@ -44,13 +45,9 @@ class OCR: NSObject, G8TesseractDelegate {
         let croppedImage = cropFilter.imageByFilteringImage(sourceImage)
       
         
-        // re-scale
-        //  let scaledImage = ImageFilter.ResizeImage(croppedImage, targetSize: CGSize.init(width: 400, height: 400))
-        
         // threshold
-        let thresholdFilter = ImageFilter.thresholdFilter(4.0)
+        let thresholdFilter = ImageFilter.thresholdFilter(4)
         let image = thresholdFilter.imageByFilteringImage(croppedImage)
-
         return image
     }
     
