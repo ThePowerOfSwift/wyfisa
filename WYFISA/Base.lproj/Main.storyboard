@@ -7,6 +7,7 @@
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -730,12 +731,22 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qUM-Dg-kMu">
                                 <items>
                                     <navigationItem id="6LU-gL-eYd">
-                                        <barButtonItem key="leftBarButtonItem" enabled="NO" systemItem="undo" id="bPK-Yn-FET">
-                                            <color key="tintColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="didPressUndoButton:" destination="vW6-Ye-fwP" id="bDX-z4-Kxa"/>
-                                            </connections>
-                                        </barButtonItem>
+                                        <leftBarButtonItems>
+                                            <barButtonItem image="ios7-upload-outline" id="pIe-gu-sjZ">
+                                                <inset key="imageInsets" minX="0.0" minY="-6" maxX="0.0" maxY="0.0"/>
+                                                <color key="tintColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                <connections>
+                                                    <action selector="didPressShareButton:" destination="vW6-Ye-fwP" id="XDY-l3-q37"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem enabled="NO" systemItem="undo" id="bPK-Yn-FET">
+                                                <inset key="imageInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-5"/>
+                                                <color key="tintColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                <connections>
+                                                    <action selector="didPressUndoButton:" destination="vW6-Ye-fwP" id="bDX-z4-Kxa"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </leftBarButtonItems>
                                         <barButtonItem key="rightBarButtonItem" image="ios-close" id="9Gu-Xt-h1F">
                                             <color key="tintColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
@@ -747,17 +758,18 @@
                             </navigationBar>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w26-z9-H17">
                                 <items>
-                                    <barButtonItem image="ios7-upload-outline" id="pIe-gu-sjZ">
-                                        <color key="tintColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="calibratedRGB"/>
-                                        <connections>
-                                            <action selector="didPressShareButton:" destination="vW6-Ye-fwP" id="XDY-l3-q37"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem image="ios7-camera-outline" width="20" id="hxh-Ry-8Je">
-                                        <inset key="imageInsets" minX="20" minY="0.0" maxX="0.0" maxY="-4"/>
+                                    <barButtonItem image="ios7-camera-outline" id="hxh-Ry-8Je">
+                                        <inset key="imageInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-4"/>
                                         <color key="tintColor" red="0.36862745099999999" green="0.41568627450000001" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <action selector="didPressCameraButton:" destination="vW6-Ye-fwP" id="qwM-VQ-5ah"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem image="image" id="JBr-Ot-CTQ">
+                                        <inset key="imageInsets" minX="20" minY="0.0" maxX="0.0" maxY="-6"/>
+                                        <color key="tintColor" red="0.36862745099999999" green="0.41568627450000001" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="didPressImageSelectButton:" destination="vW6-Ye-fwP" id="HFz-tk-iHX"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem enabled="NO" image="highlighter" id="Nh0-ue-GTT">
@@ -1044,6 +1056,7 @@
         <image name="close-fire" width="19" height="19"/>
         <image name="footer-mask-white" width="375" height="50"/>
         <image name="highlighter" width="30" height="29"/>
+        <image name="image" width="26" height="24"/>
         <image name="ios-close" width="19" height="19"/>
         <image name="ios7-bookmarks-outline" width="29" height="27"/>
         <image name="ios7-camera-outline" width="30" height="25"/>

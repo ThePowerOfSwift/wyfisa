@@ -55,7 +55,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             self.textView.font = themer.currentFont()
         }
         
-        navigationBar.topItem?.title = verseInfo?.name
+        //navigationBar.topItem?.title = verseInfo?.name
     
         
     }
@@ -125,8 +125,17 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
 
     @IBAction func didPressCameraButton(sender: AnyObject) {
-    
+        if UIImagePickerController.isSourceTypeAvailable(.Camera) == true {
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+            imagePicker.allowsEditing = false
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }
         
+    }
+
+    @IBAction func didPressImageSelectButton(sender: AnyObject) {
         if UIImagePickerController.isSourceTypeAvailable(.PhotoLibrary) == true {
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
@@ -134,9 +143,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             imagePicker.allowsEditing = false
             self.presentViewController(imagePicker, animated: true, completion: nil)
         }
-        
     }
-
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let image = info[UIImagePickerControllerOriginalImage] as? UIImage
