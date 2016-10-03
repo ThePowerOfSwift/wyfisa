@@ -49,6 +49,11 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             self.originalImage = image
         }
         
+        if let image = self.verseInfo?.overlayImage {
+            self.tmpImageView.image = image
+            self.undoButton.enabled = true
+        }
+
         if let text = self.verseInfo?.text {
             let name = self.verseInfo?.name
             self.textView.text = "\(name!) -  \(text)"
@@ -253,7 +258,10 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             self.lastPoint = currentPoint
             self.undoButton.enabled = true
         }
-        
+    }
+    
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        self.verseInfo?.overlayImage = self.tmpImageView.image
     }
     
 }

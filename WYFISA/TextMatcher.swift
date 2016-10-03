@@ -21,6 +21,7 @@ class VerseInfo {
     var bookNo: Int?
     var verse: Int?
     var image: UIImage?
+    var overlayImage: UIImage?
     var refs: [VerseInfo]?
     var verses: [VerseInfo]?
 
