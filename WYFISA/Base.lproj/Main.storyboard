@@ -7,7 +7,6 @@
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
-        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -719,33 +718,24 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="120 - iPhone Copy 2" translatesAutoresizingMaskIntoConstraints="NO" id="oWP-3t-aXX"/>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Gradient-navy" translatesAutoresizingMaskIntoConstraints="NO" id="kRY-vF-c7s"/>
-                            <view alpha="0.75" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HKh-fF-2Ij">
-                                <color key="backgroundColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
+                            <view alpha="0.75" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HKh-fF-2Ij"/>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UTg-Tz-e7Z">
+                                <gestureRecognizers/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="shX-qq-UA9"/>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qUM-Dg-kMu">
                                 <items>
                                     <navigationItem id="6LU-gL-eYd">
-                                        <leftBarButtonItems>
-                                            <barButtonItem image="ios7-upload-outline" id="gAC-EW-NXY">
-                                                <color key="tintColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="calibratedRGB"/>
-                                                <connections>
-                                                    <action selector="didPressShareButton:" destination="vW6-Ye-fwP" id="9Dn-dM-rpD"/>
-                                                </connections>
-                                            </barButtonItem>
-                                            <barButtonItem image="ios7-camera-outline" id="JNl-ow-Ogu">
-                                                <inset key="imageInsets" minX="-6" minY="0.0" maxX="0.0" maxY="-5"/>
-                                                <color key="tintColor" red="0.36862745098039218" green="0.41568627450980394" blue="0.43137254901960786" alpha="1" colorSpace="calibratedRGB"/>
-                                                <connections>
-                                                    <action selector="didPressCameraButton:" destination="vW6-Ye-fwP" id="Yll-Rb-t4M"/>
-                                                </connections>
-                                            </barButtonItem>
-                                        </leftBarButtonItems>
+                                        <barButtonItem key="leftBarButtonItem" enabled="NO" systemItem="undo" id="bPK-Yn-FET">
+                                            <color key="tintColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="calibratedRGB"/>
+                                            <connections>
+                                                <action selector="didPressUndoButton:" destination="vW6-Ye-fwP" id="bDX-z4-Kxa"/>
+                                            </connections>
+                                        </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" image="ios-close" id="9Gu-Xt-h1F">
                                             <color key="tintColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
@@ -755,12 +745,63 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w26-z9-H17">
+                                <items>
+                                    <barButtonItem image="ios7-upload-outline" id="pIe-gu-sjZ">
+                                        <color key="tintColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="didPressShareButton:" destination="vW6-Ye-fwP" id="XDY-l3-q37"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem image="ios7-camera-outline" width="20" id="hxh-Ry-8Je">
+                                        <inset key="imageInsets" minX="20" minY="0.0" maxX="0.0" maxY="-4"/>
+                                        <color key="tintColor" red="0.36862745099999999" green="0.41568627450000001" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="didPressCameraButton:" destination="vW6-Ye-fwP" id="qwM-VQ-5ah"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem enabled="NO" image="highlighter" id="Nh0-ue-GTT">
+                                        <inset key="imageInsets" minX="40" minY="0.0" maxX="0.0" maxY="-4"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </barButtonItem>
+                                    <barButtonItem image="highlighter" id="H2V-m0-s3s">
+                                        <inset key="imageInsets" minX="20" minY="0.0" maxX="0.0" maxY="-4"/>
+                                        <color key="tintColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="didPressHighlightBrush:" destination="vW6-Ye-fwP" id="2zQ-iy-O06"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem image="ios7-circle-filled" id="8xF-iA-iyX">
+                                        <inset key="imageInsets" minX="20" minY="0.0" maxX="0.0" maxY="-4"/>
+                                        <color key="tintColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="didPressOrangeBrush:" destination="vW6-Ye-fwP" id="Qta-uV-9V3"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem image="ios7-circle-filled" id="4Tf-DI-QWP">
+                                        <inset key="imageInsets" minX="20" minY="0.0" maxX="0.0" maxY="-4"/>
+                                        <color key="tintColor" red="0.80000000000000004" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="didPressRedBrush:" destination="vW6-Ye-fwP" id="ANl-Zs-IY1"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem image="ios7-circle-filled" id="ftQ-pt-C7N">
+                                        <inset key="imageInsets" minX="20" minY="0.0" maxX="0.0" maxY="-4"/>
+                                        <color key="tintColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="didPressNavyBrush:" destination="vW6-Ye-fwP" id="OY7-gS-jLP"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="5bh-a0-BKO" firstAttribute="top" secondItem="UTg-Tz-e7Z" secondAttribute="bottom" constant="20" id="45D-IJ-SHc"/>
+                            <constraint firstItem="shX-qq-UA9" firstAttribute="centerY" secondItem="oWP-3t-aXX" secondAttribute="centerY" id="4dS-gN-eol"/>
+                            <constraint firstItem="UTg-Tz-e7Z" firstAttribute="bottom" secondItem="w26-z9-H17" secondAttribute="top" id="5He-2D-KBg"/>
+                            <constraint firstItem="w26-z9-H17" firstAttribute="width" secondItem="Gb6-3N-3A7" secondAttribute="width" id="7xD-13-SBK"/>
                             <constraint firstItem="5bh-a0-BKO" firstAttribute="top" secondItem="HKh-fF-2Ij" secondAttribute="bottom" id="8lV-Px-Fwf"/>
-                            <constraint firstItem="kRY-vF-c7s" firstAttribute="height" secondItem="oWP-3t-aXX" secondAttribute="height" multiplier="0.6" id="9N5-Fs-qUV"/>
+                            <constraint firstItem="kRY-vF-c7s" firstAttribute="height" secondItem="oWP-3t-aXX" secondAttribute="height" multiplier="0.55" id="9N5-Fs-qUV"/>
                             <constraint firstItem="qUM-Dg-kMu" firstAttribute="leading" secondItem="Gb6-3N-3A7" secondAttribute="leading" id="9rp-tL-zoC"/>
                             <constraint firstItem="oWP-3t-aXX" firstAttribute="height" secondItem="Gb6-3N-3A7" secondAttribute="height" id="CBf-oN-aKo"/>
                             <constraint firstItem="oWP-3t-aXX" firstAttribute="width" secondItem="Gb6-3N-3A7" secondAttribute="width" id="CMO-PS-Nh3"/>
@@ -774,15 +815,27 @@
                             <constraint firstItem="qUM-Dg-kMu" firstAttribute="top" secondItem="VjE-CH-34m" secondAttribute="bottom" id="X5N-Gu-5PR"/>
                             <constraint firstItem="oWP-3t-aXX" firstAttribute="centerX" secondItem="Gb6-3N-3A7" secondAttribute="centerX" id="ap0-jY-NSg"/>
                             <constraint firstItem="UTg-Tz-e7Z" firstAttribute="height" secondItem="oWP-3t-aXX" secondAttribute="height" multiplier="0.3" id="eDg-nq-jbn"/>
-                            <constraint firstItem="UTg-Tz-e7Z" firstAttribute="width" secondItem="oWP-3t-aXX" secondAttribute="width" id="lAQ-7d-aVP"/>
+                            <constraint firstItem="5bh-a0-BKO" firstAttribute="top" secondItem="w26-z9-H17" secondAttribute="bottom" id="i6X-5H-fve"/>
+                            <constraint firstItem="shX-qq-UA9" firstAttribute="height" secondItem="oWP-3t-aXX" secondAttribute="height" id="iL7-L1-Qdc"/>
+                            <constraint firstItem="UTg-Tz-e7Z" firstAttribute="width" secondItem="oWP-3t-aXX" secondAttribute="width" multiplier="0.9" id="lAQ-7d-aVP"/>
                             <constraint firstItem="kRY-vF-c7s" firstAttribute="centerX" secondItem="oWP-3t-aXX" secondAttribute="centerX" id="mzL-7v-5be"/>
-                            <constraint firstItem="kRY-vF-c7s" firstAttribute="width" secondItem="oWP-3t-aXX" secondAttribute="width" id="nyk-E4-Cce"/>
+                            <constraint firstItem="kRY-vF-c7s" firstAttribute="width" secondItem="oWP-3t-aXX" secondAttribute="width" multiplier="1.2" id="nyk-E4-Cce"/>
+                            <constraint firstItem="w26-z9-H17" firstAttribute="centerX" secondItem="Gb6-3N-3A7" secondAttribute="centerX" id="v59-L2-bnA"/>
+                            <constraint firstItem="shX-qq-UA9" firstAttribute="centerX" secondItem="oWP-3t-aXX" secondAttribute="centerX" id="vmf-WK-10e"/>
+                            <constraint firstItem="shX-qq-UA9" firstAttribute="width" secondItem="oWP-3t-aXX" secondAttribute="width" id="xAX-6n-Rwk"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="bottomToolBar" destination="w26-z9-H17" id="2jq-jF-Tgs"/>
                         <outlet property="capturedImage" destination="oWP-3t-aXX" id="3CX-KC-hbc"/>
+                        <outlet property="highlightBrush" destination="H2V-m0-s3s" id="Py2-dm-g9b"/>
                         <outlet property="navigationBar" destination="qUM-Dg-kMu" id="n5z-Zo-IPf"/>
+                        <outlet property="navyBrush" destination="ftQ-pt-C7N" id="ldC-oL-Jj9"/>
+                        <outlet property="orangeBrush" destination="8xF-iA-iyX" id="Uba-ce-hdz"/>
+                        <outlet property="redBrush" destination="4Tf-DI-QWP" id="f3d-zt-71P"/>
                         <outlet property="textView" destination="UTg-Tz-e7Z" id="3OW-kO-UBR"/>
+                        <outlet property="tmpImageView" destination="shX-qq-UA9" id="ecl-Ac-wg8"/>
+                        <outlet property="undoButton" destination="bPK-Yn-FET" id="eiY-3E-a0U"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qsg-Av-bp8" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -984,15 +1037,17 @@
         <image name="DoubleRight" width="24" height="23"/>
         <image name="Find" width="375" height="667"/>
         <image name="Gradient" width="375" height="369"/>
-        <image name="Gradient-navy" width="375" height="333"/>
+        <image name="Gradient-navy" width="375" height="531"/>
         <image name="Oval 1" width="84" height="84"/>
         <image name="Rectangle-Fire" width="171" height="84"/>
         <image name="Study" width="375" height="667"/>
         <image name="close-fire" width="19" height="19"/>
         <image name="footer-mask-white" width="375" height="50"/>
+        <image name="highlighter" width="30" height="29"/>
         <image name="ios-close" width="19" height="19"/>
         <image name="ios7-bookmarks-outline" width="29" height="27"/>
         <image name="ios7-camera-outline" width="30" height="25"/>
+        <image name="ios7-circle-filled" width="33" height="33"/>
         <image name="ios7-gear-outline" width="26" height="26"/>
         <image name="ios7-photos-outline" width="31" height="26"/>
         <image name="ios7-refresh-empty" width="19" height="21"/>

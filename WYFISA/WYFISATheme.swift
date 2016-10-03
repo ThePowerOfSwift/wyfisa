@@ -21,6 +21,27 @@ class WYFISATheme {
     var fontSize: CGFloat = DEFAULT_FONT_SIZE
     static let sharedInstance = WYFISATheme()
     
+    init() {
+        do {
+            let db = try CBLManager.sharedInstance().databaseNamed("config")
+            if let doc = db.existingDocumentWithID("settings") {
+                // restore settings
+                let fontID = doc.propertyForKey("font") as! Int
+                if let font = ThemeFont(rawValue: fontID) {
+                    self.fontType = font
+                }
+                self.fontSize = doc.propertyForKey("fontSize") as! CGFloat
+                let nightMode = doc.propertyForKey("night") as! Bool
+                if nightMode == true {
+                    self.mode = .Dark
+                } else {
+                    self.mode = .Light
+                }
+
+            }
+        } catch {}
+        
+    }
     func setMode(mode: Scheme) {
         self.mode = mode
     }

@@ -13,6 +13,18 @@ class SettingsManager {
     static let sharedInstance = SettingsManager()
     var nightMode: Bool = false
     var useFlash: Bool = false
+    
+    init(){
+        do {
+            let db = try CBLManager.sharedInstance().databaseNamed("config")
+            if let doc = db.existingDocumentWithID("settings") {
+                // restore settings
+                self.nightMode = doc.propertyForKey("night") as! Bool
+                self.useFlash = doc.propertyForKey("flash") as! Bool
+            }
+        } catch {}
+        
+    }
 }
 
 let HEIGHT_FOR_HEADER:CGFloat = 30.0
@@ -23,7 +35,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet var settingsTable: UITableView!
     let settings = SettingsManager.sharedInstance
     let themer = WYFISATheme.sharedInstance
-    var configDB: CBLDatabase? = nil
     var settingsDoc: CBLDocument? = nil
     
     override func viewDidLoad() {
@@ -40,22 +51,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // settings db
         do {
-            self.configDB = try CBLManager.sharedInstance().databaseNamed("config")
-            if let doc = self.configDB?.existingDocumentWithID("settings") {
-                // restore settings
+            let db = try CBLManager.sharedInstance().databaseNamed("config")
+            if let doc = db.existingDocumentWithID("settings"){
                 self.settingsDoc = doc
-                let fontID = doc.propertyForKey("font") as! Int
-                let fontSize = doc.propertyForKey("fontSize") as! CGFloat
-                if let font = ThemeFont(rawValue: fontID) {
-                    self.themer.setFontStyle(font)
-                    self.themer.setFontSize(fontSize)
-                }
-                self.settings.nightMode = doc.propertyForKey("night") as! Bool
-                self.settings.useFlash = doc.propertyForKey("flash") as! Bool
-                self.setNightMode(self.settings.nightMode)
-                
             } else {
-                self.settingsDoc = self.configDB?.documentWithID("settings")
+                
+                // create settings doc
+                self.settingsDoc = db.documentWithID("settings")
                 let properties = ["night": false,
                                   "flash": false,
                                   "font": themer.fontType.rawValue,
@@ -90,15 +92,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let nightSwitch = cell.viewWithTag(2) as! UISwitch
             nightSwitch.addTarget(self, action:  #selector(self.toggleNightMode), forControlEvents: .ValueChanged)
             nightSwitch.setOn(settings.nightMode, animated: false)
-            self.updateSettings("night", value: settings.nightMode)
         case 1:
             label.text = "Use Flash"
             let flashSwitch = cell.viewWithTag(2) as! UISwitch
             flashSwitch.addTarget(self, action:  #selector(self.toggleUseFlash), forControlEvents: .ValueChanged)
             flashSwitch.setOn(settings.useFlash, animated: false)
-            self.updateSettings("flash", value: settings.useFlash)
-
-            
         default:
             (cell.viewWithTag(2) as! UISwitch).hidden = true
             label.text = nil
@@ -223,11 +221,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func toggleNightMode(){
         self.settings.nightMode = !self.settings.nightMode
         self.setNightMode(self.settings.nightMode)
-
+        self.updateSettings("night", value: self.settings.nightMode)
     }
 
     func toggleUseFlash(){
         self.settings.useFlash = !self.settings.useFlash
+        self.updateSettings("flash", value: self.settings.useFlash)
+
     }
     
     func setNightMode(on: Bool){

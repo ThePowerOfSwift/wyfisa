@@ -62,6 +62,7 @@ extension String {
 }
 
 extension UIColor {
+    
     class func turquoise() -> UIColor {
        return UIColor.init(red: (139/255), green: (225/255), blue: (207/255), alpha: 0.80)
     }
@@ -78,6 +79,29 @@ extension UIColor {
     }
     class func offWhite(alpha: CGFloat) -> UIColor {
         return UIColor.init(white: 0.95, alpha: alpha)
+    }
+    
+
+    // highlight Colors
+    class func hiRed() ->CGFloat { return 243/255 }
+    class func hiGreen() ->CGFloat { return 243/255 }
+    class func hiBlue() -> CGFloat { return  21/244 }
+    
+    class func hiOrangeRed() ->CGFloat { return 255/255 }
+    class func hiOrangeGreen() ->CGFloat { return 87/255 }
+    class func hiOrangeBlue() -> CGFloat { return  34/244 }
+    
+    class func hiRedRed() ->CGFloat { return 205/255 }
+    class func hiRedGreen() ->CGFloat { return 51/255 }
+    class func hiRedBlue() -> CGFloat { return  51/244 }
+    
+    class func hiNavyRed() ->CGFloat { return 64/255 }
+    class func hiNavyGreen() ->CGFloat { return 77/255 }
+    class func hiNavyBlue() -> CGFloat { return  82/244 }
+    
+    
+    class func highlighter() -> UIColor {
+        return UIColor.init(red: UIColor.hiRed(), green: UIColor.hiGreen(), blue: UIColor.hiBlue(), alpha: 1.0)
     }
 }
 

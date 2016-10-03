@@ -13,13 +13,32 @@ func defaultDoneCallback(){}
 
 class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    @IBOutlet var undoButton: UIBarButtonItem!
     @IBOutlet var capturedImage: UIImageView!
     @IBOutlet var textView: UITextView!
+    @IBOutlet var orangeBrush: UIBarButtonItem!
+    @IBOutlet var redBrush: UIBarButtonItem!
+    @IBOutlet var navyBrush: UIBarButtonItem!
+    @IBOutlet var tmpImageView: UIImageView!
+    @IBOutlet var highlightBrush: UIBarButtonItem!
+    @IBOutlet var bottomToolBar: UIToolbar!
+    
     var verseInfo: VerseInfo? = nil
     var themer = WYFISATheme.sharedInstance
     var doneCallback: ()->Void = defaultDoneCallback
+    var originalImage: UIImage? = nil
+    
+    // drawing vars
+    var swiped: Bool = false
+    var lastPoint = CGPoint.zero
+    var brushWidth: CGFloat = 20.0
+    var opacity: CGFloat = 0.10
+    var red = UIColor.hiRed()
+    var green = UIColor.hiGreen()
+    var blue = UIColor.hiBlue()
     
     @IBOutlet var navigationBar: UINavigationBar!
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,16 +46,17 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         // Do any additional setup after loading the view.
         if let image = self.verseInfo?.image {
             self.capturedImage.image = image
+            self.originalImage = image
         }
         
         if let text = self.verseInfo?.text {
             let name = self.verseInfo?.name
             self.textView.text = "\(name!) -  \(text)"
             self.textView.font = themer.currentFont()
-            
         }
         
         navigationBar.topItem?.title = verseInfo?.name
+    
         
     }
     
@@ -98,7 +118,8 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         UIGraphicsEndImageContext();
         
         let navOffset = self.navigationBar.frame.height/viewSize.height
-        let cropFilter = ImageFilter.cropFilter(0, y: navOffset, width: 1, height: 0.9)
+        let height = 1 - navOffset - self.bottomToolBar.frame.height/viewSize.height
+        let cropFilter = ImageFilter.cropFilter(0, y: navOffset, width: 1, height: height)
         let croppedImage = cropFilter.imageByFilteringImage(screenShot)
         return croppedImage
     }
@@ -122,19 +143,110 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         self.verseInfo?.image = image
         self.capturedImage.image = image
         picker.dismissViewControllerAnimated(true, completion: nil)
-
- 
+        if self.originalImage != nil {
+            // original image was replaced, show undo
+            self.undoButton.enabled = true
+        } else {
+            self.originalImage = image
+        }
+        
+        // clear out any drawing
+        self.tmpImageView.image = nil
     }
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    /*
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        let toVc = segue.destinationViewController as! ViewController
-        toVc.escapeMask.hidden = true
-        toVc.escapeMask.backgroundColor = UIColor.clearColor()
-    }*/
-
+    
+    @IBAction func didPressUndoButton(sender: AnyObject) {
+        if let img = self.originalImage {
+            self.capturedImage.image = img
+        }
+        self.tmpImageView.image = nil
+    }
+    
+    
+    // MARK: - Drawing
+    
+    @IBAction func didPressHighlightBrush(sender: AnyObject) {
+        self.red = UIColor.hiRed()
+        self.blue = UIColor.hiBlue()
+        self.green = UIColor.hiGreen()
+        self.opacity = 0.10
+        self.brushWidth = 20
+    }
+    
+    @IBAction func didPressOrangeBrush(sender: AnyObject) {
+        self.red = UIColor.hiOrangeRed()
+        self.blue = UIColor.hiOrangeBlue()
+        self.green = UIColor.hiOrangeGreen()
+        self.opacity = 0.80
+        self.brushWidth = 5
+    }
+    
+    @IBAction func didPressNavyBrush(sender: AnyObject) {
+        self.red = UIColor.hiNavyRed()
+        self.blue = UIColor.hiNavyBlue()
+        self.green = UIColor.hiNavyGreen()
+        self.opacity = 0.80
+        self.brushWidth = 5
+    }
+    
+    @IBAction func didPressRedBrush(sender: AnyObject) {
+        self.red = UIColor.hiRedRed()
+        self.blue = UIColor.hiRedBlue()
+        self.green = UIColor.hiRedGreen()
+        self.opacity = 0.80
+        self.brushWidth = 5
+    }
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        self.swiped = false
+        
+        if let touch = touches.first {
+            self.lastPoint = touch.locationInView(self.tmpImageView)
+        }
+    }
+    
+    
+    func drawLineFrom(fromPoint: CGPoint, toPoint: CGPoint) {
+        
+        UIGraphicsBeginImageContext(self.tmpImageView.frame.size)
+        let dist =  abs(fromPoint.x - toPoint.x)
+        if (opacity == 0.10 && dist < 2 ){
+            // gentle on highlighter ending
+            self.lastPoint = fromPoint
+            return
+        }
+        let rect = CGRect(x: 0, y: 0,
+                          width: self.tmpImageView.frame.size.width,
+                          height: self.tmpImageView.frame.size.height)
+        self.tmpImageView.image?.drawInRect(rect)
+        
+        if  let context = UIGraphicsGetCurrentContext(){
+            
+            CGContextMoveToPoint(context, fromPoint.x, fromPoint.y)
+            CGContextAddLineToPoint(context, toPoint.x, toPoint.y)
+            
+            CGContextSetLineCap(context, .Square)
+            CGContextSetLineWidth(context, brushWidth)
+            CGContextSetRGBStrokeColor(context, red, green, blue, opacity)
+            CGContextSetBlendMode(context, .Overlay)
+            CGContextStrokePath(context)
+        }
+        
+        self.tmpImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+    }
+    
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        self.swiped = true
+        if let touch = touches.first {
+            let currentPoint = touch.locationInView(self.tmpImageView)
+            drawLineFrom(self.lastPoint, toPoint: currentPoint)
+            
+            self.lastPoint = currentPoint
+            self.undoButton.enabled = true
+        }
+        
+    }
+    
 }
