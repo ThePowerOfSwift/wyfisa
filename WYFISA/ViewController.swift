@@ -41,6 +41,7 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
     @IBOutlet var bottomNavBar: UITabBar!
     @IBOutlet var collectionItem: UITabBarItem!
     @IBOutlet var settingsItem: UITabBarItem!
+    @IBOutlet var searchBarBG: UIView!
     
     let db = DBQuery.sharedInstance
     let themer = WYFISATheme.sharedInstance
@@ -54,17 +55,29 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
     var nightEnabled: Bool = false
     var firstLaunch: Bool = false
     var lastCaptureEmpty: Bool = false
+    var isExpanded: Bool = false
+    var tableDataSource: VerseTableDataSource? = nil
+    var frameSize: CGSize? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        verseTable.setCellDelegate(self)
 
         if self.firstLaunch == false {
             self.firstLaunch = true
             self.initCamera()
         }
-        self.doCaptureAction()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        self.verseTable.dataSource = self.tableDataSource
+        self.verseTable.isExpanded = self.isExpanded
+    }
+    
+    func configure(dataSource: VerseTableDataSource, isExpanded: Bool, size: CGSize){
+        self.tableDataSource = dataSource
+        self.isExpanded = isExpanded
+        self.view.frame.size = size
+        self.frameSize = size
     }
     
     func initCamera(){
@@ -78,7 +91,6 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
         
         if self.cam?.captureStarted == false {
             self.cam?.start()
-            //self.cam?.pause()
         }
         
         // send camera to live view
@@ -98,8 +110,20 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.verseTable.reloadData()
+        
         if firstLaunch == true {
             self.capTut.hidden = false
+        }
+        if let size = self.frameSize {
+            self.view.frame.size = size
+        }
+        
+        if self.isExpanded == true {
+            self.captureBox.hidden = true
+            self.maskView.alpha = 0.6
+            self.searchBar.hidden = false
+            self.trashIcon.hidden = false
+            self.searchBarBG.hidden = false
         }
     }
     
@@ -109,6 +133,7 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
     
     func doCaptureAction(){
         if self.captureLock.tryLock() {
+
             self.cam?.resume()
             
             // show capture box
@@ -116,14 +141,16 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
             self.captureBox.hidden = false
 
             
-            self.verseTable.isExpanded = false
+            //self.verseTable.isExpanded = false
             self.verseTable.reloadData()
             self.verseTable.setContentToCollapsedEnd()
             
             Animations.start(0.3) {
-                self.captureBoxActive.alpha = 0
                 self.maskView.alpha = 0
             }
+            
+            // flash capture box
+            Animations.fadeOutIn(0.3, tsFadeOut: 0.3, view: self.captureBox, alpha: 0)
             
             // camera init
             self.cam?.resume()
@@ -137,11 +164,10 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
             session.clearCache()
             
             // adds row to verse table
-            /*
             let defaultVerse = VerseInfo(id: "", name: self.workingText, text: "")
-            self.verseTable.appendVerse(defaultVerse)
+            self.tableDataSource?.appendVerse(defaultVerse)
             self.verseTable.addSection()
-            */
+ 
  
             
             Timing.runAfter(0.2){
@@ -176,7 +202,9 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
                 }
             }
             Timing.runAfterBg(2.0){
-                self.captureLoop()
+                if (self.session.active == true){
+                    self.captureLoop()
+                }
             }
         }
         
@@ -185,28 +213,28 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
     }
     
 
-    func handleCaptureEnd(){
+    func handleCaptureEnd() -> Bool {
         
+        var hasNewMatches = false
         updateLock.lock()
         
-        self.cam?.pause()
+        
         if self.settings.useFlash == true {
             self.cam?.torch(.Off)
         }
         
         // remove scanning box
         if self.session.newMatches == 0 && self.session.active {
-            //self.verseTable.removeFailedVerse()
+            self.verseTable.removeFailedVerse()
+        } else {
+            hasNewMatches = true
         }
         
         // hide capture box
-        self.verseTable.isExpanded = true
+        //self.verseTable.isExpanded = true
         self.captureBoxActive.hidden = true
-        self.captureBox.hidden = true
-        
-        Animations.start(0.3) {
-            self.maskView.alpha = 0.6
-        }
+//        self.captureBox.hidden = false
+
         
         self.session.currentId += 1
         self.session.newMatches = 0
@@ -215,11 +243,10 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
         
         // resort verse table by priority
         self.verseTable.sortByPriority()
-        self.verseTable.reloadData()
         self.verseTable.setContentToExpandedEnd()
 
         updateLock.unlock()
-
+        return hasNewMatches
     }
     
 
@@ -229,7 +256,7 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
     // when frame has been processed we need to write it back to the cell
     func didProcessFrame(withText text: String, image: UIImage, fromSession: UInt64) {
         
-        //print(text)
+        print(text)
         if fromSession != self.session.currentId {
             return // Ignore: from old capture session
         }
@@ -247,7 +274,7 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
 
         
         
-        let id = self.verseTable.nVerses+1
+        let id = self.verseTable.numberOfSections+1 // was nVerses+1
         if let allVerses = TextMatcher().findVersesInText(text) {
 
             for var verseInfo in allVerses {
@@ -264,14 +291,21 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
                     // make sure not repeat match
                     if self.session.matches.indexOf(verseInfo.id) == nil {
 
+                        // notify
+                        Animations.fadeInOut(0, tsFadeOut: 0.3, view: self.captureBoxActive, alpha: 0.6)
+                        
+                        // first match replaces scanning icon
+                        if self.session.newMatches == 0 {
+                            self.verseTable.updateVerseAtIndex(id-1, withVerseInfo: verseInfo)
+                        } else {
                             // new match
-                            self.verseTable.appendVerse(verseInfo)
+                            self.tableDataSource?.appendVerse(verseInfo)
                             dispatch_async(dispatch_get_main_queue()) {
                                 self.verseTable.addSection()
                             }
+                        }
                         
-                        // notify
-                        Animations.fadeInOut(0.3, tsFadeOut: 0.3, view: self.captureBoxActive, alpha: 0.6)
+
                     } else {
                         // dupe
                         continue
@@ -405,15 +439,17 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
         if let verseInfo = fromVC.resultInfo {
                 verseInfo.session = self.session.currentId
 
+            //    self.verseTable.reloadData()
             
                 // new match
-                self.verseTable.appendVerse(verseInfo)
+                self.tableDataSource?.appendVerse(verseInfo)
                 dispatch_async(dispatch_get_main_queue()) {
                     self.verseTable.addSection()
                 }
                 self.session.newMatches += 1
                 self.session.matches.append(verseInfo.id)
-                self.verseTable.updateCellHeightVal(verseInfo)
+               //TODO: probabaly ust brok
+                // self.verseTable.updateCellHeightVal(verseInfo)
         }
     
         // end session

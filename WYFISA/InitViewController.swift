@@ -27,29 +27,65 @@ class InitViewController: UIViewController {
     
 
 
-    func toggleCapture(){
-        // then toggle expanded view
-        let selectedVC = self.tabVC?.selectedViewController as! ViewController
-        if selectedVC.captureBox.hidden == true {
-            selectedVC.doCaptureAction()
-        } else {
-            selectedVC.handleCaptureEnd()
-        }
+    func getCaptureVC() -> ViewController? {
+        let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
+        return selectedVC.captureVC
     }
+    
+    func getPauseVC() -> ViewController? {
+        let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
+        return selectedVC.pauseVC
+    }
+    
+    func getScrollPage() -> Int {
+        let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
+        return selectedVC.activePage
+    }
+    
+    func moveToPage(page: Int){
+        let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
+        selectedVC.scrollToPage(page)
+    }
+    
     @IBAction func didSPressCaptureButton(sender: AnyObject) {
-        if (self.tabVC?.selectedIndex == 1){
-            self.toggleCapture()
+        let captureViewActive = self.tabVC?.selectedIndex == 1
+            
+        if (captureViewActive == false) {
+            // move to capture tab
+            self.tabVC?.selectedIndex = 1
         }
+        
+        if self.getScrollPage() == 1 {
+            // on pause page
+            // so move to active
+            self.moveToPage(0)
+        }
+        // get capture vc
+        if  let vc = self.getCaptureVC(){
+            vc.doCaptureAction()
+        }
+
     }
     
     @IBAction func didReleaseCaptureButton(sender: AnyObject){
-        if (self.tabVC?.selectedIndex != 1){
-            self.tabVC?.selectedIndex = 1
+
+        var didCaptureVerses = false
+        if let vc = self.getCaptureVC() {
+            didCaptureVerses = vc.handleCaptureEnd()
         }
+
+        if didCaptureVerses == true {
+            // swipe to pause vc
+            self.moveToPage(1)
+        }
+
     }
     
     // MARK: - Navigation
-
+    override func prefersStatusBarHidden() -> Bool {
+        return false
+    }
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let destVC = segue.destinationViewController

@@ -8,15 +8,10 @@
 
 import UIKit
 
-class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
+class VerseTableView: UITableView, UITableViewDelegate {
 
-    var nVerses: Int = 0
-    var nVersesOffset: Int = 0
-    var expandedCellHeights: CGFloat = 0.0
-    var recentVerses: [VerseInfo] = [VerseInfo]()
+
     var isExpanded: Bool = false
-    var initHeaderHeight: CGFloat = 0
-    var hasHeader: Bool = true
     var nLock: NSLock = NSLock()
     var cellDelegate: VerseTableViewCellDelegate?
     var themer = WYFISATheme.sharedInstance
@@ -26,46 +21,31 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         
         // setup tableview
         self.delegate = self
-        self.dataSource = self
-        self.initHeaderHeight = self.frame.size.height
     }
     
-    func setCellDelegate(delegate: VerseTableViewCellDelegate){
-        self.cellDelegate = delegate
-    }
-    
-    func addToSectionBy(i: Int){
-        self.nVerses = self.nVerses + i
-    }
-    
-    func updateCellHeightVal(verse: VerseInfo){
-        if let text = verse.text {
-            let height = cellHeightForText(text)
-            expandedCellHeights += height
+
+    func getDatasource() -> VerseTableDataSource? {
+        if let ds = self.dataSource {
+            return ds as? VerseTableDataSource
         }
+        return nil
     }
     
-    func appendVerse(verse: VerseInfo){
-        self.recentVerses.append(verse)
-        if(verse.id != ""){
-            updateCellHeightVal(verse)
-        }
-    }
-    
-    func updateVersePending(id: Int){
-        self.recentVerses[id-1].name = self.recentVerses[id-1].name+"."
-    }
-    
+
     func updateVerseAtIndex(id: Int, withVerseInfo verse: VerseInfo){
         if(id==0){
             return
         }
-        self.recentVerses[id-1] = verse
-        let idxSet = NSIndexSet(index: id)
-        updateCellHeightVal(verse)
+        let section = id-1
+        let idxSet = NSIndexSet(index: section)
+    
+        if let ds = self.getDatasource() {
+            ds.recentVerses[section-1] = verse
+            ds.updateCellHeightVal(verse)
+        }
         
         dispatch_async(dispatch_get_main_queue()) {
-             let path = NSIndexPath(forRow: 0, inSection: self.nVerses)
+             let path = NSIndexPath(forRow: 0, inSection: section)
              self.reloadSections(idxSet, withRowAnimation: .None)
              self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
         }
@@ -75,22 +55,31 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     // and the array value is the last one added
     func removeFailedVerse(){
 
-        let idxSet = NSIndexSet(index: self.nVerses)
-        self.nVerses = self.nVerses - 1
+        let idxSet = NSIndexSet(index: self.numberOfSections-1)
+
         Animations.start(0.2) {
+            if let ds = self.getDatasource(){
+                ds.nVerses = ds.nVerses - 1
+                ds.recentVerses.removeAtIndex(ds.recentVerses.count-1)
+            }
             self.deleteSections(idxSet, withRowAnimation: .Top)
-            self.recentVerses.removeAtIndex(self.recentVerses.count-1)
-        }     
+
+        }
     }
     
     func addSection() {
         
+        var nSections = self.numberOfSections
         // add section after dummy section
-        self.nVerses = self.nVerses + 1
-        let idxSet = NSIndexSet(index: self.nVerses)
+        if let ds = self.getDatasource(){
+            ds.nVerses += 1
+            nSections = ds.nVerses
+        }
+        
+        let idxSet = NSIndexSet(index: nSections)
 
         self.insertSections(idxSet, withRowAnimation: .None)
-        let path = NSIndexPath(forRow: 0, inSection: self.nVerses)
+        let path = NSIndexPath(forRow: 0, inSection: nSections)
         
         self.reloadSections(idxSet, withRowAnimation: .None)
 
@@ -100,129 +89,96 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func scrollToEnd(){
-        if self.nVerses > 0 {
-            let path = NSIndexPath(forRow: 0, inSection: self.nVerses)
+        if self.numberOfSections > 2 {
+            let path = NSIndexPath(forRow: 0, inSection: self.numberOfSections-1)
             self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
         }
     }
     
     func sortByPriority(){
-        self.recentVerses.sortInPlace {
-            if ($0.session != $1.session){
-                return $0.session < $1.session
+        if let ds = self.getDatasource() {
+            ds.recentVerses.sortInPlace {
+                if ($0.session != $1.session){
+                    return $0.session < $1.session
+                }
+                return $0.priority > $1.priority
             }
-            return $0.priority > $1.priority
         }
     }
     
     func updateVersePriority(id: String, priority: Float){
         var i = 0
-        for var v in self.recentVerses {
-            if v.id == id {
-                self.recentVerses[i].priority = priority
-            }
-            i+=1
-        }
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    // MARK: dataSource
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        if indexPath.section == 0 { // dummy row to padd table
-            let dummyCell = VerseTableViewCell(style: .Default, reuseIdentifier: nil)
-            dummyCell.hidden = true
-            return dummyCell
-        }
-        
-        var cell: VerseTableViewCell?
-        
-        cell = tableView.dequeueReusableCellWithIdentifier("verseCell") as! VerseTableViewCell?
-        
-        if cell == nil {
-            let nib = UINib(nibName: "VerseTableViewCell", bundle: nil)
-            tableView.registerNib(nib, forCellReuseIdentifier: "verseCell")
-            cell = tableView.dequeueReusableCellWithIdentifier("verseCell") as! VerseTableViewCell?
-        }
-        
-        if let verseCell = cell {
-            verseCell.delegate = self.cellDelegate
-            let index = indexPath.section - 1
-            if self.recentVerses.count != 0 {
-                let verse = self.recentVerses[index]
-                verseCell.enableMore = true
-                verseCell.updateWithVerseInfo(verse, isExpanded: self.isExpanded)
-                return verseCell
+        if let ds = self.getDatasource() {
+            for var v in ds.recentVerses {
+                if v.id == id {
+                    ds.recentVerses[i].priority = priority
+                }
+                i+=1
             }
         }
-        return VerseTableViewCell(style: .Default, reuseIdentifier: nil)
     }
     
-    
-    // MARK: Header
-    func heightForHeaderSection() -> CGFloat {
-        var headerHeight = self.initHeaderHeight
-        if self.isExpanded == true {
-            if self.expandedCellHeights < self.frame.height {
-                headerHeight = self.frame.height - self.expandedCellHeights
-            } else {
-                headerHeight = 0
-            }
-        }
-        
-        return headerHeight
-    }
-    
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if self.isExpanded == false {
-            // fade in new cells
-            cell.alpha = 0
-            Animations.start(0.3){
-                cell.alpha = 1
-            }
-        }
-        
-    }
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
 
-        // default height of collapsed cell
-        var sectionHeight:CGFloat = 65
+    
+
+    
+    func expandView(toSize: CGSize) -> Bool {
+        self.reloadData()
+        self.isExpanded = !self.isExpanded
+        return self.isExpanded
+    }
+    
+    func setContentToExpandedEnd() {
+        if self.numberOfSections > 0 {
+            var yOffset = self.contentSize.height - self.frame.size.height
+            if yOffset < 0 {
+                yOffset = 0
+            }
+            self.setContentOffset(CGPointMake(0, yOffset), animated: false)
+
+        }
+    }
+    
+    func setContentToCollapsedEnd() {
+        let yOffset: CGFloat = CGFloat(self.numberOfSections)*65.0
+        self.setContentOffset(CGPointMake(0, yOffset), animated: false)
+    }
+    
+    func clear(){
         
-        if indexPath.section == 0 {
-            
-            // height of header section
-            sectionHeight = 0
-            
-        }  else if self.isExpanded == true {
-            
-            // is expanded, so base height on size of text
-            let index = indexPath.section - 1
-            if let text = self.recentVerses[index].text {
-                sectionHeight = cellHeightForText(text)
+        
+        // fade out table
+        Animations.start(0.3) {
+            self.alpha = 0
+        }
+        
+        if let ds = self.getDatasource(){
+            ds.nVerses = 0
+            ds.recentVerses = [VerseInfo]()
+            ds.expandedCellHeights = 0.0
+            ds.hasHeader = true
+        }
+        
+        // clear table rows
+        Timing.runAfter(0.5) {
+            self.reloadData()
+            self.alpha = 1
+        }
+    }
+    
+    
+
+    func currentMatches() -> [String]{
+        var matches = [String]()
+        if let ds = self.getDatasource(){
+            for m in ds.recentVerses {
+                matches.append(m.id)
             }
         }
-        
-        return sectionHeight
+        return matches
     }
     
-    func cellHeightForText(text: String) -> CGFloat {
-        let font = themer.currentFont()
-        var height = text.heightWithConstrainedWidth(self.frame.size.width*0.90,
-                                                     font: font)+font.pointSize+25
-        
-        if height  > 30 { // bigger than a loading text
-            height+=50
-        }
-        
-        return height
-    }
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return self.nVerses + 1
-    }
+    // MARK: delegate methods
     
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         view.tintColor = UIColor.clearColor()
@@ -236,56 +192,52 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         view.tintColor = UIColor.clearColor()
     }
     
-    func expandView(toSize: CGSize) -> Bool {
-        self.reloadData()
-        self.isExpanded = !self.isExpanded
-        return self.isExpanded
-    }
     
-    func setContentToExpandedEnd() {
-        if self.recentVerses.count > 0 {
-            var yOffset = self.contentSize.height - self.frame.size.height
-            if yOffset < 0 {
-                yOffset = 0
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        if self.isExpanded == false {
+            // fade in new cells
+            cell.alpha = 0
+            Animations.start(0.3){
+                cell.alpha = 1
             }
-            self.setContentOffset(CGPointMake(0, yOffset), animated: false)
-
         }
+        
     }
-    
-    func setContentToCollapsedEnd() {
-        let yOffset: CGFloat = CGFloat(self.nVerses)*65.0
-        self.setContentOffset(CGPointMake(0, yOffset), animated: false)
-    }
-    
-    func clear(){
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        self.hasHeader = true
-        self.expandedCellHeights = 0.0
+        // default height of collapsed cell
+        var sectionHeight:CGFloat = 65
         
-        // fade out table
-        Animations.start(0.3) {
-            self.alpha = 0
+        if indexPath.section == 0 {
+            
+            // height of header section
+            sectionHeight = 0
+            
+        }  else if self.isExpanded == true {
+            
+            // is expanded, so base height on size of text
+            let index = indexPath.section - 1
+            if let ds = self.getDatasource() {
+                if let text = ds.recentVerses[index].text {
+                    sectionHeight = ds.cellHeightForText(text, width: self.frame.size.width)
+                }
+            }
         }
         
-        // clear table rows
-        Timing.runAfter(0.5) {
-            self.nVerses = 0
-            self.recentVerses = [VerseInfo]()
-            self.reloadData()
-            self.alpha = 1
-        }
+        return sectionHeight
     }
     
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-
+            
             
             // delete cell from datasource
             let idxSet = NSIndexSet(index: indexPath.section)
-            self.nVerses -= 1
-            self.recentVerses.removeAtIndex(indexPath.section-1)
+            if let ds = self.getDatasource() {
+                ds.nVerses -= 1
+                ds.recentVerses.removeAtIndex(indexPath.section-1)
+            }
             
             // notify cell delegate of removed content
             let cell = tableView.cellForRowAtIndexPath(indexPath) as! VerseTableViewCell
@@ -293,19 +245,12 @@ class VerseTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
             
             // drop celll from section
             tableView.deleteSections(idxSet, withRowAnimation: .Automatic)
-            self.reloadData()
+            tableView.reloadData()
             
         }
     }
     
     
-    func currentMatches() -> [String]{
-        var matches = [String]()
-        for m in self.recentVerses {
-            matches.append(m.id)
-        }
-        return matches
-    }
 
 }
 
