@@ -46,7 +46,22 @@ class Animations {
                               forDuration: tsFadeOut){
             view.alpha = 0
         }
-
+        
+    }
+    class func fadeOutIn(tsFadeIn: NSTimeInterval, tsFadeOut: NSTimeInterval, view: UIView, alpha: CGFloat) {
+        
+        if view.alpha != 1.0 {
+            return // already transitioning
+        }
+        
+        Animations.start(tsFadeIn){
+            view.alpha = alpha
+        }
+        
+        Animations.startAfter(tsFadeIn,
+                              forDuration: tsFadeOut){
+                                view.alpha = 1
+        }
         
     }
 }

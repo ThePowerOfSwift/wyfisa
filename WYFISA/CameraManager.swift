@@ -13,9 +13,6 @@ import TesseractOCR
 
 let IS_SIMULATOR = TARGET_OS_SIMULATOR != 0
 
-protocol CameraManagerDelegate: class {
-    func didProcessFrame(sender: CameraManager, withText text: String, image: UIImage, fromSession: UInt64)
-}
 
 class CameraManager {
     let camera: GPUImageStillCamera
@@ -24,7 +21,6 @@ class CameraManager {
     var simImage: UIImage! = UIImage(named: "oneanother")
     var captureStarted: Bool = false
     
-    weak var delegate:CameraManagerDelegate?
 
     init(){
         
@@ -82,15 +78,12 @@ class CameraManager {
     }
     
     // add filters and targets to camera
-    func addCameraTarget(target: GPUImageInput!){
+    func addCameraBlurTargets(target: GPUImageInput!){
         
         let targetView = target as! UIView
         let guassFilter = ImageFilter.guassianBlur(0.5, y: 0.0, radius: targetView.superview!.frame.width/800)
-
-        // chain filters
         self.camera.addTarget(guassFilter)
         guassFilter.addTarget(target)
-
     }
     
     func addDebugTarget(target: GPUImageInput!){
@@ -123,25 +116,10 @@ class CameraManager {
         return  self.filter.imageFromCurrentFramebuffer()
     }
     
-    func recognizeFrameFromCamera(fromSession: UInt64) {
-        
-        if (self.camera.inputCamera == nil ||
-            self.camera.inputCamera.adjustingFocus == true) &&
-            IS_SIMULATOR == false {
-            // is autofocusing
-            return
-        }
-
-        // grap frame from campera
-        if let image = self.imageFromFrame(){
-            
-            // do image recognition
-            if let recognizedText = ocr.process(image){
-                self.delegate?.didProcessFrame(self, withText: recognizedText, image: image, fromSession: fromSession)
-            }
-        }
-       
+    func processImage(image: UIImage) -> String? {
+        return self.ocr.process(image)
     }
+    
     
 
 }

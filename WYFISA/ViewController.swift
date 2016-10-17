@@ -23,21 +23,25 @@ struct CaptureSession {
         return self.newMatches > 0
     }
 }
-class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCellDelegate, UIScrollViewDelegate, UISearchBarDelegate, UIPopoverPresentationControllerDelegate {
+class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollViewDelegate, UISearchBarDelegate, UIPopoverPresentationControllerDelegate {
 
     @IBOutlet var debugWindow: GPUImageView!
     @IBOutlet var verseTable: VerseTableView!
     @IBOutlet var filterView: GPUImageView!
-    @IBOutlet var captureButton: UIButton!
     @IBOutlet var maskView: UIView!
     @IBOutlet var captureBox: UIImageView!
     @IBOutlet var refeshButton: UIButton!
+    @IBOutlet var captureBoxActive: UIImageView!
     
     @IBOutlet var capTut: UILabel!
     @IBOutlet var trashIcon: UIButton!
     @IBOutlet var escapeMask: UIView!
     @IBOutlet var searchView: UIView!
     @IBOutlet var searchBar: UISearchBar!
+    @IBOutlet var bottomNavBar: UITabBar!
+    @IBOutlet var collectionItem: UITabBarItem!
+    @IBOutlet var settingsItem: UITabBarItem!
+    
     let db = DBQuery.sharedInstance
     let themer = WYFISATheme.sharedInstance
     let settings = SettingsManager.sharedInstance
@@ -49,15 +53,18 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
     var settingsEnabled: Bool = false
     var nightEnabled: Bool = false
     var firstLaunch: Bool = false
+    var lastCaptureEmpty: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         verseTable.setCellDelegate(self)
 
         if self.firstLaunch == false {
             self.firstLaunch = true
             self.initCamera()
         }
+        self.doCaptureAction()
     }
     
     func initCamera(){
@@ -71,22 +78,20 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         if self.cam?.captureStarted == false {
             self.cam?.start()
-            self.cam?.pause()
+            //self.cam?.pause()
         }
         
         // send camera to live view
         self.checkCameraAccess()
         self.filterView.fillMode = GPUImageFillModeType.init(2)
-        
+
         // put a gaussian blur on the live view
-        self.cam?.addCameraTarget(self.filterView)
+        self.cam?.addCameraBlurTargets(self.filterView)
         
         // camera config
         self.cam?.zoom(1)
         self.cam?.focus(.ContinuousAutoFocus)
-        
-        // start capture
-        self.cam?.delegate = self
+
     }
     
 
@@ -102,60 +107,83 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         super.didReceiveMemoryWarning()
     }
     
-    // MARK: - Capture
-    @IBAction func didPressCaptureButton(sender: AnyObject) {
-                
-        // make sure not in editing mode
-        self.exitEditingMode()
-        self.capTut.hidden = true
-        
-
+    func doCaptureAction(){
         if self.captureLock.tryLock() {
+            self.cam?.resume()
             
             // show capture box
+            self.captureBoxActive.hidden = false
             self.captureBox.hidden = false
 
+            
             self.verseTable.isExpanded = false
             self.verseTable.reloadData()
             self.verseTable.setContentToCollapsedEnd()
-
+            
             Animations.start(0.3) {
-               // self.captureBox.alpha = 0
+                self.captureBoxActive.alpha = 0
                 self.maskView.alpha = 0
             }
             
             // camera init
             self.cam?.resume()
-
+            
             if self.settings.useFlash == true {
                 self.cam?.torch(.On)
             }
-
+            
             // session init
             self.session.active = true
-            let sessionId = self.session.currentId
             session.clearCache()
-
+            
             // adds row to verse table
+            /*
             let defaultVerse = VerseInfo(id: "", name: self.workingText, text: "")
             self.verseTable.appendVerse(defaultVerse)
             self.verseTable.addSection()
+            */
+ 
             
             Timing.runAfter(0.2){
                 self.verseTable.scrollToEnd()
             }
+            self.captureLoop()
+
             
-            // capture frames
-            let asyncQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-            dispatch_async(asyncQueue) {
-                while self.session.currentId == sessionId {
-                    self.cam?.recognizeFrameFromCamera(sessionId)
-                }
-            }
             self.captureLock.unlock()
         }
-        
     }
+    
+    func captureLoop(){
+        let sessionId = self.session.currentId
+
+        // capture frames
+        Timing.runAfterBg(0) {
+            while self.session.currentId == sessionId {
+                // grap frame from campera
+                
+                if let image = self.cam?.imageFromFrame(){
+                    
+                    // do image recognition
+                    if let recognizedText = self.cam?.processImage(image){
+                        self.didProcessFrame(withText: recognizedText, image: image, fromSession: sessionId)
+                    }
+                }
+                
+                if (self.session.misses >= 10) {
+                    self.session.misses = 0
+                    break
+                }
+            }
+            Timing.runAfterBg(2.0){
+                self.captureLoop()
+            }
+        }
+        
+
+                
+    }
+    
 
     func handleCaptureEnd(){
         
@@ -168,13 +196,14 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         
         // remove scanning box
         if self.session.newMatches == 0 && self.session.active {
-            self.verseTable.removeFailedVerse()
+            //self.verseTable.removeFailedVerse()
         }
         
         // hide capture box
         self.verseTable.isExpanded = true
+        self.captureBoxActive.hidden = true
         self.captureBox.hidden = true
-
+        
         Animations.start(0.3) {
             self.maskView.alpha = 0.6
         }
@@ -193,26 +222,29 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
 
     }
     
-    @IBAction func didReleaseCaptureButton(sender: AnyObject) {
-        self.handleCaptureEnd()
-    }
-    @IBAction func didReleaseCaptureButtonOutside(sender: AnyObject) {
-        self.handleCaptureEnd()
-    }
+
     
     // MARK: - Process
     
     // when frame has been processed we need to write it back to the cell
-    func didProcessFrame(sender: CameraManager, withText text: String, image: UIImage, fromSession: UInt64) {
+    func didProcessFrame(withText text: String, image: UIImage, fromSession: UInt64) {
         
         //print(text)
         if fromSession != self.session.currentId {
             return // Ignore: from old capture session
         }
+        if (text.length == 0){
+            self.session.misses += 1
+            return // empty
+        } else {
+            self.session.misses = 0
+        }
         
+        Animations.fadeOutIn(0.3, tsFadeOut: 0.3, view: self.captureBox, alpha: 0)
+
+
         updateLock.lock()
 
-        Animations.fadeInOut(0.3, tsFadeOut: 0.3, view: self.captureBox, alpha: 0.6)
         
         
         let id = self.verseTable.nVerses+1
@@ -231,17 +263,15 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
                     
                     // make sure not repeat match
                     if self.session.matches.indexOf(verseInfo.id) == nil {
-                        
-                        // first match replaces scanning icon
-                        if self.session.newMatches == 0 {
-                            self.verseTable.updateVerseAtIndex(id-1, withVerseInfo: verseInfo)
-                        } else {
+
                             // new match
                             self.verseTable.appendVerse(verseInfo)
                             dispatch_async(dispatch_get_main_queue()) {
                                 self.verseTable.addSection()
                             }
-                        }
+                        
+                        // notify
+                        Animations.fadeInOut(0.3, tsFadeOut: 0.3, view: self.captureBoxActive, alpha: 0.6)
                     } else {
                         // dupe
                         continue
@@ -284,7 +314,7 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
 
          // pause camera
         dispatch_async(dispatch_get_main_queue()) {
-            self.cam?.pause()
+ //           self.cam?.pause()
         }
         
          // Get the new view controller using segue.destinationViewController.
@@ -498,6 +528,16 @@ class ViewController: UIViewController, CameraManagerDelegate, VerseTableViewCel
         self.escapeMask.hidden = true
     }
 
+    // tab bar nav
+    @IBAction func didPressCollectionButton(sender: AnyObject) {
+        self.settingsItem.image = UIImage(named: "ios7-gear-outline")
+//       self.collectionItem.image
+    }
+    
+    @IBAction func didPressSettingsButton(sender: AnyObject) {
+        self.settingsItem.image = UIImage(named: "ios7-gear-fire")
+    }
+    
 }
 
 

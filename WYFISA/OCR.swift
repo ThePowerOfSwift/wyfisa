@@ -55,6 +55,9 @@ class OCR: NSObject, G8TesseractDelegate {
     @objc func preprocessedImageForTesseract(tesseract: G8Tesseract!, sourceImage: UIImage!) -> UIImage! {
         return self.cropScaleAndFilter(sourceImage)
     }
+    func shouldCancelImageRecognitionForTesseract(tesseract: G8Tesseract!) -> Bool {
+        return false
+    }
     
     func imageToFile(image: UIImage, named: String){
         if let data = UIImageJPEGRepresentation(image, 0.8) {
