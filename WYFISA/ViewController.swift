@@ -23,31 +23,23 @@ struct CaptureSession {
         return self.newMatches > 0
     }
 }
-class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollViewDelegate, UISearchBarDelegate, UIPopoverPresentationControllerDelegate {
+class ViewController: UIViewController, UIScrollViewDelegate {
 
-    @IBOutlet var debugWindow: GPUImageView!
     @IBOutlet var verseTable: VerseTableView!
-    @IBOutlet var filterView: GPUImageView!
-    @IBOutlet var maskView: UIView!
     @IBOutlet var captureBox: UIImageView!
     @IBOutlet var refeshButton: UIButton!
     @IBOutlet var captureBoxActive: UIImageView!
     
+    @IBOutlet var gradientView: UIImageView!
     @IBOutlet var capTut: UILabel!
     @IBOutlet var trashIcon: UIButton!
-    @IBOutlet var escapeMask: UIView!
-    @IBOutlet var searchView: UIView!
-    @IBOutlet var searchBar: UISearchBar!
-    @IBOutlet var bottomNavBar: UITabBar!
-    @IBOutlet var collectionItem: UITabBarItem!
-    @IBOutlet var settingsItem: UITabBarItem!
-    @IBOutlet var searchBarBG: UIView!
     
     let db = DBQuery.sharedInstance
     let themer = WYFISATheme.sharedInstance
     let settings = SettingsManager.sharedInstance
+    var cam = CameraManager.sharedInstance
+
     var session = CaptureSession()
-    var cam: CameraManager? = nil
     var captureLock = NSLock()
     var updateLock = NSLock()
     var workingText = "Scanning"
@@ -61,11 +53,6 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if self.firstLaunch == false {
-            self.firstLaunch = true
-            self.initCamera()
-        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -87,22 +74,13 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
         }
         
         self.firstLaunch = false
-        self.cam = CameraManager()
-        
-        if self.cam?.captureStarted == false {
-            self.cam?.start()
-        }
-        
+
         // send camera to live view
         self.checkCameraAccess()
-        self.filterView.fillMode = GPUImageFillModeType.init(2)
 
-        // put a gaussian blur on the live view
-        self.cam?.addCameraBlurTargets(self.filterView)
-        
         // camera config
-        self.cam?.zoom(1)
-        self.cam?.focus(.ContinuousAutoFocus)
+        self.cam.zoom(1)
+        self.cam.focus(.ContinuousAutoFocus)
 
     }
     
@@ -111,7 +89,13 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
         super.viewWillAppear(animated)
         self.verseTable.reloadData()
         
-        if firstLaunch == true {
+        if self.firstLaunch == false {
+            self.firstLaunch = true
+            print(self.isExpanded)
+            if self.isExpanded == false {
+                self.initCamera()
+            }
+        } else {
             self.capTut.hidden = false
         }
         if let size = self.frameSize {
@@ -120,10 +104,10 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
         
         if self.isExpanded == true {
             self.captureBox.hidden = true
-            self.maskView.alpha = 0.6
-            self.searchBar.hidden = false
+           // self.searchBar.hidden = false
             self.trashIcon.hidden = false
-            self.searchBarBG.hidden = false
+           // self.searchBarBG.hidden = false
+            self.gradientView.hidden = true
         }
     }
     
@@ -134,7 +118,7 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
     func doCaptureAction(){
         if self.captureLock.tryLock() {
 
-            self.cam?.resume()
+            self.cam.resume()
             
             // show capture box
             self.captureBoxActive.hidden = false
@@ -145,18 +129,12 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
             self.verseTable.reloadData()
             self.verseTable.setContentToCollapsedEnd()
             
-            Animations.start(0.3) {
-                self.maskView.alpha = 0
-            }
-            
             // flash capture box
             Animations.fadeOutIn(0.3, tsFadeOut: 0.3, view: self.captureBox, alpha: 0)
-            
-            // camera init
-            self.cam?.resume()
+
             
             if self.settings.useFlash == true {
-                self.cam?.torch(.On)
+                self.cam.torch(.On)
             }
             
             // session init
@@ -188,10 +166,10 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
             while self.session.currentId == sessionId {
                 // grap frame from campera
                 
-                if let image = self.cam?.imageFromFrame(){
+                if let image = self.cam.imageFromFrame(){
                     
                     // do image recognition
-                    if let recognizedText = self.cam?.processImage(image){
+                    if let recognizedText = self.cam.processImage(image){
                         self.didProcessFrame(withText: recognizedText, image: image, fromSession: sessionId)
                     }
                 }
@@ -220,7 +198,7 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
         
         
         if self.settings.useFlash == true {
-            self.cam?.torch(.Off)
+            self.cam.torch(.Off)
         }
         
         // remove scanning box
@@ -231,9 +209,7 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
         }
         
         // hide capture box
-        //self.verseTable.isExpanded = true
         self.captureBoxActive.hidden = true
-//        self.captureBox.hidden = false
 
         
         self.session.currentId += 1
@@ -256,7 +232,7 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
     // when frame has been processed we need to write it back to the cell
     func didProcessFrame(withText text: String, image: UIImage, fromSession: UInt64) {
         
-        print(text)
+        // print(text)
         if fromSession != self.session.currentId {
             return // Ignore: from old capture session
         }
@@ -305,6 +281,10 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
                             }
                         }
                         
+                        // cache
+                        self.db.chapterForVerse(verseInfo.id)
+                        self.db.crossReferencesForVerse(verseInfo.id)
+                        self.db.versesForChapter(verseInfo.id)
 
                     } else {
                         // dupe
@@ -320,158 +300,28 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
         updateLock.unlock()
 
     }
-    
-    // MARK: - Table cell delegate
-    func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo){
-        if sender.editing == false {
-            performSegueWithIdentifier("VerseDetail", sender: (verse as! AnyObject))
-        }
-    }
-    
-    func didTapInfoButtonForVerse(verse: VerseInfo){
-        performSegueWithIdentifier("infosegue", sender: (verse as! AnyObject))
-    }
-    
-    func didRemoveCell(sender: VerseTableViewCell) {
-        // update session matches to reflect new set of cells
+
+    func updateSessionMatches(){
         self.session.matches = self.verseTable.currentMatches()
-        if self.session.matches.count == 0 {
-            // removed all cells, exit editing mode
-            self.exitEditingMode()
+    }
+    
+    func syncWithDataSource(){
+        print(self.session.currentId)
+        self.updateSessionMatches()
+        if self.session.matches.count == 0 && self.session.currentId > 0 {
+            self.verseTable.clear()
+            self.session.currentId = 0
         }
     }
 
      // MARK: - Navigation
-     
      // In a storyboard-based application, you will often want to do a little preparation before navigation
      override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-
-         // pause camera
-        dispatch_async(dispatch_get_main_queue()) {
- //           self.cam?.pause()
-        }
-        
-         // Get the new view controller using segue.destinationViewController.
-         // Pass the selected object to the new view controller.
-        if segue.identifier == "VerseDetail" {
-            let toVc = segue.destinationViewController as! VerseDetailModalViewController
-
-            let verse = sender as! VerseInfo
-            toVc.verseInfo = verse
-        }
-        
-        if segue.identifier == "infosegue" {
-            let toVc = segue.destinationViewController as! InfoViewController
-            
-            // make a partial controller
-            let width = self.view.frame.width
-            toVc.preferredContentSize = CGSize(width:width, height: 460)
-            let controller = toVc.popoverPresentationController
-            controller?.delegate = self
-            controller?.sourceView = self.captureBox
-            controller?.sourceRect = CGRect(x:CGRectGetMidX(self.view.bounds),
-                                            y: CGRectGetMidY(self.view.bounds)*0.70,
-                                            width: width,
-                                            height: 420)
-            controller?.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
-
-            self.escapeMask.alpha = 0
-            self.escapeMask.hidden = false
-            
-            Animations.start(0.3){
-                self.escapeMask.backgroundColor = UIColor.navy(1.0)
-                self.escapeMask.alpha = 0.7
-            }
-            let verse = sender as! VerseInfo
-            toVc.verseInfo = verse
-            toVc.doneCallback = self.hideEscapeMask
-        }
-        
-        if segue.identifier == "searchsegue" {
-            let toVc = segue.destinationViewController as! SearchBarViewController
-            toVc.escapeMask = self.escapeMask
-            toVc.searchView = self.searchView
-            self.searchBar.delegate = toVc
-            
-        }
-
         // make sure tutorial is gone if we're pressing buttons!
         self.capTut.hidden = true
         
      }
-    
-    
-    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
-        
-        if identifier == "settingsegue" {
-            // if search bar is up, close it
-            // this is not a true editing mode
-            if self.escapeMask.hidden == false {
-                if let delegate = self.searchBar.delegate {
-                    delegate.searchBarTextDidEndEditing!(self.searchBar)
-                }
-                return false
-            }
-        }
-        return true
-    }
 
-    func closeSearchView(){
-        // clean up search results
-        Animations.start(0.3){
-            self.searchView.alpha = 0
-            self.searchBar.text = nil
-        }
-        
-        Timing.runAfter(0.3){
-            self.searchBar.endEditing(true)
-        }
-        
-    }
-    
-    @IBAction func unwindFromSearch(segue: UIStoryboardSegue) {
-        
-        self.closeSearchView()
-        self.exitEditingMode()
-        
-        // add verse if matched
-        let fromVC = segue.sourceViewController as! SearchBarViewController
-        if let verseInfo = fromVC.resultInfo {
-                verseInfo.session = self.session.currentId
-
-            //    self.verseTable.reloadData()
-            
-                // new match
-                self.tableDataSource?.appendVerse(verseInfo)
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.verseTable.addSection()
-                }
-                self.session.newMatches += 1
-                self.session.matches.append(verseInfo.id)
-               //TODO: probabaly ust brok
-                // self.verseTable.updateCellHeightVal(verseInfo)
-        }
-    
-        // end session
-        self.handleCaptureEnd()
-        self.capTut.hidden = true
-        
-    }
-    
-    @IBAction func unwindFromSettings(segue: UIStoryboardSegue) {
-        
-    }
-    
-    @IBAction func unwindFromInfo(segue: UIStoryboardSegue) {
-        self.escapeMask.backgroundColor = UIColor.clearColor()
-        self.escapeMask.hidden = true
-    }
-    
-
-    override func prefersStatusBarHidden() -> Bool {
-        return false
-    }
-    
     func checkCameraAccess() {
         
         if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) !=  AVAuthorizationStatus.Authorized
@@ -484,95 +334,8 @@ class ViewController: UIViewController, VerseTableViewCellDelegate, UIScrollView
             });
         }
     }
+    
 
-    @IBAction func didTapView(sender: UITapGestureRecognizer) {
-        // if we are showing search view
-        // tell delegate that editing ended
-        if let delegate = self.searchBar.delegate {
-           delegate.searchBarTextDidEndEditing!(self.searchBar)
-        }
-        
-    }
-    
-    func updateEditingView(toMode: Bool){
-        if toMode == true { // enter editing mode
-            Animations.start(0.5){
-                self.refeshButton.alpha = 1
-                self.trashIcon.setImage(UIImage(named: "ios7-trash-fire"), forState: .Normal)
-            }
-        } else {
-            Animations.start(0.5){
-                self.refeshButton.alpha = 0
-                self.trashIcon.setImage(UIImage(named: "ios7-trash-outline"), forState: .Normal)
-            }
-        }
-    }
-    
-    @IBAction func didTapTrashIcon(sender: AnyObject) {
-
-        
-        // if search bar is up, close it
-        // this is not a true editing mode
-        if self.escapeMask.hidden == false {
-            if let delegate = self.searchBar.delegate {
-                delegate.searchBarTextDidEndEditing!(self.searchBar)
-            }
-            return
-        }
-
-        let mode = !self.verseTable.editing
-        self.verseTable.setEditing(mode, animated: true)
-        self.updateEditingView(mode)
-    }
-    
-    @IBAction func didTapClearAllButton(sender: UIButton) {
-        self.exitEditingMode()
-        if captureLock.tryLock(){
-            self.session.currentId = 0
-            
-            // empty table
-            self.verseTable.clear()
-            
-            // clear matches on session
-            self.session.matches = [String]()
-            
-            // unlock safely after clear operation
-            Timing.runAfter(1){
-                self.captureLock.unlock()
-            }
-        }
-        
-    }
-    
-    func exitEditingMode(){
-        if self.verseTable.editing == true {
-            self.verseTable.setEditing(false, animated: true)
-            self.updateEditingView(false)
-        }
-    }
-    
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
-        return UIModalPresentationStyle.None
-    }
-    
-    func popoverPresentationControllerDidDismissPopover(popoverPresentationController: UIPopoverPresentationController) {
-        self.hideEscapeMask()
-    }
-    
-    func hideEscapeMask(){
-        self.escapeMask.backgroundColor = UIColor.clearColor()
-        self.escapeMask.hidden = true
-    }
-
-    // tab bar nav
-    @IBAction func didPressCollectionButton(sender: AnyObject) {
-        self.settingsItem.image = UIImage(named: "ios7-gear-outline")
-//       self.collectionItem.image
-    }
-    
-    @IBAction func didPressSettingsButton(sender: AnyObject) {
-        self.settingsItem.image = UIImage(named: "ios7-gear-fire")
-    }
     
 }
 

@@ -31,7 +31,6 @@ let HEIGHT_FOR_HEADER:CGFloat = 30.0
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    @IBOutlet var navBar: UINavigationBar!
     @IBOutlet var settingsTable: UITableView!
     let settings = SettingsManager.sharedInstance
     let themer = WYFISATheme.sharedInstance
@@ -70,7 +69,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func themeView(){
-        self.navBar.barTintColor = self.themer.whiteForLightOrNavy(1.0)
         self.view.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
         self.settingsTable.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
         self.settingsTable.reloadData()
@@ -222,6 +220,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.settings.nightMode = !self.settings.nightMode
         self.setNightMode(self.settings.nightMode)
         self.updateSettings("night", value: self.settings.nightMode)
+
     }
 
     func toggleUseFlash(){

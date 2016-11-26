@@ -47,7 +47,8 @@ class VerseTableViewCell: UITableViewCell {
 
         self.backgroundColor = self.themer.whiteForLightOrNavy(0.8)
         if self.enableMore == true {
-            self.moreButton.hidden = false
+           // no "more"
+           // self.moreButton.hidden = false
         }
         if  verse.id.characters.count > 0 {
             // cell has a verse
@@ -152,4 +153,5 @@ class VerseTableViewCell: UITableViewCell {
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
+    
 }

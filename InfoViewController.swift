@@ -13,7 +13,6 @@ func defaultDoneCallback(){}
 
 class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    @IBOutlet var undoButton: UIBarButtonItem!
     @IBOutlet var capturedImage: UIImageView!
     @IBOutlet var textView: UITextView!
     @IBOutlet var orangeBrush: UIBarButtonItem!
@@ -21,12 +20,13 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet var navyBrush: UIBarButtonItem!
     @IBOutlet var tmpImageView: UIImageView!
     @IBOutlet var highlightBrush: UIBarButtonItem!
-    @IBOutlet var bottomToolBar: UIToolbar!
     
+    @IBOutlet var navToolbar: UIToolbar!
     var verseInfo: VerseInfo? = nil
     var themer = WYFISATheme.sharedInstance
     var doneCallback: ()->Void = defaultDoneCallback
     var originalImage: UIImage? = nil
+    var frameSize: CGSize = CGSize()
     
     // drawing vars
     var swiped: Bool = false
@@ -37,7 +37,6 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     var green = UIColor.hiGreen()
     var blue = UIColor.hiBlue()
     
-    @IBOutlet var navigationBar: UINavigationBar!
 
 
     override func viewDidLoad() {
@@ -51,7 +50,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         if let image = self.verseInfo?.overlayImage {
             self.tmpImageView.image = image
-            self.undoButton.enabled = true
+         //   self.undoButton.enabled = true
         }
 
         if let text = self.verseInfo?.text {
@@ -60,9 +59,13 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             self.textView.font = themer.currentFont()
         }
         
-        //navigationBar.topItem?.title = verseInfo?.name
+    }
+    override func viewWillAppear(animated: Bool) {
+        self.view.frame.size = self.frameSize
+    }
     
-        
+    func configure(size: CGSize){
+        self.frameSize = size
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -76,10 +79,12 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         // Dispose of any resources that can be recreated.
     }
     
+    /*
     @IBAction func didPressCloseButton(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
         self.doneCallback()
     }
+    */
     
     @IBAction func didPressShareButton(sender: AnyObject) {
         /*
@@ -116,15 +121,15 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     func makeShareImage() -> UIImage? {
+        
         let viewSize = self.view.bounds.size
         UIGraphicsBeginImageContext(viewSize);
         self.view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
         let screenShot = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-        let navOffset = self.navigationBar.frame.height/viewSize.height
-        let height = 1 - navOffset - self.bottomToolBar.frame.height/viewSize.height
-        let cropFilter = ImageFilter.cropFilter(0, y: navOffset, width: 1, height: height)
+        let navOffset = self.navToolbar.frame.height/viewSize.height
+        let cropFilter = ImageFilter.cropFilter(0, y: navOffset, width: 1, height: viewSize.height)
         let croppedImage = cropFilter.imageByFilteringImage(screenShot)
         return croppedImage
     }
@@ -140,6 +145,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
     }
 
+    /*
     @IBAction func didPressImageSelectButton(sender: AnyObject) {
         if UIImagePickerController.isSourceTypeAvailable(.PhotoLibrary) == true {
             let imagePicker = UIImagePickerController()
@@ -148,7 +154,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             imagePicker.allowsEditing = false
             self.presentViewController(imagePicker, animated: true, completion: nil)
         }
-    }
+    }*/
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let image = info[UIImagePickerControllerOriginalImage] as? UIImage
@@ -157,7 +163,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         picker.dismissViewControllerAnimated(true, completion: nil)
         if self.originalImage != nil {
             // original image was replaced, show undo
-            self.undoButton.enabled = true
+            // self.undoButton.enabled = true
         } else {
             self.originalImage = image
         }
@@ -165,11 +171,13 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         // clear out any drawing
         self.tmpImageView.image = nil
     }
+
     
-    @IBAction func didPressUndoButton(sender: AnyObject) {
+    @IBAction func pressUndoButton(sender: AnyObject) {
         if let img = self.originalImage {
             self.capturedImage.image = img
         }
+        
         self.tmpImageView.image = nil
     }
     
@@ -256,7 +264,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             drawLineFrom(self.lastPoint, toPoint: currentPoint)
             
             self.lastPoint = currentPoint
-            self.undoButton.enabled = true
+         //   self.undoButton.enabled = true
         }
     }
     

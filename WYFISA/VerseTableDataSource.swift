@@ -59,7 +59,7 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
             let index = indexPath.section - 1
             if self.recentVerses.count != 0 {
                 let verse = self.recentVerses[index]
-                verseCell.enableMore = true
+                verseCell.enableMore = vTableView.isExpanded == true
                 verseCell.updateWithVerseInfo(verse, isExpanded: vTableView.isExpanded)
                 return verseCell
             }
@@ -78,7 +78,7 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
     func cellHeightForText(text: String, width: CGFloat) -> CGFloat {
         let font = themer.currentFont()
         var height = text.heightWithConstrainedWidth(width*0.90,
-                                                     font: font)+font.pointSize+25
+                                                     font: font)+font.pointSize
         
         if height  > 30 { // bigger than a loading text
             height+=50
@@ -108,6 +108,22 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
         }
     }
     
-    
-    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            
+            
+            // delete cell from datasource
+            let idxSet = NSIndexSet(index: indexPath.section)
+            self.nVerses -= 1
+            self.recentVerses.removeAtIndex(indexPath.section-1)
+            
+            // notify cell delegate of removed content
+            let cell = tableView.cellForRowAtIndexPath(indexPath) as! VerseTableViewCell
+            cell.delegate?.didRemoveCell(cell)
+            
+            // drop celll from section
+            tableView.deleteSections(idxSet, withRowAnimation: .Automatic)
+            tableView.reloadData()
+        }
+    }
 }

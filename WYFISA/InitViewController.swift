@@ -12,7 +12,8 @@ class InitViewController: UIViewController {
 
     var tabVC: TabBarViewController? = nil
     @IBOutlet var captureButton: UIButton!
-    let inCaptureMode: Bool = false
+    var inCaptureMode: Bool = false
+    @IBOutlet var pageController: UIPageControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,9 +33,15 @@ class InitViewController: UIViewController {
         return selectedVC.captureVC
     }
     
-    func getPauseVC() -> ViewController? {
+    func getPauseVC() -> HistoryViewController? {
         let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
         return selectedVC.pauseVC
+    }
+    
+    
+    func getSearchVC() -> SearchViewController? {
+        let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
+        return selectedVC.searchVC
     }
     
     func getScrollPage() -> Int {
@@ -45,20 +52,30 @@ class InitViewController: UIViewController {
     func moveToPage(page: Int){
         let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
         selectedVC.scrollToPage(page)
+        self.pageController.currentPage = page
     }
     
     @IBAction func didSPressCaptureButton(sender: AnyObject) {
+        
         let captureViewActive = self.tabVC?.selectedIndex == 1
             
         if (captureViewActive == false) {
             // move to capture tab
+            self.pageController.hidden = false
+            
             self.tabVC?.selectedIndex = 1
+            self.inCaptureMode = false
+            let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
+            selectedVC.captureVC?.verseTable.reloadData()
+            selectedVC.pauseVC?.verseTable.reloadData()
+            return // just activate
         }
         
-        if self.getScrollPage() == 1 {
-            // on pause page
-            // so move to active
-            self.moveToPage(0)
+        self.inCaptureMode = true
+        
+        if self.getScrollPage() != 1 {
+            // move to active
+            self.moveToPage(1)
         }
         // get capture vc
         if  let vc = self.getCaptureVC(){
@@ -69,6 +86,12 @@ class InitViewController: UIViewController {
     
     @IBAction func didReleaseCaptureButton(sender: AnyObject){
 
+        if self.inCaptureMode == false {
+            let image = UIImage(named: "Oval 1")
+            self.captureButton.setImage(image, forState: .Normal)
+            return // release does not correspond to a capture
+        }
+        
         var didCaptureVerses = false
         if let vc = self.getCaptureVC() {
             didCaptureVerses = vc.handleCaptureEnd()
@@ -76,7 +99,7 @@ class InitViewController: UIViewController {
 
         if didCaptureVerses == true {
             // swipe to pause vc
-            self.moveToPage(1)
+            self.moveToPage(2)
         }
 
     }
@@ -90,6 +113,37 @@ class InitViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let destVC = segue.destinationViewController
         self.tabVC = destVC as! TabBarViewController
+        self.tabVC?.onTabChange = self.didChangeTab
+        self.tabVC?.onPageChange = self.didChangePage
+
+    }
+    
+    func didChangePage(page: Int){
+        let searchVC = self.getSearchVC()
+
+        
+        if page == 0 {
+            // draw page
+            searchVC?.openSearchView()
+        } else {
+            searchVC?.closeSearchView()
+        }
+ 
+        self.pageController.currentPage = page
+    }
+    
+    func didChangeTab(tab: Int){
+        print(tab)
+        if (tab == 1) {
+            // just left middle
+            let image = UIImage(named: "Oval 1-disabled")
+            self.captureButton.setImage(image, forState: .Normal)
+            // pause camera
+            if let vc = self.getCaptureVC() {
+                vc.cam.pause()
+            }
+            self.pageController.hidden = true
+        }
     }
     
 

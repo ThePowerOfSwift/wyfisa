@@ -20,7 +20,8 @@ class CameraManager {
     let ocr: OCR = OCR()
     var simImage: UIImage! = UIImage(named: "oneanother")
     var captureStarted: Bool = false
-    
+    static let sharedInstance = CameraManager()
+
 
     init(){
         
@@ -28,6 +29,8 @@ class CameraManager {
         self.camera = GPUImageStillCamera()
         self.camera.addTarget(filter)
         self.camera.outputImageOrientation = .Portrait;
+        
+        
     }
     
     func focus(mode: AVCaptureFocusMode){
@@ -101,6 +104,10 @@ class CameraManager {
     
     func resume(){
         self.camera.resumeCameraCapture()
+    }
+    
+    func stop(){
+        self.camera.stopCameraCapture()
     }
     
     func setSimImage(image: UIImage){

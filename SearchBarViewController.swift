@@ -18,7 +18,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     var selectedChapter: Int?
     var searchBarRef: UISearchBar?
     var searchView: UIView?
-    var escapeMask: UIView?
+    var escapeImageMask: UIImageView?
     var resultInfo: VerseInfo?
     var isVisible: Bool = false
     let themer = WYFISATheme.sharedInstance
@@ -52,7 +52,10 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.searchBarRef = searchBar
         self.chapterCollection.reloadData()
         self.isVisible = true
-        self.escapeMask?.hidden = false
+        Animations.start(0.3){
+            self.escapeImageMask?.hidden = false
+            self.escapeImageMask?.alpha = 1
+        }
         
         // theme
         self.matchLabel.textColor = self.themer.navyForLightOrWhite(1.0)
@@ -62,6 +65,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         
         self.matchLabel.font = self.themer.currentFontAdjustedBy(10)
         self.chapterLabel.font = self.themer.currentFontAdjustedBy(10)
+ 
         
     }
     
@@ -279,7 +283,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         self.isVisible = false
-        self.escapeMask?.hidden = true
+        self.escapeImageMask?.hidden = true
     }
  
  

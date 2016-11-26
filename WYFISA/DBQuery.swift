@@ -131,7 +131,7 @@ class DBQuery {
     func chapterForVerse(verseId: String) -> String {
         var chapter: String = ""
         var chapterVerses = [VerseInfo]()
-        
+
         if let cachedChapter = self.chapterCache[verseId] {
             return cachedChapter
         }
@@ -187,6 +187,7 @@ class DBQuery {
         }
         self.verseCache[verseId] = chapterVerses
         self.chapterCache[verseId] = chapter
+ 
         return chapter
     }
 

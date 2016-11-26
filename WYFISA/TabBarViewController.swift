@@ -8,15 +8,27 @@
 
 import UIKit
 
+func defaultCallback(page: Int){}
+
 class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
 
-    var captureVC: ViewController? = nil
-    
+    var captureButtonPtr: UIButton? = nil
+    var onTabChange: (Int) -> () = defaultCallback
+    var onPageChange: (Int) -> () = defaultCallback
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.selectedIndex = 1
         self.delegate = self
+        
         // Do any additional setup after loading the view.
+        let scrollVC = self.selectedViewController as! ScrollViewController
+        scrollVC.onPageChange = self.onPageChange
+    }
+    
+
+    override func tabBar(tabBar: UITabBar, didSelectItem item: UITabBarItem) {
+        self.onTabChange(self.selectedIndex)
     }
 
     override func didReceiveMemoryWarning() {

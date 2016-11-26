@@ -18,8 +18,10 @@
 		C31A7BC61D7FB4D400654753 /* WYFISATutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31A7BC41D7FB4D400654753 /* WYFISATutViewController.swift */; };
 		C31A7BC71D7FB4D400654753 /* WYFISATutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C31A7BC51D7FB4D400654753 /* WYFISATutViewController.xib */; };
 		C323F3D71D86EE5B00A7EC95 /* SearchBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */; };
+		C3355C591DE939380045E797 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3355C581DE939380045E797 /* SearchViewController.swift */; };
 		C338AF381D964B2F004E5E97 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C338AF371D964B2F004E5E97 /* InfoViewController.swift */; };
 		C34C52341D472E1A001E5F1A /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = C39090CF1D2C9C88000DFD15 /* tessdata */; };
+		C3606CE81DBBBACD00AE2E8B /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3606CE71DBBBACD00AE2E8B /* HistoryViewController.swift */; };
 		C362A4421DACD586002B1AF4 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362A4411DACD586002B1AF4 /* TabBarViewController.swift */; };
 		C362A4441DACD662002B1AF4 /* InitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362A4431DACD662002B1AF4 /* InitViewController.swift */; };
 		C371D0931D44623F00F944CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C390907D1D2C9AF8000DFD15 /* Assets.xcassets */; };
@@ -43,6 +45,7 @@
 		C3A5A73E1D9A22FF00A22FDB /* cross_ref.db in Resources */ = {isa = PBXBuildFile; fileRef = C3A5A73D1D9A22FF00A22FDB /* cross_ref.db */; };
 		C3A5A7401D9A249E00A22FDB /* t_web.db in Resources */ = {isa = PBXBuildFile; fileRef = C3A5A73F1D9A249E00A22FDB /* t_web.db */; };
 		C3AE3AD81D89FBDD0039AE3E /* WYFISATabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AE3AD71D89FBDD0039AE3E /* WYFISATabBarController.swift */; };
+		C3C4FAEC1DBB2F3E0068B19A /* ReadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C4FAEB1DBB2F3E0068B19A /* ReadViewController.swift */; };
 		C3D5065A1D3932FB00A04C83 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D506591D3932FB00A04C83 /* Animations.swift */; };
 		C3E0712C1D4DB54900097D01 /* WYFISAFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E0712B1D4DB54900097D01 /* WYFISAFont.swift */; };
 		C3F53B711D36219400E2F80D /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F53B701D36219400E2F80D /* CameraManager.swift */; };
@@ -86,7 +89,9 @@
 		C31A7BC41D7FB4D400654753 /* WYFISATutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISATutViewController.swift; sourceTree = "<group>"; };
 		C31A7BC51D7FB4D400654753 /* WYFISATutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WYFISATutViewController.xib; sourceTree = "<group>"; };
 		C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchBarViewController.swift; path = ../SearchBarViewController.swift; sourceTree = "<group>"; };
+		C3355C581DE939380045E797 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		C338AF371D964B2F004E5E97 /* InfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoViewController.swift; path = ../InfoViewController.swift; sourceTree = "<group>"; };
+		C3606CE71DBBBACD00AE2E8B /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		C362A4411DACD586002B1AF4 /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		C362A4431DACD662002B1AF4 /* InitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitViewController.swift; sourceTree = "<group>"; };
 		C374B49F1D8CF4600083366E /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -116,6 +121,7 @@
 		C3A5A73D1D9A22FF00A22FDB /* cross_ref.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = cross_ref.db; sourceTree = "<group>"; };
 		C3A5A73F1D9A249E00A22FDB /* t_web.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = t_web.db; sourceTree = "<group>"; };
 		C3AE3AD71D89FBDD0039AE3E /* WYFISATabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISATabBarController.swift; sourceTree = "<group>"; };
+		C3C4FAEB1DBB2F3E0068B19A /* ReadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadViewController.swift; sourceTree = "<group>"; };
 		C3D506571D38D56200A04C83 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C3D506591D3932FB00A04C83 /* Animations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
 		C3E0712B1D4DB54900097D01 /* WYFISAFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISAFont.swift; sourceTree = "<group>"; };
@@ -211,10 +217,13 @@
 				C379515F1D43D62A003FB4F5 /* Books.swift */,
 				C3F53B701D36219400E2F80D /* CameraManager.swift */,
 				C3F53B951D37499700E2F80D /* DBQuery.swift */,
+				C3606CE71DBBBACD00AE2E8B /* HistoryViewController.swift */,
 				C37951651D44306C003FB4F5 /* ImageFilter.swift */,
 				C362A4431DACD662002B1AF4 /* InitViewController.swift */,
 				C338AF371D964B2F004E5E97 /* InfoViewController.swift */,
 				C37951611D442023003FB4F5 /* OCR.swift */,
+				C3C4FAEB1DBB2F3E0068B19A /* ReadViewController.swift */,
+				C3355C581DE939380045E797 /* SearchViewController.swift */,
 				C306DA071DB484A200D1F962 /* ScrollViewController.swift */,
 				C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */,
 				C374B49F1D8CF4600083366E /* SettingsViewController.swift */,
@@ -556,6 +565,7 @@
 				C37951621D442023003FB4F5 /* OCR.swift in Sources */,
 				C3AE3AD81D89FBDD0039AE3E /* WYFISATabBarController.swift in Sources */,
 				C37951661D44306C003FB4F5 /* ImageFilter.swift in Sources */,
+				C3355C591DE939380045E797 /* SearchViewController.swift in Sources */,
 				C39090791D2C9AF8000DFD15 /* ViewController.swift in Sources */,
 				C362A4421DACD586002B1AF4 /* TabBarViewController.swift in Sources */,
 				C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */,
@@ -567,8 +577,10 @@
 				C31A7BC61D7FB4D400654753 /* WYFISATutViewController.swift in Sources */,
 				C312DE531D6C5A5E0098D0C5 /* WYFISATheme.swift in Sources */,
 				C306DA0A1DB49B8300D1F962 /* VerseTableDataSource.swift in Sources */,
+				C3C4FAEC1DBB2F3E0068B19A /* ReadViewController.swift in Sources */,
 				C3F53B901D372C0200E2F80D /* TextMatcher.swift in Sources */,
 				C3F53B961D37499700E2F80D /* DBQuery.swift in Sources */,
+				C3606CE81DBBBACD00AE2E8B /* HistoryViewController.swift in Sources */,
 				C37A7E3F1D3ABFF300F37F20 /* WYFISAExtentions.swift in Sources */,
 				C338AF381D964B2F004E5E97 /* InfoViewController.swift in Sources */,
 				C362A4441DACD662002B1AF4 /* InitViewController.swift in Sources */,

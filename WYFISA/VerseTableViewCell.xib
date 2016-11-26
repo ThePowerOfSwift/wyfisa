@@ -47,6 +47,7 @@
                     </stackView>
                     <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chatbox-working-navy" translatesAutoresizingMaskIntoConstraints="NO" id="O57-JO-AUF"/>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tiK-xj-sWk">
+                        <gestureRecognizers/>
                         <connections>
                             <action selector="didCancelCellTap:" destination="KGk-i7-Jjw" eventType="touchUpOutside" id="oxg-wl-ghz"/>
                             <action selector="didTapCellView:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="yo0-tn-EBb"/>
@@ -59,15 +60,15 @@
                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                 <gestureRecognizers/>
                 <constraints>
-                    <constraint firstItem="tiK-xj-sWk" firstAttribute="width" secondItem="Hx6-rj-7bM" secondAttribute="width" id="40v-B2-S8x"/>
+                    <constraint firstItem="tiK-xj-sWk" firstAttribute="centerX" secondItem="AuM-TO-WBP" secondAttribute="centerX" id="21A-B8-7PD"/>
+                    <constraint firstItem="tiK-xj-sWk" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" id="5TT-aA-Lgi"/>
                     <constraint firstItem="AuM-TO-WBP" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.9" id="68s-cR-MVi"/>
-                    <constraint firstItem="tiK-xj-sWk" firstAttribute="height" secondItem="Hx6-rj-7bM" secondAttribute="height" id="9ST-Hj-Zud"/>
                     <constraint firstItem="AuM-TO-WBP" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="I2k-oa-LOu"/>
                     <constraint firstItem="O57-JO-AUF" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" multiplier="0.3" id="Omf-td-bOw"/>
-                    <constraint firstItem="tiK-xj-sWk" firstAttribute="centerY" secondItem="Hx6-rj-7bM" secondAttribute="centerY" id="QD3-7M-4B5"/>
                     <constraint firstItem="AuM-TO-WBP" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="YOl-hV-nvX"/>
                     <constraint firstItem="O57-JO-AUF" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" multiplier="1.3" id="gvi-ts-Om0"/>
-                    <constraint firstItem="tiK-xj-sWk" firstAttribute="centerX" secondItem="Hx6-rj-7bM" secondAttribute="centerX" id="igK-aL-u3e"/>
+                    <constraint firstItem="tiK-xj-sWk" firstAttribute="top" secondItem="AuM-TO-WBP" secondAttribute="top" id="jnR-ap-b0g"/>
+                    <constraint firstItem="tiK-xj-sWk" firstAttribute="bottom" secondItem="Hx6-rj-7bM" secondAttribute="bottom" id="nuZ-XU-5aS"/>
                     <constraint firstAttribute="leadingMargin" secondItem="O57-JO-AUF" secondAttribute="leading" id="qAO-op-KQn"/>
                 </constraints>
             </tableViewCellContentView>
