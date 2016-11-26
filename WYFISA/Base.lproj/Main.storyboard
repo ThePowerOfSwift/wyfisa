@@ -20,7 +20,7 @@
                         <viewControllerLayoutGuide type="bottom" id="CMf-ph-o22"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Wvj-3j-E9m">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -39,48 +39,48 @@
                         <viewControllerLayoutGuide type="bottom" id="i9e-RT-we3"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="S2K-IU-3Cc">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Gradient" translatesAutoresizingMaskIntoConstraints="NO" id="Hi0-vM-BOW">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                                 <gestureRecognizers/>
                             </imageView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text=" In the beginning was the Word, and the Word was with God, and the Word was God." textAlignment="right" translatesAutoresizingMaskIntoConstraints="NO" id="YLC-jc-aJh">
-                                <rect key="frame" x="16" y="226" width="343" height="441"/>
+                                <rect key="frame" x="16" y="220.5" width="343" height="377.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="John 1:1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="BX9-33-TQZ">
-                                <rect key="frame" x="64" y="112" width="295" height="76.5"/>
+                                <rect key="frame" x="64" y="107.5" width="295" height="76.5"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="64"/>
                                 <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view alpha="0.10000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QEA-oI-piJ">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="NeF-Lp-SE9" appends="YES" id="jAM-T8-spX"/>
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="58Y-Wf-NLV">
-                                <rect key="frame" x="64" y="188.5" width="295" height="1"/>
+                                <rect key="frame" x="64" y="184" width="295" height="1"/>
                                 <color key="backgroundColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="KmX-yR-HOC"/>
                                 </constraints>
                             </view>
                             <containerView opaque="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cls-Zv-4mK">
-                                <rect key="frame" x="0.0" y="64" width="375" height="367"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="356"/>
                                 <connections>
                                     <segue destination="q3P-gX-fGt" kind="embed" identifier="searchsegue" id="2CB-Ry-dgF"/>
                                 </connections>
                             </containerView>
                             <searchBar contentMode="redraw" placeholder="search" translatesAutoresizingMaskIntoConstraints="NO" id="fFS-Jy-rx4">
-                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                         </subviews>
@@ -118,6 +118,7 @@
                             <constraint firstItem="Hi0-vM-BOW" firstAttribute="height" secondItem="S2K-IU-3Cc" secondAttribute="height" id="zS0-17-4Zc"/>
                         </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="" image="search" id="4nE-tm-god"/>
                     <connections>
                         <outlet property="escapeImageMask" destination="Hi0-vM-BOW" id="Tcb-sa-cRC"/>
                         <outlet property="escapeMask" destination="QEA-oI-piJ" id="0cw-ft-aMT"/>
@@ -260,8 +261,8 @@
                                     <action selector="didSPressCaptureButton:" destination="XjC-yA-6pa" eventType="touchDown" id="jVD-Cy-xXI"/>
                                 </connections>
                             </button>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" currentPage="1" translatesAutoresizingMaskIntoConstraints="NO" id="s29-Qd-YbJ">
-                                <rect key="frame" x="168" y="536.5" width="39" height="37"/>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="s29-Qd-YbJ">
+                                <rect key="frame" x="176" y="536.5" width="23" height="37"/>
                             </pageControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -297,7 +298,7 @@
                     <connections>
                         <segue destination="Wwn-ce-w95" kind="relationship" relationship="viewControllers" id="dUS-cu-9PE"/>
                         <segue destination="QIg-cf-JU2" kind="relationship" relationship="viewControllers" id="PpZ-d8-Htr"/>
-                        <segue destination="L60-FG-Ax8" kind="relationship" relationship="viewControllers" id="Bz9-6v-sOZ"/>
+                        <segue destination="lLH-2j-Vpk" kind="relationship" relationship="viewControllers" id="ROa-ap-Xkv"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xUl-dh-Ihe" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1143,23 +1144,23 @@
                         <viewControllerLayoutGuide type="bottom" id="f5O-uM-BrI"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="MLZ-gH-kWC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="367"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="356"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="UJe-Fr-mk1">
-                                <rect key="frame" x="16" y="20" width="375" height="347"/>
+                                <rect key="frame" x="16" y="20" width="375" height="336"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="a6B-TI-6TD">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="257.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="246.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0O9-6Z-xPf">
-                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="257.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="246.5"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="30"/>
                                                 <color key="textColor" red="0.16862745100000001" green="0.20784313730000001" blue="0.22352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GvF-cs-mvy">
-                                                <rect key="frame" x="10" y="0.0" width="365" height="257.5"/>
+                                                <rect key="frame" x="10" y="0.0" width="365" height="246.5"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="30"/>
                                                 <color key="textColor" red="0.16862745100000001" green="0.20784313730000001" blue="0.22352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -1167,7 +1168,7 @@
                                         </subviews>
                                     </stackView>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="751" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="FOK-eH-CKb">
-                                        <rect key="frame" x="0.0" y="257.5" width="337.5" height="89.5"/>
+                                        <rect key="frame" x="0.0" y="246.5" width="337.5" height="89.5"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="rYh-IU-07b">
                                             <size key="itemSize" width="50" height="50"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>

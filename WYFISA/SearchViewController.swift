@@ -31,12 +31,9 @@ class SearchViewController: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
-        self.view.frame.size = self.frameSize
+        self.openSearchView()
     }
     
-    func configure(size: CGSize){
-        self.frameSize = size
-    }
 
     
     func openSearchView(){

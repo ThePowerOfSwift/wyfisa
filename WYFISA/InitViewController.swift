@@ -39,10 +39,6 @@ class InitViewController: UIViewController {
     }
     
     
-    func getSearchVC() -> SearchViewController? {
-        let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
-        return selectedVC.searchVC
-    }
     
     func getScrollPage() -> Int {
         let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
@@ -73,9 +69,9 @@ class InitViewController: UIViewController {
         
         self.inCaptureMode = true
         
-        if self.getScrollPage() != 1 {
+        if self.getScrollPage() == 1 {
             // move to active
-            self.moveToPage(1)
+            self.moveToPage(0)
         }
         // get capture vc
         if  let vc = self.getCaptureVC(){
@@ -99,14 +95,14 @@ class InitViewController: UIViewController {
 
         if didCaptureVerses == true {
             // swipe to pause vc
-            self.moveToPage(2)
+            self.moveToPage(1)
         }
 
     }
     
     // MARK: - Navigation
     override func prefersStatusBarHidden() -> Bool {
-        return false
+        return true
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -119,21 +115,10 @@ class InitViewController: UIViewController {
     }
     
     func didChangePage(page: Int){
-        let searchVC = self.getSearchVC()
-
-        
-        if page == 0 {
-            // draw page
-            searchVC?.openSearchView()
-        } else {
-            searchVC?.closeSearchView()
-        }
- 
         self.pageController.currentPage = page
     }
     
     func didChangeTab(tab: Int){
-        print(tab)
         if (tab == 1) {
             // just left middle
             let image = UIImage(named: "Oval 1-disabled")

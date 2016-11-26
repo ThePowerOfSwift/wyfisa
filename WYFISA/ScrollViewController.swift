@@ -14,7 +14,6 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
     @IBOutlet var scrollView: UIScrollView!
     var captureVC: ViewController? = nil
     var pauseVC: HistoryViewController? = nil
-    var searchVC: SearchViewController? = nil
     var commonDataSource: VerseTableDataSource? = nil
     var activePage: Int = 0
     var onPageChange: (Int) -> () = defaultCallback
@@ -31,13 +30,11 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
-        self.searchVC = storyboard.instantiateViewControllerWithIdentifier("searchvc") as? SearchViewController
         self.captureVC = storyboard.instantiateViewControllerWithIdentifier("capturevc") as? ViewController
         self.pauseVC = storyboard.instantiateViewControllerWithIdentifier("historyvc") as? HistoryViewController
-        
-        self.searchVC?.view.frame.origin.x = 0
-        self.captureVC?.view.frame.origin.x = w
-        self.pauseVC?.view.frame.origin.x = 2*w
+
+        self.captureVC?.view.frame.origin.x = 0
+        self.pauseVC?.view.frame.origin.x = w
 
         
         // set data sources
@@ -45,9 +42,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         ds.cellDelegate = self
         self.captureVC?.configure(ds, isExpanded: false, size: self.view.frame.size)
         self.pauseVC?.configure(ds, isExpanded: true, size: self.view.frame.size)
-        self.searchVC?.configure(self.view.frame.size)
 
-        self.scrollView.addSubview(searchVC!.view)
         self.scrollView.addSubview(captureVC!.view)
         self.scrollView.addSubview(pauseVC!.view)
         
@@ -62,8 +57,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
     }
     override func viewDidAppear(animated: Bool) {
         if (!self.didLoad) {
-            let w = self.view.frame.size.width
-            self.scrollView.contentOffset.x = w
+            self.scrollView.contentOffset.x = 0
             self.didLoad = true
         }
     }
@@ -74,21 +68,18 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         Animations.start(0.3){
             self.scrollView.contentOffset.x = self.view.frame.size.width*CGFloat(page)
             
-            if page != 1 {
+            // moving to pause page
+            if page == 1 {
+                
                 // make sure cam is paused
                 self.captureVC?.cam.pause()
-            }
-            
-            // moving to pause page
-            if page == 2 {
-                
                 // make sure view is up to date
                 self.pauseVC?.verseTable.reloadData()
 
                 // scroll to end
                 self.pauseVC?.verseTable.scrollToEnd()
                 
-            } else if page == 1 {
+            } else  {
                 // resume cam on scroll to active page
                 self.captureVC?.cam.resume()
                 self.captureVC?.syncWithDataSource()
@@ -102,16 +93,9 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         let page =  self.scrollView.contentOffset.x/self.view.frame.size.width
         self.activePage = Int(page)
 
-        if self.activePage != 1 {
+        if self.activePage == 1 {
             self.captureVC?.cam.pause()
         }
-        
-        
-        if self.activePage == 0 {
-            // moving to draw page
-           // self.scrollView.scrollEnabled = false
-        }
-        
         
         self.onPageChange(self.activePage)
 
