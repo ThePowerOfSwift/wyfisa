@@ -40,7 +40,7 @@ class SearchViewController: UIViewController {
         self.searchBar.text = nil
         self.searchView.hidden = false
         self.searchBar.hidden = false
-        self.searchBar.becomeFirstResponder()
+       // self.searchBar.becomeFirstResponder()
         self.escapeImageMask.hidden = false
         
         Animations.start(0.3){
@@ -87,7 +87,7 @@ class SearchViewController: UIViewController {
     
     
     func closeSearchView(){
-        self.resignFirstResponder()
+       // self.resignFirstResponder()
         self.searchBar.endEditing(true)
 
         // clean up search results

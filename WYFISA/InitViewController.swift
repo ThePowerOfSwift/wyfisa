@@ -25,7 +25,6 @@ class InitViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
 
     func getCaptureVC() -> ViewController? {
@@ -64,6 +63,11 @@ class InitViewController: UIViewController {
             let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
             selectedVC.captureVC?.verseTable.reloadData()
             selectedVC.pauseVC?.verseTable.reloadData()
+            if self.getScrollPage() == 0 {
+                if let vc = self.getCaptureVC() {
+                    vc.cam.resume()
+                }
+            }
             return // just activate
         }
         
@@ -119,6 +123,7 @@ class InitViewController: UIViewController {
     }
     
     func didChangeTab(tab: Int){
+        
         if (tab == 1) {
             // just left middle
             let image = UIImage(named: "Oval 1-disabled")

@@ -14,7 +14,6 @@ func defaultDoneCallback(){}
 class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet var capturedImage: UIImageView!
-    @IBOutlet var textView: UITextView!
     @IBOutlet var orangeBrush: UIBarButtonItem!
     @IBOutlet var redBrush: UIBarButtonItem!
     @IBOutlet var navyBrush: UIBarButtonItem!
@@ -52,16 +51,10 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             self.tmpImageView.image = image
          //   self.undoButton.enabled = true
         }
-
-        if let text = self.verseInfo?.text {
-            let name = self.verseInfo?.name
-            self.textView.text = "\(name!) -  \(text)"
-            self.textView.font = themer.currentFont()
-        }
         
     }
     override func viewWillAppear(animated: Bool) {
-        self.view.frame.size = self.frameSize
+       // self.view.frame.size = self.frameSize
     }
     
     func configure(size: CGSize){
@@ -69,9 +62,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     override func viewDidAppear(animated: Bool) {
-            
-        let range = NSRange.init(location: 0, length: 1)
-        self.textView.scrollRangeToVisible(range)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -271,5 +262,11 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.verseInfo?.overlayImage = self.tmpImageView.image
     }
+    
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
+    
     
 }

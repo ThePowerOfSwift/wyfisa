@@ -159,5 +159,9 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         }
  */
     }
+    
+    @IBAction func unwindFromHighlight(segue: UIStoryboardSegue) {
+        //
+    }
 
 }
