@@ -20,6 +20,7 @@ class VerseTableViewCell: UITableViewCell {
     @IBOutlet var labelText: UILabel!
     @IBOutlet var searchIcon: UIImageView!
 
+    @IBOutlet var mediaAccessory: UIImageView!
     @IBOutlet var moreButton: UIButton!
     weak var delegate:VerseTableViewCellDelegate?
     var verseInfo: VerseInfo?
@@ -64,6 +65,13 @@ class VerseTableViewCell: UITableViewCell {
             Animations.start(0.2){
                 self.labelHeader.textColor = self.themer.navyForLightOrTeal(1.0)
             }
+            
+            if let img = verse.accessoryImage {
+                    // is accessory cell
+                    self.mediaAccessory.hidden = false
+                    self.mediaAccessory.image =  img
+            }
+            
 
         } else {
             // still searching

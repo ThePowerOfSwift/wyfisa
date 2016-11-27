@@ -204,7 +204,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         view.backgroundColor = themer.offWhiteForLightOrNavy(0.1)
         let label = UILabel(frame: CGRectMake(10, 0, tableView.frame.width, HEIGHT_FOR_HEADER))
         if section == 0 {
-            label.text = "General"
+            label.text = "Lighting"
         }
         if section == 1 {
             label.text = "Font"

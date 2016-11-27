@@ -18,9 +18,15 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
     var activePage: Int = 0
     var onPageChange: (Int) -> () = defaultCallback
     var bgCam: CameraManager = CameraManager.sharedInstance
-    @IBOutlet var filterView: GPUImageView!
+    let db = DBQuery.sharedInstance
     var didLoad: Bool = false
+
+    @IBOutlet var buttonStack: UIStackView!
+    @IBOutlet var filterView: GPUImageView!
+    @IBOutlet var buttonBottomConstraint: NSLayoutConstraint!
+    @IBOutlet var buttonLeadingConstraint: NSLayoutConstraint!
     
+    @IBOutlet var backgroundTextFieldButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,7 +48,8 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         ds.cellDelegate = self
         self.captureVC?.configure(ds, isExpanded: false, size: self.view.frame.size)
         self.pauseVC?.configure(ds, isExpanded: true, size: self.view.frame.size)
-
+        self.commonDataSource = ds
+        
         self.scrollView.addSubview(captureVC!.view)
         self.scrollView.addSubview(pauseVC!.view)
         
@@ -53,8 +60,11 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         // put a gaussian blur on the live view
         self.bgCam.start()
         self.bgCam.addCameraBlurTargets(self.filterView)
-        
+
     }
+
+
+
     override func viewDidAppear(animated: Bool) {
         if (!self.didLoad) {
             self.scrollView.contentOffset.x = 0
@@ -163,5 +173,65 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
     @IBAction func unwindFromHighlight(segue: UIStoryboardSegue) {
         //
     }
+    
+    @IBAction func unwindFromNotes(segue: UIStoryboardSegue) {
+        
+        let vc = segue.sourceViewController as! NotesViewController
+        
+        if let verseInfo = vc.verseInfo {
+            
+            
+            // add verse to datasource
+            verseInfo.session = (self.captureVC?.session.currentId)!
+            
+            self.commonDataSource?.appendVerse(verseInfo)
+            
+            // add the section to capture table and then reload pauseVC
+            dispatch_async(dispatch_get_main_queue()) {
+                if let table = self.pauseVC?.verseTable {
+                    table.addSection()
+                }
+                self.captureVC?.verseTable.reloadData()
+            }
+        }
+    }
+    
+    @IBAction func unwindFromSearchAndQuit(segue: UIStoryboardSegue) {
+        //
+    }
+    @IBAction func unwindFromSearchAndSave(segue: UIStoryboardSegue) {
+        // add verse to datasource
+        
+        let searchVC = segue.sourceViewController as! SearchViewController
+        
+
+        if let verseInfo = searchVC.verseInfo {
+            
+            
+            // add verse to datasource
+            verseInfo.session = (self.captureVC?.session.currentId)!
+
+             self.commonDataSource?.appendVerse(verseInfo)
+            
+             // add the section to capture table and then reload pauseVC
+             dispatch_async(dispatch_get_main_queue()) {
+                if let table = self.pauseVC?.verseTable {
+                     table.addSection()
+                }
+                self.captureVC?.verseTable.reloadData()
+             }
+            
+             //self.captureVC?.session.newMatches += 1
+             self.captureVC?.session.matches.append(verseInfo.id)
+             
+             // cache
+             Timing.runAfterBg(0.3){
+                 self.db.chapterForVerse(verseInfo.id)
+                 self.db.crossReferencesForVerse(verseInfo.id)
+                 self.db.versesForChapter(verseInfo.id)
+             }
+        }
+    }
+
 
 }

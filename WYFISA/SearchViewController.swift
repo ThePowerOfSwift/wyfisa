@@ -18,6 +18,7 @@ class SearchViewController: UIViewController {
     @IBOutlet var verseText: UITextView!
     @IBOutlet var verseTitle: UILabel!
     var frameSize: CGSize = CGSize()
+    var verseInfo: VerseInfo? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +41,7 @@ class SearchViewController: UIViewController {
         self.searchBar.text = nil
         self.searchView.hidden = false
         self.searchBar.hidden = false
-       // self.searchBar.becomeFirstResponder()
+        self.searchBar.becomeFirstResponder()
         self.escapeImageMask.hidden = false
         
         Animations.start(0.3){
@@ -62,32 +63,14 @@ class SearchViewController: UIViewController {
         if let verseInfo = fromVC.resultInfo {
             self.verseTitle.text = verseInfo.name
             self.verseText.text = verseInfo.text
-            
-            /*
-             verseInfo.session = self.session.currentId
-             
-             // new match
-             self.tableDataSource?.appendVerse(verseInfo)
-             dispatch_async(dispatch_get_main_queue()) {
-             self.verseTable.addSection()
-             }
-             self.session.newMatches += 1
-             self.session.matches.append(verseInfo.id)
-             
-             // cache
-             Timing.runAfterBg(0.3){
-             self.db.chapterForVerse(verseInfo.id)
-             self.db.crossReferencesForVerse(verseInfo.id)
-             self.db.versesForChapter(verseInfo.id)
-             }
-             */
+            self.verseInfo = verseInfo
         }
         
     }
     
     
     func closeSearchView(){
-       // self.resignFirstResponder()
+        self.resignFirstResponder()
         self.searchBar.endEditing(true)
 
         // clean up search results
@@ -114,6 +97,11 @@ class SearchViewController: UIViewController {
             self.searchBar.delegate = toVc
         }
  
+    }
+    
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
     }
     
 

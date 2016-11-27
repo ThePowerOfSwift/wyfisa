@@ -45,6 +45,7 @@
 		C3A5A73E1D9A22FF00A22FDB /* cross_ref.db in Resources */ = {isa = PBXBuildFile; fileRef = C3A5A73D1D9A22FF00A22FDB /* cross_ref.db */; };
 		C3A5A7401D9A249E00A22FDB /* t_web.db in Resources */ = {isa = PBXBuildFile; fileRef = C3A5A73F1D9A249E00A22FDB /* t_web.db */; };
 		C3AE3AD81D89FBDD0039AE3E /* WYFISATabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AE3AD71D89FBDD0039AE3E /* WYFISATabBarController.swift */; };
+		C3AEF17C1DEB8D0C007750A8 /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AEF17B1DEB8D0C007750A8 /* NotesViewController.swift */; };
 		C3C4FAEC1DBB2F3E0068B19A /* ReadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C4FAEB1DBB2F3E0068B19A /* ReadViewController.swift */; };
 		C3D5065A1D3932FB00A04C83 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D506591D3932FB00A04C83 /* Animations.swift */; };
 		C3E0712C1D4DB54900097D01 /* WYFISAFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E0712B1D4DB54900097D01 /* WYFISAFont.swift */; };
@@ -121,6 +122,7 @@
 		C3A5A73D1D9A22FF00A22FDB /* cross_ref.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = cross_ref.db; sourceTree = "<group>"; };
 		C3A5A73F1D9A249E00A22FDB /* t_web.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = t_web.db; sourceTree = "<group>"; };
 		C3AE3AD71D89FBDD0039AE3E /* WYFISATabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISATabBarController.swift; sourceTree = "<group>"; };
+		C3AEF17B1DEB8D0C007750A8 /* NotesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotesViewController.swift; path = ../NotesViewController.swift; sourceTree = "<group>"; };
 		C3C4FAEB1DBB2F3E0068B19A /* ReadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadViewController.swift; sourceTree = "<group>"; };
 		C3D506571D38D56200A04C83 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C3D506591D3932FB00A04C83 /* Animations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 				C37951651D44306C003FB4F5 /* ImageFilter.swift */,
 				C362A4431DACD662002B1AF4 /* InitViewController.swift */,
 				C338AF371D964B2F004E5E97 /* InfoViewController.swift */,
+				C3AEF17B1DEB8D0C007750A8 /* NotesViewController.swift */,
 				C37951611D442023003FB4F5 /* OCR.swift */,
 				C3C4FAEB1DBB2F3E0068B19A /* ReadViewController.swift */,
 				C3355C581DE939380045E797 /* SearchViewController.swift */,
@@ -586,6 +589,7 @@
 				C362A4441DACD662002B1AF4 /* InitViewController.swift in Sources */,
 				C3F53B711D36219400E2F80D /* CameraManager.swift in Sources */,
 				C39090771D2C9AF8000DFD15 /* AppDelegate.swift in Sources */,
+				C3AEF17C1DEB8D0C007750A8 /* NotesViewController.swift in Sources */,
 				C323F3D71D86EE5B00A7EC95 /* SearchBarViewController.swift in Sources */,
 				C3D5065A1D3932FB00A04C83 /* Animations.swift in Sources */,
 				C3F53B791D36973D00E2F80D /* VerseTableView.swift in Sources */,
