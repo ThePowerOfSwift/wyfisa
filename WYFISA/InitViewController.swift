@@ -14,11 +14,10 @@ class InitViewController: UIViewController {
     @IBOutlet var captureButton: UIButton!
     var inCaptureMode: Bool = false
     @IBOutlet var pageController: UIPageControl!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,6 +49,7 @@ class InitViewController: UIViewController {
         self.pageController.currentPage = page
     }
     
+    // entered capture tab
     @IBAction func didSPressCaptureButton(sender: AnyObject) {
         
         let captureViewActive = self.tabVC?.selectedIndex == 1
@@ -68,7 +68,11 @@ class InitViewController: UIViewController {
                     vc.cam.resume()
                 }
             }
-            return // just activate
+            
+            // theme
+            selectedVC.pauseVC?.themeView()
+            
+            return // just activate don't start scanning
         }
         
         self.inCaptureMode = true

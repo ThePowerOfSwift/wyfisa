@@ -269,15 +269,14 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.verseInfo?.overlayImage = self.tmpImageView.image
     }
-    
-    
+
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // self.verseInfo = VerseInfo.init(id: "0", name: "Just Now", text: "and discerning the thoughts and intentions")
-        self.verseInfo = VerseInfo.init(id: "0", name: "", text: "")
+        self.verseInfo = VerseInfo.init(id: "0", name: "", text: nil)
         self.verseInfo?.accessoryImage = self.makeShareImage()
     }
     

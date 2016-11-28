@@ -17,9 +17,10 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
     var commonDataSource: VerseTableDataSource? = nil
     var activePage: Int = 0
     var onPageChange: (Int) -> () = defaultCallback
+    var didLoad: Bool = false
+
     var bgCam: CameraManager = CameraManager.sharedInstance
     let db = DBQuery.sharedInstance
-    var didLoad: Bool = false
 
     @IBOutlet var buttonStack: UIStackView!
     @IBOutlet var filterView: GPUImageView!

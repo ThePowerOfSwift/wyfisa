@@ -14,6 +14,8 @@ class HistoryViewController: UIViewController {
     @IBOutlet var clearButton: UIButton!
     @IBOutlet var clearAllButton: UIButton!
     
+    let themer = WYFISATheme.sharedInstance
+
     var tableDataSource: VerseTableDataSource? = nil
     var frameSize: CGSize? = nil
     var isEditingMode: Bool = false
@@ -30,7 +32,6 @@ class HistoryViewController: UIViewController {
         if let size = self.frameSize {
             self.view.frame.size = size
         }
-        
     }
     
     override func viewDidLoad() {
@@ -76,6 +77,11 @@ class HistoryViewController: UIViewController {
         // empty table
         self.verseTable.clear()
         self.updateIconsForEditingMode(false)
+    }
+    
+    func themeView(){
+        // bg color
+        self.view.backgroundColor = themer.whiteForLightOrNavy(1.0)
     }
     
     /*

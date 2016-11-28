@@ -13,9 +13,11 @@ class NotesViewController: UIViewController {
     @IBOutlet var buttonStack: UIStackView!
     @IBOutlet var buttonBottomConstraint: NSLayoutConstraint!
     @IBOutlet var textView: UITextView!
+    @IBOutlet var noteHeader: UILabel!
 
     var verseInfo: VerseInfo? = nil
-
+    let themer = WYFISATheme.sharedInstance
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.textView.becomeFirstResponder()
@@ -25,7 +27,16 @@ class NotesViewController: UIViewController {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.keyboardWillHide), name: UIKeyboardWillHideNotification, object: nil)
         
+        // colors
+        self.view.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+        self.textView.textColor = self.themer.navyForLightOrWhite(1.0)
+        self.textView.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
         
+        // fonts
+        let textFont = themer.currentFont()
+        self.textView.font = textFont
+        self.noteHeader.font = textFont.fontWithSize(48.0)
+
     }
 
     override func didReceiveMemoryWarning() {

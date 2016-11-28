@@ -31,23 +31,20 @@ class SearchViewController: UIViewController {
         
         // when we have verses then use last one
         if let verse = self.verseInfo {
-            verseTitle.text = verse.name
-            verseText.text = verse.text
+            if verseInfo?.text != nil {
+                verseTitle.text = verse.name
+                verseText.text = verse.text
+            }
         }
 
         // theme - colors
         self.view.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
         self.verseTitle.textColor = self.themer.darkGreyForLightOrLightGrey()
         self.verseText.textColor = self.themer.navyForLightOrWhite(1.0)
-        let closeButtonColor = self.themer.navyForLightOrWhite(1.0)
-        self.closeButton.setTitleColor(closeButtonColor, forState: .Normal)
-        
         // theme - fonts
         let textFont = themer.currentFont()
         self.verseText.font = textFont
         self.verseTitle.font = textFont.fontWithSize(64.0)
-        self.closeButton.titleLabel!.font = textFont.fontWithSize(24.0)
-        self.saveButton.titleLabel!.font = textFont.fontWithSize(24.0)
 
         // hide save button
         self.saveButton.hidden = true

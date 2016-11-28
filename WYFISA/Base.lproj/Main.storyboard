@@ -57,7 +57,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="John 1:1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="BX9-33-TQZ">
                                 <rect key="frame" x="64" y="112.5" width="295" height="76.5"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="64"/>
-                                <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view alpha="0.10000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QEA-oI-piJ">
@@ -91,7 +91,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="61" height="41"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                         <state key="normal" title="Close">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <segue destination="ZNL-8t-usN" kind="unwind" unwindAction="unwindFromSearchAndQuit:" id="YYG-fM-qzL"/>
@@ -293,6 +293,8 @@
                             </button>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="s29-Qd-YbJ">
                                 <rect key="frame" x="176" y="533" width="23" height="37"/>
+                                <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="currentPageIndicatorTintColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="0.5" colorSpace="calibratedRGB"/>
                             </pageControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -766,6 +768,7 @@
                     <connections>
                         <outlet property="buttonBottomConstraint" destination="6c3-f5-Sen" id="bAv-qd-eBu"/>
                         <outlet property="buttonStack" destination="CCN-lq-m1b" id="B8X-a2-RdU"/>
+                        <outlet property="noteHeader" destination="G4b-Ks-mmS" id="sbt-vt-nMb"/>
                         <outlet property="textView" destination="lzh-j0-YzJ" id="3IT-tx-uY1"/>
                     </connections>
                 </viewController>
@@ -962,7 +965,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.16862745100000001" green="0.20784313730000001" blue="0.22352941179999999" alpha="0.90000000000000002" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="uOO-lg-AkI" firstAttribute="top" secondItem="icb-FZ-6ef" secondAttribute="bottom" multiplier="1.25" id="04O-UZ-lUP"/>
