@@ -48,7 +48,7 @@
                                 <gestureRecognizers/>
                             </imageView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text=" In the beginning was the Word, and the Word was with God, and the Word was God." textAlignment="right" translatesAutoresizingMaskIntoConstraints="NO" id="YLC-jc-aJh">
-                                <rect key="frame" x="16" y="226.5" width="343" height="399.5"/>
+                                <rect key="frame" x="16" y="226.5" width="343" height="389.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
@@ -85,7 +85,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Zr5-ss-Vpc">
-                                <rect key="frame" x="225" y="626" width="134" height="41"/>
+                                <rect key="frame" x="225" y="616" width="134" height="41"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="19L-A8-6VP">
                                         <rect key="frame" x="0.0" y="0.0" width="61" height="41"/>
@@ -121,7 +121,7 @@
                             <constraint firstItem="QEA-oI-piJ" firstAttribute="width" secondItem="S2K-IU-3Cc" secondAttribute="width" id="9rU-ZF-6zb"/>
                             <constraint firstItem="58Y-Wf-NLV" firstAttribute="top" secondItem="BX9-33-TQZ" secondAttribute="bottom" id="CNs-uh-96p"/>
                             <constraint firstItem="QEA-oI-piJ" firstAttribute="centerY" secondItem="S2K-IU-3Cc" secondAttribute="centerY" id="GKc-5L-XQa"/>
-                            <constraint firstItem="i9e-RT-we3" firstAttribute="top" secondItem="Zr5-ss-Vpc" secondAttribute="bottom" id="J4g-Zk-MA2"/>
+                            <constraint firstItem="i9e-RT-we3" firstAttribute="top" secondItem="Zr5-ss-Vpc" secondAttribute="bottom" constant="10" id="J4g-Zk-MA2"/>
                             <constraint firstItem="Hi0-vM-BOW" firstAttribute="centerY" secondItem="S2K-IU-3Cc" secondAttribute="centerY" id="Lhw-M3-UtL"/>
                             <constraint firstItem="BX9-33-TQZ" firstAttribute="centerY" secondItem="S2K-IU-3Cc" secondAttribute="centerY" multiplier="0.45" id="Mq1-1o-hRc"/>
                             <constraint firstItem="fFS-Jy-rx4" firstAttribute="top" secondItem="fmP-V2-cMP" secondAttribute="bottom" id="N72-x2-BKx"/>
@@ -637,7 +637,7 @@
                                         <rect key="frame" x="44" y="0.0" width="37" height="37"/>
                                         <state key="normal" image="highlight-pen-marker-tool-highlighter-512"/>
                                         <connections>
-                                            <segue destination="vW6-Ye-fwP" kind="presentation" id="JTF-88-UxB"/>
+                                            <segue destination="vW6-Ye-fwP" kind="presentation" identifier="highlightsegue" id="JTF-88-UxB"/>
                                         </connections>
                                     </button>
                                 </subviews>

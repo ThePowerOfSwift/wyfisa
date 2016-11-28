@@ -66,10 +66,30 @@ class VerseTableViewCell: UITableViewCell {
                 self.labelHeader.textColor = self.themer.navyForLightOrTeal(1.0)
             }
             
+            
+            // support for notes formating
+            //   multi line header
+            //   label text is date
+            if verse.text == nil && verse.name.length > 0 {
+                // all the text is in header
+                self.labelHeader.lineBreakMode = .ByWordWrapping
+                self.labelHeader.numberOfLines = 0
+            } else {
+                self.labelHeader.lineBreakMode = .ByTruncatingTail
+                self.labelHeader.numberOfLines = 1
+            }
+            
             if let img = verse.accessoryImage {
                     // is accessory cell
                     self.mediaAccessory.hidden = false
                     self.mediaAccessory.image =  img
+                    if isExpanded == false {
+                        self.backgroundColor = UIColor.clearColor()
+                    }
+                
+            } else {
+                self.mediaAccessory.image = nil
+                self.mediaAccessory.hidden = true
             }
             
 

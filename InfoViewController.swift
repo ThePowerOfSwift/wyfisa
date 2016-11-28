@@ -26,6 +26,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     var doneCallback: ()->Void = defaultDoneCallback
     var originalImage: UIImage? = nil
     var frameSize: CGSize = CGSize()
+    var snaphot: UIImage? = nil
     
     // drawing vars
     var swiped: Bool = false
@@ -42,7 +43,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        if let image = self.verseInfo?.image {
+        if let image = self.snaphot {
             self.capturedImage.image = image
             self.originalImage = image
         }
@@ -119,10 +120,16 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         let screenShot = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
+        let cropFilter = ImageFilter.cropFilter(0, y: 0.1, width: 1, height: 0.50)
+        let croppedImage = cropFilter.imageByFilteringImage(screenShot)
+        
+        return croppedImage
+        /*
         let navOffset = self.navToolbar.frame.height/viewSize.height
         let cropFilter = ImageFilter.cropFilter(0, y: navOffset, width: 1, height: viewSize.height)
         let croppedImage = cropFilter.imageByFilteringImage(screenShot)
         return croppedImage
+ */
     }
 
     @IBAction func didPressCameraButton(sender: AnyObject) {
@@ -268,5 +275,10 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         return true
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // self.verseInfo = VerseInfo.init(id: "0", name: "Just Now", text: "and discerning the thoughts and intentions")
+        self.verseInfo = VerseInfo.init(id: "0", name: "", text: "")
+        self.verseInfo?.accessoryImage = self.makeShareImage()
+    }
     
 }

@@ -76,8 +76,8 @@ class NotesViewController: UIViewController {
         
         // save verse info
         if self.textView.text.length > 0 {
-            self.verseInfo = VerseInfo(id: "0", name: "Just Now", text: self.textView.text)
-            //self.verseInfo?.accessoryImage = UIImage.init(named: "compose-dark")
+            let note = "“\(self.textView.text)"
+            self.verseInfo = VerseInfo(id: "0", name:  note, text: nil)
         }
     }
     

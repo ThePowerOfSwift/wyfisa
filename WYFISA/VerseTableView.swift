@@ -218,8 +218,25 @@ class VerseTableView: UITableView, UITableViewDelegate {
             // is expanded, so base height on size of text
             let index = indexPath.section - 1
             if let ds = self.getDatasource() {
-                if let text = ds.recentVerses[index].text {
+                let verse = ds.recentVerses[index]
+                if let text = verse.text {
                     sectionHeight = ds.cellHeightForText(text, width: self.frame.size.width)
+                } else {
+                    sectionHeight = ds.cellHeightForText(verse.name, width: self.frame.size.width) - 65
+                }
+                if verse.accessoryImage != nil {
+                    // height for an image cell
+                    sectionHeight += 200
+                }
+            }
+        } else {
+            
+            // hide accessory cells on quick view
+            let index = indexPath.section - 1
+            if let ds = self.getDatasource() {
+                let verse = ds.recentVerses[index]
+                if verse.accessoryImage != nil || verse.text == nil {
+                    sectionHeight = 0
                 }
             }
         }

@@ -212,7 +212,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         self.captureBoxActive.hidden = true
 
         
-        self.session.currentId += 1
+        self.updateCaptureId()
         self.session.newMatches = 0
         self.session.active = false
         self.session.misses = 0
@@ -225,7 +225,12 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         return hasNewMatches
     }
     
-
+    // updates and returns old id
+    func updateCaptureId() -> UInt64 {
+        let currId = self.session.currentId
+        self.session.currentId = currId + 1
+        return currId
+    }
     
     // MARK: - Process
     

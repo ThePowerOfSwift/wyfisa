@@ -96,6 +96,9 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
                 self.captureVC?.verseTable.reloadData()
             }
         }
+        
+        self.onPageChange(page)
+
     }
     
 
@@ -145,6 +148,20 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
             let verse = sender as! VerseInfo
             toVc.verseInfo = verse
         }
+        
+        if segue.identifier == "highlightsegue" {
+            let toVc = segue.destinationViewController as! InfoViewController
+            // resume cam if on paused page
+            if self.activePage == 1 {
+                self.bgCam.resume()
+            }
+            // take snapshot to the vc
+            toVc.snaphot = self.bgCam.imageFromFrame()
+            
+            if self.activePage == 1 {
+                self.bgCam.pause()
+            }
+        }
     }
     
     // MARK: - cell delegate
@@ -171,7 +188,25 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
     }
     
     @IBAction func unwindFromHighlight(segue: UIStoryboardSegue) {
-        //
+        let vc = segue.sourceViewController as! InfoViewController
+        
+        if let verseInfo = vc.verseInfo {
+            self.scrollToPage(1)
+
+            
+            // add verse to datasource
+            verseInfo.session = (self.captureVC?.updateCaptureId())!
+            
+            self.commonDataSource?.appendVerse(verseInfo)
+            
+            // add the section to capture table and then reload pauseVC
+            dispatch_async(dispatch_get_main_queue()) {
+                if let table = self.pauseVC?.verseTable {
+                    table.addSection()
+                }
+                self.captureVC?.verseTable.reloadData()
+            }
+        }
     }
     
     @IBAction func unwindFromNotes(segue: UIStoryboardSegue) {
@@ -179,10 +214,11 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         let vc = segue.sourceViewController as! NotesViewController
         
         if let verseInfo = vc.verseInfo {
-            
+            self.scrollToPage(1)
+
             
             // add verse to datasource
-            verseInfo.session = (self.captureVC?.session.currentId)!
+            verseInfo.session = (self.captureVC?.updateCaptureId())!
             
             self.commonDataSource?.appendVerse(verseInfo)
             
@@ -201,15 +237,15 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
     }
     @IBAction func unwindFromSearchAndSave(segue: UIStoryboardSegue) {
         // add verse to datasource
-        
         let searchVC = segue.sourceViewController as! SearchViewController
         
 
         if let verseInfo = searchVC.verseInfo {
             
+            self.scrollToPage(1)
             
             // add verse to datasource
-            verseInfo.session = (self.captureVC?.session.currentId)!
+            verseInfo.session = (self.captureVC?.updateCaptureId())!
 
              self.commonDataSource?.appendVerse(verseInfo)
             
