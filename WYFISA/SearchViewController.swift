@@ -11,19 +11,21 @@ import UIKit
 class SearchViewController: UIViewController {
 
     @IBOutlet var searchView: UIView!
-    
     @IBOutlet var escapeMask: UIView!
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var escapeImageMask: UIImageView!
     @IBOutlet var verseText: UITextView!
     @IBOutlet var verseTitle: UILabel!
+    
+    let themer = WYFISATheme.sharedInstance
+
     var frameSize: CGSize = CGSize()
     var verseInfo: VerseInfo? = nil
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -33,6 +35,12 @@ class SearchViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         self.openSearchView()
+        
+        // when we have verses then use last one
+        if let verse = self.verseInfo {
+            verseTitle.text = verse.name
+            verseText.text = verse.text
+        }
     }
     
 
@@ -65,6 +73,7 @@ class SearchViewController: UIViewController {
             self.verseText.text = verseInfo.text
             self.verseInfo = verseInfo
         }
+        self.escapeMask.hidden = true
         
     }
     
@@ -84,8 +93,7 @@ class SearchViewController: UIViewController {
             //self.searchView.hidden = true
             //self.searchBar.hidden = true
             self.escapeImageMask.hidden = true
-        }
-        
+        }        
     }
     
     // MARK: - Navigation
@@ -95,14 +103,14 @@ class SearchViewController: UIViewController {
             toVc.escapeImageMask = self.escapeImageMask
             toVc.searchView = self.searchView
             self.searchBar.delegate = toVc
+            self.escapeMask.hidden = false
         }
  
     }
-    
+
     
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
-    
 
 }

@@ -51,9 +51,7 @@ class NotesViewController: UIViewController {
          var userInfo = notification.userInfo!
          let keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
          let animationDurarion = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSTimeInterval
-//        let offset: = 0// self.view.frame.size.height - self.noteTextField.frame.origin.y - self.noteTextField.frame.height
          let changeInHeight = (CGRectGetHeight(keyboardFrame)+10) * (show ? 1 : -1)
-        print(changeInHeight)
         
          // move up buttons
          Animations.start(animationDurarion){

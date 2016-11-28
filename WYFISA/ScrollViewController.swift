@@ -142,13 +142,6 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
             toVc.verseInfo = verse
         }
         
-        if segue.identifier == "infosegue" {
-            
-            let toVc = segue.destinationViewController as! InfoViewController
-            let verse = sender as! VerseInfo
-            toVc.verseInfo = verse
-        }
-        
         if segue.identifier == "highlightsegue" {
             let toVc = segue.destinationViewController as! InfoViewController
             // resume cam if on paused page
@@ -160,6 +153,16 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
             
             if self.activePage == 1 {
                 self.bgCam.pause()
+            }
+        }
+        
+        if segue.identifier == "searchsegue" {
+            // give last verse from datasource
+            if let ds = self.commonDataSource {
+                if let verse = ds.recentVerses.last {
+                    let toVc = segue.destinationViewController as! SearchViewController
+                    toVc.verseInfo = verse
+                }
             }
         }
     }

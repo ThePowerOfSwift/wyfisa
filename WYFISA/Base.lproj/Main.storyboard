@@ -630,7 +630,7 @@
                                         <rect key="frame" x="0.0" y="4" width="29" height="29"/>
                                         <state key="normal" image="ios7-Search"/>
                                         <connections>
-                                            <segue destination="lLH-2j-Vpk" kind="presentation" id="X9Q-gj-PUp"/>
+                                            <segue destination="lLH-2j-Vpk" kind="presentation" identifier="searchsegue" id="X9Q-gj-PUp"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ppr-S5-eWm">
@@ -851,7 +851,7 @@
                                         </constraints>
                                     </stackView>
                                     <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SJP-k0-lmB">
-                                        <rect key="frame" x="537" y="463.5" width="44" height="22"/>
+                                        <rect key="frame" x="537" y="463" width="44" height="22"/>
                                         <state key="normal" title=" All" image="ios7-refresh-empty">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
