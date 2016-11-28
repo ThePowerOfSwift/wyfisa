@@ -74,6 +74,13 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
     }
     
     func scrollToPage(_ page: Int){
+        
+        if page == self.activePage {
+            // already here
+            self.onPageChange(page)
+            return
+        }
+        
         self.activePage = page
         
         Animations.start(0.3){
@@ -202,7 +209,6 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
             if vc.isUpdate == false {
                 // add verse to datasource
                 verseInfo.session = (self.captureVC?.updateCaptureId())!
-                print("NEW SESSION", verseInfo.session)
                 self.commonDataSource?.appendVerse(verseInfo)
                 
                 // add the section to capture table and then reload pauseVC
@@ -210,11 +216,9 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
                     if let table = self.pauseVC?.verseTable {
                         table.addSection()
                     }
-                    self.captureVC?.verseTable.reloadData()
                 }
             }
             else {
-                print("EDITED", verseInfo.session)
                 // updating data at this session
                 if let ds = self.commonDataSource {
                     var i = 0
@@ -227,6 +231,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
                     }
                 }
             }
+            self.pauseVC?.verseTable.reloadData()
         }
         
         // resume cam if we quit
@@ -253,7 +258,6 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
                     if let table = self.pauseVC?.verseTable {
                         table.addSection()
                     }
-                    self.captureVC?.verseTable.reloadData()
                 }
             } else {
                 // updating data at this session
@@ -268,6 +272,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
                     }
                 }
             }
+            self.pauseVC?.verseTable.reloadData()
         }
     }
     
@@ -293,7 +298,6 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
                 if let table = self.pauseVC?.verseTable {
                      table.addSection()
                 }
-                self.captureVC?.verseTable.reloadData()
              }
             
              //self.captureVC?.session.newMatches += 1
@@ -305,6 +309,8 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
                  self.db.crossReferencesForVerse(verseInfo.id)
                  self.db.versesForChapter(verseInfo.id)
              }
+            
+            self.pauseVC?.verseTable.reloadData()
         }
     }
 
