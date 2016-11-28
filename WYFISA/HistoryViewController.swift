@@ -85,6 +85,18 @@ class HistoryViewController: UIViewController {
         self.view.backgroundColor = themer.whiteForLightOrNavy(1.0)
     }
     
+    @IBAction func didPanRight(sender: AnyObject) {
+    
+        if self.isEditingMode == false {
+            // toggle editing mode
+            self.isEditingMode = !self.isEditingMode
+            self.updateIconsForEditingMode(self.isEditingMode)
+            
+            // update editing state
+            self.verseTable.setEditing(self.isEditingMode, animated: true)
+        }
+    }
+
     /*
     // MARK: - Navigation
 

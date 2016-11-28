@@ -44,13 +44,36 @@ class VerseTableViewCell: UITableViewCell {
         self.labelText.attributedText = attributedText
     }
 
+    func applyCategoryStyle(verse: VerseInfo){
+        
+        // general styles
+        self.backgroundColor = self.themer.whiteForLightOrNavy(0.8)
+        self.mediaAccessory.hidden = true
+        self.mediaAccessory.image =  nil
+        self.labelHeader.lineBreakMode = .ByTruncatingTail
+        self.labelHeader.numberOfLines = 1
+        
+        // support different cell styles
+        switch verse.category {
+        case .Verse:
+            break
+        case .Image:
+            // show accesory view
+            self.mediaAccessory.hidden = false
+            self.mediaAccessory.image =  verse.accessoryImage
+            self.backgroundColor = UIColor.clearColor()
+            self.mediaAccessory.layer.borderColor = UIColor.lightGrayColor().CGColor
+        case .Note:
+            // all the text is in header
+            self.labelHeader.lineBreakMode = .ByWordWrapping
+            self.labelHeader.numberOfLines = 0
+        }
+    }
+    
     func updateWithVerseInfo(verse: VerseInfo, isExpanded: Bool) {
 
-        self.backgroundColor = self.themer.whiteForLightOrNavy(0.8)
-        if self.enableMore == true {
-           // no "more"
-           // self.moreButton.hidden = false
-        }
+        self.applyCategoryStyle(verse)
+        
         if  verse.id.characters.count > 0 {
             // cell has a verse
             self.verseInfo = verse
@@ -65,34 +88,6 @@ class VerseTableViewCell: UITableViewCell {
             Animations.start(0.2){
                 self.labelHeader.textColor = self.themer.navyForLightOrTeal(1.0)
             }
-            
-            
-            // support for notes formating
-            //   multi line header
-            //   label text is date
-            if verse.text == nil && verse.name.length > 0 {
-                // all the text is in header
-                self.labelHeader.lineBreakMode = .ByWordWrapping
-                self.labelHeader.numberOfLines = 0
-            } else {
-                self.labelHeader.lineBreakMode = .ByTruncatingTail
-                self.labelHeader.numberOfLines = 1
-            }
-            
-            if let img = verse.accessoryImage {
-                    // is accessory cell
-                    self.mediaAccessory.hidden = false
-                    self.mediaAccessory.image =  img
-                    if isExpanded == false {
-                        self.backgroundColor = UIColor.clearColor()
-                    }
-                     self.mediaAccessory.layer.borderColor = UIColor.lightGrayColor().CGColor
-                
-            } else {
-                self.mediaAccessory.image = nil
-                self.mediaAccessory.hidden = true
-            }
-            
 
         } else {
             // still searching
@@ -117,6 +112,10 @@ class VerseTableViewCell: UITableViewCell {
         self.labelHeader.text = verse.name
         self.labelText.text = verse.text
         self.labelText.textColor = self.themer.navyForLightOrWhite(1.0)
+        
+        if verse.category == .Note { // add opening quote
+            self.labelHeader.text = "“\(verse.name)"
+        }
         
         if isExpanded == true {
             

@@ -33,7 +33,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         
         self.scrollView.delegate = self
         let w = self.view.frame.size.width
-        self.scrollView.contentSize.width = w * 3.0
+        self.scrollView.contentSize.width = w * 2.0
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
@@ -138,25 +138,28 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         // Pass the selected object to the new view controller.
         if segue.identifier == "VerseDetail" {
             let toVc = segue.destinationViewController as! VerseDetailModalViewController
-            
             let verse = sender as! VerseInfo
             toVc.verseInfo = verse
         }
         
         if segue.identifier == "highlightsegue" {
             let toVc = segue.destinationViewController as! InfoViewController
-            // resume cam if on paused page
-            if self.activePage == 1 {
-                self.bgCam.resume()
-            }
-            // take snapshot to the vc
-            toVc.snaphot = self.bgCam.imageFromFrame()
-            
-            if self.activePage == 1 {
-                self.bgCam.pause()
+            // detect if this was a cell select
+            if let verse = sender as? VerseInfo {
+                toVc.isUpdate = true
+                toVc.snaphot = verse.image
+                toVc.verseInfo = verse
             }
         }
-        
+        if segue.identifier == "notesegue" {
+            
+            // when editing a note then pass previous text to view
+            if let verse = sender as? VerseInfo {
+                let toVc = segue.destinationViewController as! NotesViewController
+                toVc.editingText = verse.name
+                toVc.verseInfo = verse
+            }
+        }
         if segue.identifier == "searchsegue" {
             // give last verse from datasource
             if let ds = self.commonDataSource {
@@ -170,8 +173,15 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
     
     // MARK: - cell delegate
     func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo){
-        if sender.editing == false {
-            performSegueWithIdentifier("VerseDetail", sender: (verse as! AnyObject))
+        if sender.editing == false { // don't segue if cell is being edited
+            switch verse.category {
+            case .Verse:
+                performSegueWithIdentifier("VerseDetail", sender: (verse as! AnyObject))
+            case .Note:
+                performSegueWithIdentifier("notesegue", sender: (verse as! AnyObject))
+            case .Image:
+                performSegueWithIdentifier("highlightsegue", sender: (verse as! AnyObject))
+            }
         }
     }
     
@@ -180,15 +190,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
     }
     
     func didRemoveCell(sender: VerseTableViewCell) {
-        //print("HOTHOT")
-        /*
-        // update session matches to reflect new set of cells
-        self.session.matches = self.verseTable.currentMatches()
-        if self.session.matches.count == 0 {
-            // removed all cells, exit editing mode
-            self.exitEditingMode()
-        }
- */
+
     }
     
     @IBAction func unwindFromHighlight(segue: UIStoryboardSegue) {
@@ -197,19 +199,39 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         if let verseInfo = vc.verseInfo {
             self.scrollToPage(1)
 
-            
-            // add verse to datasource
-            verseInfo.session = (self.captureVC?.updateCaptureId())!
-            
-            self.commonDataSource?.appendVerse(verseInfo)
-            
-            // add the section to capture table and then reload pauseVC
-            dispatch_async(dispatch_get_main_queue()) {
-                if let table = self.pauseVC?.verseTable {
-                    table.addSection()
+            if vc.isUpdate == false {
+                // add verse to datasource
+                verseInfo.session = (self.captureVC?.updateCaptureId())!
+                print("NEW SESSION", verseInfo.session)
+                self.commonDataSource?.appendVerse(verseInfo)
+                
+                // add the section to capture table and then reload pauseVC
+                dispatch_async(dispatch_get_main_queue()) {
+                    if let table = self.pauseVC?.verseTable {
+                        table.addSection()
+                    }
+                    self.captureVC?.verseTable.reloadData()
                 }
-                self.captureVC?.verseTable.reloadData()
             }
+            else {
+                print("EDITED", verseInfo.session)
+                // updating data at this session
+                if let ds = self.commonDataSource {
+                    var i = 0
+                    for v in ds.recentVerses {
+                        if v.session == verseInfo.session {
+                            ds.recentVerses[i] = verseInfo
+                            break
+                        }
+                        i=i+1
+                    }
+                }
+            }
+        }
+        
+        // resume cam if we quit
+        if self.activePage == 0 {
+            self.bgCam.resume()
         }
     }
     
@@ -220,18 +242,31 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         if let verseInfo = vc.verseInfo {
             self.scrollToPage(1)
 
-            
-            // add verse to datasource
-            verseInfo.session = (self.captureVC?.updateCaptureId())!
-            
-            self.commonDataSource?.appendVerse(verseInfo)
-            
-            // add the section to capture table and then reload pauseVC
-            dispatch_async(dispatch_get_main_queue()) {
-                if let table = self.pauseVC?.verseTable {
-                    table.addSection()
+            if vc.isUpdate == false {
+                // add verse to datasource
+                verseInfo.session = (self.captureVC?.updateCaptureId())!
+                
+                self.commonDataSource?.appendVerse(verseInfo)
+                
+                // add the section to capture table and then reload pauseVC
+                dispatch_async(dispatch_get_main_queue()) {
+                    if let table = self.pauseVC?.verseTable {
+                        table.addSection()
+                    }
+                    self.captureVC?.verseTable.reloadData()
                 }
-                self.captureVC?.verseTable.reloadData()
+            } else {
+                // updating data at this session
+                if let ds = self.commonDataSource {
+                    var i = 0
+                    for v in ds.recentVerses {
+                        if v.session == verseInfo.session {
+                            ds.recentVerses[i] = verseInfo
+                            break
+                        }
+                        i=i+1
+                    }
+                }
             }
         }
     }

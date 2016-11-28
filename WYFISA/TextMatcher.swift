@@ -10,29 +10,6 @@ import Foundation
 import Regex
 
 
-class VerseInfo {
-    let id: String
-    var name: String
-    var priority: Float = -1.0
-    var session: UInt64 = 0
-    var text: String?
-    var chapter: String?
-    var chapterNo: Int?
-    var bookNo: Int?
-    var verse: Int?
-    var image: UIImage?
-    var overlayImage: UIImage?
-    var accessoryImage: UIImage?
-    var refs: [VerseInfo]?
-    var verses: [VerseInfo]?
-
-    init(id: String, name: String, text: String?){
-        self.id = id
-        self.name = name
-        self.text = text
-    }
-}
-
 class TextMatcher {
     
     func findBookInText(text: String) -> Books? {

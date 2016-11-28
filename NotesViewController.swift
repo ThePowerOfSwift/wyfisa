@@ -16,10 +16,19 @@ class NotesViewController: UIViewController {
     @IBOutlet var noteHeader: UILabel!
 
     var verseInfo: VerseInfo? = nil
+    var editingText: String? = nil
     let themer = WYFISATheme.sharedInstance
+    var isUpdate: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // load previous text if available
+        if let text = self.editingText {
+            self.textView.text = text
+            self.isUpdate = true
+        }
+        
         self.textView.becomeFirstResponder()
         
         // keyboard observers
@@ -83,10 +92,14 @@ class NotesViewController: UIViewController {
         // close keyboard
         self.textView.resignFirstResponder()
         
-        // save verse info
-        if self.textView.text.length > 0 {
-            let note = "“\(self.textView.text)"
-            self.verseInfo = VerseInfo(id: "0", name:  note, text: nil)
+        if self.isUpdate == false {
+            // save verse info
+            if self.textView.text.length > 0 {
+                self.verseInfo = VerseInfo(id: "0", name:  self.textView.text, text: nil)
+                self.verseInfo?.category = .Note
+            }
+        } else {
+            self.verseInfo?.name = self.textView.text
         }
     }
     

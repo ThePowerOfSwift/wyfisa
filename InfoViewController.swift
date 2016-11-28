@@ -23,10 +23,13 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet var navToolbar: UIToolbar!
     var verseInfo: VerseInfo? = nil
     var themer = WYFISATheme.sharedInstance
+    let cam = CameraManager.sharedInstance
+    
     var doneCallback: ()->Void = defaultDoneCallback
     var originalImage: UIImage? = nil
     var frameSize: CGSize = CGSize()
     var snaphot: UIImage? = nil
+    var isUpdate: Bool = false
     
     // drawing vars
     var swiped: Bool = false
@@ -43,19 +46,28 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        if let image = self.snaphot {
-            self.capturedImage.image = image
-            self.originalImage = image
+        if self.isUpdate == false || self.snaphot == nil {
+            // resume cam if on paused page
+            self.cam.resume()
+            self.snaphot = self.cam.imageFromFrame()
+            self.cam.pause()
         }
+        
+        self.capturedImage.image = self.snaphot
+        self.originalImage = self.snaphot
         
         if let image = self.verseInfo?.overlayImage {
             self.tmpImageView.image = image
-         //   self.undoButton.enabled = true
         }
+        
         
     }
     override func viewWillAppear(animated: Bool) {
-       // self.view.frame.size = self.frameSize
+
+    }
+    
+    func setImageToSnapshot(){
+
     }
     
     func configure(size: CGSize){
@@ -120,16 +132,15 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         let screenShot = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-        let cropFilter = ImageFilter.cropFilter(0, y: 0.1, width: 1, height: 0.50)
-        let croppedImage = cropFilter.imageByFilteringImage(screenShot)
+        var shareImage: UIImage? = nil
+        if self.isUpdate == false { // crop
+            let cropFilter = ImageFilter.cropFilter(0, y: 0.1, width: 1, height: 0.50)
+            shareImage = cropFilter.imageByFilteringImage(screenShot)
+        } else {
+            shareImage = screenShot
+        }
         
-        return croppedImage
-        /*
-        let navOffset = self.navToolbar.frame.height/viewSize.height
-        let cropFilter = ImageFilter.cropFilter(0, y: navOffset, width: 1, height: viewSize.height)
-        let croppedImage = cropFilter.imageByFilteringImage(screenShot)
-        return croppedImage
- */
+        return shareImage
     }
 
     @IBAction func didPressCameraButton(sender: AnyObject) {
@@ -275,9 +286,14 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // self.verseInfo = VerseInfo.init(id: "0", name: "Just Now", text: "and discerning the thoughts and intentions")
-        self.verseInfo = VerseInfo.init(id: "0", name: "", text: nil)
+        if isUpdate == false {
+            self.verseInfo = VerseInfo.init(id: "0", name: "", text: nil)
+            self.verseInfo?.category = .Image
+        }
         self.verseInfo?.accessoryImage = self.makeShareImage()
+        self.verseInfo?.overlayImage = self.tmpImageView.image
+        self.verseInfo?.image = self.snaphot
+
     }
     
 }
