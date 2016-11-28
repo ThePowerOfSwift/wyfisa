@@ -106,6 +106,15 @@ class WYFISATheme {
         }
     }
     
+    func darkGreyForLightOrLightGrey() -> UIColor {
+        switch  self.mode {
+        case .Light:
+            return UIColor.darkTextColor()
+        default:
+            return UIColor.lightTextColor()
+        }
+    }
+    
     func navyForLightOrOffWhite(alpha: CGFloat) -> UIColor {
         switch  self.mode {
         case .Light:

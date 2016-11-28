@@ -147,8 +147,10 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Read" image="ios7-bookmarks-outline" id="4nE-tm-god"/>
                     <connections>
+                        <outlet property="closeButton" destination="19L-A8-6VP" id="rOk-Pw-D40"/>
                         <outlet property="escapeImageMask" destination="Hi0-vM-BOW" id="Tcb-sa-cRC"/>
                         <outlet property="escapeMask" destination="QEA-oI-piJ" id="0cw-ft-aMT"/>
+                        <outlet property="saveButton" destination="opU-R5-tV6" id="ChT-bN-9Dx"/>
                         <outlet property="searchBar" destination="fFS-Jy-rx4" id="mcN-po-lqR"/>
                         <outlet property="searchView" destination="cls-Zv-4mK" id="6Co-Vm-e9h"/>
                         <outlet property="verseText" destination="YLC-jc-aJh" id="DOt-dh-7k4"/>

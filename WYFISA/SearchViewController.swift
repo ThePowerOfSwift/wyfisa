@@ -16,6 +16,9 @@ class SearchViewController: UIViewController {
     @IBOutlet var escapeImageMask: UIImageView!
     @IBOutlet var verseText: UITextView!
     @IBOutlet var verseTitle: UILabel!
+    @IBOutlet var closeButton: UIButton!
+    @IBOutlet var saveButton: UIButton!
+
     
     let themer = WYFISATheme.sharedInstance
 
@@ -25,7 +28,29 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // when we have verses then use last one
+        if let verse = self.verseInfo {
+            verseTitle.text = verse.name
+            verseText.text = verse.text
+        }
 
+        // theme - colors
+        self.view.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+        self.verseTitle.textColor = self.themer.darkGreyForLightOrLightGrey()
+        self.verseText.textColor = self.themer.navyForLightOrWhite(1.0)
+        let closeButtonColor = self.themer.navyForLightOrWhite(1.0)
+        self.closeButton.setTitleColor(closeButtonColor, forState: .Normal)
+        
+        // theme - fonts
+        let textFont = themer.currentFont()
+        self.verseText.font = textFont
+        self.verseTitle.font = textFont.fontWithSize(64.0)
+        self.closeButton.titleLabel!.font = textFont.fontWithSize(24.0)
+        self.saveButton.titleLabel!.font = textFont.fontWithSize(24.0)
+
+        // hide save button
+        self.saveButton.hidden = true
     }
     
     override func didReceiveMemoryWarning() {
@@ -35,12 +60,7 @@ class SearchViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         self.openSearchView()
-        
-        // when we have verses then use last one
-        if let verse = self.verseInfo {
-            verseTitle.text = verse.name
-            verseText.text = verse.text
-        }
+
     }
     
 
@@ -69,9 +89,15 @@ class SearchViewController: UIViewController {
         // add verse if matched
         let fromVC = segue.sourceViewController as! SearchBarViewController
         if let verseInfo = fromVC.resultInfo {
+            // show save button on new verse
+            if self.verseInfo?.id != verseInfo.id {
+                self.saveButton.hidden = false
+            }
             self.verseTitle.text = verseInfo.name
             self.verseText.text = verseInfo.text
             self.verseInfo = verseInfo
+            
+            
         }
         self.escapeMask.hidden = true
         
