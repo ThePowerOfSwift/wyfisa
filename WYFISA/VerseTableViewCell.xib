@@ -21,11 +21,16 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="59"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="E9088F55-AFC1-4247-9A6D-25DD8E47D22C" translatesAutoresizingMaskIntoConstraints="NO" id="GuE-N4-XAx">
-                        <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="4CF5177E-E575-435C-B542-1F3DC0468E4D" translatesAutoresizingMaskIntoConstraints="NO" id="GuE-N4-XAx">
+                        <rect key="frame" x="131" y="0.0" width="59" height="59"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="GuE-N4-XAx" secondAttribute="height" id="By3-3p-D8M"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="10"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </imageView>
                     <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="f9U-2C-adP">
                         <rect key="frame" x="8" y="0.0" width="304" height="59"/>
@@ -72,10 +77,10 @@
                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                 <gestureRecognizers/>
                 <constraints>
+                    <constraint firstItem="GuE-N4-XAx" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="5M8-5s-ciQ"/>
                     <constraint firstAttribute="leadingMargin" secondItem="f9U-2C-adP" secondAttribute="leading" id="7Be-vp-XR5"/>
                     <constraint firstItem="f9U-2C-adP" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" id="A1P-av-IW9"/>
                     <constraint firstItem="tiK-xj-sWk" firstAttribute="width" secondItem="AuM-TO-WBP" secondAttribute="width" id="A24-P5-VPH"/>
-                    <constraint firstItem="GuE-N4-XAx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="HYD-E3-Efg"/>
                     <constraint firstItem="O57-JO-AUF" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" multiplier="0.3" id="Omf-td-bOw"/>
                     <constraint firstItem="tiK-xj-sWk" firstAttribute="height" secondItem="AuM-TO-WBP" secondAttribute="height" id="Q09-Kt-Z4s"/>
                     <constraint firstAttribute="trailingMargin" secondItem="f9U-2C-adP" secondAttribute="trailing" id="VYb-Ug-qm4"/>
@@ -107,7 +112,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="E9088F55-AFC1-4247-9A6D-25DD8E47D22C" width="31" height="26">
+        <image name="4CF5177E-E575-435C-B542-1F3DC0468E4D" width="31" height="26">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

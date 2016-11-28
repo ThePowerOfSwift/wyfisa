@@ -41,6 +41,7 @@ class SearchViewController: UIViewController {
         self.view.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
         self.verseTitle.textColor = self.themer.darkGreyForLightOrLightGrey()
         self.verseText.textColor = self.themer.navyForLightOrWhite(1.0)
+
         // theme - fonts
         let textFont = themer.currentFont()
         self.verseText.font = textFont

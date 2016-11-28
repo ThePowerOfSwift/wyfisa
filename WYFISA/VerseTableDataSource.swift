@@ -37,6 +37,7 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let vTableView = tableView as! VerseTableView
+        vTableView.separatorColor = UIColor.clearColor()
         
         if indexPath.section == 0 { // dummy row to padd table
             let dummyCell = VerseTableViewCell(style: .Default, reuseIdentifier: nil)

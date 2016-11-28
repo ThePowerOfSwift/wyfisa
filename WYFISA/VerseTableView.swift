@@ -106,6 +106,7 @@ class VerseTableView: UITableView, UITableViewDelegate {
         }
     }
     
+    
     func updateVersePriority(id: String, priority: Float){
         var i = 0
         if let ds = self.getDatasource() {
