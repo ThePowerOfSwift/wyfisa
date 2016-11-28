@@ -220,23 +220,24 @@ class VerseTableView: UITableView, UITableViewDelegate {
             let index = indexPath.section - 1
             if let ds = self.getDatasource() {
                 let verse = ds.recentVerses[index]
-                if let text = verse.text {
-                    sectionHeight = ds.cellHeightForText(text, width: self.frame.size.width)
-                } else {
-                    sectionHeight = ds.cellHeightForText(verse.name, width: self.frame.size.width) - 65
-                }
-                if verse.accessoryImage != nil {
-                    // height for an image cell
+                switch  verse.category {
+                case .Verse:
+                    if let text = verse.text {
+                        sectionHeight = ds.cellHeightForText(text, width: self.frame.size.width)
+                    }
+                case .Note:
+                     sectionHeight = ds.cellHeightForText(verse.name, width: self.frame.size.width) - 30
+                case .Image:
                     sectionHeight += 200
                 }
             }
-        } else {
+        } else { // non expanded
             
-            // hide accessory cells on quick view
+            // only show verses in quick view
             let index = indexPath.section - 1
             if let ds = self.getDatasource() {
                 let verse = ds.recentVerses[index]
-                if verse.accessoryImage != nil || verse.text == nil {
+                if verse.category != .Verse {
                     sectionHeight = 0
                 }
             }
