@@ -21,7 +21,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="59"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="4CF5177E-E575-435C-B542-1F3DC0468E4D" translatesAutoresizingMaskIntoConstraints="NO" id="GuE-N4-XAx">
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="52E524AB-7077-4E27-82FF-16D249AFA757" translatesAutoresizingMaskIntoConstraints="NO" id="GuE-N4-XAx">
                         <rect key="frame" x="131" y="0.0" width="59" height="59"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="GuE-N4-XAx" secondAttribute="height" id="By3-3p-D8M"/>
@@ -29,6 +29,10 @@
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                 <integer key="value" value="10"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                <integer key="value" value="1"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </imageView>
@@ -112,7 +116,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="4CF5177E-E575-435C-B542-1F3DC0468E4D" width="31" height="26">
+        <image name="52E524AB-7077-4E27-82FF-16D249AFA757" width="31" height="26">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

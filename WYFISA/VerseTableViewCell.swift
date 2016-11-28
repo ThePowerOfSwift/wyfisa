@@ -86,6 +86,7 @@ class VerseTableViewCell: UITableViewCell {
                     if isExpanded == false {
                         self.backgroundColor = UIColor.clearColor()
                     }
+                     self.mediaAccessory.layer.borderColor = UIColor.lightGrayColor().CGColor
                 
             } else {
                 self.mediaAccessory.image = nil
