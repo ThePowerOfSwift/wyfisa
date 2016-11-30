@@ -29,6 +29,8 @@ class HistoryViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         self.verseTable.dataSource = self.tableDataSource
         self.verseTable.isExpanded = true
+        self.verseTable.reloadData()
+
         if let size = self.frameSize {
             self.view.frame.size = size
         }

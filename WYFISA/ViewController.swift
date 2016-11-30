@@ -58,6 +58,11 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidAppear(animated: Bool) {
         self.verseTable.dataSource = self.tableDataSource
         self.verseTable.isExpanded = self.isExpanded
+        self.verseTable.reloadData()
+        self.updateSessionMatches()
+        if let ds = self.tableDataSource {
+            self.session.currentId = UInt64(ds.nVerses+1)
+        }
     }
     
     func configure(dataSource: VerseTableDataSource, isExpanded: Bool, size: CGSize){
@@ -311,7 +316,6 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func syncWithDataSource(){
-        print(self.session.currentId)
         self.updateSessionMatches()
         if self.session.matches.count == 0 && self.session.currentId > 0 {
             self.verseTable.clear()

@@ -42,6 +42,7 @@ class VerseTableView: UITableView, UITableViewDelegate {
         if let ds = self.getDatasource() {
             ds.recentVerses[section-1] = verse
             ds.updateCellHeightVal(verse)
+            ds.storage.putVerse(verse)
         }
         
         dispatch_async(dispatch_get_main_queue()) {

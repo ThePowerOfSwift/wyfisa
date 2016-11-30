@@ -21,6 +21,7 @@
 		C3355C591DE939380045E797 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3355C581DE939380045E797 /* SearchViewController.swift */; };
 		C338AF381D964B2F004E5E97 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C338AF371D964B2F004E5E97 /* InfoViewController.swift */; };
 		C34C52341D472E1A001E5F1A /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = C39090CF1D2C9C88000DFD15 /* tessdata */; };
+		C351DB4C1DEDE250009E853D /* CBStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB4B1DEDE250009E853D /* CBStorage.swift */; };
 		C3606CE81DBBBACD00AE2E8B /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3606CE71DBBBACD00AE2E8B /* HistoryViewController.swift */; };
 		C362A4421DACD586002B1AF4 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362A4411DACD586002B1AF4 /* TabBarViewController.swift */; };
 		C362A4441DACD662002B1AF4 /* InitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362A4431DACD662002B1AF4 /* InitViewController.swift */; };
@@ -93,6 +94,7 @@
 		C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchBarViewController.swift; path = ../SearchBarViewController.swift; sourceTree = "<group>"; };
 		C3355C581DE939380045E797 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		C338AF371D964B2F004E5E97 /* InfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoViewController.swift; path = ../InfoViewController.swift; sourceTree = "<group>"; };
+		C351DB4B1DEDE250009E853D /* CBStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBStorage.swift; sourceTree = "<group>"; };
 		C3606CE71DBBBACD00AE2E8B /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		C362A4411DACD586002B1AF4 /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		C362A4431DACD662002B1AF4 /* InitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitViewController.swift; sourceTree = "<group>"; };
@@ -219,6 +221,7 @@
 				C3D506591D3932FB00A04C83 /* Animations.swift */,
 				C39090761D2C9AF8000DFD15 /* AppDelegate.swift */,
 				C379515F1D43D62A003FB4F5 /* Books.swift */,
+				C351DB4B1DEDE250009E853D /* CBStorage.swift */,
 				C3F53B701D36219400E2F80D /* CameraManager.swift */,
 				C3F53B951D37499700E2F80D /* DBQuery.swift */,
 				C3606CE71DBBBACD00AE2E8B /* HistoryViewController.swift */,
@@ -593,6 +596,7 @@
 				C362A4441DACD662002B1AF4 /* InitViewController.swift in Sources */,
 				C3F53B711D36219400E2F80D /* CameraManager.swift in Sources */,
 				C39090771D2C9AF8000DFD15 /* AppDelegate.swift in Sources */,
+				C351DB4C1DEDE250009E853D /* CBStorage.swift in Sources */,
 				C3AEF17C1DEB8D0C007750A8 /* NotesViewController.swift in Sources */,
 				C323F3D71D86EE5B00A7EC95 /* SearchBarViewController.swift in Sources */,
 				C3D5065A1D3932FB00A04C83 /* Animations.swift in Sources */,

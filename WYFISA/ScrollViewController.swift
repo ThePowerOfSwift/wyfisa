@@ -68,8 +68,15 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
 
     override func viewDidAppear(animated: Bool) {
         if (!self.didLoad) {
-            self.scrollView.contentOffset.x = 0
             self.didLoad = true
+            
+            // show history view... if we have history
+            if self.commonDataSource?.nVerses > 0 {
+                self.scrollView.contentOffset.x = self.view.frame.size.width
+                self.scrollToPage(1)
+            } else {
+                self.scrollView.contentOffset.x = 0
+            }
         }
     }
     
@@ -217,19 +224,9 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
                         table.addSection()
                     }
                 }
-            }
-            else {
+            } else {
                 // updating data at this session
-                if let ds = self.commonDataSource {
-                    var i = 0
-                    for v in ds.recentVerses {
-                        if v.session == verseInfo.session {
-                            ds.recentVerses[i] = verseInfo
-                            break
-                        }
-                        i=i+1
-                    }
-                }
+                self.commonDataSource?.updateRecentVerse(verseInfo)
             }
             self.pauseVC?.verseTable.reloadData()
         }
@@ -261,16 +258,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
                 }
             } else {
                 // updating data at this session
-                if let ds = self.commonDataSource {
-                    var i = 0
-                    for v in ds.recentVerses {
-                        if v.session == verseInfo.session {
-                            ds.recentVerses[i] = verseInfo
-                            break
-                        }
-                        i=i+1
-                    }
-                }
+                self.commonDataSource?.updateRecentVerse(verseInfo)
             }
             self.pauseVC?.verseTable.reloadData()
         }

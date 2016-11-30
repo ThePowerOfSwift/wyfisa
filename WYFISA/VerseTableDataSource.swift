@@ -20,13 +20,14 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
     var hasHeader: Bool = true
     var cellDelegate: VerseTableViewCellDelegate?
     var themer = WYFISATheme.sharedInstance
-
+    var storage: CBStorage = CBStorage(databaseName: "verses")
    
     init(frameSize: CGSize) {
         super.init()
         self.initHeaderHeight = frameSize.height
         self.initFrameWidth = frameSize.width
-
+        self.recentVerses = storage.getRecentVerses()
+        self.nVerses = self.recentVerses.count
     }
     
     func setCellDelegate(delegate: VerseTableViewCellDelegate){
@@ -93,15 +94,29 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
     func appendVerse(verse: VerseInfo){
         self.recentVerses.append(verse)
         if(verse.id != ""){
+            // is actual verse
             updateCellHeightVal(verse)
+            self.storage.putVerse(verse)
         }
     }
+
     
     
     func updateVersePending(id: Int){
         self.recentVerses[id-1].name = self.recentVerses[id-1].name+"."
     }
 
+    func updateRecentVerse(verse: VerseInfo){
+        var i = 0
+        for v in self.recentVerses {
+            if v.session == verse.session {
+                self.recentVerses[i] = verse
+                self.storage.updateVerse(verse)
+                break
+            }
+            i=i+1
+        }
+    }
     func updateCellHeightVal(verse: VerseInfo){
         if let text = verse.text {
             let height = self.cellHeightForText(text, width: self.initFrameWidth)
@@ -112,7 +127,10 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             
-            
+            // remove from storage
+            let verseKey = self.recentVerses[indexPath.section-1].createdAt
+            self.storage.removeVerse(verseKey)
+
             // delete cell from datasource
             let idxSet = NSIndexSet(index: indexPath.section)
             self.nVerses -= 1
@@ -124,7 +142,7 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
             
             // drop celll from section
             tableView.deleteSections(idxSet, withRowAnimation: .Automatic)
-            tableView.reloadData()
+            tableView.reloadData()            
         }
     }
 }
