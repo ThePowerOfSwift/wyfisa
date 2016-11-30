@@ -8,7 +8,6 @@
 
 import UIKit
 
-func defaultCallback(page: Int){}
 
 class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
 

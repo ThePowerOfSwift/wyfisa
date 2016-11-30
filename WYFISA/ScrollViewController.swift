@@ -17,14 +17,15 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     var commonDataSource: VerseTableDataSource? = nil
     var activePage: Int = 1
     var onPageChange: (Int) -> () = defaultCallback
+
     var didLoad: Bool = false
     var tabBarHeight: CGFloat? = nil
     
-    @IBOutlet var noteTextInput: UITextField!
     var bgCam: CameraManager = CameraManager.sharedInstance
     let db = DBQuery.sharedInstance
     var kbo: KeyboardObserver? = nil
     
+    @IBOutlet var noteTextInput: UITextField!
     @IBOutlet var escapeMask: UIView!
     @IBOutlet var buttonStack: UIStackView!
     @IBOutlet var filterView: GPUImageView!
@@ -53,6 +54,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         self.pauseVC?.configure(ds, isExpanded: true, size: self.view.frame.size)
         self.commonDataSource = ds
         
+        // add controllers to scroll view
         self.scrollView.addSubview(pauseVC!.view)
         self.scrollView.addSubview(captureVC!.view)
 
@@ -62,6 +64,9 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         // put a gaussian blur on the live view
         self.bgCam.start()
         self.bgCam.addCameraBlurTargets(self.filterView)
+        
+        // setup callbacks from child view
+        self.pauseVC?.notifyClearVerses = self.handleClearAllNotification
         
     }
 
@@ -143,6 +148,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         
         // make sure exit editing mode when we are scrolling
         self.pauseVC?.exitEditingMode()
+
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
@@ -319,6 +325,11 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             self.pauseVC?.verseTable.reloadData()
         }
     }
+    
+    func handleClearAllNotification(){
+        self.captureVC?.verseTable.reloadData()
+    }
+    
     
     // MARK - keyboard watcher
     @IBAction func didPressNotesButton(sender: UIButton) {

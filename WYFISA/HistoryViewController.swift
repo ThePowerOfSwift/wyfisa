@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class HistoryViewController: UIViewController {
 
     @IBOutlet var verseTable: VerseTableView!
@@ -19,6 +20,7 @@ class HistoryViewController: UIViewController {
     var tableDataSource: VerseTableDataSource? = nil
     var frameSize: CGSize? = nil
     var isEditingMode: Bool = false
+    var notifyClearVerses: () -> () = notifyCallback
     
     func configure(dataSource: VerseTableDataSource, isExpanded: Bool, size: CGSize){
         self.tableDataSource = dataSource
@@ -80,6 +82,9 @@ class HistoryViewController: UIViewController {
         // empty table
         self.verseTable.clear()
         self.updateIconsForEditingMode(false)
+        
+        // notify parents
+        self.notifyClearVerses()
     }
     
     
