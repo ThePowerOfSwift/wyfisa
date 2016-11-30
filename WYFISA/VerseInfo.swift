@@ -97,8 +97,11 @@ class VerseInfo {
                 v.category = category
             }
             
+            if let session = verseDoc["session"] as? NSNumber {
+                v.session = session.unsignedLongLongValue
+            }
+            
             v.createdAt = verseDoc["createdAt"] as? String ?? ""
-            v.session = verseDoc["session"] as? UInt64 ?? 0
             v.priority = verseDoc["priority"] as? Float ?? -1
             v.chapter = verseDoc["chapter"] as? String ?? ""
             v.chapterNo = verseDoc["chapterNo"] as? Int ?? 0

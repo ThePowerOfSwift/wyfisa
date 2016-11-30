@@ -71,7 +71,6 @@ class CBStorage {
     }
     
     func updateVerseNote(id: String, note: String){
-        print("UPDATING", id, note)
 
         if let doc = db?.existingDocumentWithID(id) {
             do {

@@ -264,6 +264,11 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         }
     }
     
+    @IBAction func unwindFromNotesAndQuit(segue: UIStoryboardSegue) {
+        //
+    }
+
+    
     @IBAction func unwindFromSearchAndQuit(segue: UIStoryboardSegue) {
         //
     }

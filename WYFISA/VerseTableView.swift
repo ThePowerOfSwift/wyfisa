@@ -155,6 +155,12 @@ class VerseTableView: UITableView, UITableViewDelegate {
         }
         
         if let ds = self.getDatasource(){
+            // remove from db
+            for v in ds.recentVerses {
+                ds.storage.removeVerse(v.createdAt)
+            }
+            
+            // remove from ds
             ds.nVerses = 0
             ds.recentVerses = [VerseInfo]()
             ds.expandedCellHeights = 0.0
