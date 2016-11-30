@@ -11,22 +11,7 @@ import Foundation
 
 
 enum ItemCategory: Int {
-    
     case Verse = 0, Note, Image
-    
-    func name() -> String {
-        switch self.rawValue {
-        case 0:
-            return "Avenir"
-        case 1:
-            return "Baskerville"
-        case 2:
-            return "Iowan"
-        default:
-            return "San Francisco"
-        }
-    }
-    
 }
 
 class VerseInfo {

@@ -13,13 +13,17 @@ import TesseractOCR
 
 let IS_SIMULATOR = TARGET_OS_SIMULATOR != 0
 
+enum CameraState: Int {
+    case Stopped = 0, InUse, Paused
+}
 
 class CameraManager {
     let camera: GPUImageStillCamera
     let filter = ImageFilter.genericFilter()
     let ocr: OCR = OCR()
     var simImage: UIImage! = UIImage(named: "oneanother")
-    var captureStarted: Bool = false
+    var state: CameraState = .Stopped
+    var shouldResumeOnAppFG = false
     static let sharedInstance = CameraManager()
 
 
@@ -95,19 +99,36 @@ class CameraManager {
     
     func start(){
         self.camera.startCameraCapture()
-        self.captureStarted = true
+        self.state = .InUse
     }
     
     func pause(){
         self.camera.pauseCameraCapture()
+        self.state = .Paused
     }
     
     func resume(){
         self.camera.resumeCameraCapture()
+        self.state = .InUse
     }
     
     func stop(){
         self.camera.stopCameraCapture()
+        self.state = .Stopped
+    }
+    
+    func appPause(){
+        if self.state == .InUse {
+            self.shouldResumeOnAppFG = true
+        }
+        self.pause()
+    }
+    
+    func appResume(){
+        if self.shouldResumeOnAppFG == true {
+            self.resume()
+        }
+        self.shouldResumeOnAppFG = false
     }
     
     func setSimImage(image: UIImage){

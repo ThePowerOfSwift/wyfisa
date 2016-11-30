@@ -9,24 +9,26 @@
 import UIKit
 import GPUImage
 
-class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableViewCellDelegate {
+class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate, VerseTableViewCellDelegate {
 
     @IBOutlet var scrollView: UIScrollView!
     var captureVC: ViewController? = nil
     var pauseVC: HistoryViewController? = nil
     var commonDataSource: VerseTableDataSource? = nil
-    var activePage: Int = 0
+    var activePage: Int = 1
     var onPageChange: (Int) -> () = defaultCallback
     var didLoad: Bool = false
-
+    var tabBarHeight: CGFloat? = nil
+    
+    @IBOutlet var noteTextInput: UITextField!
     var bgCam: CameraManager = CameraManager.sharedInstance
     let db = DBQuery.sharedInstance
-
+    var kbo: KeyboardObserver? = nil
+    
+    @IBOutlet var escapeMask: UIView!
     @IBOutlet var buttonStack: UIStackView!
     @IBOutlet var filterView: GPUImageView!
-    @IBOutlet var buttonBottomConstraint: NSLayoutConstraint!
-    @IBOutlet var buttonLeadingConstraint: NSLayoutConstraint!
-    
+    @IBOutlet var notesBottomConstraint: NSLayoutConstraint!
     @IBOutlet var backgroundTextFieldButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,8 +42,8 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         self.captureVC = storyboard.instantiateViewControllerWithIdentifier("capturevc") as? ViewController
         self.pauseVC = storyboard.instantiateViewControllerWithIdentifier("historyvc") as? HistoryViewController
 
-        self.captureVC?.view.frame.origin.x = 0
-        self.pauseVC?.view.frame.origin.x = w
+        self.pauseVC?.view.frame.origin.x = 0
+        self.captureVC?.view.frame.origin.x = w
 
         
         // set data sources
@@ -51,9 +53,8 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         self.pauseVC?.configure(ds, isExpanded: true, size: self.view.frame.size)
         self.commonDataSource = ds
         
-        self.scrollView.addSubview(captureVC!.view)
         self.scrollView.addSubview(pauseVC!.view)
-        
+        self.scrollView.addSubview(captureVC!.view)
 
         // enable filter view
         self.filterView.fillMode = GPUImageFillModeType.init(2)
@@ -61,9 +62,8 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         // put a gaussian blur on the live view
         self.bgCam.start()
         self.bgCam.addCameraBlurTargets(self.filterView)
-
+        
     }
-
 
 
     override func viewDidAppear(animated: Bool) {
@@ -72,11 +72,17 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
             
             // show history view... if we have history
             if self.commonDataSource?.nVerses > 0 {
-                self.scrollView.contentOffset.x = self.view.frame.size.width
-                self.scrollToPage(1)
-            } else {
                 self.scrollView.contentOffset.x = 0
+                self.scrollToPage(0)
+            } else {
+                // otherwise show capture
+                self.scrollView.contentOffset.x =  self.view.frame.size.width
             }
+            
+            // init keyboard observers
+            self.noteTextInput.delegate = self
+            initKeyboardObserver()
+
         }
     }
     
@@ -94,7 +100,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
             self.scrollView.contentOffset.x = self.view.frame.size.width*CGFloat(page)
             
             // moving to pause page
-            if page == 1 {
+            if page == 0 {
                 
                 // make sure cam is paused
                 self.captureVC?.cam.pause()
@@ -104,7 +110,8 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
                 // scroll to end
                 self.pauseVC?.verseTable.scrollToEnd()
                 
-            } else  {
+            } else  { // leaving pause page
+                
                 // resume cam on scroll to active page
                 self.captureVC?.cam.resume()
                 self.captureVC?.syncWithDataSource()
@@ -121,32 +128,35 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         let page =  self.scrollView.contentOffset.x/self.view.frame.size.width
         self.activePage = Int(page)
 
-        if self.activePage == 1 {
+        if self.activePage == 0 {
             self.captureVC?.cam.pause()
         }
         
         self.onPageChange(self.activePage)
+        
 
     }
 
     func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
         // make cam hot on moves, we can pause later
         self.captureVC?.cam.resume()
+        
+        // make sure exit editing mode when we are scrolling
+        self.pauseVC?.exitEditingMode()
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        if self.activePage == 2 {
-            // going left
-            self.captureVC?.syncWithDataSource()
-            self.captureVC?.verseTable.reloadData()
-        }
+
     }
     
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
+
+        // make sure we're not deleting cells
+        self.pauseVC?.exitEditingMode()
+
 
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
@@ -177,7 +187,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         if segue.identifier == "searchsegue" {
             // give last verse from datasource
             if let ds = self.commonDataSource {
-                if let verse = ds.recentVerses.last {
+                if let verse = ds.getLastVerseItem() {
                     let toVc = segue.destinationViewController as! SearchViewController
                     toVc.verseInfo = verse
                 }
@@ -204,14 +214,17 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
     }
     
     func didRemoveCell(sender: VerseTableViewCell) {
-
+        // just removed one cell
+        self.captureVC?.syncWithDataSource()
+        self.pauseVC?.exitEditingMode()
+        
     }
     
     @IBAction func unwindFromHighlight(segue: UIStoryboardSegue) {
         let vc = segue.sourceViewController as! InfoViewController
         
         if let verseInfo = vc.verseInfo {
-            self.scrollToPage(1)
+            self.scrollToPage(0)
 
             if vc.isUpdate == false {
                 // add verse to datasource
@@ -232,7 +245,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         }
         
         // resume cam if we quit
-        if self.activePage == 0 {
+        if self.activePage == 1 {
             self.bgCam.resume()
         }
     }
@@ -242,7 +255,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
         let vc = segue.sourceViewController as! NotesViewController
         
         if let verseInfo = vc.verseInfo {
-            self.scrollToPage(1)
+            self.scrollToPage(0)
 
             if vc.isUpdate == false {
                 // add verse to datasource
@@ -279,7 +292,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
 
         if let verseInfo = searchVC.verseInfo {
             
-            self.scrollToPage(1)
+            self.scrollToPage(0)
             
             // add verse to datasource
             verseInfo.session = (self.captureVC?.updateCaptureId())!
@@ -306,6 +319,79 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, VerseTableVi
             self.pauseVC?.verseTable.reloadData()
         }
     }
+    
+    // MARK - keyboard watcher
+    @IBAction func didPressNotesButton(sender: UIButton) {
+        if self.activePage == 1 {
+            self.bgCam.pause()
+        }
+        self.noteTextInput.text = nil
+        self.noteTextInput.hidden = false
+        self.noteTextInput.becomeFirstResponder()
+        
+        self.escapeMask.hidden = false
+        
+        // make sure exit editing mode when creating a note
+        self.pauseVC?.exitEditingMode()
+        
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        self.escapeMask.hidden = true
+        let text = textField.text ?? ""
+    
+        if text != "" {
 
+            let verseInfo = VerseInfo(id: "0", name:  text, text: nil)
+            verseInfo.category = .Note
+            
+            // add verse to datasource
+            verseInfo.session = (self.captureVC?.updateCaptureId())!
+            
+            self.commonDataSource?.appendVerse(verseInfo)
+            
+            // add the section to capture table and then reload pauseVC
+            dispatch_async(dispatch_get_main_queue()) {
+                if let table = self.pauseVC?.verseTable {
+                    table.addSection()
+                }
+            }
+            
+            self.scrollToPage(0)
+        } else {
+            // did nothing
+            if self.activePage == 1 {
+                self.bgCam.resume()
+            }
+        }
+        
+
+        self.noteTextInput.hidden = true
+    }
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func initKeyboardObserver(){
+        let kbo = KeyboardObserver(self, constraint: self.notesBottomConstraint)
+        kbo.yOffset = self.tabBarHeight ?? 0
+        kbo.frameOffset = 1
+        self.kbo = kbo
+    }
+    func keyboardWillShow(notification:NSNotification) {
+        self.kbo?.keyboardWillShow(notification)
+    }
+    func keyboardWillHide(notification:NSNotification) {
+        self.kbo?.keyboardWillHide(notification)
+    }
+    
+    @IBAction func didTapEscapeMask(sender: AnyObject) {
+        self.closeNotesInput()
+    }
+    func closeNotesInput(){
+        self.noteTextInput.text = nil
+        self.noteTextInput.endEditing(true)
+    }
 
 }

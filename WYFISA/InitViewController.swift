@@ -17,7 +17,6 @@ class InitViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -63,7 +62,7 @@ class InitViewController: UIViewController {
             let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
             selectedVC.captureVC?.verseTable.reloadData()
             selectedVC.pauseVC?.verseTable.reloadData()
-            if self.getScrollPage() == 0 {
+            if self.getScrollPage() == 1 {
                 if let vc = self.getCaptureVC() {
                     vc.cam.resume()
                 }
@@ -77,9 +76,9 @@ class InitViewController: UIViewController {
         
         self.inCaptureMode = true
         
-        if self.getScrollPage() == 1 {
+        if self.getScrollPage() == 0 {
             // move to active
-            self.moveToPage(0)
+            self.moveToPage(1)
         }
         // get capture vc
         if  let vc = self.getCaptureVC(){
@@ -103,7 +102,7 @@ class InitViewController: UIViewController {
 
         if didCaptureVerses == true {
             // swipe to pause vc
-            self.moveToPage(1)
+            self.moveToPage(0)
         }
 
     }

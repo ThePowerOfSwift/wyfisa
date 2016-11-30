@@ -124,6 +124,15 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
         }
     }
     
+    func getLastVerseItem() -> VerseInfo? {
+        for v in self.recentVerses.reverse() {
+            if v.category == .Verse {
+                return v
+            }
+        }
+        return nil
+    }
+    
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             

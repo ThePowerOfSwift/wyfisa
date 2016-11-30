@@ -82,6 +82,14 @@ class HistoryViewController: UIViewController {
         self.updateIconsForEditingMode(false)
     }
     
+    
+    func exitEditingMode(){
+        if self.verseTable.editing == true {
+            self.verseTable.setEditing(false, animated: true)
+            self.updateIconsForEditingMode(false)
+        }
+    }
+    
     func themeView(){
         // bg color
         self.view.backgroundColor = themer.whiteForLightOrNavy(1.0)

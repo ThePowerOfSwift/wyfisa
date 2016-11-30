@@ -22,6 +22,7 @@
 		C338AF381D964B2F004E5E97 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C338AF371D964B2F004E5E97 /* InfoViewController.swift */; };
 		C34C52341D472E1A001E5F1A /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = C39090CF1D2C9C88000DFD15 /* tessdata */; };
 		C351DB4C1DEDE250009E853D /* CBStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB4B1DEDE250009E853D /* CBStorage.swift */; };
+		C351DB4E1DEE7668009E853D /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB4D1DEE7668009E853D /* KeyboardObserver.swift */; };
 		C3606CE81DBBBACD00AE2E8B /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3606CE71DBBBACD00AE2E8B /* HistoryViewController.swift */; };
 		C362A4421DACD586002B1AF4 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362A4411DACD586002B1AF4 /* TabBarViewController.swift */; };
 		C362A4441DACD662002B1AF4 /* InitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362A4431DACD662002B1AF4 /* InitViewController.swift */; };
@@ -95,6 +96,7 @@
 		C3355C581DE939380045E797 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		C338AF371D964B2F004E5E97 /* InfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoViewController.swift; path = ../InfoViewController.swift; sourceTree = "<group>"; };
 		C351DB4B1DEDE250009E853D /* CBStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBStorage.swift; sourceTree = "<group>"; };
+		C351DB4D1DEE7668009E853D /* KeyboardObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		C3606CE71DBBBACD00AE2E8B /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		C362A4411DACD586002B1AF4 /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		C362A4431DACD662002B1AF4 /* InitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitViewController.swift; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 				C3AEF17B1DEB8D0C007750A8 /* NotesViewController.swift */,
 				C37951611D442023003FB4F5 /* OCR.swift */,
 				C3C4FAEB1DBB2F3E0068B19A /* ReadViewController.swift */,
+				C351DB4D1DEE7668009E853D /* KeyboardObserver.swift */,
 				C306DA071DB484A200D1F962 /* ScrollViewController.swift */,
 				C3355C581DE939380045E797 /* SearchViewController.swift */,
 				C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */,
@@ -577,6 +580,7 @@
 				C3355C591DE939380045E797 /* SearchViewController.swift in Sources */,
 				C39090791D2C9AF8000DFD15 /* ViewController.swift in Sources */,
 				C362A4421DACD586002B1AF4 /* TabBarViewController.swift in Sources */,
+				C351DB4E1DEE7668009E853D /* KeyboardObserver.swift in Sources */,
 				C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */,
 				C374B4A01D8CF4600083366E /* SettingsViewController.swift in Sources */,
 				C3F53B761D36945900E2F80D /* VerseTableViewCell.swift in Sources */,

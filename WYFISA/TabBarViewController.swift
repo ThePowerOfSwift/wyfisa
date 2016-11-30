@@ -24,6 +24,8 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
         // Do any additional setup after loading the view.
         let scrollVC = self.selectedViewController as! ScrollViewController
         scrollVC.onPageChange = self.onPageChange
+        scrollVC.tabBarHeight = self.tabBar.frame.height
+        
     }
     
 

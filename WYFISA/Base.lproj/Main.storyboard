@@ -291,9 +291,9 @@
                                     <action selector="didSPressCaptureButton:" destination="XjC-yA-6pa" eventType="touchDown" id="jVD-Cy-xXI"/>
                                 </connections>
                             </button>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="s29-Qd-YbJ">
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" currentPage="1" translatesAutoresizingMaskIntoConstraints="NO" id="s29-Qd-YbJ">
                                 <rect key="frame" x="176" y="533" width="23" height="37"/>
-                                <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
                                 <color key="currentPageIndicatorTintColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="0.5" colorSpace="calibratedRGB"/>
                             </pageControl>
                         </subviews>
@@ -628,7 +628,7 @@
                                 <color key="backgroundColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="ohX-AJ-cTZ">
-                                <rect key="frame" x="16" y="538.5" width="81" height="37"/>
+                                <rect key="frame" x="16" y="539" width="81" height="37"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yuj-PD-znn">
                                         <rect key="frame" x="0.0" y="4" width="29" height="29"/>
@@ -647,29 +647,50 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b8b-TX-Wvi">
-                                <rect key="frame" x="208" y="538.5" width="159" height="31"/>
+                                <rect key="frame" x="208" y="539" width="159" height="31"/>
                                 <state key="normal" image="NotesImage"/>
                                 <connections>
-                                    <segue destination="aVO-9A-Mpc" kind="presentation" identifier="notesegue" id="pBq-AG-nBs"/>
+                                    <action selector="didPressNotesButton:" destination="QIg-cf-JU2" eventType="touchUpInside" id="NU3-hX-ghR"/>
                                 </connections>
                             </button>
+                            <view hidden="YES" alpha="0.10000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0I7-kf-2o1">
+                                <rect key="frame" x="-0.5" y="-0.5" width="375" height="647"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="43T-N6-5iy" appends="YES" id="sOv-2D-rVE"/>
+                                </connections>
+                            </view>
+                            <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Note" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Obq-30-FuH">
+                                <rect key="frame" x="4" y="568" width="367" height="30"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="send" enablesReturnKeyAutomatically="YES"/>
+                            </textField>
                         </subviews>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Obq-30-FuH" secondAttribute="trailing" constant="4" id="8lT-Wa-pA4"/>
                             <constraint firstItem="mkn-v8-aJd" firstAttribute="top" secondItem="gLE-jb-PcZ" secondAttribute="bottom" id="AXG-5K-SR3"/>
                             <constraint firstItem="x4e-dK-sLo" firstAttribute="height" secondItem="gt9-bu-I17" secondAttribute="height" id="B9r-QK-S4x"/>
                             <constraint firstItem="B8Q-l4-UQR" firstAttribute="height" secondItem="gt9-bu-I17" secondAttribute="height" id="BR4-9K-X6e"/>
                             <constraint firstItem="B8Q-l4-UQR" firstAttribute="width" secondItem="gt9-bu-I17" secondAttribute="width" id="Chz-0l-bVe"/>
+                            <constraint firstItem="0I7-kf-2o1" firstAttribute="width" secondItem="gt9-bu-I17" secondAttribute="width" id="Cm8-C2-5bZ"/>
                             <constraint firstItem="x4e-dK-sLo" firstAttribute="top" secondItem="5Sz-Ag-IBR" secondAttribute="bottom" id="E6v-xn-SAe"/>
                             <constraint firstItem="gLE-jb-PcZ" firstAttribute="width" secondItem="gt9-bu-I17" secondAttribute="width" id="EZd-Se-5kw"/>
+                            <constraint firstItem="0I7-kf-2o1" firstAttribute="centerY" secondItem="gt9-bu-I17" secondAttribute="centerY" id="IYG-hR-b56"/>
                             <constraint firstItem="gLE-jb-PcZ" firstAttribute="centerX" secondItem="gt9-bu-I17" secondAttribute="centerX" id="O0U-mP-Oxm"/>
+                            <constraint firstItem="Obq-30-FuH" firstAttribute="leading" secondItem="gt9-bu-I17" secondAttribute="leading" constant="4" id="QGK-XB-kxs"/>
                             <constraint firstItem="B8Q-l4-UQR" firstAttribute="leading" secondItem="gt9-bu-I17" secondAttribute="leading" id="Ubb-CK-rgu"/>
                             <constraint firstItem="ohX-AJ-cTZ" firstAttribute="leading" secondItem="gt9-bu-I17" secondAttribute="leadingMargin" id="WxI-ps-aay"/>
+                            <constraint firstItem="mkn-v8-aJd" firstAttribute="top" secondItem="Obq-30-FuH" secondAttribute="bottom" id="XSP-t0-JMj"/>
                             <constraint firstItem="ohX-AJ-cTZ" firstAttribute="top" secondItem="b8b-TX-Wvi" secondAttribute="top" id="XWz-Rz-7wy"/>
                             <constraint firstItem="l8p-to-PHP" firstAttribute="centerX" secondItem="gt9-bu-I17" secondAttribute="centerX" id="Ztb-9c-7my"/>
                             <constraint firstItem="l8p-to-PHP" firstAttribute="top" secondItem="5Sz-Ag-IBR" secondAttribute="bottom" id="a1b-HE-nPb"/>
                             <constraint firstItem="b8b-TX-Wvi" firstAttribute="leading" secondItem="gt9-bu-I17" secondAttribute="leadingMargin" multiplier="13" id="fTg-5a-UDe"/>
                             <constraint firstItem="gLE-jb-PcZ" firstAttribute="height" secondItem="gt9-bu-I17" secondAttribute="height" multiplier="0.15" id="j1q-pc-e9F"/>
+                            <constraint firstItem="0I7-kf-2o1" firstAttribute="centerX" secondItem="gt9-bu-I17" secondAttribute="centerX" id="jhW-Om-h32"/>
                             <constraint firstItem="mkn-v8-aJd" firstAttribute="top" secondItem="b8b-TX-Wvi" secondAttribute="bottom" multiplier="1.05" id="mLw-9p-y3l"/>
+                            <constraint firstItem="0I7-kf-2o1" firstAttribute="height" secondItem="gt9-bu-I17" secondAttribute="height" id="mzq-Sw-Ofo"/>
                             <constraint firstItem="b8b-TX-Wvi" firstAttribute="trailing" secondItem="gLE-jb-PcZ" secondAttribute="trailingMargin" id="q8S-hr-CEp"/>
                             <constraint firstItem="l8p-to-PHP" firstAttribute="width" secondItem="gt9-bu-I17" secondAttribute="width" id="ser-QY-tUc"/>
                             <constraint firstItem="x4e-dK-sLo" firstAttribute="width" secondItem="gt9-bu-I17" secondAttribute="width" id="t2H-t6-Rvl"/>
@@ -680,15 +701,22 @@
                     <tabBarItem key="tabBarItem" title="" id="fhI-1I-Xsq"/>
                     <connections>
                         <outlet property="backgroundTextFieldButton" destination="b8b-TX-Wvi" id="vuM-4s-vkY"/>
-                        <outlet property="buttonBottomConstraint" destination="mLw-9p-y3l" id="Zyw-V8-tHo"/>
-                        <outlet property="buttonLeadingConstraint" destination="fTg-5a-UDe" id="KJY-EA-H6r"/>
                         <outlet property="buttonStack" destination="ohX-AJ-cTZ" id="eDN-Us-XWa"/>
+                        <outlet property="escapeMask" destination="0I7-kf-2o1" id="V3f-M6-xeQ"/>
                         <outlet property="filterView" destination="l8p-to-PHP" id="DiL-Ya-wEC"/>
+                        <outlet property="noteTextInput" destination="Obq-30-FuH" id="DzM-nF-Mfn"/>
+                        <outlet property="notesBottomConstraint" destination="XSP-t0-JMj" id="hG9-xy-V1E"/>
                         <outlet property="scrollView" destination="B8Q-l4-UQR" id="0m6-91-KVb"/>
                         <segue destination="MHR-2x-CaL" kind="presentation" identifier="VerseDetail" id="nku-uu-oq7"/>
+                        <segue destination="aVO-9A-Mpc" kind="presentation" identifier="notesegue" id="XUq-Uf-xLP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oew-Di-sIT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="43T-N6-5iy">
+                    <connections>
+                        <action selector="didTapEscapeMask:" destination="QIg-cf-JU2" id="IvY-wv-vac"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="-2114.4000000000001" y="2146.776611694153"/>
         </scene>
@@ -994,7 +1022,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mLY-iA-uzW" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <screenEdgePanGestureRecognizer cancelsTouchesInView="NO" minimumNumberOfTouches="1" id="6s7-uK-ioT">
-                    <rectEdge key="edges" right="YES"/>
+                    <rectEdge key="edges" left="YES"/>
                     <connections>
                         <action selector="didPanRight:" destination="hxq-w5-FtD" id="Ojj-hV-1NF"/>
                     </connections>
