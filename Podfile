@@ -11,6 +11,7 @@ target 'TurnTo' do
   pod "STRegex", "~> 0.3.1"
   pod 'SQLite.swift', '~> 0.10.1'
   pod 'couchbase-lite-ios', '1.3.1'
+  pod 'Firebase/Storage'
 
   target 'WYFISATests' do
     inherit! :search_paths

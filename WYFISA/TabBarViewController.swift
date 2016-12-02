@@ -14,7 +14,7 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
     var captureButtonPtr: UIButton? = nil
     var onTabChange: (Int) -> () = defaultCallback
     var onPageChange: (Int) -> () = defaultCallback
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.selectedIndex = 1

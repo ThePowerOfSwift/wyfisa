@@ -32,6 +32,7 @@ class VerseInfo {
     var category: ItemCategory = .Verse
     var ts: NSTimeInterval
     var createdAt: String
+    var cellID: CellIdentifier? = nil
     
     init(id: String, name: String, text: String?){
         self.id = id

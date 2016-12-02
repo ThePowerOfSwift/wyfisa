@@ -11,7 +11,8 @@ import Foundation
 class CBStorage {
     
     var db: CBLDatabase?  = nil
-
+   // let firedb: FBStorage = FBStorage.sharedInstance
+    
     init(databaseName: String){
         do {
             let db = try CBLManager.sharedInstance().databaseNamed(databaseName)

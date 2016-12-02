@@ -12,6 +12,8 @@
 		98D7016DCF5935DB2A5AD85C /* Pods_WYFISATests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 231106650F4EB642E443C0B1 /* Pods_WYFISATests.framework */; };
 		C306DA081DB484A200D1F962 /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C306DA071DB484A200D1F962 /* ScrollViewController.swift */; };
 		C306DA0A1DB49B8300D1F962 /* VerseTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C306DA091DB49B8300D1F962 /* VerseTableDataSource.swift */; };
+		C30963DF1DEFD420009CD474 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C30963DE1DEFD420009CD474 /* GoogleService-Info.plist */; };
+		C30963E11DF03112009CD474 /* ScriptCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30963E01DF03112009CD474 /* ScriptCollection.swift */; };
 		C312DE531D6C5A5E0098D0C5 /* WYFISATheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C312DE521D6C5A5E0098D0C5 /* WYFISATheme.swift */; };
 		C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */; };
 		C316B6B61D3A35DE00E272A3 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */; };
@@ -24,6 +26,7 @@
 		C351DB4C1DEDE250009E853D /* CBStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB4B1DEDE250009E853D /* CBStorage.swift */; };
 		C351DB4E1DEE7668009E853D /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB4D1DEE7668009E853D /* KeyboardObserver.swift */; };
 		C351DB501DEF52D7009E853D /* Generics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB4F1DEF52D7009E853D /* Generics.swift */; };
+		C351DB521DEFCCEE009E853D /* FBStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB511DEFCCEE009E853D /* FBStorage.swift */; };
 		C3606CE81DBBBACD00AE2E8B /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3606CE71DBBBACD00AE2E8B /* HistoryViewController.swift */; };
 		C362A4421DACD586002B1AF4 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362A4411DACD586002B1AF4 /* TabBarViewController.swift */; };
 		C362A4441DACD662002B1AF4 /* InitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362A4431DACD662002B1AF4 /* InitViewController.swift */; };
@@ -88,6 +91,8 @@
 		C036CFC08D857FBD0986B028 /* Pods-WYFISATests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WYFISATests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WYFISATests/Pods-WYFISATests.debug.xcconfig"; sourceTree = "<group>"; };
 		C306DA071DB484A200D1F962 /* ScrollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
 		C306DA091DB49B8300D1F962 /* VerseTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseTableDataSource.swift; sourceTree = "<group>"; };
+		C30963DE1DEFD420009CD474 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C30963E01DF03112009CD474 /* ScriptCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptCollection.swift; sourceTree = "<group>"; };
 		C312DE521D6C5A5E0098D0C5 /* WYFISATheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISATheme.swift; sourceTree = "<group>"; };
 		C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseDetailModalViewController.swift; sourceTree = "<group>"; };
 		C316B6B51D3A35DE00E272A3 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
@@ -99,6 +104,7 @@
 		C351DB4B1DEDE250009E853D /* CBStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBStorage.swift; sourceTree = "<group>"; };
 		C351DB4D1DEE7668009E853D /* KeyboardObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		C351DB4F1DEF52D7009E853D /* Generics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generics.swift; sourceTree = "<group>"; };
+		C351DB511DEFCCEE009E853D /* FBStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBStorage.swift; sourceTree = "<group>"; };
 		C3606CE71DBBBACD00AE2E8B /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		C362A4411DACD586002B1AF4 /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		C362A4431DACD662002B1AF4 /* InitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitViewController.swift; sourceTree = "<group>"; };
@@ -228,6 +234,7 @@
 				C351DB4B1DEDE250009E853D /* CBStorage.swift */,
 				C3F53B701D36219400E2F80D /* CameraManager.swift */,
 				C3F53B951D37499700E2F80D /* DBQuery.swift */,
+				C351DB511DEFCCEE009E853D /* FBStorage.swift */,
 				C351DB4F1DEF52D7009E853D /* Generics.swift */,
 				C3606CE71DBBBACD00AE2E8B /* HistoryViewController.swift */,
 				C37951651D44306C003FB4F5 /* ImageFilter.swift */,
@@ -237,6 +244,7 @@
 				C37951611D442023003FB4F5 /* OCR.swift */,
 				C3C4FAEB1DBB2F3E0068B19A /* ReadViewController.swift */,
 				C351DB4D1DEE7668009E853D /* KeyboardObserver.swift */,
+				C30963E01DF03112009CD474 /* ScriptCollection.swift */,
 				C306DA071DB484A200D1F962 /* ScrollViewController.swift */,
 				C3355C581DE939380045E797 /* SearchViewController.swift */,
 				C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */,
@@ -245,12 +253,12 @@
 				C3F53B8F1D372C0200E2F80D /* TextMatcher.swift */,
 				C39090781D2C9AF8000DFD15 /* ViewController.swift */,
 				C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */,
+				C36A24FD1DECB0CE00D2880E /* VerseInfo.swift */,
 				C306DA091DB49B8300D1F962 /* VerseTableDataSource.swift */,
 				C3F53B781D36973D00E2F80D /* VerseTableView.swift */,
 				C3F53B741D36945900E2F80D /* VerseTableViewCell.swift */,
 				C37A7E3E1D3ABFF300F37F20 /* WYFISAExtentions.swift */,
 				C3E0712B1D4DB54900097D01 /* WYFISAFont.swift */,
-				C36A24FD1DECB0CE00D2880E /* VerseInfo.swift */,
 				C3AE3AD71D89FBDD0039AE3E /* WYFISATabBarController.swift */,
 				C312DE521D6C5A5E0098D0C5 /* WYFISATheme.swift */,
 				C31A7BC41D7FB4D400654753 /* WYFISATutViewController.swift */,
@@ -259,6 +267,7 @@
 				C3F53B751D36945900E2F80D /* VerseTableViewCell.xib */,
 				C31A7BC51D7FB4D400654753 /* WYFISATutViewController.xib */,
 				C390907D1D2C9AF8000DFD15 /* Assets.xcassets */,
+				C30963DE1DEFD420009CD474 /* GoogleService-Info.plist */,
 				C39090821D2C9AF8000DFD15 /* Info.plist */,
 				C379515C1D43D5F4003FB4F5 /* books.json */,
 				C39090D21D2C9DE7000DFD15 /* WYFISA-Bridging-Header.h */,
@@ -425,6 +434,7 @@
 				C3A5A7401D9A249E00A22FDB /* t_web.db in Resources */,
 				C371D0931D44623F00F944CC /* Assets.xcassets in Resources */,
 				C3F53B771D36945900E2F80D /* VerseTableViewCell.xib in Resources */,
+				C30963DF1DEFD420009CD474 /* GoogleService-Info.plist in Resources */,
 				C3A5A73E1D9A22FF00A22FDB /* cross_ref.db in Resources */,
 				C390907C1D2C9AF8000DFD15 /* Main.storyboard in Resources */,
 			);
@@ -585,6 +595,7 @@
 				C362A4421DACD586002B1AF4 /* TabBarViewController.swift in Sources */,
 				C351DB4E1DEE7668009E853D /* KeyboardObserver.swift in Sources */,
 				C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */,
+				C30963E11DF03112009CD474 /* ScriptCollection.swift in Sources */,
 				C374B4A01D8CF4600083366E /* SettingsViewController.swift in Sources */,
 				C3F53B761D36945900E2F80D /* VerseTableViewCell.swift in Sources */,
 				C306DA081DB484A200D1F962 /* ScrollViewController.swift in Sources */,
@@ -609,6 +620,7 @@
 				C323F3D71D86EE5B00A7EC95 /* SearchBarViewController.swift in Sources */,
 				C3D5065A1D3932FB00A04C83 /* Animations.swift in Sources */,
 				C3F53B791D36973D00E2F80D /* VerseTableView.swift in Sources */,
+				C351DB521DEFCCEE009E853D /* FBStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
