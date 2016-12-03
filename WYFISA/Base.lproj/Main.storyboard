@@ -7,6 +7,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -1178,14 +1179,14 @@
                                 </items>
                             </navigationBar>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LTQ-ha-uff">
-                                <rect key="frame" x="19" y="30" width="24" height="24"/>
+                                <rect key="frame" x="16" y="30" width="24" height="24"/>
                                 <state key="normal" image="ios7-minus"/>
                                 <connections>
                                     <action selector="didPressClearButton:" destination="hxq-w5-FtD" eventType="touchUpInside" id="epi-CS-hrs"/>
                                 </connections>
                             </button>
                             <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zCn-WS-8IO">
-                                <rect key="frame" x="63" y="31" width="44" height="22"/>
+                                <rect key="frame" x="60" y="31" width="44" height="22"/>
                                 <state key="normal" title=" All" image="ios7-refresh-empty">
                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -1200,33 +1201,57 @@
                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="icb-FZ-6ef" customClass="VerseTableView" customModule="TurnTo" customModuleProvider="target">
-                                <rect key="frame" x="19" y="64" width="337" height="603"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </tableView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="d6t-QV-Itn">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="icb-FZ-6ef" customClass="VerseTableView" customModule="TurnTo" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="283"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </tableView>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oj5-4w-ccz">
+                                        <rect key="frame" x="0.0" y="303" width="375" height="300"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="26j-Cd-eU8" customClass="GPUImageView">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="26j-Cd-eU8" firstAttribute="width" secondItem="oj5-4w-ccz" secondAttribute="width" id="2Si-Sq-H96"/>
+                                            <constraint firstItem="26j-Cd-eU8" firstAttribute="height" secondItem="oj5-4w-ccz" secondAttribute="height" id="PU4-F7-tLE"/>
+                                            <constraint firstItem="26j-Cd-eU8" firstAttribute="centerY" secondItem="oj5-4w-ccz" secondAttribute="centerY" id="d77-Hm-D6z"/>
+                                            <constraint firstItem="26j-Cd-eU8" firstAttribute="centerX" secondItem="oj5-4w-ccz" secondAttribute="centerX" id="x23-fN-6Tz"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="uOO-lg-AkI" firstAttribute="top" secondItem="icb-FZ-6ef" secondAttribute="bottom" id="04O-UZ-lUP"/>
-                            <constraint firstItem="LTQ-ha-uff" firstAttribute="leading" secondItem="icb-FZ-6ef" secondAttribute="leading" id="724-nW-pZ3"/>
+                            <constraint firstItem="d6t-QV-Itn" firstAttribute="width" secondItem="uZU-f9-P5K" secondAttribute="width" id="1Mk-bb-pjV"/>
                             <constraint firstItem="zCn-WS-8IO" firstAttribute="leading" secondItem="LTQ-ha-uff" secondAttribute="trailing" constant="20" id="7Px-04-OrQ"/>
+                            <constraint firstItem="d6t-QV-Itn" firstAttribute="centerX" secondItem="uZU-f9-P5K" secondAttribute="centerX" id="Bsx-Kg-ptd"/>
                             <constraint firstItem="iBU-S7-GBj" firstAttribute="top" secondItem="oJV-XZ-QkS" secondAttribute="bottom" id="FgJ-cb-RGW"/>
                             <constraint firstItem="iBU-S7-GBj" firstAttribute="width" secondItem="uZU-f9-P5K" secondAttribute="width" id="RRQ-1g-qZa"/>
-                            <constraint firstItem="icb-FZ-6ef" firstAttribute="width" secondItem="uZU-f9-P5K" secondAttribute="width" multiplier="0.9" id="T8T-6x-93Z"/>
                             <constraint firstItem="zCn-WS-8IO" firstAttribute="centerY" secondItem="LTQ-ha-uff" secondAttribute="centerY" id="VkU-bg-Wp7"/>
-                            <constraint firstItem="icb-FZ-6ef" firstAttribute="top" secondItem="iBU-S7-GBj" secondAttribute="bottom" id="Wzw-TF-rKT"/>
                             <constraint firstItem="LTQ-ha-uff" firstAttribute="centerY" secondItem="iBU-S7-GBj" secondAttribute="centerY" id="XMm-ze-mfV"/>
-                            <constraint firstItem="icb-FZ-6ef" firstAttribute="centerX" secondItem="uZU-f9-P5K" secondAttribute="centerX" id="aMb-BR-11v"/>
                             <constraint firstAttribute="trailingMargin" secondItem="BZM-Ed-AqP" secondAttribute="trailing" constant="3" id="b2B-92-DuB"/>
+                            <constraint firstItem="oj5-4w-ccz" firstAttribute="height" secondItem="uZU-f9-P5K" secondAttribute="width" multiplier="0.8" id="gom-Wn-6cg"/>
                             <constraint firstItem="BZM-Ed-AqP" firstAttribute="centerY" secondItem="iBU-S7-GBj" secondAttribute="centerY" id="iWW-MW-rRW"/>
+                            <constraint firstItem="d6t-QV-Itn" firstAttribute="top" secondItem="iBU-S7-GBj" secondAttribute="bottom" id="ijJ-yp-sA2"/>
                             <constraint firstItem="iBU-S7-GBj" firstAttribute="centerX" secondItem="uZU-f9-P5K" secondAttribute="centerX" id="uEw-cg-Jhd"/>
+                            <constraint firstItem="uOO-lg-AkI" firstAttribute="top" secondItem="d6t-QV-Itn" secondAttribute="bottom" id="xZH-tI-LES"/>
+                            <constraint firstItem="LTQ-ha-uff" firstAttribute="leading" secondItem="uZU-f9-P5K" secondAttribute="leadingMargin" id="yh2-fJ-h1h"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="6s7-uK-ioT" appends="YES" id="UIn-fO-1H3"/>
                         </connections>
                     </view>
                     <connections>
+                        <outlet property="captureContainer" destination="oj5-4w-ccz" id="eMA-3D-dkj"/>
+                        <outlet property="captureImage" destination="26j-Cd-eU8" id="fju-0M-b2G"/>
                         <outlet property="clearAllButton" destination="zCn-WS-8IO" id="2Pg-4a-7bB"/>
                         <outlet property="clearButton" destination="LTQ-ha-uff" id="Y7b-6T-XzT"/>
                         <outlet property="verseTable" destination="icb-FZ-6ef" id="nhg-yc-v0b"/>

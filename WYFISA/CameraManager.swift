@@ -93,6 +93,10 @@ class CameraManager {
         guassFilter.addTarget(target)
     }
     
+    func addTarget(target: GPUImageInput!){
+        self.camera.addTarget(target)
+    }
+    
     func addDebugTarget(target: GPUImageInput!){
         // self.debugTarget = target
     }

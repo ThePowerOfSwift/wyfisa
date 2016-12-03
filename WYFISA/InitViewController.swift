@@ -76,19 +76,17 @@ class InitViewController: UIViewController {
         
         self.inCaptureMode = true
         
-        if self.getScrollPage() == 0 {
-            // move to active
-            self.moveToPage(1)
-        }
         // get capture vc
-        if  let vc = self.getCaptureVC(){
-            vc.doCaptureAction()
+        if  let vc = self.getPauseVC(){
+            vc.startCaptureAction()
         }
 
     }
     
     @IBAction func didReleaseCaptureButton(sender: AnyObject){
 
+        self.getPauseVC()?.endCaptureAction()
+        
         if self.inCaptureMode == false {
             let image = UIImage(named: "Oval 1")
             self.captureButton.setImage(image, forState: .Normal)

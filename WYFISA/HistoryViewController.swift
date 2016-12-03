@@ -7,16 +7,18 @@
 //
 
 import UIKit
-
+import GPUImage
 
 class HistoryViewController: UIViewController {
 
     @IBOutlet var verseTable: VerseTableView!
     @IBOutlet var clearButton: UIButton!
     @IBOutlet var clearAllButton: UIButton!
-    
+    @IBOutlet var captureImage: GPUImageView!
+    @IBOutlet var captureContainer: UIView!
     let themer = WYFISATheme.sharedInstance
-
+    let camera = CameraManager.sharedInstance
+    
     var tableDataSource: VerseTableDataSource? = nil
     var frameSize: CGSize? = nil
     var isEditingMode: Bool = false
@@ -42,6 +44,10 @@ class HistoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.themeView()
+        
+        // setup camera
+        self.captureImage.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
+        self.camera.addTarget(self.captureImage)
     }
 
     override func didReceiveMemoryWarning() {
@@ -111,6 +117,25 @@ class HistoryViewController: UIViewController {
             // update editing state
             self.verseTable.setEditing(self.isEditingMode, animated: true)
         }
+    }
+    
+    
+    func startCaptureAction(){
+        self.camera.resume()
+        
+        Animations.start(0.1){
+            self.captureContainer.hidden = false
+        }
+        Timing.runAfter(0){
+            self.verseTable.scrollToEnd()
+        }
+    }
+    
+    func endCaptureAction(){
+        Animations.start(0.1){
+            self.captureContainer.hidden = true
+        }
+        self.camera.pause()
     }
 
     /*
