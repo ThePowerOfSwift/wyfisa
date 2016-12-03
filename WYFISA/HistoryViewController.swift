@@ -35,6 +35,7 @@ class HistoryViewController: UIViewController {
 
         if let size = self.frameSize {
             self.view.frame.size = size
+            self.view.frame.size.height = size.height*0.80
         }
     }
     

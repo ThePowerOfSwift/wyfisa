@@ -68,6 +68,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         // setup callbacks from child view
         self.pauseVC?.notifyClearVerses = self.handleClearAllNotification
         
+        
     }
 
 
@@ -87,8 +88,11 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             // init keyboard observers
             self.noteTextInput.delegate = self
             initKeyboardObserver()
-
         }
+        
+        // theme it
+        self.scrollView.backgroundColor = WYFISATheme.sharedInstance.whiteForLightOrNavy(1.0)
+
     }
     
     func scrollToPage(_ page: Int){
