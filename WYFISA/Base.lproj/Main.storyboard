@@ -170,7 +170,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="114" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WKR-gX-LV3">
+                                                <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WKR-gX-LV3">
                                                     <rect key="frame" x="0.0" y="0.0" width="114" height="50"/>
                                                 </imageView>
                                             </subviews>
@@ -494,14 +494,32 @@
                                     <action selector="didSPressCaptureButton:" destination="XjC-yA-6pa" eventType="touchDown" id="jVD-Cy-xXI"/>
                                 </connections>
                             </button>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" currentPage="1" translatesAutoresizingMaskIntoConstraints="NO" id="s29-Qd-YbJ">
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="s29-Qd-YbJ">
                                 <rect key="frame" x="176" y="533" width="23" height="37"/>
                                 <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
                                 <color key="currentPageIndicatorTintColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="0.5" colorSpace="calibratedRGB"/>
                             </pageControl>
+                            <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="XCp-pQ-Kw0">
+                                <rect key="frame" x="133" y="529.5" width="110.5" height="14.5"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="scripture" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7lb-SM-5tA">
+                                        <rect key="frame" x="0.0" y="0.0" width="51" height="14.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="highlight" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bvn-qR-RUu">
+                                        <rect key="frame" x="61" y="0.0" width="49.5" height="14.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="XCp-pQ-Kw0" firstAttribute="centerX" secondItem="1QP-Ud-Rz5" secondAttribute="centerX" id="5fc-0O-lDU"/>
                             <constraint firstItem="s29-Qd-YbJ" firstAttribute="centerX" secondItem="M2j-Df-8FQ" secondAttribute="centerX" id="7Eb-Hs-9HX"/>
                             <constraint firstItem="qsZ-hl-vpr" firstAttribute="top" secondItem="M2j-Df-8FQ" secondAttribute="bottom" id="8T2-xz-siD"/>
                             <constraint firstItem="ely-tg-guf" firstAttribute="centerX" secondItem="M2j-Df-8FQ" secondAttribute="centerX" id="9y0-9w-ng8"/>
@@ -510,6 +528,7 @@
                             <constraint firstItem="M2j-Df-8FQ" firstAttribute="top" secondItem="Rbz-3l-VGc" secondAttribute="bottom" id="Qgj-eQ-qCo"/>
                             <constraint firstItem="qsZ-hl-vpr" firstAttribute="top" secondItem="s29-Qd-YbJ" secondAttribute="bottom" multiplier="1.17" id="UIb-YX-zVI"/>
                             <constraint firstAttribute="trailing" secondItem="M2j-Df-8FQ" secondAttribute="trailing" id="VKe-fC-OL3"/>
+                            <constraint firstItem="XCp-pQ-Kw0" firstAttribute="bottom" secondItem="s29-Qd-YbJ" secondAttribute="top" multiplier="1.02" id="Znk-Z0-poN"/>
                         </constraints>
                     </view>
                     <connections>
@@ -1276,7 +1295,7 @@
                             <constraint firstItem="LTQ-ha-uff" firstAttribute="leading" secondItem="uZU-f9-P5K" secondAttribute="leadingMargin" id="yh2-fJ-h1h"/>
                         </constraints>
                         <connections>
-                            <outletCollection property="gestureRecognizers" destination="6s7-uK-ioT" appends="YES" id="UIn-fO-1H3"/>
+                            <outletCollection property="gestureRecognizers" destination="4jq-FY-RiG" appends="YES" id="uPo-Ga-eLj"/>
                         </connections>
                     </view>
                     <connections>
@@ -1290,14 +1309,37 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mLY-iA-uzW" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <screenEdgePanGestureRecognizer cancelsTouchesInView="NO" minimumNumberOfTouches="1" id="6s7-uK-ioT">
-                    <rectEdge key="edges" left="YES"/>
+                <swipeGestureRecognizer enabled="NO" delaysTouchesBegan="YES" direction="right" id="4jq-FY-RiG">
                     <connections>
-                        <action selector="didPanRight:" destination="hxq-w5-FtD" id="Ojj-hV-1NF"/>
+                        <action selector="didPanRight:" destination="hxq-w5-FtD" id="94v-J8-NLj"/>
                     </connections>
-                </screenEdgePanGestureRecognizer>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="986" y="2198"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="f0V-Es-y3x">
+            <objects>
+                <viewController id="sye-YG-ssf" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="u90-ES-djP"/>
+                        <viewControllerLayoutGuide type="bottom" id="RGZ-xO-uVC"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="avN-5x-gvy">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Hu-ne-TVV">
+                                <rect key="frame" x="0.0" y="168" width="375" height="216"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            </pickerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oJk-SG-iu4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2560" y="2156"/>
         </scene>
         <!--Verse Detail Modal View Controller-->
         <scene sceneID="daH-Wi-yeE">

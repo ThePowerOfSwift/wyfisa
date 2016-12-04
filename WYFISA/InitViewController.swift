@@ -85,13 +85,15 @@ class InitViewController: UIViewController {
     
     @IBAction func didReleaseCaptureButton(sender: AnyObject){
 
-        self.getPauseVC()?.endCaptureAction()
         
         if self.inCaptureMode == false {
             let image = UIImage(named: "Oval 1")
             self.captureButton.setImage(image, forState: .Normal)
             return // release does not correspond to a capture
         }
+        
+        self.getPauseVC()?.endCaptureAction()
+
         
         var didCaptureVerses = false
         if let vc = self.getCaptureVC() {

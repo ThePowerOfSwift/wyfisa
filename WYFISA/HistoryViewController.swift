@@ -127,7 +127,9 @@ class HistoryViewController: UIViewController {
         self.verseTable.clear()
         self.updateIconsForEditingMode(false)
         
-        self.updateSessionMatches()
+        // sync with ds
+        self.syncWithDataSource()
+        
         // notify parents
         self.verseTable.reloadData()
 
@@ -165,6 +167,14 @@ class HistoryViewController: UIViewController {
     
     func updateSessionMatches(){
         self.session.matches = self.verseTable.currentMatches()
+    }
+    
+    func syncWithDataSource(){
+        self.updateSessionMatches()
+        if self.session.matches.count == 0 && self.session.currentId > 0 {
+            self.verseTable.clear()
+            self.session.currentId = 0
+        }
     }
     
     func checkCameraAccess() {
@@ -260,7 +270,6 @@ class HistoryViewController: UIViewController {
         Animations.start(0.1){
             self.captureContainer.hidden = true
         }
-        self.cam.pause()
         
         if self.settings.useFlash == true {
             self.cam.torch(.Off)
@@ -271,8 +280,25 @@ class HistoryViewController: UIViewController {
             hasNewMatches = true
         }
         
-        
+        // update session
         self.updateCaptureId()
+        
+        // add last image to list
+        let verseInfo = VerseInfo.init(id: "0", name: "", text: nil)
+        verseInfo.session = self.session.currentId
+        verseInfo.category = .Image
+        let captureImage =  self.cam.imageFromFrame()
+        verseInfo.image = captureImage
+        verseInfo.accessoryImage = captureImage
+        self.tableDataSource?.appendVerse(verseInfo)
+        
+        // add the section to capture table and then reload pauseVC
+        dispatch_async(dispatch_get_main_queue()) {
+            self.verseTable.addSection()
+        }
+        
+        self.cam.pause()
+        
         self.session.newMatches = 0
         self.session.active = false
         self.session.misses = 0
@@ -299,7 +325,6 @@ class HistoryViewController: UIViewController {
     // when frame has been processed we need to write it back to the cell
     func didProcessFrame(withText text: String, image: UIImage, fromSession: UInt64) {
         
-        print(text)
         
         if fromSession != self.session.currentId {
             return // Ignore: from old capture session

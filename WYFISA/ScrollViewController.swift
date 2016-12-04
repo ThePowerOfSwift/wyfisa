@@ -36,7 +36,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         
         self.scrollView.delegate = self
         let w = self.view.frame.size.width
-        self.scrollView.contentSize.width = w * 2.0
+        self.scrollView.contentSize.width = w
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
@@ -44,7 +44,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         self.pauseVC = storyboard.instantiateViewControllerWithIdentifier("historyvc") as? HistoryViewController
 
         self.pauseVC?.view.frame.origin.x = 0
-        self.captureVC?.view.frame.origin.x = w
+        self.captureVC?.view.frame.origin.x = 0
 
         
         // set data sources
@@ -56,7 +56,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         
         // add controllers to scroll view
         self.scrollView.addSubview(pauseVC!.view)
-        self.scrollView.addSubview(captureVC!.view)
+       // self.scrollView.addSubview(captureVC!.view)
 
         // enable filter view
         self.filterView.fillMode = GPUImageFillModeType.init(2)
@@ -73,14 +73,9 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         if (!self.didLoad) {
             self.didLoad = true
             
-            // show history view... if we have history
-            if self.commonDataSource?.nVerses > 0 {
-                self.scrollView.contentOffset.x = 0
-                self.scrollToPage(0)
-            } else {
-                // otherwise show capture
-                self.scrollView.contentOffset.x =  self.view.frame.size.width
-            }
+            self.scrollView.contentOffset.x = 0
+            self.scrollToPage(0)
+            
             
             // init keyboard observers
             self.noteTextInput.delegate = self
@@ -222,7 +217,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     
     func didRemoveCell(sender: VerseTableViewCell) {
         // just removed one cell
-        self.captureVC?.syncWithDataSource()
+        self.pauseVC?.syncWithDataSource()
         self.pauseVC?.exitEditingMode()
         
     }
@@ -235,7 +230,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
 
             if vc.isUpdate == false {
                 // add verse to datasource
-                verseInfo.session = (self.captureVC?.updateCaptureId())!
+                verseInfo.session = (self.pauseVC?.updateCaptureId())!
                 self.commonDataSource?.appendVerse(verseInfo)
                 
                 // add the section to capture table and then reload pauseVC
@@ -266,7 +261,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
 
             if vc.isUpdate == false {
                 // add verse to datasource
-                verseInfo.session = (self.captureVC?.updateCaptureId())!
+                verseInfo.session = (self.pauseVC?.updateCaptureId())!
                 
                 self.commonDataSource?.appendVerse(verseInfo)
                 
@@ -302,7 +297,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             self.scrollToPage(0)
             
             // add verse to datasource
-            verseInfo.session = (self.captureVC?.updateCaptureId())!
+            verseInfo.session = (self.pauseVC?.updateCaptureId())!
 
              self.commonDataSource?.appendVerse(verseInfo)
             
@@ -354,7 +349,8 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             verseInfo.category = .Note
             
             // add verse to datasource
-            verseInfo.session = (self.captureVC?.updateCaptureId())!
+            verseInfo.session = (self.pauseVC?.updateCaptureId())!
+            print(verseInfo.session)
             
             self.commonDataSource?.appendVerse(verseInfo)
             
