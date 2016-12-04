@@ -21,7 +21,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="59"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="5E3951FD-247A-46DC-993A-45EC8C21F932" translatesAutoresizingMaskIntoConstraints="NO" id="GuE-N4-XAx">
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="3FA20E70-2651-488C-89DA-41B0BBBFDD94" translatesAutoresizingMaskIntoConstraints="NO" id="GuE-N4-XAx">
                         <rect key="frame" x="131" y="0.0" width="59" height="59"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="GuE-N4-XAx" secondAttribute="height" id="By3-3p-D8M"/>
@@ -116,7 +116,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="5E3951FD-247A-46DC-993A-45EC8C21F932" width="31" height="26">
+        <image name="3FA20E70-2651-488C-89DA-41B0BBBFDD94" width="31" height="26">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

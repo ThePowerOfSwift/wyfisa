@@ -65,9 +65,6 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         self.bgCam.start()
         self.bgCam.addCameraBlurTargets(self.filterView)
         
-        // setup callbacks from child view
-        self.pauseVC?.notifyClearVerses = self.handleClearAllNotification
-        
         
     }
 
@@ -329,11 +326,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             self.pauseVC?.verseTable.reloadData()
         }
     }
-    
-    func handleClearAllNotification(){
-        self.captureVC?.verseTable.reloadData()
-    }
-    
+
     
     // MARK - keyboard watcher
     @IBAction func didPressNotesButton(sender: UIButton) {

@@ -16,13 +16,24 @@ class HistoryViewController: UIViewController {
     @IBOutlet var clearAllButton: UIButton!
     @IBOutlet var captureImage: GPUImageView!
     @IBOutlet var captureContainer: UIView!
-    let themer = WYFISATheme.sharedInstance
-    let camera = CameraManager.sharedInstance
+    @IBOutlet var captureBox: UIImageView!
+    @IBOutlet var captureBoxActive: UIImageView!
     
+    let themer = WYFISATheme.sharedInstance
+    let cam = CameraManager.sharedInstance
+    let settings = SettingsManager.sharedInstance
+    let db = DBQuery.sharedInstance
+
     var tableDataSource: VerseTableDataSource? = nil
     var frameSize: CGSize? = nil
     var isEditingMode: Bool = false
-    var notifyClearVerses: () -> () = notifyCallback
+    var cameraEnabled: Bool = true
+    var workingText = "Scanning"
+    var session = CaptureSession()
+    var captureLock = NSLock()
+    var updateLock = NSLock()
+
+
     
     func configure(dataSource: VerseTableDataSource, isExpanded: Bool, size: CGSize){
         self.tableDataSource = dataSource
@@ -39,6 +50,32 @@ class HistoryViewController: UIViewController {
             self.view.frame.size = size
             self.view.frame.size.height = size.height*0.80
         }
+        
+        self.updateSessionMatches()
+        if let ds = self.tableDataSource {
+            self.session.currentId = UInt64(ds.nVerses+1)
+        }
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.verseTable.reloadData()
+        self.initCamera()
+
+
+        if let size = self.frameSize {
+            self.view.frame.size = size
+        }
+    }
+    
+    func initCamera(){
+        // send camera to live view
+        self.checkCameraAccess()
+        
+        // camera config
+        self.cam.zoom(1)
+        self.cam.focus(.ContinuousAutoFocus)
     }
     
     override func viewDidLoad() {
@@ -47,7 +84,7 @@ class HistoryViewController: UIViewController {
         
         // setup camera
         self.captureImage.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
-        self.camera.addTarget(self.captureImage)
+        self.cam.addTarget(self.captureImage)
     }
 
     override func didReceiveMemoryWarning() {
@@ -90,8 +127,10 @@ class HistoryViewController: UIViewController {
         self.verseTable.clear()
         self.updateIconsForEditingMode(false)
         
+        self.updateSessionMatches()
         // notify parents
-        self.notifyClearVerses()
+        self.verseTable.reloadData()
+
     }
     
     
@@ -120,32 +159,230 @@ class HistoryViewController: UIViewController {
     }
     
     
-    func startCaptureAction(){
-        self.camera.resume()
+
+    
+    // MARK: - Capture management
+    
+    func updateSessionMatches(){
+        self.session.matches = self.verseTable.currentMatches()
+    }
+    
+    func checkCameraAccess() {
         
-        Animations.start(0.1){
-            self.captureContainer.hidden = false
-        }
-        Timing.runAfter(0){
-            self.verseTable.scrollToEnd()
+        if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) !=  AVAuthorizationStatus.Authorized
+        {
+            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { (granted :Bool) -> Void in
+                if granted == false
+                {
+                   self.cameraEnabled = false
+                }
+            });
         }
     }
     
-    func endCaptureAction(){
+    func startCaptureAction(){
+        if self.captureLock.tryLock() {
+            
+            self.verseTable.isExpanded = false
+            self.verseTable.reloadData()
+            
+            self.cam.resume()
+            
+            Animations.start(0.1){
+                self.captureContainer.hidden = false
+            }
+            Timing.runAfter(0){
+                self.verseTable.scrollToEnd()
+            }
+            
+            // flash capture box
+            Animations.fadeOutIn(0.3, tsFadeOut: 0.3, view: self.captureBox, alpha: 0)
+            
+            if self.settings.useFlash == true {
+                self.cam.torch(.On)
+            }
+            
+            // session init
+            self.session.active = true
+            session.clearCache()
+    
+            
+            Timing.runAfter(0.2){
+                self.verseTable.scrollToEnd()
+            }
+            self.captureLoop()
+            
+            
+            self.captureLock.unlock()
+        }
+    }
+    
+    func captureLoop(){
+        let sessionId = self.session.currentId
+        
+        // capture frames
+        Timing.runAfterBg(0) {
+            while self.session.currentId == sessionId {
+                // grap frame from campera
+                
+                if let image = self.cam.imageFromFrame(){
+                    
+                    // do image recognition
+                    if let recognizedText = self.cam.processImage(image){
+                        self.didProcessFrame(withText: recognizedText, image: image, fromSession: sessionId)
+                    }
+                }
+                
+                if (self.session.misses >= 10) {
+                    self.session.misses = 0
+                    break
+                }
+            }
+            Timing.runAfterBg(2.0){
+                if (self.session.active == true){
+                    self.captureLoop()
+                }
+            }
+        }
+        
+        
+        
+    }
+    
+    
+    func endCaptureAction() -> Bool {
+        
+        var hasNewMatches = false
+        updateLock.lock()
+        self.verseTable.isExpanded = true
+
+        // hide capture container
         Animations.start(0.1){
             self.captureContainer.hidden = true
         }
-        self.camera.pause()
+        self.cam.pause()
+        
+        if self.settings.useFlash == true {
+            self.cam.torch(.Off)
+        }
+        
+        // remove scanning box
+        if self.session.newMatches > 0 && self.session.active {
+            hasNewMatches = true
+        }
+        
+        
+        self.updateCaptureId()
+        self.session.newMatches = 0
+        self.session.active = false
+        self.session.misses = 0
+        
+        // resort verse table by priority
+        self.verseTable.sortByPriority()
+        self.verseTable.reloadData()
+        self.verseTable.setContentToExpandedEnd()
+
+        
+        updateLock.unlock()
+        return hasNewMatches
+    }
+    
+    // updates and returns old id
+    func updateCaptureId() -> UInt64 {
+        let currId = self.session.currentId
+        self.session.currentId = currId + 1
+        return currId
+    }
+    
+    // MARK: - Process
+    
+    // when frame has been processed we need to write it back to the cell
+    func didProcessFrame(withText text: String, image: UIImage, fromSession: UInt64) {
+        
+        print(text)
+        
+        if fromSession != self.session.currentId {
+            return // Ignore: from old capture session
+        }
+        if (text.length == 0){
+            self.session.misses += 1
+            return // empty
+        } else {
+            self.session.misses = 0
+        }
+        
+        Animations.fadeOutIn(0.3, tsFadeOut: 0.3, view: self.captureBox, alpha: 0)
+        
+        
+        updateLock.lock()
+        
+        
+        
+        let id = self.verseTable.numberOfSections+1 // was nVerses+1
+        if let allVerses = TextMatcher().findVersesInText(text) {
+            
+            for var verseInfo in allVerses {
+                
+                if let verse = self.db.lookupVerse(verseInfo.id){
+                    
+                    // we have match
+                    verseInfo.text = verse
+                    verseInfo.session = fromSession
+                    verseInfo.image = image
+                    
+                    
+                    // make sure not repeat match
+                    if self.session.matches.indexOf(verseInfo.id) == nil {
+                        
+                        // notify
+                        Animations.fadeInOut(0, tsFadeOut: 0.3, view: self.captureBoxActive, alpha: 0.6)
+                        
+                        // new match
+                        self.tableDataSource?.appendVerse(verseInfo)
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.verseTable.addSection()
+                            self.verseTable.updateVersePriority(verseInfo.id, priority: verseInfo.priority)
+
+                        }
+                
+                        
+                        // cache
+                        self.db.chapterForVerse(verseInfo.id)
+                        self.db.crossReferencesForVerse(verseInfo.id)
+                        self.db.versesForChapter(verseInfo.id)
+                        
+                    } else {
+                        // dupe
+                        print("NO DUPE LYFE")
+                        continue
+                    }
+                    
+                    self.session.newMatches += 1
+                    self.session.matches.append(verseInfo.id)
+                }
+            }
+        }
+        
+        updateLock.unlock()
+        
     }
 
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+}
+
+
+struct CaptureSession {
+    var active: Bool = false
+    var currentId: UInt64 = 0
+    var matches: [String] = [String]()
+    var newMatches = 0
+    var misses = 0
+    
+    func clearCache() {
+        DBQuery.sharedInstance.clearCache()
     }
-    */
+    func hasMatches() -> Bool {
+        return self.newMatches > 0
+    }
 
 }

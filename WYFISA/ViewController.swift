@@ -9,20 +9,7 @@
 import UIKit
 import GPUImage
 
-struct CaptureSession {
-    var active: Bool = false
-    var currentId: UInt64 = 0
-    var matches: [String] = [String]()
-    var newMatches = 0
-    var misses = 0
-    
-    func clearCache() {
-        DBQuery.sharedInstance.clearCache()
-    }
-    func hasMatches() -> Bool {
-        return self.newMatches > 0
-    }
-}
+
 class ViewController: UIViewController, UIScrollViewDelegate {
 
     @IBOutlet var verseTable: VerseTableView!
