@@ -12,10 +12,10 @@ import GPUImage
 class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate, VerseTableViewCellDelegate {
 
     @IBOutlet var scrollView: UIScrollView!
-    var captureVC: ViewController? = nil
+    var scriptVC: ScriptViewController? = nil
     var pauseVC: HistoryViewController? = nil
     var commonDataSource: VerseTableDataSource? = nil
-    var activePage: Int = 1
+    var activePage: Int = 0
     var onPageChange: (Int) -> () = defaultCallback
 
     var didLoad: Bool = false
@@ -36,26 +36,33 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         
         self.scrollView.delegate = self
         let w = self.view.frame.size.width
-        self.scrollView.contentSize.width = w
+        self.scrollView.contentSize.width = 2*w
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
-        self.captureVC = storyboard.instantiateViewControllerWithIdentifier("capturevc") as? ViewController
+        self.scriptVC = storyboard.instantiateViewControllerWithIdentifier("scriptvc") as? ScriptViewController
         self.pauseVC = storyboard.instantiateViewControllerWithIdentifier("historyvc") as? HistoryViewController
 
         self.pauseVC?.view.frame.origin.x = 0
-        self.captureVC?.view.frame.origin.x = 0
+        self.scriptVC?.view.frame.origin.x = w
 
         
         // set data sources
         let ds = VerseTableDataSource(frameSize: self.view.frame.size)
         ds.cellDelegate = self
-        self.captureVC?.configure(ds, isExpanded: false, size: self.view.frame.size)
+        self.scriptVC?.configure(self.view.frame.size)
         self.pauseVC?.configure(ds, isExpanded: true, size: self.view.frame.size)
         self.commonDataSource = ds
         
+
+        // setup navigation
+        self.pauseVC?.navNext = self.scrollToScript
+        self.scriptVC?.navPrev = self.scrollToEdit
+        
         // add controllers to scroll view
         self.scrollView.addSubview(pauseVC!.view)
+        self.scrollView.addSubview(scriptVC!.view)
+        
     }
 
 
@@ -76,71 +83,56 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     }
     
     func scrollToPage(_ page: Int){
-        
-        if page == self.activePage {
-            // already here
-            self.onPageChange(page)
-            return
-        }
-        
-        self.activePage = page
-        
         Animations.start(0.3){
             self.scrollView.contentOffset.x = self.view.frame.size.width*CGFloat(page)
-            
-            // moving to pause page
-            if page == 0 {
-                
-                // make sure cam is paused
-                self.captureVC?.cam.pause()
-                // make sure view is up to date
-                self.pauseVC?.verseTable.reloadData()
-
-                // scroll to end
-                self.pauseVC?.verseTable.scrollToEnd()
-                
-            } else  { // leaving pause page
-                
-                // resume cam on scroll to active page
-                self.captureVC?.cam.resume()
-                self.captureVC?.syncWithDataSource()
-                self.captureVC?.verseTable.reloadData()
-            }
         }
-        
-        self.onPageChange(page)
+    }
 
+
+    func resumeCamIfActive(){
+        if self.pauseVC?.pickerView.selectedItem != 0 {
+            self.pauseVC?.resumeCam()
+        }
     }
     
-
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        let page =  self.scrollView.contentOffset.x/self.view.frame.size.width
-        self.activePage = Int(page)
-
-        if self.activePage == 0 {
-            self.captureVC?.cam.pause()
+    func pauseCamIfActive(){
+        if self.pauseVC?.pickerView.selectedItem != 0 {
+            self.pauseVC?.resumeCam()
         }
-        
-        self.onPageChange(self.activePage)
-        
-
     }
 
-    func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
-        // make cam hot on moves, we can pause later
-        self.captureVC?.cam.resume()
-        
-        // make sure exit editing mode when we are scrolling
-        self.pauseVC?.exitEditingMode()
-
-    }
-    
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-
-    }
     
     // MARK: - Navigation
 
+    func scrollToScript(){
+        // pause camera
+        self.pauseCamIfActive()
+        
+        // reload script
+        self.scriptVC?.refresh()
+        
+        // scroll over
+        self.scrollToPage(1)
+        self.activePage = 1
+        
+        // end all editing
+        self.pauseVC?.exitEditingMode()
+        
+        // hide actions
+        self.buttonStack.hidden = true
+        self.backgroundTextFieldButton.hidden = true
+
+    }
+    
+    func scrollToEdit(){
+        self.resumeCamIfActive()
+        self.activePage = 0
+        self.buttonStack.hidden = false
+        self.backgroundTextFieldButton.hidden = false
+        self.scrollToPage(0)
+
+    }
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 
@@ -236,6 +228,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                 self.commonDataSource?.updateRecentVerse(verseInfo)
             }
             self.pauseVC?.verseTable.reloadData()
+            self.pauseVC?.verseTable.scrollToEnd()
         }
         
         // resume cam if we quit
@@ -268,6 +261,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                 self.commonDataSource?.updateRecentVerse(verseInfo)
             }
             self.pauseVC?.verseTable.reloadData()
+            self.pauseVC?.verseTable.scrollToEnd()
         }
     }
     
@@ -301,7 +295,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
              }
             
              //self.captureVC?.session.newMatches += 1
-             self.captureVC?.session.matches.append(verseInfo.id)
+             self.pauseVC?.session.matches.append(verseInfo.id)
              
              // cache
              Timing.runAfterBg(0.3){
@@ -311,6 +305,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
              }
             
             self.pauseVC?.verseTable.reloadData()
+            self.pauseVC?.verseTable.scrollToEnd()
         }
     }
 
@@ -342,7 +337,6 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
             
             // add verse to datasource
             verseInfo.session = (self.pauseVC?.updateCaptureId())!
-            print(verseInfo.session)
             
             self.commonDataSource?.appendVerse(verseInfo)
             

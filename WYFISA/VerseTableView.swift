@@ -15,7 +15,8 @@ class VerseTableView: UITableView, UITableViewDelegate {
     var nLock: NSLock = NSLock()
     var cellDelegate: VerseTableViewCellDelegate?
     var themer = WYFISATheme.sharedInstance
-
+    var scrollNotifier: ()->() =  notifyCallback
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -251,6 +252,11 @@ class VerseTableView: UITableView, UITableViewDelegate {
         }
         
         return sectionHeight
+    }
+    
+    // MARK - scroll
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        self.scrollNotifier()
     }
 
 }

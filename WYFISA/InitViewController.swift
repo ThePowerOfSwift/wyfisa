@@ -27,18 +27,12 @@ class InitViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
-    func getCaptureVC() -> ViewController? {
-        let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
-        return selectedVC.captureVC
-    }
     
     func getPauseVC() -> HistoryViewController? {
         let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
         return selectedVC.pauseVC
     }
-    
-    
+        
     
     func getScrollPage() -> Int {
         let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
@@ -71,11 +65,17 @@ class InitViewController: UIViewController {
             return // just activate don't start scanning
         }
         
-        self.inCaptureMode = true
         
-        // get capture vc
-        if  let vc = self.getPauseVC(){
-            vc.startCaptureAction()
+        let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
+        if selectedVC.activePage == 0 {
+            // correspond to capture
+            self.inCaptureMode = true
+            if  let vc = self.getPauseVC(){
+                vc.startCaptureAction()
+            }
+        } else {
+            // is just a scroll handler for script page
+            selectedVC.scriptVC?.scriptCollection.scrollToEnd()
         }
 
     }

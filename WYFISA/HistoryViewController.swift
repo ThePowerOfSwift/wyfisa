@@ -32,8 +32,7 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     var session = CaptureSession()
     var captureLock = NSLock()
     var updateLock = NSLock()
-
-
+    var navNext = notifyCallback
     
     func configure(dataSource: VerseTableDataSource, isExpanded: Bool, size: CGSize){
         self.tableDataSource = dataSource
@@ -42,10 +41,7 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     }
     
     override func viewDidAppear(animated: Bool) {
-        self.verseTable.dataSource = self.tableDataSource
-        self.verseTable.isExpanded = true
-        self.verseTable.reloadData()
-
+ 
         if let size = self.frameSize {
             self.view.frame.size = size
             self.view.frame.size.height = size.height*0.85
@@ -56,13 +52,32 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
             self.session.currentId = UInt64(ds.nVerses+1)
         }
         
+        self.verseTable.dataSource = self.tableDataSource
+        self.verseTable.isExpanded = true
+        self.verseTable.scrollNotifier = self.tableScrollNotifierFunc
+        
+        self.verseTable.reloadData()
+
+        if self.tableDataSource?.nVerses > 0 {
+            // hide picker and show current media
+            // allows middle to operate as down button
+            self.pickerView.selectItemByOption(.Hide, animated: true)
+        } else {
+            // show the verse ocr
+            self.pickerView.selectItemByOption(.VerseOCR, animated: true)
+        }
+        
+    }
+    
+    func tableScrollNotifierFunc(){
+        if self.pickerView.selectedOption() != .Hide {
+            self.pickerView.selectItemByOption(.Hide, animated: true)
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.verseTable.reloadData()
         self.initCamera()
-
 
         if let size = self.frameSize {
             self.view.frame.size = size
@@ -97,7 +112,6 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         self.pickerView.font = UIFont.systemFontOfSize(14, weight: UIFontWeightBold)
         self.pickerView.highlightedFont = UIFont.systemFontOfSize(14, weight: UIFontWeightBold)
         self.pickerView.highlightedTextColor = UIColor.fire()
-        self.pickerView.selectItem(1)
         self.pickerView.maskDisabled = false
         self.pickerView.reloadData()
     }
@@ -119,7 +133,7 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         
         if self.isEditingMode == true {
             // hide capture container if showing
-            self.pickerView.selectItem(0, animated: true)
+            self.pickerView.selectItemByOption(.Hide, animated: true)
         }
     }
 
@@ -176,10 +190,10 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     func startCaptureAction(){
         
         // only do ocr-mode if in verse detection
-        if self.pickerView.selectedItem == 2 {
+        if self.pickerView.selectedOption() == .VerseOCR {
             self.startOCRCaptureAction()
         }
-        if self.pickerView.selectedItem == 0 {
+        if self.pickerView.selectedOption() == .Hide {
             // scroll to end
             self.verseTable.scrollToEnd()
         }
@@ -253,7 +267,7 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     
     func endCaptureAction() -> Bool {
         
-        if self.pickerView.selectedItem == 0 {
+        if self.pickerView.selectedOption() == .Hide {
             return true // nothing to do
         }
         
@@ -276,7 +290,7 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         self.updateCaptureId()
         
         // add last image to list if in photo mode
-        if self.pickerView.selectedItem == 1 {
+        if self.pickerView.selectedOption() == .Photo {
             let verseInfo = VerseInfo.init(id: "0", name: "", text: nil)
             verseInfo.session = self.session.currentId
             verseInfo.category = .Image
@@ -291,7 +305,14 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
             }
             
             // TODO - adjust by settings if we want to hide after photo
-            self.pickerView.selectItem(0, animated: true)
+            self.pickerView.selectItemByOption(.Hide, animated: true)
+        }
+        
+        if self.session.newMatches > 0 &&
+            self.pickerView.selectedOption() == .VerseOCR {
+            
+            self.pickerView.selectItemByOption(.Hide, animated: false)
+            
         }
         
         self.session.newMatches = 0
@@ -301,7 +322,7 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         // resort verse table by priority
         self.verseTable.sortByPriority()
         self.verseTable.reloadData()
-        self.verseTable.setContentToExpandedEnd()
+        self.verseTable.scrollToEnd()
 
         
         updateLock.unlock()
@@ -391,51 +412,42 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     func numberOfItemsInPickerView(pickerView: AKPickerView) -> Int {
         return 3
     }
-    
+
     func pickerView(pickerView: AKPickerView, titleForItem item: Int) -> String {
-        switch item {
-        case 0:
-            return "HIDE"
-        case 1:
-            return "PHOTO"
-        case 2:
-            return "VERSE DETECTION"
-        default:
-            return ""
-        }
+        return pickerView.optionDescription(item)
     }
     
     func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
+        
+        let option = pickerView.selectedOption()
+        
         let hide = {
-            switch item {
-            case 0: // hide all
+            switch option {
+            case .Hide: // hide all
                 self.photoImageView.alpha = 0.0
                 self.captureAssetsAlpha(0.0)
                 self.hideCaptureContainer(true)
                 
                 // pause camera
                 self.cam.pause()
-            case 1: // hide capture
+            case .Photo: // hide capture
                 self.captureAssetsAlpha(0.0)
-            case 2: // hide photo
+            case .VerseOCR: // hide photo
                 self.photoImageView.alpha = 0.0
-            default:
-                break
+
             }
         }
         let show = {
-            switch item {
-            case 0: // show all
-                break
-            case 1: // show photo
+            switch option {
+            case .Photo: // show photo
                 self.hideCaptureContainer(false)
                 self.photoImageView.alpha = 1.0
                 self.resumeCam()
-            case 2: // show capture
+            case .VerseOCR: // show capture
                 self.hideCaptureContainer(false)
                 self.captureImage.alpha = 1.0 // only showing image, box activated on press
                 self.resumeCam()
-            default:
+            default: // nothing to show
                 break
             }
         }
@@ -477,13 +489,41 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
                 self.pickerView.scrollToItem(selectedItem)
             }
             self.pickerView.selectItem(selectedItem)
-
         }
+        
+        if sender.direction == .Up || sender.direction == .Down {
+            self.pickerView.selectItem(0, animated: true)
+        }
+
+        
+    }
+    
+    
+    // MARK - navigation
+    @IBAction func showScriptPreview(sender: AnyObject) {
+        self.navNext()
+    }
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
     }
     
     
 }
 
+enum PickerViewOption: Int { // as ordered in pickerview
+    case Hide = 0, VerseOCR, Photo
+    func description() -> String {
+        switch self{
+        case .Hide:
+            return "HIDE"
+        case .VerseOCR:
+            return "VERSE DETECTION"
+        case .Photo:
+            return "PHOTO"
+        }
+    }
+}
 
 struct CaptureSession {
     var active: Bool = false

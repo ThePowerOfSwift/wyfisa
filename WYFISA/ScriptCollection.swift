@@ -28,6 +28,8 @@ class ScriptCollection: UICollectionView, UICollectionViewDelegate, UICollection
     }
 
     func initDisplayVerses(){
+        self.displayedVerses = [VerseInfo]()
+        self.lastCellID = .None
         
         // apply layout ID's to cells
         for verse in storage.getRecentVerses() {
@@ -62,6 +64,7 @@ class ScriptCollection: UICollectionView, UICollectionViewDelegate, UICollection
         }
         
         self.lastCellID = .None
+        self.reloadData()
     }
 
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -150,9 +153,15 @@ class ScriptCollection: UICollectionView, UICollectionViewDelegate, UICollection
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
+
+    func scrollToEnd(){
+        let n = self.displayedVerses.count
+        if n > 0 {
+            let path = NSIndexPath(forRow: n-1, inSection: 0)
+            self.scrollToItemAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
+        }
+    }
     
-
-
 }
 
 

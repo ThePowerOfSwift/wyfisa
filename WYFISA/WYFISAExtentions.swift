@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AKPickerView_Swift
 
 extension String {
     func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
@@ -119,6 +120,24 @@ class UnderlinedLabel: UILabel {
             
             self.attributedText = attributedText
         }
+    }
+}
+
+extension AKPickerView {
+
+    func itemToOption(item: Int) -> PickerViewOption {
+        return PickerViewOption(rawValue: item) ??
+            PickerViewOption.Hide
+    }
+    func selectedOption() -> PickerViewOption {
+        return self.itemToOption(self.selectedItem)
+    }
+    func selectItemByOption(option: PickerViewOption, animated: Bool){
+        self.selectItem(option.rawValue, animated: animated)
+    }
+    func optionDescription(item: Int) -> String {
+        let opt = self.itemToOption(item)
+        return opt.description()
     }
 }
 

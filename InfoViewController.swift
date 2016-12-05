@@ -134,7 +134,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         var shareImage: UIImage? = nil
         if self.isUpdate == false { // crop
-            let cropFilter = ImageFilter.cropFilter(0, y: 0.1, width: 1, height: 0.50)
+            let cropFilter = ImageFilter.cropFilter(0, y: 0.1, width: 1, height: 0.8)
             shareImage = cropFilter.imageByFilteringImage(screenShot)
         } else {
             shareImage = screenShot

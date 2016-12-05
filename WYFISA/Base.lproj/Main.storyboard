@@ -16,17 +16,29 @@
         <!--Scripts-->
         <scene sceneID="XO7-rx-QWc">
             <objects>
-                <viewController id="Sf6-B3-huL" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="scriptvc" id="Sf6-B3-huL" customClass="ScriptViewController" customModule="TurnTo" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8A5-R0-hmd"/>
                         <viewControllerLayoutGuide type="bottom" id="wmu-Pj-ZUr"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3w2-kK-Tby">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jZP-6o-gmS">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <items>
+                                    <navigationItem title="Title" id="K7v-fc-PRW">
+                                        <barButtonItem key="leftBarButtonItem" title="Back" id="RuC-GM-0Nt">
+                                            <connections>
+                                                <action selector="showScriptEditor:" destination="Sf6-B3-huL" id="awF-d0-Ewt"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="pwY-ce-qYA" customClass="ScriptCollection" customModule="TurnTo" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="20" width="375" height="518"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="533.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="0.0" id="9iB-P0-dic">
                                     <size key="itemSize" width="327" height="50"/>
@@ -221,18 +233,24 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="jZP-6o-gmS" firstAttribute="top" secondItem="8A5-R0-hmd" secondAttribute="bottom" id="CvK-Jt-Qqv"/>
+                            <constraint firstItem="pwY-ce-qYA" firstAttribute="top" secondItem="jZP-6o-gmS" secondAttribute="bottom" id="GoX-US-Hnq"/>
                             <constraint firstAttribute="trailing" secondItem="pwY-ce-qYA" secondAttribute="trailing" id="Hnb-yP-Rx5"/>
-                            <constraint firstItem="pwY-ce-qYA" firstAttribute="top" secondItem="8A5-R0-hmd" secondAttribute="bottom" constant="20" id="O22-UX-pwJ"/>
                             <constraint firstItem="pwY-ce-qYA" firstAttribute="centerX" secondItem="3w2-kK-Tby" secondAttribute="centerX" id="Tst-Uz-Cxc"/>
+                            <constraint firstItem="jZP-6o-gmS" firstAttribute="width" secondItem="3w2-kK-Tby" secondAttribute="width" id="dpb-Bd-QRA"/>
                             <constraint firstItem="pwY-ce-qYA" firstAttribute="leading" secondItem="3w2-kK-Tby" secondAttribute="leading" id="e0n-m6-lyO"/>
+                            <constraint firstItem="jZP-6o-gmS" firstAttribute="centerX" secondItem="3w2-kK-Tby" secondAttribute="centerX" id="pjB-42-e8g"/>
                             <constraint firstItem="pwY-ce-qYA" firstAttribute="height" secondItem="3w2-kK-Tby" secondAttribute="height" multiplier="0.8" id="uMk-ny-U7Q"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Scripts" image="ios7-bookmarks-outline" id="VBR-Oj-9ub"/>
+                    <connections>
+                        <outlet property="scriptCollection" destination="pwY-ce-qYA" id="2q2-MR-eTn"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X52-Fb-FE7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3215.1999999999998" y="1202.2488755622189"/>
+            <point key="canvasLocation" x="1831" y="2197"/>
         </scene>
         <!--Read-->
         <scene sceneID="WTh-gM-5dH">
@@ -534,7 +552,7 @@
                     <connections>
                         <segue destination="Wwn-ce-w95" kind="relationship" relationship="viewControllers" id="dUS-cu-9PE"/>
                         <segue destination="QIg-cf-JU2" kind="relationship" relationship="viewControllers" id="PpZ-d8-Htr"/>
-                        <segue destination="Sf6-B3-huL" kind="relationship" relationship="viewControllers" id="m1h-Bh-z1d"/>
+                        <segue destination="sye-YG-ssf" kind="relationship" relationship="viewControllers" id="HIY-wc-moT"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xUl-dh-Ihe" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -815,7 +833,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l8p-to-PHP" customClass="GPUImageView">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                             </view>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" bounces="NO" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B8Q-l4-UQR">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" bounces="NO" scrollEnabled="NO" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B8Q-l4-UQR">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x4e-dK-sLo">
@@ -1177,23 +1195,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iBU-S7-GBj">
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iBU-S7-GBj">
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                 <items>
-                                    <navigationItem title="Collection" id="3I0-8X-29o">
-                                        <barButtonItem key="rightBarButtonItem" title="edit" id="SiN-4k-ByH">
+                                    <navigationItem title="Script" id="3I0-8X-29o">
+                                        <barButtonItem key="rightBarButtonItem" title="untitled" id="SiN-4k-ByH">
                                             <color key="tintColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                            <connections>
+                                                <action selector="showScriptPreview:" destination="hxq-w5-FtD" id="1Rj-FZ-pKi"/>
+                                            </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BZM-Ed-AqP">
-                                <rect key="frame" x="277" y="22" width="79" height="41"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="Publish">
-                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8BC-hv-SXP" customClass="AKPickerView" customModule="AKPickerView_Swift">
                                 <rect key="frame" x="56" y="607" width="262.5" height="60"/>
                                 <constraints>
@@ -1211,14 +1225,14 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="d6t-QV-Itn">
-                                <rect key="frame" x="16" y="20" width="343" height="543"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="d6t-QV-Itn">
+                                <rect key="frame" x="16" y="64" width="343" height="543"/>
                                 <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="755" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="icb-FZ-6ef" customClass="VerseTableView" customModule="TurnTo" customModuleProvider="target">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="755" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="icb-FZ-6ef" customClass="VerseTableView" customModule="TurnTo" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="335.5"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oj5-4w-ccz">
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oj5-4w-ccz">
                                         <rect key="frame" x="0.0" y="355.5" width="343" height="187.5"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZeZ-YP-BF2" customClass="GPUImageView">
@@ -1247,7 +1261,7 @@
                                             <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Rectangle-Flashing" translatesAutoresizingMaskIntoConstraints="NO" id="PsW-mK-lvd">
                                                 <rect key="frame" x="34" y="23.5" width="274" height="140.5"/>
                                             </imageView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Rectangle-Fire" translatesAutoresizingMaskIntoConstraints="NO" id="bhv-SC-t6e">
+                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Rectangle-Fire" translatesAutoresizingMaskIntoConstraints="NO" id="bhv-SC-t6e">
                                                 <rect key="frame" x="34" y="23.5" width="274" height="140.5"/>
                                             </imageView>
                                         </subviews>
@@ -1280,6 +1294,8 @@
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="Oak-IT-Tz4" appends="YES" id="KaD-2n-OMd"/>
                                             <outletCollection property="gestureRecognizers" destination="fv4-Qs-YiR" appends="YES" id="RW4-7V-UZd"/>
+                                            <outletCollection property="gestureRecognizers" destination="Odw-QV-0sY" appends="YES" id="yZA-zr-Bve"/>
+                                            <outletCollection property="gestureRecognizers" destination="5Ck-Uu-p6W" appends="YES" id="H14-VV-wWj"/>
                                         </connections>
                                     </view>
                                 </subviews>
@@ -1292,11 +1308,9 @@
                             <constraint firstItem="d6t-QV-Itn" firstAttribute="centerX" secondItem="uZU-f9-P5K" secondAttribute="centerX" id="Bsx-Kg-ptd"/>
                             <constraint firstItem="iBU-S7-GBj" firstAttribute="top" secondItem="oJV-XZ-QkS" secondAttribute="bottom" id="FgJ-cb-RGW"/>
                             <constraint firstItem="iBU-S7-GBj" firstAttribute="width" secondItem="uZU-f9-P5K" secondAttribute="width" id="RRQ-1g-qZa"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="BZM-Ed-AqP" secondAttribute="trailing" constant="3" id="b2B-92-DuB"/>
                             <constraint firstItem="8BC-hv-SXP" firstAttribute="centerX" secondItem="uZU-f9-P5K" secondAttribute="centerX" id="d41-go-5IW"/>
                             <constraint firstItem="d6t-QV-Itn" firstAttribute="leading" secondItem="uZU-f9-P5K" secondAttribute="leadingMargin" id="g2V-L8-xJX"/>
                             <constraint firstItem="oj5-4w-ccz" firstAttribute="height" secondItem="uZU-f9-P5K" secondAttribute="width" multiplier="0.5" id="gom-Wn-6cg"/>
-                            <constraint firstItem="BZM-Ed-AqP" firstAttribute="centerY" secondItem="iBU-S7-GBj" secondAttribute="centerY" id="iWW-MW-rRW"/>
                             <constraint firstItem="d6t-QV-Itn" firstAttribute="top" secondItem="iBU-S7-GBj" secondAttribute="bottom" id="ijJ-yp-sA2"/>
                             <constraint firstAttribute="trailingMargin" secondItem="d6t-QV-Itn" secondAttribute="trailing" id="mMC-xU-FtW"/>
                             <constraint firstItem="uOO-lg-AkI" firstAttribute="top" secondItem="8BC-hv-SXP" secondAttribute="bottom" id="otc-2o-qSz"/>
@@ -1325,20 +1339,20 @@
                         <action selector="didSwipePickerView:" destination="hxq-w5-FtD" id="pg3-89-NXk"/>
                     </connections>
                 </swipeGestureRecognizer>
-                <swipeGestureRecognizer direction="right" id="32k-yC-eix">
+                <swipeGestureRecognizer direction="up" id="Odw-QV-0sY">
                     <connections>
-                        <action selector="didSwipePickerView:" destination="hxq-w5-FtD" id="hpV-Hr-4Tk"/>
+                        <action selector="didSwipePickerView:" destination="hxq-w5-FtD" id="PpM-es-U32"/>
                     </connections>
                 </swipeGestureRecognizer>
-                <swipeGestureRecognizer direction="left" id="VC2-Kj-b0x">
+                <swipeGestureRecognizer direction="down" id="5Ck-Uu-p6W">
                     <connections>
-                        <action selector="didSwipePickerView:" destination="hxq-w5-FtD" id="23q-QI-Ryu"/>
+                        <action selector="didSwipePickerView:" destination="hxq-w5-FtD" id="I9f-K3-4Ix"/>
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="986" y="2198"/>
         </scene>
-        <!--View Controller-->
+        <!--Scripts-->
         <scene sceneID="f0V-Es-y3x">
             <objects>
                 <viewController id="sye-YG-ssf" sceneMemberID="viewController">
@@ -1347,7 +1361,7 @@
                         <viewControllerLayoutGuide type="bottom" id="RGZ-xO-uVC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="avN-5x-gvy">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Hu-ne-TVV">
@@ -1357,10 +1371,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Scripts" image="ios7-bookmarks-outline" id="f4H-Il-bsf"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oJk-SG-iu4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2560" y="2156"/>
+            <point key="canvasLocation" x="-3836" y="1236"/>
         </scene>
         <!--Verse Detail Modal View Controller-->
         <scene sceneID="daH-Wi-yeE">
