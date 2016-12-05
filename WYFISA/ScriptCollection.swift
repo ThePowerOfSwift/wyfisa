@@ -184,11 +184,11 @@ enum CellIdentifier: Int {
         var fontOffset:CGFloat
         switch self {
         case .Quote:
-            fontOffset = -1.0
+            fontOffset = -2.0
         case .Header:
             fontOffset = 8.0
         case .Subtitle:
-            fontOffset = -3.0
+            fontOffset = -4.0
         default:
             fontOffset = 0.0
         }

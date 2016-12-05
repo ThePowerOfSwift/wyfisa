@@ -56,16 +56,6 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         
         // add controllers to scroll view
         self.scrollView.addSubview(pauseVC!.view)
-       // self.scrollView.addSubview(captureVC!.view)
-
-        // enable filter view
-        self.filterView.fillMode = GPUImageFillModeType.init(2)
-        
-        // put a gaussian blur on the live view
-        self.bgCam.start()
-        self.bgCam.addCameraBlurTargets(self.filterView)
-        
-        
     }
 
 
@@ -73,7 +63,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         if (!self.didLoad) {
             self.didLoad = true
             
-            self.scrollView.contentOffset.x = 0            
+            self.scrollView.contentOffset.x = 0
             
             // init keyboard observers
             self.noteTextInput.delegate = self
@@ -193,6 +183,10 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
                 }
             }
         }
+    }
+    
+    @IBAction func didPressClearButton(sender: AnyObject) {
+        self.pauseVC?.didPressClearButton(sender)
     }
     
     // MARK: - cell delegate

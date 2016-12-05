@@ -58,22 +58,16 @@ class InitViewController: UIViewController {
             
         if (captureViewActive == false) {
             // move to capture tab
-            self.pageController.hidden = false
-            
             self.tabVC?.selectedIndex = 1
             self.inCaptureMode = false
             let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
-            selectedVC.captureVC?.verseTable.reloadData()
             selectedVC.pauseVC?.verseTable.reloadData()
-            if self.getScrollPage() == 1 {
-                if let vc = self.getCaptureVC() {
-                    vc.cam.resume()
-                }
-            }
             
             // theme
             selectedVC.pauseVC?.themeView()
-            
+            if selectedVC.pauseVC?.pickerView.selectedItem != 0 {
+                selectedVC.pauseVC?.resumeCam()
+            }
             return // just activate don't start scanning
         }
         
@@ -96,17 +90,6 @@ class InitViewController: UIViewController {
         }
         
         self.getPauseVC()?.endCaptureAction()
-
-        
-        var didCaptureVerses = false
-        if let vc = self.getCaptureVC() {
-            didCaptureVerses = vc.handleCaptureEnd()
-        }
-
-        if didCaptureVerses == true {
-            // swipe to pause vc
-            self.moveToPage(0)
-        }
 
     }
     
@@ -135,7 +118,7 @@ class InitViewController: UIViewController {
             let image = UIImage(named: "Oval 1-disabled")
             self.captureButton.setImage(image, forState: .Normal)
             // pause camera
-            if let vc = self.getCaptureVC() {
+            if let vc = self.getPauseVC() {
                 vc.cam.pause()
             }
             self.pageController.hidden = true

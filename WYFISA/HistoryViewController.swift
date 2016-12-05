@@ -13,13 +13,12 @@ import AKPickerView_Swift
 class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerViewDelegate  {
 
     @IBOutlet var verseTable: VerseTableView!
-    @IBOutlet var clearButton: UIButton!
-    @IBOutlet var clearAllButton: UIButton!
     @IBOutlet var captureImage: GPUImageView!
     @IBOutlet var captureContainer: UIView!
     @IBOutlet var captureBox: UIImageView!
     @IBOutlet var captureBoxActive: UIImageView!
     @IBOutlet var pickerView: AKPickerView!
+    @IBOutlet var photoImageView: GPUImageView!
 
     let themer = WYFISATheme.sharedInstance
     let cam = CameraManager.sharedInstance
@@ -72,12 +71,13 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     }
     
     func initCamera(){
-        // send camera to live view
+        // check camera permissions
         self.checkCameraAccess()
-        
-        // camera config
-        self.cam.zoom(1)
-        self.cam.focus(.ContinuousAutoFocus)
+        if self.cameraEnabled { // start
+            self.cam.start()
+            self.cam.zoom(1)
+            self.cam.focus(.ContinuousAutoFocus)
+        }
     }
     
     override func viewDidLoad() {
@@ -88,11 +88,15 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         self.captureImage.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
         self.cam.addTarget(self.captureImage)
         
+        self.photoImageView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
+        self.cam.addTarget(self.photoImageView)
+        
         // setup picker view
         self.pickerView.dataSource = self
         self.pickerView.delegate = self
         self.pickerView.font = UIFont.systemFontOfSize(14, weight: UIFontWeightBold)
         self.pickerView.highlightedFont = UIFont.systemFontOfSize(14, weight: UIFontWeightBold)
+        self.pickerView.highlightedTextColor = UIColor.fire()
         self.pickerView.selectItem(1)
         self.pickerView.maskDisabled = false
         self.pickerView.reloadData()
@@ -105,54 +109,25 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         // Dispose of any resources that can be recreated.
     }
     
-    func updateIconsForEditingMode(mode: Bool){
-        var fireButton: UIImage? = nil
-        if mode == true {
-            // entering editing mode
-            fireButton = UIImage.init(named: "ios7-minus-fire")
-            Animations.start(0.3){
-                self.clearAllButton.alpha = 1
-            }
-        } else {
-            fireButton = UIImage.init(named: "ios7-minus")
-            Animations.start(0.3){
-                self.clearAllButton.alpha = 0
-            }
-        }
-        self.clearButton.setImage(fireButton, forState: .Normal)
-    }
-    
     @IBAction func didPressClearButton(sender: AnyObject) {
         
         // toggle editing mode
         self.isEditingMode = !self.isEditingMode
-        self.updateIconsForEditingMode(self.isEditingMode)
 
         // update editing state
         self.verseTable.setEditing(self.isEditingMode, animated: true)
+        
+        if self.isEditingMode == true {
+            // hide capture container if showing
+            self.pickerView.selectItem(0, animated: true)
+        }
     }
-    
-    @IBAction func didPressClearAllButton(sender: AnyObject) {
-        self.isEditingMode = false
-        self.verseTable.setEditing(self.isEditingMode, animated: true)
-        
-        // empty table
-        self.verseTable.clear()
-        self.updateIconsForEditingMode(false)
-        
-        // sync with ds
-        self.syncWithDataSource()
-        
-        // notify parents
-        self.verseTable.reloadData()
 
-    }
     
     
     func exitEditingMode(){
         if self.verseTable.editing == true {
             self.verseTable.setEditing(false, animated: true)
-            self.updateIconsForEditingMode(false)
         }
     }
     
@@ -166,7 +141,6 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         if self.isEditingMode == false {
             // toggle editing mode
             self.isEditingMode = !self.isEditingMode
-            self.updateIconsForEditingMode(self.isEditingMode)
             
             // update editing state
             self.verseTable.setEditing(self.isEditingMode, animated: true)
@@ -200,16 +174,25 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     }
     
     func startCaptureAction(){
+        
+        // only do ocr-mode if in verse detection
+        if self.pickerView.selectedItem == 2 {
+            self.startOCRCaptureAction()
+        }
+        if self.pickerView.selectedItem == 0 {
+            // scroll to end
+            self.verseTable.scrollToEnd()
+        }
+    }
+    
+    func startOCRCaptureAction(){
         if self.captureLock.tryLock() {
             
             self.verseTable.isExpanded = false
             self.verseTable.reloadData()
             
-            self.cam.resume()
+            self.captureBox.alpha = 1.0
             
-            Animations.start(0.1){
-                self.captureContainer.hidden = false
-            }
             Timing.runAfter(0){
                 self.verseTable.scrollToEnd()
             }
@@ -224,13 +207,12 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
             // session init
             self.session.active = true
             session.clearCache()
-    
+            
             
             Timing.runAfter(0.2){
                 self.verseTable.scrollToEnd()
             }
             self.captureLoop()
-            
             
             self.captureLock.unlock()
         }
@@ -271,14 +253,15 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     
     func endCaptureAction() -> Bool {
         
+        if self.pickerView.selectedItem == 0 {
+            return true // nothing to do
+        }
+        
         var hasNewMatches = false
         updateLock.lock()
-        self.verseTable.isExpanded = true
+        self.captureBox.alpha = 0.0
 
-        // hide capture container
-        Animations.start(0.1){
-            self.captureContainer.hidden = true
-        }
+        self.verseTable.isExpanded = true
         
         if self.settings.useFlash == true {
             self.cam.torch(.Off)
@@ -292,21 +275,24 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         // update session
         self.updateCaptureId()
         
-        // add last image to list
-        let verseInfo = VerseInfo.init(id: "0", name: "", text: nil)
-        verseInfo.session = self.session.currentId
-        verseInfo.category = .Image
-        let captureImage =  self.cam.imageFromFrame()
-        verseInfo.image = captureImage
-        verseInfo.accessoryImage = captureImage
-        self.tableDataSource?.appendVerse(verseInfo)
-        
-        // add the section to capture table and then reload pauseVC
-        dispatch_async(dispatch_get_main_queue()) {
-            self.verseTable.addSection()
+        // add last image to list if in photo mode
+        if self.pickerView.selectedItem == 1 {
+            let verseInfo = VerseInfo.init(id: "0", name: "", text: nil)
+            verseInfo.session = self.session.currentId
+            verseInfo.category = .Image
+            let captureImage =  self.cam.imageFromFrame()
+            verseInfo.image = captureImage
+            verseInfo.accessoryImage = captureImage
+            self.tableDataSource?.appendVerse(verseInfo)
+            
+            // add the section to capture table and then reload pauseVC
+            dispatch_async(dispatch_get_main_queue()) {
+                self.verseTable.addSection()
+            }
+            
+            // TODO - adjust by settings if we want to hide after photo
+            self.pickerView.selectItem(0, animated: true)
         }
-        
-        self.cam.pause()
         
         self.session.newMatches = 0
         self.session.active = false
@@ -419,7 +405,62 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         }
     }
     
-  
+    func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
+        let hide = {
+            switch item {
+            case 0: // hide all
+                self.photoImageView.alpha = 0.0
+                self.captureAssetsAlpha(0.0)
+                self.hideCaptureContainer(true)
+                
+                // pause camera
+                self.cam.pause()
+            case 1: // hide capture
+                self.captureAssetsAlpha(0.0)
+            case 2: // hide photo
+                self.photoImageView.alpha = 0.0
+            default:
+                break
+            }
+        }
+        let show = {
+            switch item {
+            case 0: // show all
+                break
+            case 1: // show photo
+                self.hideCaptureContainer(false)
+                self.photoImageView.alpha = 1.0
+                self.resumeCam()
+            case 2: // show capture
+                self.hideCaptureContainer(false)
+                self.captureImage.alpha = 1.0 // only showing image, box activated on press
+                self.resumeCam()
+            default:
+                break
+            }
+        }
+        
+        // hide then show active item
+        Animations.start(0.3, animations: hide)
+        Animations.startAfter(0.3, forDuration: 0.3, animations: show)
+
+    }
+    
+    func captureAssetsAlpha(alpha: CGFloat) {
+        self.captureImage.alpha = alpha
+        self.captureBox.alpha = alpha
+    }
+    
+    func hideCaptureContainer(hidden: Bool){
+        self.captureContainer.hidden = hidden
+    }
+    
+    func resumeCam(){
+        if self.cam.state == .Paused {
+            self.cam.resume()
+        }
+    }
+
     @IBAction func didSwipePickerView(sender: UISwipeGestureRecognizer) {
         var selectedItem = self.pickerView.selectedItem
 
