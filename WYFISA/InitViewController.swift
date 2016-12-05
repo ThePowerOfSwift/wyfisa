@@ -14,11 +14,14 @@ class InitViewController: UIViewController {
     @IBOutlet var captureButton: UIButton!
     var inCaptureMode: Bool = false
     @IBOutlet var pageController: UIPageControl!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
 
+    override func viewWillAppear(animated: Bool) {
+        
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -138,6 +141,8 @@ class InitViewController: UIViewController {
             self.pageController.hidden = true
         }
     }
+    
+    
     
 
 }

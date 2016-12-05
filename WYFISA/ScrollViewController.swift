@@ -73,9 +73,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         if (!self.didLoad) {
             self.didLoad = true
             
-            self.scrollView.contentOffset.x = 0
-            self.scrollToPage(0)
-            
+            self.scrollView.contentOffset.x = 0            
             
             // init keyboard observers
             self.noteTextInput.delegate = self

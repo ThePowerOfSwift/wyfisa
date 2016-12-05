@@ -8,8 +8,9 @@
 
 import UIKit
 import GPUImage
+import AKPickerView_Swift
 
-class HistoryViewController: UIViewController {
+class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerViewDelegate  {
 
     @IBOutlet var verseTable: VerseTableView!
     @IBOutlet var clearButton: UIButton!
@@ -18,12 +19,12 @@ class HistoryViewController: UIViewController {
     @IBOutlet var captureContainer: UIView!
     @IBOutlet var captureBox: UIImageView!
     @IBOutlet var captureBoxActive: UIImageView!
-    
+    @IBOutlet var pickerView: AKPickerView!
+
     let themer = WYFISATheme.sharedInstance
     let cam = CameraManager.sharedInstance
     let settings = SettingsManager.sharedInstance
     let db = DBQuery.sharedInstance
-
     var tableDataSource: VerseTableDataSource? = nil
     var frameSize: CGSize? = nil
     var isEditingMode: Bool = false
@@ -48,7 +49,7 @@ class HistoryViewController: UIViewController {
 
         if let size = self.frameSize {
             self.view.frame.size = size
-            self.view.frame.size.height = size.height*0.80
+            self.view.frame.size.height = size.height*0.85
         }
         
         self.updateSessionMatches()
@@ -67,6 +68,7 @@ class HistoryViewController: UIViewController {
         if let size = self.frameSize {
             self.view.frame.size = size
         }
+
     }
     
     func initCamera(){
@@ -85,7 +87,18 @@ class HistoryViewController: UIViewController {
         // setup camera
         self.captureImage.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
         self.cam.addTarget(self.captureImage)
+        
+        // setup picker view
+        self.pickerView.dataSource = self
+        self.pickerView.delegate = self
+        self.pickerView.font = UIFont.systemFontOfSize(14, weight: UIFontWeightBold)
+        self.pickerView.highlightedFont = UIFont.systemFontOfSize(14, weight: UIFontWeightBold)
+        self.pickerView.selectItem(1)
+        self.pickerView.maskDisabled = false
+        self.pickerView.reloadData()
     }
+    
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -159,12 +172,8 @@ class HistoryViewController: UIViewController {
             self.verseTable.setEditing(self.isEditingMode, animated: true)
         }
     }
-    
-    
 
-    
-    // MARK: - Capture management
-    
+    // MARK: - Capture management    
     func updateSessionMatches(){
         self.session.matches = self.verseTable.currentMatches()
     }
@@ -378,7 +387,6 @@ class HistoryViewController: UIViewController {
                         
                     } else {
                         // dupe
-                        print("NO DUPE LYFE")
                         continue
                     }
                     
@@ -392,7 +400,47 @@ class HistoryViewController: UIViewController {
         
     }
 
+    
+    // MARK: - picker view
+    func numberOfItemsInPickerView(pickerView: AKPickerView) -> Int {
+        return 3
+    }
+    
+    func pickerView(pickerView: AKPickerView, titleForItem item: Int) -> String {
+        switch item {
+        case 0:
+            return "HIDE"
+        case 1:
+            return "PHOTO"
+        case 2:
+            return "VERSE DETECTION"
+        default:
+            return ""
+        }
+    }
+    
+  
+    @IBAction func didSwipePickerView(sender: UISwipeGestureRecognizer) {
+        var selectedItem = self.pickerView.selectedItem
 
+        if sender.direction == .Right && selectedItem > 0 {
+            selectedItem -= 1
+            Animations.start(0.30){
+                self.pickerView.scrollToItem(selectedItem)
+            }
+            self.pickerView.selectItem(selectedItem)
+        }
+        if sender.direction == .Left && selectedItem < 2 {
+            selectedItem += 1
+            Animations.start(0.30){
+                self.pickerView.scrollToItem(selectedItem)
+            }
+            self.pickerView.selectItem(selectedItem)
+
+        }
+    }
+    
+    
 }
 
 
