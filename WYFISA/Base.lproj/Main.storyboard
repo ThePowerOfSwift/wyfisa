@@ -921,6 +921,7 @@
                         <outlet property="scrollView" destination="B8Q-l4-UQR" id="0m6-91-KVb"/>
                         <segue destination="MHR-2x-CaL" kind="presentation" identifier="VerseDetail" id="nku-uu-oq7"/>
                         <segue destination="aVO-9A-Mpc" kind="presentation" identifier="notesegue" id="XUq-Uf-xLP"/>
+                        <segue destination="vW6-Ye-fwP" kind="presentation" identifier="highlightsegue" id="XcK-Vz-Dcw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oew-Di-sIT" userLabel="First Responder" sceneMemberID="firstResponder"/>
