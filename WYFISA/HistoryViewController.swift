@@ -10,7 +10,7 @@ import UIKit
 import GPUImage
 import AKPickerView_Swift
 
-class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerViewDelegate  {
+class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIGestureRecognizerDelegate  {
 
     @IBOutlet var verseTable: VerseTableView!
     @IBOutlet var captureImage: GPUImageView!
@@ -19,6 +19,8 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     @IBOutlet var captureBoxActive: UIImageView!
     @IBOutlet var pickerView: AKPickerView!
     @IBOutlet var photoImageView: GPUImageView!
+    @IBOutlet var gradientMask: UIImageView!
+    var scrollViewEscapeMask: UIView!
 
     let themer = WYFISATheme.sharedInstance
     let cam = CameraManager.sharedInstance
@@ -64,11 +66,12 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
             self.pickerView.selectItemByOption(.Hide, animated: true)
         } else {
             // show the verse ocr
-            self.pickerView.selectItemByOption(.VerseOCR, animated: true)
+            self.pickerView.selectItemByOption(.Photo, animated: true)
         }
         
     }
     
+
     func tableScrollNotifierFunc(){
         if self.pickerView.selectedOption() != .Hide {
             self.pickerView.selectItemByOption(.Hide, animated: true)
@@ -114,6 +117,14 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         self.pickerView.highlightedTextColor = UIColor.fire()
         self.pickerView.maskDisabled = false
         self.pickerView.reloadData()
+        
+    }
+
+    @IBAction func didTapGradientMask(sender: AnyObject) {
+        Animations.start(0.3){
+            self.gradientMask.alpha = 0
+        }
+        self.pickerView.selectItemByOption(.Hide, animated: true)
     }
     
     
@@ -202,8 +213,8 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     func startOCRCaptureAction(){
         if self.captureLock.tryLock() {
             
-            self.verseTable.isExpanded = false
-            self.verseTable.reloadData()
+          //  self.verseTable.isExpanded = false
+           // self.verseTable.reloadData()
             
             self.captureBox.alpha = 1.0
             
@@ -273,7 +284,9 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         
         var hasNewMatches = false
         updateLock.lock()
-        self.captureBox.alpha = 0.0
+        Timing.runAfter(0.3){
+            self.captureBox.alpha = 0.0
+        }
 
         self.verseTable.isExpanded = true
         
@@ -310,9 +323,7 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         
         if self.session.newMatches > 0 &&
             self.pickerView.selectedOption() == .VerseOCR {
-            
             self.pickerView.selectItemByOption(.Hide, animated: false)
-            
         }
         
         self.session.newMatches = 0
@@ -423,12 +434,16 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         
         let hide = {
             switch option {
-            case .Hide: // hide all
+            case .Hide:
+                // hide the kids
                 self.photoImageView.alpha = 0.0
                 self.captureAssetsAlpha(0.0)
                 self.hideCaptureContainer(true)
                 
-                // pause camera
+                // open the shades
+                self.hideGradients(true)
+                
+                // mannequin  
                 self.cam.pause()
             case .Photo: // hide capture
                 self.captureAssetsAlpha(0.0)
@@ -443,10 +458,15 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
                 self.hideCaptureContainer(false)
                 self.photoImageView.alpha = 1.0
                 self.resumeCam()
+                
+                // close the shades
+                self.hideGradients(false)
             case .VerseOCR: // show capture
                 self.hideCaptureContainer(false)
                 self.captureImage.alpha = 1.0 // only showing image, box activated on press
                 self.resumeCam()
+                self.hideGradients(false)
+                
             default: // nothing to show
                 break
             }
@@ -456,6 +476,15 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         Animations.start(0.3, animations: hide)
         Animations.startAfter(0.3, forDuration: 0.3, animations: show)
 
+    }
+    
+    func hideGradients(hidden: Bool){
+        self.scrollViewEscapeMask.hidden = hidden
+        if hidden {
+            self.gradientMask.alpha = 0
+        } else {
+            self.gradientMask.alpha = 1.0
+        }
     }
     
     func captureAssetsAlpha(alpha: CGFloat) {
@@ -498,7 +527,6 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         
     }
     
-    
     // MARK - navigation
     @IBAction func showScriptPreview(sender: AnyObject) {
         self.navNext()
@@ -512,11 +540,11 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
 }
 
 enum PickerViewOption: Int { // as ordered in pickerview
-    case Hide = 0, VerseOCR, Photo
+    case Hide = 0, Photo, VerseOCR
     func description() -> String {
         switch self{
         case .Hide:
-            return "HIDE"
+            return "SCRIPT"
         case .VerseOCR:
             return "VERSE DETECTION"
         case .Photo:

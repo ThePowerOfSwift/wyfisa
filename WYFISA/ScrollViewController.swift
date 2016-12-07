@@ -53,11 +53,11 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         self.scriptVC?.configure(self.view.frame.size)
         self.pauseVC?.configure(ds, isExpanded: true, size: self.view.frame.size)
         self.commonDataSource = ds
-        
 
         // setup navigation
-        self.pauseVC?.navNext = self.scrollToScript
         self.scriptVC?.navPrev = self.scrollToEdit
+        self.pauseVC?.navNext = self.scrollToScript
+        self.pauseVC?.scrollViewEscapeMask = self.escapeMask
         
         // add controllers to scroll view
         self.scrollView.addSubview(pauseVC!.view)
@@ -180,6 +180,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @IBAction func didPressClearButton(sender: AnyObject) {
         self.pauseVC?.didPressClearButton(sender)
     }
+
     
     // MARK: - cell delegate
     func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo){
@@ -378,6 +379,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
     
     @IBAction func didTapEscapeMask(sender: AnyObject) {
         self.closeNotesInput()
+        self.pauseVC?.didTapGradientMask(sender)
     }
     func closeNotesInput(){
         self.noteTextInput.text = nil

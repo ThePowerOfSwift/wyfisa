@@ -19,9 +19,9 @@ class VerseTableViewCell: UITableViewCell {
     @IBOutlet var labelHeader: UILabel!
     @IBOutlet var labelText: UILabel!
     @IBOutlet var searchIcon: UIImageView!
-
     @IBOutlet var mediaAccessory: UIImageView!
     @IBOutlet var moreButton: UIButton!
+    
     weak var delegate:VerseTableViewCellDelegate?
     var verseInfo: VerseInfo?
     var enableMore: Bool = false
@@ -146,15 +146,17 @@ class VerseTableViewCell: UITableViewCell {
     }
     
     @IBAction func willSelectCellView(sender: UIButton) {
+        /*
         sender.backgroundColor = UIColor.turquoise()
         Animations.startAfter(0.5, forDuration: 0.2){
             sender.backgroundColor = UIColor.clearColor()
         }
+        */
     }
     
     @IBAction func didCancelCellTap(sender: UIButton) {
         // taped outside of cell
-        sender.backgroundColor = UIColor.clearColor()
+        // sender.backgroundColor = UIColor.clearColor()
     }
     
     @IBAction func didTapCellView(sender: UIButton) {

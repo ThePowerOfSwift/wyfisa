@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C39090721D2C9AF7000DFD15"
-               BuildableName = "TurnTo.app"
-               BlueprintName = "TurnTo"
+               BuildableName = "Scriptr.app"
+               BlueprintName = "Scriptr"
                ReferencedContainer = "container:WYFISA.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -53,8 +53,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C39090721D2C9AF7000DFD15"
-            BuildableName = "TurnTo.app"
-            BlueprintName = "TurnTo"
+            BuildableName = "Scriptr.app"
+            BlueprintName = "Scriptr"
             ReferencedContainer = "container:WYFISA.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -76,8 +76,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C39090721D2C9AF7000DFD15"
-            BuildableName = "TurnTo.app"
-            BlueprintName = "TurnTo"
+            BuildableName = "Scriptr.app"
+            BlueprintName = "Scriptr"
             ReferencedContainer = "container:WYFISA.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -95,8 +95,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C39090721D2C9AF7000DFD15"
-            BuildableName = "TurnTo.app"
-            BlueprintName = "TurnTo"
+            BuildableName = "Scriptr.app"
+            BlueprintName = "Scriptr"
             ReferencedContainer = "container:WYFISA.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

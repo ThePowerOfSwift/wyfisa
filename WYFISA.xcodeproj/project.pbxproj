@@ -116,7 +116,7 @@
 		C37951611D442023003FB4F5 /* OCR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OCR.swift; sourceTree = "<group>"; };
 		C37951651D44306C003FB4F5 /* ImageFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageFilter.swift; sourceTree = "<group>"; };
 		C37A7E3E1D3ABFF300F37F20 /* WYFISAExtentions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISAExtentions.swift; sourceTree = "<group>"; };
-		C39090731D2C9AF7000DFD15 /* TurnTo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TurnTo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C39090731D2C9AF7000DFD15 /* Scriptr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scriptr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C39090761D2C9AF8000DFD15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C39090781D2C9AF8000DFD15 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C390907B1D2C9AF8000DFD15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -220,7 +220,7 @@
 		C39090741D2C9AF7000DFD15 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C39090731D2C9AF7000DFD15 /* TurnTo.app */,
+				C39090731D2C9AF7000DFD15 /* Scriptr.app */,
 				C39090871D2C9AF8000DFD15 /* WYFISATests.xctest */,
 				C39090921D2C9AF8000DFD15 /* WYFISAUITests.xctest */,
 			);
@@ -318,9 +318,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C39090721D2C9AF7000DFD15 /* TurnTo */ = {
+		C39090721D2C9AF7000DFD15 /* Scriptr */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C390909B1D2C9AF8000DFD15 /* Build configuration list for PBXNativeTarget "TurnTo" */;
+			buildConfigurationList = C390909B1D2C9AF8000DFD15 /* Build configuration list for PBXNativeTarget "Scriptr" */;
 			buildPhases = (
 				4CA02A7352C49D622A5985CA /* [CP] Check Pods Manifest.lock */,
 				C390906F1D2C9AF7000DFD15 /* Sources */,
@@ -333,9 +333,9 @@
 			);
 			dependencies = (
 			);
-			name = TurnTo;
+			name = Scriptr;
 			productName = WYFISA;
-			productReference = C39090731D2C9AF7000DFD15 /* TurnTo.app */;
+			productReference = C39090731D2C9AF7000DFD15 /* Scriptr.app */;
 			productType = "com.apple.product-type.application";
 		};
 		C39090861D2C9AF8000DFD15 /* WYFISATests */ = {
@@ -417,7 +417,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C39090721D2C9AF7000DFD15 /* TurnTo */,
+				C39090721D2C9AF7000DFD15 /* Scriptr */,
 				C39090861D2C9AF8000DFD15 /* WYFISATests */,
 				C39090911D2C9AF8000DFD15 /* WYFISAUITests */,
 			);
@@ -649,12 +649,12 @@
 /* Begin PBXTargetDependency section */
 		C39090891D2C9AF8000DFD15 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C39090721D2C9AF7000DFD15 /* TurnTo */;
+			target = C39090721D2C9AF7000DFD15 /* Scriptr */;
 			targetProxy = C39090881D2C9AF8000DFD15 /* PBXContainerItemProxy */;
 		};
 		C39090941D2C9AF8000DFD15 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C39090721D2C9AF7000DFD15 /* TurnTo */;
+			target = C39090721D2C9AF7000DFD15 /* Scriptr */;
 			targetProxy = C39090931D2C9AF8000DFD15 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -874,7 +874,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C390909B1D2C9AF8000DFD15 /* Build configuration list for PBXNativeTarget "TurnTo" */ = {
+		C390909B1D2C9AF8000DFD15 /* Build configuration list for PBXNativeTarget "Scriptr" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C390909C1D2C9AF8000DFD15 /* Debug */,

@@ -133,6 +133,8 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
         return nil
     }
     
+    
+    
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             

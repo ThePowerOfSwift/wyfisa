@@ -25,6 +25,12 @@ class VerseTableView: UITableView, UITableViewDelegate {
     }
     
 
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        if self.editing == true {
+            return UITableViewCellEditingStyle.Delete
+        }
+        return UITableViewCellEditingStyle.None
+    }
     func getDatasource() -> VerseTableDataSource? {
         if let ds = self.dataSource {
             return ds as? VerseTableDataSource
@@ -258,6 +264,10 @@ class VerseTableView: UITableView, UITableViewDelegate {
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         self.scrollNotifier()
     }
-
+    
+    override func pressesBegan(presses: Set<UIPress>, withEvent event: UIPressesEvent?) {
+        super.pressesBegan(presses, withEvent: event)
+        self.scrollNotifier()
+    }
 }
 
