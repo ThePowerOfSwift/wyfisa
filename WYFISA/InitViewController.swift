@@ -8,12 +8,21 @@
 
 import UIKit
 
+protocol CaptureButtonDelegate: class {
+    func didPressCaptureButton(sender: InitViewController)
+    func didReleaseCaptureButton(sender: InitViewController) -> Bool
+}
+
+
 class InitViewController: UIViewController {
 
-    var tabVC: TabBarViewController? = nil
     @IBOutlet var captureButton: UIButton!
-    var inCaptureMode: Bool = false
     @IBOutlet var pageController: UIPageControl!
+    
+    var tabVC: TabBarViewController? = nil
+    var inCaptureMode: Bool = false
+    weak var delegate:CaptureButtonDelegate?
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +57,7 @@ class InitViewController: UIViewController {
     // entered capture tab
     @IBAction func didSPressCaptureButton(sender: AnyObject) {
         
+        
         let captureViewActive = self.tabVC?.selectedIndex == 1
             
         if (captureViewActive == false) {
@@ -65,20 +75,10 @@ class InitViewController: UIViewController {
             return // just activate don't start scanning
         }
         
-        
-        let selectedVC = self.tabVC?.selectedViewController as! ScrollViewController
-        if selectedVC.activePage == 0 {
-            // correspond to capture
-            self.inCaptureMode = true
-            if  let vc = self.getPauseVC(){
-                vc.startCaptureAction()
-            }
-        } else {
-            // is just a scroll handler for script page
-            selectedVC.scriptVC?.scriptCollection.scrollToEnd()
-        }
-
+        self.inCaptureMode = true
+        self.delegate?.didPressCaptureButton(self)
     }
+    
     
     @IBAction func didReleaseCaptureButton(sender: AnyObject){
 
@@ -89,8 +89,7 @@ class InitViewController: UIViewController {
             return // release does not correspond to a capture
         }
         
-        self.getPauseVC()?.endCaptureAction()
-
+        self.delegate?.didReleaseCaptureButton(self)
     }
     
     // MARK: - Navigation
@@ -102,8 +101,9 @@ class InitViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let destVC = segue.destinationViewController
         self.tabVC = destVC as! TabBarViewController
-        self.tabVC?.onTabChange = self.didChangeTab
-        self.tabVC?.onPageChange = self.didChangePage
+        self.tabVC?.applyDelegate(self)
+     //   self.tabVC?.onTabChange = self.didChangeTab
+     //   self.tabVC?.onPageChange = self.didChangePage
 
     }
     

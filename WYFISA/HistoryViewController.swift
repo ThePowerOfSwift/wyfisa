@@ -10,7 +10,7 @@ import UIKit
 import GPUImage
 import AKPickerView_Swift
 
-class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIGestureRecognizerDelegate  {
+class HistoryViewController: UIViewController, CaptureButtonDelegate, AKPickerViewDataSource, AKPickerViewDelegate  {
 
     @IBOutlet var verseTable: VerseTableView!
     @IBOutlet var captureImage: GPUImageView!
@@ -20,6 +20,8 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     @IBOutlet var pickerView: AKPickerView!
     @IBOutlet var photoImageView: GPUImageView!
     @IBOutlet var gradientMask: UIImageView!
+    
+    var captureDelegate: CaptureButtonDelegate? = nil
     var scrollViewEscapeMask: UIView!
 
     let themer = WYFISATheme.sharedInstance
@@ -36,18 +38,8 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     var updateLock = NSLock()
     var navNext = notifyCallback
     
-    func configure(dataSource: VerseTableDataSource, isExpanded: Bool, size: CGSize){
-        self.tableDataSource = dataSource
-        self.view.frame.size = size
-        self.frameSize = size
-    }
-    
     override func viewDidAppear(animated: Bool) {
  
-        if let size = self.frameSize {
-            self.view.frame.size = size
-            self.view.frame.size.height = size.height*0.85
-        }
         
         self.updateSessionMatches()
         if let ds = self.tableDataSource {
@@ -81,11 +73,6 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.initCamera()
-
-        if let size = self.frameSize {
-            self.view.frame.size = size
-        }
-
     }
     
     func initCamera(){
@@ -109,6 +96,9 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         self.photoImageView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
         self.cam.addTarget(self.photoImageView)
         
+        // verse table
+        self.tableDataSource = VerseTableDataSource.init(frameSize: self.view.frame.size)
+
         // setup picker view
         self.pickerView.dataSource = self
         self.pickerView.delegate = self
@@ -117,6 +107,7 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         self.pickerView.highlightedTextColor = UIColor.fire()
         self.pickerView.maskDisabled = false
         self.pickerView.reloadData()
+        
         
     }
 
@@ -198,7 +189,8 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
         }
     }
     
-    func startCaptureAction(){
+    // MARK: - CaptureButtonDelegate
+    func didPressCaptureButton(sender: InitViewController){
         
         // only do ocr-mode if in verse detection
         if self.pickerView.selectedOption() == .VerseOCR {
@@ -276,7 +268,7 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     }
     
     
-    func endCaptureAction() -> Bool {
+    func didReleaseCaptureButton(sender: InitViewController) -> Bool {
         
         if self.pickerView.selectedOption() == .Hide {
             return true // nothing to do
@@ -479,7 +471,7 @@ class HistoryViewController: UIViewController, AKPickerViewDataSource, AKPickerV
     }
     
     func hideGradients(hidden: Bool){
-        self.scrollViewEscapeMask.hidden = hidden
+       // self.scrollViewEscapeMask.hidden = hidden
         if hidden {
             self.gradientMask.alpha = 0
         } else {

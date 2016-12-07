@@ -11,9 +11,7 @@ import UIKit
 
 class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
 
-    var captureButtonPtr: UIButton? = nil
-    var onTabChange: (Int) -> () = defaultCallback
-    var onPageChange: (Int) -> () = defaultCallback
+    var delegatingVC: InitViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,15 +19,19 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
         self.delegate = self
         
         // Do any additional setup after loading the view.
-        let scrollVC = self.selectedViewController as! ScrollViewController
-        scrollVC.onPageChange = self.onPageChange
-        scrollVC.tabBarHeight = self.tabBar.frame.height
+        if let historyVC = self.selectedViewController as? HistoryViewController {
+            self.delegatingVC.delegate = historyVC
+        }
         
     }
     
 
+    
+    func applyDelegate(fromVC: InitViewController){
+        self.delegatingVC = fromVC
+    }
+
     override func tabBar(tabBar: UITabBar, didSelectItem item: UITabBarItem) {
-        self.onTabChange(self.selectedIndex)
     }
 
     override func didReceiveMemoryWarning() {

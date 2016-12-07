@@ -51,7 +51,6 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         let ds = VerseTableDataSource(frameSize: self.view.frame.size)
         ds.cellDelegate = self
         self.scriptVC?.configure(self.view.frame.size)
-        self.pauseVC?.configure(ds, isExpanded: true, size: self.view.frame.size)
         self.commonDataSource = ds
 
         // setup navigation
@@ -60,8 +59,8 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UITextFieldD
         self.pauseVC?.scrollViewEscapeMask = self.escapeMask
         
         // add controllers to scroll view
-        self.scrollView.addSubview(pauseVC!.view)
-        self.scrollView.addSubview(scriptVC!.view)
+        //self.scrollView.addSubview(pauseVC!.view)
+        //self.scrollView.addSubview(scriptVC!.view)
         
     }
 
