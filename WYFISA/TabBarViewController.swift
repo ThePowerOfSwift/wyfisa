@@ -10,28 +10,26 @@ import UIKit
 
 
 class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
-
-    var delegatingVC: InitViewController!
     
+    let sharedOutlet = SharedOutlets.instance
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.selectedIndex = 1
         self.delegate = self
         
         // Do any additional setup after loading the view.
-        if let historyVC = self.selectedViewController as? HistoryViewController {
-            self.delegatingVC.delegate = historyVC
+        sharedOutlet.tabBarFrame = self.tabBar.frame
+        sharedOutlet.notifyTabEnabled = {
+            self.selectedIndex = 1
         }
         
     }
     
-
-    
-    func applyDelegate(fromVC: InitViewController){
-        self.delegatingVC = fromVC
-    }
-
     override func tabBar(tabBar: UITabBar, didSelectItem item: UITabBarItem) {
+        if self.selectedIndex == 1 {
+            sharedOutlet.notifyTabDisabled()
+        }
     }
 
     override func didReceiveMemoryWarning() {
