@@ -40,6 +40,7 @@ class ScriptComposeViewController: UIViewController,
     let db = DBQuery.sharedInstance
     let sharedOutles = SharedOutlets.instance
     
+    var scriptTitle: String? = nil
     var tableDataSource: VerseTableDataSource? = nil
     var isEditingMode: Bool = false
     var cameraEnabled: Bool = true
@@ -49,6 +50,7 @@ class ScriptComposeViewController: UIViewController,
     var updateLock = NSLock()
     var navNext = notifyCallback
     var kbo: KeyboardObserver? = nil
+    var scriptID: String = randomString(10)
 
     
     override func viewDidLoad() {
@@ -87,6 +89,7 @@ class ScriptComposeViewController: UIViewController,
     
     override func viewDidAppear(animated: Bool) {
  
+        // scriptTitle
         
         self.updateSessionMatches()
         if let ds = self.tableDataSource {
@@ -104,6 +107,7 @@ class ScriptComposeViewController: UIViewController,
         
         // keyboard
         self.initKeyboardObserver()
+        
     }
     
 
@@ -127,7 +131,7 @@ class ScriptComposeViewController: UIViewController,
 
     @IBAction func hideGradientMask(sender: AnyObject) {
         Animations.start(0.3){
-            self.gradientMask.hidden = true
+          //  self.gradientMask.hidden = true
         }
         self.pickerView.selectItemByOption(.Script, animated: true)
     }
@@ -632,34 +636,32 @@ class ScriptComposeViewController: UIViewController,
         // make sure we're not deleting cells
         self.exitEditingMode()
         
-        
+
+        switch segue.identifier ?? "" {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if segue.identifier == "VerseDetail" {
+        case "VerseDetail":
             let toVc = segue.destinationViewController as! VerseDetailModalViewController
             let verse = sender as! VerseInfo
             toVc.verseInfo = verse
-        }
         
-        if segue.identifier == "highlightsegue" {
-            let toVc = segue.destinationViewController as! InfoViewController
+        case "highlightsegue":
             // detect if this was a cell select
+            let toVc = segue.destinationViewController as! InfoViewController
             if let verse = sender as? VerseInfo {
                 toVc.isUpdate = true
                 toVc.snaphot = verse.image
                 toVc.verseInfo = verse
             }
-        }
-        if segue.identifier == "notesegue" {
-            
+
+        case "notesegue":
             // when editing a note then pass previous text to view
             if let verse = sender as? VerseInfo {
                 let toVc = segue.destinationViewController as! NotesViewController
                 toVc.editingText = verse.name
                 toVc.verseInfo = verse
             }
-        }
-        if segue.identifier == "searchsegue" {
+        case "searchsegue":
             // give last verse from datasource
             if let ds = self.tableDataSource {
                 if let verse = ds.getLastVerseItem() {
@@ -667,7 +669,10 @@ class ScriptComposeViewController: UIViewController,
                     toVc.verseInfo = verse
                 }
             }
+        default:
+            break
         }
+
     }
 
     
@@ -766,7 +771,6 @@ class ScriptComposeViewController: UIViewController,
         self.noteTextInput.text = nil
         self.noteTextInput.endEditing(true)
     }
-
 }
 
 enum PickerViewOption: Int {

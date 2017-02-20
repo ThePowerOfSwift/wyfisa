@@ -28,6 +28,7 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
         self.initFrameWidth = frameSize.width
         self.recentVerses = storage.getRecentVerses()
         self.nVerses = self.recentVerses.count
+        self.storage.replicate(.Push)
     }
     
     func setCellDelegate(delegate: VerseTableViewCellDelegate){

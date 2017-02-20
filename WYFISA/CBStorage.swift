@@ -8,9 +8,15 @@
 
 import Foundation
 
+enum StorageReplicationMode {
+    case Push, Pull, Dual
+}
+
 class CBStorage {
     
     var db: CBLDatabase?  = nil
+    var push: CBLReplication?
+    var pull: CBLReplication?
    // let firedb: FBStorage = FBStorage.sharedInstance
     
     init(databaseName: String){
@@ -30,6 +36,24 @@ class CBStorage {
             // TODO: Handle this can be really bad!
             print("Unable to create database")
         }
+    }
+    
+    func replicate(mode: StorageReplicationMode){
+        let url = NSURL(string: "http://10.0.0.5:4984/turnto")!
+        
+        switch mode {
+        case .Push:
+            self.push = self.db?.createPushReplication(url)
+        case .Pull:
+            self.pull = self.db?.createPullReplication(url)
+        case .Dual:
+            self.push = self.db?.createPushReplication(url)
+            self.pull = self.db?.createPullReplication(url)
+        }
+        self.push?.continuous = true
+        self.pull?.continuous = true
+        self.push?.start()
+        self.pull?.start()
     }
     
     
