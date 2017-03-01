@@ -88,7 +88,7 @@ class CameraManager {
     func addCameraBlurTargets(target: GPUImageInput!){
         
         let targetView = target as! UIView
-        let guassFilter = ImageFilter.guassianBlur(0.5, y: 0.0, radius: targetView.superview!.frame.width/800)
+        let guassFilter = ImageFilter.guassianBlur(0.5, y: 0.0, radius: targetView.superview!.frame.width/400)
         self.camera.addTarget(guassFilter)
         guassFilter.addTarget(target)
     }

@@ -49,7 +49,9 @@ class VerseTableView: UITableView, UITableViewDelegate {
         if let ds = self.getDatasource() {
             ds.recentVerses[section-1] = verse
             ds.updateCellHeightVal(verse)
-            ds.storage.putVerse(verse)
+            if ds.ephemeral == false {
+                ds.storage.putVerse(verse)
+            }
         }
         
         dispatch_async(dispatch_get_main_queue()) {
@@ -163,8 +165,10 @@ class VerseTableView: UITableView, UITableViewDelegate {
         
         if let ds = self.getDatasource(){
             // remove from db
-            for v in ds.recentVerses {
-                ds.storage.removeVerse(v.createdAt)
+            if ds.ephemeral == false {
+                for v in ds.recentVerses {
+                    ds.storage.removeVerse(v.createdAt)
+                }
             }
             
             // remove from ds
@@ -250,9 +254,13 @@ class VerseTableView: UITableView, UITableViewDelegate {
             // only show verses in quick view
             let index = indexPath.section - 1
             if let ds = self.getDatasource() {
-                let verse = ds.recentVerses[index]
-                if verse.category != .Verse {
-                    sectionHeight = 0
+                if ds.recentVerses.count == 0 {
+                    sectionHeight = 0  // nothing here
+                } else {
+                    let verse = ds.recentVerses[index]
+                    if verse.category != .Verse {
+                        sectionHeight = 0
+                    }
                 }
             }
         }

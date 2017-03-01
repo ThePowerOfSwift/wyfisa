@@ -31,12 +31,14 @@ class ScriptComposeViewController: UIViewController,
     @IBOutlet var notesButton: UIButton!
     @IBOutlet var captureContainerHeightConstraint: NSLayoutConstraint!
     
+    @IBOutlet var captureViewOverlay: GPUImageView!
     var captureDelegate: CaptureButtonDelegate? = nil
     var scrollViewEscapeMask: UIView!
 
     let themer = WYFISATheme.sharedInstance
     let cam = CameraManager.sharedInstance
     let settings = SettingsManager.sharedInstance
+    var session = CaptureSession.sharedInstance
     let db = DBQuery.sharedInstance
     let sharedOutles = SharedOutlets.instance
     
@@ -44,8 +46,6 @@ class ScriptComposeViewController: UIViewController,
     var tableDataSource: VerseTableDataSource? = nil
     var isEditingMode: Bool = false
     var cameraEnabled: Bool = true
-    var workingText = "Scanning"
-    var session = CaptureSession()
     var captureLock = NSLock()
     var updateLock = NSLock()
     var navNext = notifyCallback
@@ -56,11 +56,6 @@ class ScriptComposeViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         self.themeView()
-        
-        // setup camera
-        self.captureImage.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
-        self.cam.addTarget(self.captureImage)
-        self.initCamera()
 
         // setup datasource
         self.tableDataSource = VerseTableDataSource.init(frameSize: self.view.frame.size)
@@ -96,6 +91,10 @@ class ScriptComposeViewController: UIViewController,
             self.session.currentId = UInt64(ds.nVerses+1)
         }
         self.verseTable.reloadData()
+        
+        self.pickerView.selectItemByOption(.VerseOCR, animated: true)
+
+        /*
         if self.tableDataSource?.nVerses > 0 {
             // hide picker and show current media
             // allows middle to operate as down button
@@ -104,6 +103,7 @@ class ScriptComposeViewController: UIViewController,
             // show the verse ocr
             self.pickerView.selectItemByOption(.Photo, animated: true)
         }
+        */
         
         // keyboard
         self.initKeyboardObserver()
@@ -112,9 +112,11 @@ class ScriptComposeViewController: UIViewController,
     
 
     func tableScrollNotifierFunc(){
+        /*
         if self.pickerView.selectedOption() != .Script {
             self.pickerView.selectItemByOption(.Script, animated: true)
         }
+        */
     }
     
     
@@ -215,7 +217,8 @@ class ScriptComposeViewController: UIViewController,
         switch option {
         case .VerseOCR:
             // only do ocr-mode if in verse detection
-             self.startOCRCaptureAction()
+             //self.startOCRCaptureAction()
+            var ok = 23;
         case .Script:
             // scroll to end
             self.verseTable.scrollToEnd()
@@ -225,10 +228,36 @@ class ScriptComposeViewController: UIViewController,
         }
     }
     
+    
+    func didReleaseCaptureButton(sender: InitViewController, verses: [VerseInfo]) -> Bool {
+        
+        if self.pickerView.selectedOption() != .VerseOCR {
+            return true // nothing to do
+        }
+
+        
+        // carry verses over to editor table
+        if let ds = self.tableDataSource {
+            for verseInfo in verses {
+                ds.appendVerse(verseInfo)
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.verseTable.addSection()
+                    self.verseTable.updateVersePriority(verseInfo.id, priority: verseInfo.priority)
+                }
+            }
+
+        }
+        self.verseTable.sortByPriority()
+        self.verseTable.reloadData()
+        self.verseTable.scrollToEnd()
+        return true
+
+    }
+    
     func takePhoto(){
         
         let verseInfo = VerseInfo.init(id: "0", name: "", text: nil)
-        verseInfo.session = self.updateCaptureId()
+        verseInfo.session = self.session.updateCaptureId()
         verseInfo.category = .Image
         let captureImage =  self.cam.imageFromFrame()
         verseInfo.image = captureImage
@@ -241,198 +270,11 @@ class ScriptComposeViewController: UIViewController,
             self.verseTable.reloadData()
             self.verseTable.scrollToEnd()
         }
-
+        
         self.pickerView.selectItemByOption(.Script, animated: true)
         
     }
     
-    func startOCRCaptureAction(){
-        if self.captureLock.tryLock() {
-    
-            
-            // flash capture box
-            Animations.fadeOutIn(0.3, tsFadeOut: 0.3, view: self.captureBox, alpha: 0)
-            
-            if self.settings.useFlash == true {
-                self.cam.torch(.On)
-            }
-            
-            // session init
-            self.session.active = true
-            session.clearCache()
-            
-            /*
-            if self.verseTable.isExpanded == true {
-                // compress table to view results
-                Timing.runAfter(0.2){
-                    self.verseTable.isExpanded = false
-                    self.verseTable.reloadData()
-                    self.verseTable.scrollToEnd()
-                }
-            }
-            */
-            
-            // start capture loop
-            self.captureLoop()
-            
-            self.captureLock.unlock()
-        }
-    }
-    
-    func captureLoop(){
-        let sessionId = self.session.currentId
-        
-        // capture frames
-        Timing.runAfterBg(0) {
-            while self.session.currentId == sessionId {
-                // grap frame from campera
-                
-                if let image = self.cam.imageFromFrame(){
-                    
-                    // do image recognition
-                    if let recognizedText = self.cam.processImage(image){
-                        self.didProcessFrame(withText: recognizedText, image: image, fromSession: sessionId)
-                    }
-                }
-                
-                if (self.session.misses >= 10) {
-                    self.session.misses = 0
-                    break
-                }
-            }
-            Timing.runAfterBg(2.0){
-                if (self.session.active == true){
-                    self.captureLoop()
-                }
-            }
-        }
-        
-        
-        
-    }
-    
-    
-    func didReleaseCaptureButton(sender: InitViewController) -> Bool {
-        
-        if self.pickerView.selectedOption() != .VerseOCR {
-            return true // nothing to do
-        }
-        
-        var hasNewMatches = false
-        updateLock.lock()
-        Timing.runAfter(0.3){
-            self.captureBox.alpha = 1.0 // make sure capture box stays enabled
-        }
-        
-        if self.settings.useFlash == true {
-            self.cam.torch(.Off)
-        }
-        
-        // remove scanning box
-        if self.session.newMatches > 0 && self.session.active {
-            hasNewMatches = true
-        }
-        
-        // update session
-        self.updateCaptureId()
-
-        if self.session.newMatches > 0 &&
-            self.pickerView.selectedOption() == .VerseOCR {
-            self.pickerView.selectItemByOption(.Script, animated: false)
-        }
-        
-        self.session.newMatches = 0
-        self.session.active = false
-        self.session.misses = 0
-        
-        // resort verse table by priority
-        self.verseTable.sortByPriority()
-        self.verseTable.reloadData()
-        self.verseTable.scrollToEnd()
-
-        
-        updateLock.unlock()
-        return hasNewMatches
-    }
-    
-    // updates and returns old id
-    func updateCaptureId() -> UInt64 {
-        let currId = self.session.currentId
-        self.session.currentId = currId + 1
-        return currId
-    }
-    
-    // MARK: - Process
-    
-    // when frame has been processed we need to write it back to the cell
-    func didProcessFrame(withText text: String, image: UIImage, fromSession: UInt64) {
-        
-        
-        if fromSession != self.session.currentId {
-            return // Ignore: from old capture session
-        }
-        if (text.length == 0){
-            self.session.misses += 1
-            return // empty
-        } else {
-            self.session.misses = 0
-        }
-        
-        Animations.fadeOutIn(0.3, tsFadeOut: 0.3, view: self.captureBox, alpha: 0)
-        
-        
-        updateLock.lock()
-        
-        
-        
-        let id = self.verseTable.numberOfSections+1 // was nVerses+1
-        if let allVerses = TextMatcher().findVersesInText(text) {
-            
-            for var verseInfo in allVerses {
-                
-                if let verse = self.db.lookupVerse(verseInfo.id){
-                    
-                    // we have match
-                    verseInfo.text = verse
-                    verseInfo.session = fromSession
-                    verseInfo.image = image
-                    
-                    
-                    // make sure not repeat match
-                    if self.session.matches.indexOf(verseInfo.id) == nil {
-                        
-                        // notify
-                        Animations.fadeInOut(0, tsFadeOut: 0.3, view: self.captureBoxActive, alpha: 0.6)
-                        
-                        // new match
-                        self.tableDataSource?.appendVerse(verseInfo)
-                        dispatch_async(dispatch_get_main_queue()) {
-                            self.verseTable.addSection()
-                            self.verseTable.updateVersePriority(verseInfo.id, priority: verseInfo.priority)
-
-                        }
-                
-                        
-                        // cache
-                        self.db.chapterForVerse(verseInfo.id)
-                        self.db.crossReferencesForVerse(verseInfo.id)
-                        self.db.versesForChapter(verseInfo.id)
-                        
-                    } else {
-                        // dupe
-                        continue
-                    }
-                    
-                    self.session.newMatches += 1
-                    self.session.matches.append(verseInfo.id)
-                }
-            }
-        }
-        
-        updateLock.unlock()
-        
-    }
-
     
     // MARK: - picker view
     func numberOfItemsInPickerView(pickerView: AKPickerView) -> Int {
@@ -450,6 +292,7 @@ class ScriptComposeViewController: UIViewController,
         func toggleViews(hidden: Bool) {
             Animations.start(0.3){
                 self.captureImage.hidden = hidden
+               // self.captureViewOverlay.hidden = hidden
                 self.hideActionButtons(!hidden)
                 self.hideGradients(hidden)
                 self.hideCaptureContainer(hidden)
@@ -459,19 +302,22 @@ class ScriptComposeViewController: UIViewController,
         
         switch option {
         case .Script:
-            self.cam.pause()
+         //   self.cam.pause()
             toggleViews(true)
             self.verseTable.reloadData()
         case .Photo:
             self.resumeCam()
             self.captureBox.alpha = 0
-            self.captureContainerHeightConstraint.constant = 0
+          //  self.captureContainerHeightConstraint.constant = 0
             toggleViews(false)
         case .VerseOCR:
-            self.resumeCam()
-            self.captureBox.alpha = 1
-            self.captureContainerHeightConstraint.constant -= 100
-            toggleViews(false)
+            self.captureBox.alpha = 0
+            toggleViews(true)
+
+           // self.resumeCam()
+           // self.captureBox.alpha = 1
+           // self.captureContainerHeightConstraint.constant -= 100
+           // toggleViews(false)
         }
     }
     
@@ -547,7 +393,7 @@ class ScriptComposeViewController: UIViewController,
         if let verseInfo = searchVC.verseInfo {
             
             // add verse to datasource
-            verseInfo.session = self.updateCaptureId()
+            verseInfo.session = self.session.updateCaptureId()
             
             self.tableDataSource?.appendVerse(verseInfo)
             
@@ -583,7 +429,7 @@ class ScriptComposeViewController: UIViewController,
             
             if vc.isUpdate == false {
                 // add verse to datasource
-                verseInfo.session = self.updateCaptureId()
+                verseInfo.session = self.session.updateCaptureId()
                 
                 self.tableDataSource?.appendVerse(verseInfo)
                 
@@ -613,7 +459,7 @@ class ScriptComposeViewController: UIViewController,
             
             if vc.isUpdate == false {
                 // add verse to datasource
-                verseInfo.session = self.updateCaptureId()
+                verseInfo.session = self.session.updateCaptureId()
                 self.tableDataSource?.appendVerse(verseInfo)
                 
                 // add the section to capture table and then reload pauseVC
@@ -728,7 +574,7 @@ class ScriptComposeViewController: UIViewController,
             verseInfo.category = .Note
             
             // add verse to datasource
-            verseInfo.session = self.updateCaptureId()
+            verseInfo.session = self.session.updateCaptureId()
             
             self.tableDataSource?.appendVerse(verseInfo)
             
@@ -775,31 +621,16 @@ class ScriptComposeViewController: UIViewController,
 
 enum PickerViewOption: Int {
     // as ordered in pickerview
-    case Script = 0, Photo, VerseOCR
+    case VerseOCR = 0, Photo, Script
     func description() -> String {
         switch self{
-        case .Script:
-            return "SCRIPT"
         case .VerseOCR:
-            return "VERSE DETECTION"
+            return "SCAN"
+        case .Script:
+            return "AUDIO"
         case .Photo:
             return "PHOTO"
         }
     }
 }
 
-struct CaptureSession {
-    var active: Bool = false
-    var currentId: UInt64 = 0
-    var matches: [String] = [String]()
-    var newMatches = 0
-    var misses = 0
-    
-    func clearCache() {
-        DBQuery.sharedInstance.clearCache()
-    }
-    func hasMatches() -> Bool {
-        return self.newMatches > 0
-    }
-
-}

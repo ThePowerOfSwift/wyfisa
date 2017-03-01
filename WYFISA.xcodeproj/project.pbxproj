@@ -21,6 +21,8 @@
 		C323F3D71D86EE5B00A7EC95 /* SearchBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */; };
 		C3355C591DE939380045E797 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3355C581DE939380045E797 /* SearchViewController.swift */; };
 		C338AF381D964B2F004E5E97 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C338AF371D964B2F004E5E97 /* InfoViewController.swift */; };
+		C3466D5F1E650EA3005EF365 /* CaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3466D5E1E650EA3005EF365 /* CaptureSession.swift */; };
+		C3466D611E65109E005EF365 /* VerseRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3466D601E65109E005EF365 /* VerseRecognition.swift */; };
 		C34C52341D472E1A001E5F1A /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = C39090CF1D2C9C88000DFD15 /* tessdata */; };
 		C351DB4C1DEDE250009E853D /* CBStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB4B1DEDE250009E853D /* CBStorage.swift */; };
 		C351DB4E1DEE7668009E853D /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB4D1DEE7668009E853D /* KeyboardObserver.swift */; };
@@ -98,6 +100,8 @@
 		C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchBarViewController.swift; path = ../SearchBarViewController.swift; sourceTree = "<group>"; };
 		C3355C581DE939380045E797 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		C338AF371D964B2F004E5E97 /* InfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoViewController.swift; path = ../InfoViewController.swift; sourceTree = "<group>"; };
+		C3466D5E1E650EA3005EF365 /* CaptureSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureSession.swift; sourceTree = "<group>"; };
+		C3466D601E65109E005EF365 /* VerseRecognition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseRecognition.swift; sourceTree = "<group>"; };
 		C351DB4B1DEDE250009E853D /* CBStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBStorage.swift; sourceTree = "<group>"; };
 		C351DB4D1DEE7668009E853D /* KeyboardObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		C351DB4F1DEF52D7009E853D /* Generics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generics.swift; sourceTree = "<group>"; };
@@ -229,6 +233,7 @@
 				C379515F1D43D62A003FB4F5 /* Books.swift */,
 				C351DB4B1DEDE250009E853D /* CBStorage.swift */,
 				C3F53B701D36219400E2F80D /* CameraManager.swift */,
+				C3466D5E1E650EA3005EF365 /* CaptureSession.swift */,
 				C3F53B951D37499700E2F80D /* DBQuery.swift */,
 				C351DB511DEFCCEE009E853D /* FBStorage.swift */,
 				C351DB4F1DEF52D7009E853D /* Generics.swift */,
@@ -249,6 +254,7 @@
 				C39090781D2C9AF8000DFD15 /* ViewController.swift */,
 				C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */,
 				C36A24FD1DECB0CE00D2880E /* VerseInfo.swift */,
+				C3466D601E65109E005EF365 /* VerseRecognition.swift */,
 				C306DA091DB49B8300D1F962 /* VerseTableDataSource.swift */,
 				C3F53B781D36973D00E2F80D /* VerseTableView.swift */,
 				C3F53B741D36945900E2F80D /* VerseTableViewCell.swift */,
@@ -594,6 +600,7 @@
 				C3F53B761D36945900E2F80D /* VerseTableViewCell.swift in Sources */,
 				C3E0712C1D4DB54900097D01 /* WYFISAFont.swift in Sources */,
 				C37951601D43D62A003FB4F5 /* Books.swift in Sources */,
+				C3466D611E65109E005EF365 /* VerseRecognition.swift in Sources */,
 				C31A7BC61D7FB4D400654753 /* WYFISATutViewController.swift in Sources */,
 				C312DE531D6C5A5E0098D0C5 /* WYFISATheme.swift in Sources */,
 				C306DA0A1DB49B8300D1F962 /* VerseTableDataSource.swift in Sources */,
@@ -613,6 +620,7 @@
 				C3D5065A1D3932FB00A04C83 /* Animations.swift in Sources */,
 				C3F53B791D36973D00E2F80D /* VerseTableView.swift in Sources */,
 				C351DB521DEFCCEE009E853D /* FBStorage.swift in Sources */,
+				C3466D5F1E650EA3005EF365 /* CaptureSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

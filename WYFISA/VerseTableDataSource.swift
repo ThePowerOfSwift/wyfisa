@@ -21,14 +21,18 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
     var cellDelegate: VerseTableViewCellDelegate?
     var themer = WYFISATheme.sharedInstance
     var storage: CBStorage = CBStorage(databaseName: "verses")
-   
-    init(frameSize: CGSize) {
+    var ephemeral: Bool = false
+    
+    init(frameSize: CGSize, ephemeral: Bool = false) {
         super.init()
         self.initHeaderHeight = frameSize.height
         self.initFrameWidth = frameSize.width
-        self.recentVerses = storage.getRecentVerses()
+        if ephemeral == false {
+            self.recentVerses = storage.getRecentVerses()
+            self.storage.replicate(.Push)
+        }
+        self.ephemeral = ephemeral
         self.nVerses = self.recentVerses.count
-        self.storage.replicate(.Push)
     }
     
     func setCellDelegate(delegate: VerseTableViewCellDelegate){
@@ -97,7 +101,9 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
         if(verse.id != ""){
             // is actual verse
             updateCellHeightVal(verse)
-            self.storage.putVerse(verse)
+            if self.ephemeral == false {
+                self.storage.putVerse(verse)
+            }
         }
     }
 
@@ -112,7 +118,9 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
         for v in self.recentVerses {
             if v.session == verse.session {
                 self.recentVerses[i] = verse
-                self.storage.updateVerse(verse)
+                if self.ephemeral == false {
+                    self.storage.updateVerse(verse)
+                }
                 break
             }
             i=i+1
