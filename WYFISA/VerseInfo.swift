@@ -56,14 +56,15 @@ class VerseInfo {
              "name": self.name,
              "priority": self.priority,
              "session": NSNumber(unsignedLongLong: self.session),
-             "text": text,
              "chapter": chapter,
              "chapterNo": chapterNo,
              "bookNo": bookNo,
              "verse": verse,
              "category": self.category.rawValue,
              "ts": self.ts,
-             "createdAt": self.createdAt]
+             "createdAt": self.createdAt,
+             "channels": ["script"],
+        ]
         
         return properties
     }
@@ -71,11 +72,16 @@ class VerseInfo {
     class func DocPropertiesToObj(doc: AnyObject?) -> VerseInfo? {
         
         var verseInfo:VerseInfo? = nil
-        
+        let dbq: DBQuery = DBQuery.sharedInstance
+
         if let verseDoc = doc as? [String: AnyObject] {
             let id = verseDoc["id"] as? String ?? ""
             let name = verseDoc["name"] as? String ?? ""
-            let text = verseDoc["text"] as? String
+            var text:String? = nil
+            if id != "" {
+                text = dbq.lookupVerse(id)
+            }
+
             let v = VerseInfo.init(id: id, name: name, text: text)
    
             let categoryVal = verseDoc["category"] as? Int ?? 0

@@ -88,19 +88,11 @@ class InitViewController: UIViewController {
             self.captureView.alpha = 1
             self.captureBoxActive.alpha = 0
             self.captureBox.hidden =  false
+            self.captureVerseTable.hidden = false
         }
         
         // decide what to do depending on what state we are in
         self.sharedOutlet.captureDelegate?.didPressCaptureButton(self)
-        self.captureVerseTable.hidden = false
-        
-        // show working text
-        let defaultVerse = VerseInfo(id: "", name: self.workingText, text: "")
-        print("COOOO", self.session.currentId)
-        Timing.runAfter(0.3){
-            self.tableDataSource?.appendVerse(defaultVerse)
-            self.captureVerseTable.addSection()
-        }
 
         self.startOCRCaptureAction()
     }
@@ -162,6 +154,10 @@ class InitViewController: UIViewController {
     func startOCRCaptureAction(){
         if self.captureLock.tryLock() {
             
+            // show working text
+            let defaultVerse = VerseInfo(id: "", name: self.workingText, text: "")
+            self.tableDataSource?.appendVerse(defaultVerse)
+            self.captureVerseTable.addSection()
             
             // flash capture box
             Animations.fadeOutIn(0.3, tsFadeOut: 0.3, view: captureBox, alpha: 0)

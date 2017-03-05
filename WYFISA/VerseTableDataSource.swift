@@ -28,8 +28,8 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
         self.initHeaderHeight = frameSize.height
         self.initFrameWidth = frameSize.width
         if ephemeral == false {
+            self.storage.replicate(.Dual)
             self.recentVerses = storage.getRecentVerses()
-            self.storage.replicate(.Push)
         }
         self.ephemeral = ephemeral
         self.nVerses = self.recentVerses.count

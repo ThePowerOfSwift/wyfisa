@@ -17,13 +17,14 @@ class CBStorage {
     var db: CBLDatabase?  = nil
     var push: CBLReplication?
     var pull: CBLReplication?
+    var auth: CBLAuthenticatorProtocol?
    // let firedb: FBStorage = FBStorage.sharedInstance
     
     init(databaseName: String){
         do {
             let db = try CBLManager.sharedInstance().databaseNamed(databaseName)
             self.db = db
-           // try db.deleteDatabase()
+            // try db.deleteDatabase()
             // create views
             let verseView = db.viewNamed("versesByCreated")
             verseView.setMapBlock({ (doc, emit) in
@@ -31,6 +32,9 @@ class CBStorage {
                     emit(ts, doc)
                 }
             }, version: "2")
+            
+            // auth
+            self.auth = CBLAuthenticator.basicAuthenticatorWithName("ray", password: "pass")
             
         } catch {
             // TODO: Handle this can be really bad!
@@ -52,8 +56,11 @@ class CBStorage {
         }
         self.push?.continuous = true
         self.pull?.continuous = true
+        self.push?.authenticator = self.auth
+        self.pull?.authenticator = self.auth
         self.push?.start()
         self.pull?.start()
+        
     }
     
     

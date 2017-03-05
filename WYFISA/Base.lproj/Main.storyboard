@@ -250,7 +250,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X52-Fb-FE7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1937" y="2182"/>
+            <point key="canvasLocation" x="-1812" y="2203"/>
         </scene>
         <!--Read-->
         <scene sceneID="WTh-gM-5dH">
@@ -879,7 +879,7 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="CCN-lq-m1b">
-                                <rect key="frame" x="225" y="616" width="134" height="41"/>
+                                <rect key="frame" x="234" y="616" width="125" height="41"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iiG-jU-R3S">
                                         <rect key="frame" x="0.0" y="0.0" width="61" height="41"/>
@@ -892,9 +892,9 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="beZ-bg-MsO">
-                                        <rect key="frame" x="81" y="0.0" width="53" height="41"/>
+                                        <rect key="frame" x="81" y="0.0" width="44" height="41"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                        <state key="normal" title="Save">
+                                        <state key="normal" title="Add">
                                             <color key="titleColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>

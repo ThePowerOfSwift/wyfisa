@@ -504,7 +504,9 @@ class ScriptComposeViewController: UIViewController,
             // when editing a note then pass previous text to view
             if let verse = sender as? VerseInfo {
                 let toVc = segue.destinationViewController as! NotesViewController
-                toVc.editingText = verse.name
+                if verse.session != 0 {
+                    toVc.editingText = verse.name
+                }
                 toVc.verseInfo = verse
             }
         case "searchsegue":
@@ -549,19 +551,8 @@ class ScriptComposeViewController: UIViewController,
     
     // MARK: - notes handler
     @IBAction func didPressNotesButton(sender: UIButton) {
-        if self.pickerView.selectedOption() != .Script {
-            self.pickerView.selectItemByOption(.Script, animated: false)
-        }
-        
-        self.noteTextInput.text = nil
-        self.noteTextInput.hidden = false
-        self.noteTextInput.becomeFirstResponder()
-        
-       // self.escapeMask.hidden = false
-        
-        // make sure exit editing mode when creating a note
-        self.exitEditingMode()
-        
+        let verse = VerseInfo.init(id: "", name: "", text: nil)
+        performSegueWithIdentifier("notesegue", sender: (verse as AnyObject))
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
