@@ -8,7 +8,7 @@
 
 import Foundation
 import SQLite
-
+import Regex
 
 struct BibleTableColumns {
     let id = Expression<String>("id")
@@ -38,24 +38,29 @@ class DBQuery {
     var chapterCache = [String:String]()
     var refCache = [String:[VerseInfo]]()
     var verseCache = [String:[VerseInfo]]()
-
+    var storage: CBStorage = CBStorage(databaseName: "bibles")
+    
     init(){
         var path = NSBundle.mainBundle().pathForResource("t_kjv", ofType: "db")!
         self.conn = try! Connection(path, readonly: true)
         path = NSBundle.mainBundle().pathForResource("cross_ref", ofType: "db")!
         self.refconn = try! Connection(path, readonly: true)
+        self.storage.replicate(.Pull)
+        self.storage.createBibleViews()
+
+        
     }
     
     func lookupVerse(verseId: String) -> String? {
-        var verse: String?
+        var text: String?
         
-        let query = bibleTable.select(bibleCol.text).filter(bibleCol.id == verseId)
-        if let row = conn.pluck(query) {
-            verse = row.get(bibleCol.text)
-            verse = self.stripText(verse!)
+        if let verse = self.storage.getVerseDoc(verseId){
+            text = verse.text
         }
         
-        return verse
+        // otherwise get it from api bc we haven't sync'd yet
+        
+        return text
     }
     
     func versesForChapter(verseId: String) -> [VerseInfo] {
@@ -107,12 +112,15 @@ class DBQuery {
     
     func prevChapter(bookId: Int, chapterId: Int) -> VerseInfo? {
         
-        // check if next chapter has verses
+        // check if prev chapter has verses
         var bookNo = bookId
         var chapterNo = chapterId - 1
         if let book = Books(rawValue: bookNo) {
             if chapterNo == 0 { // check if previous book has verses
                 bookNo = bookId-1
+                if bookNo == 0 {
+                    return nil
+                }
                 if let lastBook = Books(rawValue: bookNo) {
                     chapterNo = lastBook.chapters()-1
                     let n = self.numChapterVerses(bookNo, chapterId: chapterNo)
@@ -135,6 +143,51 @@ class DBQuery {
         if let cachedChapter = self.chapterCache[verseId] {
             return cachedChapter
         }
+        
+        let verseParts = self.verseParts(verseId)
+        let bookNo = verseParts[0]
+        let chapterNo = verseParts[1]
+        let verseNo = verseParts[2]
+        var i = 1
+        while true {
+            let bookIdStr = String(format: "%02d", bookNo)
+            let chapterStr = String(format: "%03d", chapterNo)
+            let verseStr = String(format: "%03d", i)
+            let id = "\(bookIdStr)\(chapterStr)\(verseStr)"
+            if let verse = self.storage.getVerseDoc(id){
+                verse.name = self.createVerseName(bookNo, chapterNo: chapterNo, verseNo: i)!
+                verse.verse = i
+                verse.bookNo = bookNo
+                verse.chapterNo = chapterNo
+                chapterVerses.append(verse)
+                
+                if var rc = verse.text {
+                    if (i == verseNo){ // this is context verse
+                        if i == 1 {
+                            rc = "\u{293}\(rc)\u{297}"
+                        } else {
+                            rc = "  \u{293}\(i) \(rc)\u{297}"
+                        }
+                    } else {
+                        if i == 1 {
+                            rc = "\(rc)"
+                        } else {
+                            rc = "  \(i) \(rc)"
+                        }
+                    }
+                    chapter = chapter.stringByAppendingString(rc)
+                }
+            } else {
+                break
+            }
+            i += 1
+        }
+        
+        self.verseCache[verseId] = chapterVerses
+        self.chapterCache[verseId] = chapter
+        return chapter
+        /*
+        let vids = self.storage.getChapterVerses(verseParts[0], chapterNo: verseParts[1])
         
         // get book and chapter
         var query = bibleTable.select(bibleCol.book, bibleCol.chapter, bibleCol.verse).filter(bibleCol.id == verseId)
@@ -189,6 +242,7 @@ class DBQuery {
         self.chapterCache[verseId] = chapter
  
         return chapter
+     */
     }
 
     func crossReferencesForVerse(verseId: String) -> [VerseInfo] {
@@ -288,6 +342,23 @@ class DBQuery {
  
     }
     
+    func verseParts(verseId: String) -> [Int] {
+        var parts:[Int] = []
+        let pattern: Regex = Regex("(\\d{2})(\\d{3})(\\d{3})")
+        let match = pattern.match(verseId)
+
+        if let book = match?.captures[0] {
+            parts.append(Int(book)!)
+        }
+        if let chapter = match?.captures[1] {
+            parts.append(Int(chapter)!)
+        }
+        if let verse = match?.captures[2] {
+            parts.append(Int(verse)!)
+        }
+        
+        return parts
+    }
     func createVerseId(bookNo: Int, chapterNo: Int, verseNo: Int) -> String {
         let bookIdStr = String(format: "%02d", bookNo)
         let chapterId = String(format: "%03d", chapterNo)

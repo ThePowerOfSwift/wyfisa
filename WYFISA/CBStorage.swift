@@ -18,21 +18,16 @@ class CBStorage {
     var push: CBLReplication?
     var pull: CBLReplication?
     var auth: CBLAuthenticatorProtocol?
+    var databaseName: String
    // let firedb: FBStorage = FBStorage.sharedInstance
     
     init(databaseName: String){
+        self.databaseName = databaseName
         do {
             let db = try CBLManager.sharedInstance().databaseNamed(databaseName)
             self.db = db
-            // try db.deleteDatabase()
-            // create views
-            let verseView = db.viewNamed("versesByCreated")
-            verseView.setMapBlock({ (doc, emit) in
-                if let ts = doc["createdAt"] {
-                    emit(ts, doc)
-                }
-            }, version: "2")
-            
+            //try db.deleteDatabase()
+
             // auth
             self.auth = CBLAuthenticator.basicAuthenticatorWithName("ray", password: "pass")
             
@@ -42,8 +37,57 @@ class CBStorage {
         }
     }
     
+    func createScriptView(){
+        
+        // create views
+        let verseView = db?.viewNamed("versesByCreated")
+        verseView?.setMapBlock({ (doc, emit) in
+            if let ts = doc["createdAt"] {
+                emit(ts, doc)
+            }
+            }, version: "2")
+    }
+    
+    func createBibleViews(){
+        
+        // create views
+        let verseView = db?.viewNamed("versesByCh")
+        verseView?.setMapBlock({ (doc, emit) in
+            if let book = doc["book"] {
+                if let chapter = doc["chapter"] {
+                    emit( [book as! Int, chapter as! Int], doc["id"])
+                }
+            }
+            }, version: "3")
+    }
+    
+    func getChapterVerses(bookNo: Int, chapterNo: Int) -> [String]{
+        var verses: [String] = []
+        
+        
+        if let db = self.db {
+            let query = db.viewNamed("versesByCh").createQuery()
+            query.keys = [[bookNo, chapterNo]]
+            do {
+                let result = try query.run()
+                while let row = result.nextRow() {
+                    let verse = row.value
+                    /*
+                    if let verse = VerseInfo.DocPropertiesToObj(doc) {
+                        verse.image = self.getImageAttachment(verse.createdAt, named: "original.jpg")
+                        verse.overlayImage = self.getImageAttachment(verse.createdAt, named: "overlay.jpg")
+                        verse.accessoryImage = self.getImageAttachment(verse.createdAt, named: "accessory.jpg")
+                        recentVerses.append(verse)
+                    }*/
+                }
+            } catch {}
+        }
+        return verses
+    }
+    
     func replicate(mode: StorageReplicationMode){
-        let url = NSURL(string: "http://10.0.0.5:4984/turnto")!
+        
+        let url = NSURL(string: "http://10.0.0.5:4984/\(self.databaseName)")!
         
         switch mode {
         case .Push:
@@ -63,6 +107,13 @@ class CBStorage {
         
     }
     
+    func getVerseDoc(id: String) -> VerseInfo? {
+        var verse:VerseInfo? = nil
+        if let doc = self.db?.documentWithID(id) {
+            verse = VerseInfo.DocPropertiesToObj(doc.properties)
+        }
+        return verse
+    }
     
     func getRecentVerses() -> [VerseInfo]{
         var recentVerses: [VerseInfo] = [VerseInfo]()

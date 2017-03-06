@@ -11,18 +11,19 @@ import Firebase
 
 class FBStorage {
     var storage: FIRStorage
-    let ref: FIRStorageReference
+    let storageRef: FIRStorageReference
+
     static let sharedInstance = FBStorage()
 
     init(){
         FIRApp.configure()
         self.storage = FIRStorage.storage()
-        self.ref = storage.referenceForURL("gs://turnto-26933.appspot.com")
+        self.storageRef = storage.referenceForURL("gs://turnto-26933.appspot.com")
     }
     
     func upload(path: String, data: NSData, type: String?) -> FIRStorageUploadTask {
         
-        let uploadRef = self.ref.child(path)
+        let uploadRef = self.storageRef.child(path)
         let meta = FIRStorageMetadata()
         meta.contentType = type
         

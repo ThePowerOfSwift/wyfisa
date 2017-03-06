@@ -62,8 +62,9 @@ class VerseInfo {
              "verse": verse,
              "category": self.category.rawValue,
              "ts": self.ts,
+             "text": text,
              "createdAt": self.createdAt,
-             "channels": ["script"],
+             "channels": ["ray@gmail.com"],
         ]
         
         return properties
@@ -77,10 +78,9 @@ class VerseInfo {
         if let verseDoc = doc as? [String: AnyObject] {
             let id = verseDoc["id"] as? String ?? ""
             let name = verseDoc["name"] as? String ?? ""
-            var text:String? = nil
-            if id != "" {
-                text = dbq.lookupVerse(id)
-            }
+            
+            // get text from db
+            var text:String? =  verseDoc["text"] as? String ?? ""
 
             let v = VerseInfo.init(id: id, name: name, text: text)
    

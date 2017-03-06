@@ -12,6 +12,8 @@ target 'TurnTo' do
   pod 'SQLite.swift', '~> 0.10.1'
   pod 'couchbase-lite-ios', '1.3.1'
   pod 'Firebase/Storage'
+  pod 'Firebase/Core'
+  pod 'Firebase/Database'
   pod "AKPickerView-Swift"
 
   target 'WYFISATests' do

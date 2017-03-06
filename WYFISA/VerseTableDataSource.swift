@@ -20,7 +20,7 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
     var hasHeader: Bool = true
     var cellDelegate: VerseTableViewCellDelegate?
     var themer = WYFISATheme.sharedInstance
-    var storage: CBStorage = CBStorage(databaseName: "verses")
+    var storage: CBStorage = CBStorage(databaseName: "scripts")
     var ephemeral: Bool = false
     
     init(frameSize: CGSize, ephemeral: Bool = false) {
@@ -29,6 +29,7 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
         self.initFrameWidth = frameSize.width
         if ephemeral == false {
             self.storage.replicate(.Dual)
+            self.storage.createScriptView()
             self.recentVerses = storage.getRecentVerses()
         }
         self.ephemeral = ephemeral
