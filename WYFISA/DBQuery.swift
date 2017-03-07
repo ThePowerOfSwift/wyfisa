@@ -47,7 +47,6 @@ class DBQuery {
         self.refconn = try! Connection(path, readonly: true)
         self.storage.replicate(.Pull)
         self.storage.createBibleViews()
-
         
     }
     
@@ -145,6 +144,10 @@ class DBQuery {
         }
         
         let verseParts = self.verseParts(verseId)
+        if verseParts.count != 3 {
+            return ""
+        }
+        
         let bookNo = verseParts[0]
         let chapterNo = verseParts[1]
         let verseNo = verseParts[2]

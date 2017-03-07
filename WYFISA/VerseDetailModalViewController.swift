@@ -9,7 +9,7 @@
 import UIKit
 import Social
 
-class VerseDetailModalViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, VerseTableViewCellDelegate {
+class VerseDetailModalViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, VerseTableViewCellDelegate, FBStorageDelegate {
 
     @IBOutlet var segmentBar: UISegmentedControl!
     @IBOutlet var verseLabel: UILabel!
@@ -26,6 +26,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     
     var themer = WYFISATheme.sharedInstance
     var db = DBQuery.sharedInstance
+    let firDB = FBStorage()
     var verseInfo: VerseInfo? = nil
     var startViewPos: Int = 0
     var splitMode: Bool = false
@@ -38,7 +39,13 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initView()
+        self.firDB.delegate = self
+        
+        if let verse = verseInfo {
+            if (verse.bookNo != nil) && (verse.chapterNo != nil){
+                self.firDB.getVerseContext(verse.bookNo!, chapterNo: verse.chapterNo!)
+            }
+        }
     }
     
     func initView() {
@@ -57,7 +64,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             
             // find context start position
             var chapter = verse.chapter!
-            chapter = "\n\n\n\n\(chapter)"
+            chapter = "\n\n\n\n\(chapter)\n\n"
 
             let startIdx = chapter.indexOfCharacter("\u{293}")
             let endIdx = chapter.indexOfCharacter("\u{297}")
@@ -229,6 +236,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     }
     
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        var footerHeight:CGFloat = 10.0
         return 10.0
     }
     
@@ -493,6 +501,16 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             self.footerMask.image = UIImage(named: "footer-mask")
         }
         
+    }
+    
+    // MARK: - FIR Delegate
+    func didGetSingleVerse(sender: FBStorage, verse: VerseInfo){
+        
+    }
+    
+    func didGetVerseContext(sender: FBStorage, verses: [VerseInfo]){
+        self.verseInfo?.updateChapterForVerses(verses)
+        initView()
     }
 
 }

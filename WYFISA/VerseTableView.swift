@@ -16,6 +16,7 @@ class VerseTableView: UITableView, UITableViewDelegate {
     var cellDelegate: VerseTableViewCellDelegate?
     var themer = WYFISATheme.sharedInstance
     var scrollNotifier: ()->() =  notifyCallback
+    var footerHeight: CGFloat? = nil
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -26,6 +27,7 @@ class VerseTableView: UITableView, UITableViewDelegate {
     
 
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        
         if self.editing == true {
             return UITableViewCellEditingStyle.Delete
         }
@@ -198,13 +200,21 @@ class VerseTableView: UITableView, UITableViewDelegate {
     }
     
     // MARK: delegate methods
-    
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         view.tintColor = UIColor.clearColor()
     }
     
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 10.0
+        var footerHeight:CGFloat = 10.0
+        
+        // use a larger footer when rendering last section in table
+        if section == (self.numberOfSections - 1){
+            if let height = self.footerHeight {
+                footerHeight = height
+            }
+        }
+    
+        return footerHeight
     }
     
     func tableView(tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {

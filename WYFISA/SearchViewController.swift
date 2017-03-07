@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchViewController: UIViewController {
+class SearchViewController: UIViewController, FBStorageDelegate {
 
     @IBOutlet var searchView: UIView!
     @IBOutlet var escapeMask: UIView!
@@ -21,6 +21,7 @@ class SearchViewController: UIViewController {
 
     
     let themer = WYFISATheme.sharedInstance
+    let firDB = FBStorage()
 
     var frameSize: CGSize = CGSize()
     var verseInfo: VerseInfo? = nil
@@ -49,6 +50,9 @@ class SearchViewController: UIViewController {
 
         // hide save button
         self.saveButton.hidden = true
+        
+        // fir delegate
+        self.firDB.delegate = self
     }
     
     override func didReceiveMemoryWarning() {
@@ -94,7 +98,8 @@ class SearchViewController: UIViewController {
             self.verseTitle.text = verseInfo.name
             self.verseText.text = verseInfo.text
             self.verseInfo = verseInfo
-            
+            self.firDB.getVerseDoc(verseInfo.id)
+
             
         }
         self.escapeMask.hidden = true
@@ -132,9 +137,20 @@ class SearchViewController: UIViewController {
  
     }
 
-    
     override func prefersStatusBarHidden() -> Bool {
         return true
+    }
+
+    // MARK: - FIR Delegate
+    func didGetSingleVerse(sender: FBStorage, verse: VerseInfo){
+        self.verseText.text = verse.text
+        if self.verseInfo != nil {
+            self.verseInfo!.text = verse.text
+        }
+    }
+    
+    func didGetVerseContext(sender: FBStorage, verses: [VerseInfo]){
+        
     }
 
 }

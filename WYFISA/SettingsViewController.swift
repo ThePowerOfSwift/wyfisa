@@ -8,11 +8,28 @@
 
 import UIKit
 
+enum Version: Int {
+    case KJV = 0, ESV, NIV, NLT
+    func text() -> String {
+        switch self{
+        case .KJV:
+            return "kjv"
+        case .ESV:
+            return "esv"
+        case .NIV:
+            return "niv"
+        case .NLT:
+            return "nlt"
+        }
+    }
+}
+
 class SettingsManager {
     // is singleton
     static let sharedInstance = SettingsManager()
     var nightMode: Bool = false
     var useFlash: Bool = false
+    var version: Version = Version.ESV
     
     init(){
         do {
@@ -21,6 +38,7 @@ class SettingsManager {
                 // restore settings
                 self.nightMode = doc.propertyForKey("night") as! Bool
                 self.useFlash = doc.propertyForKey("flash") as! Bool
+                // TODO self.version = doc.propertyForKey("version") as! Bool
             }
         } catch {}
         

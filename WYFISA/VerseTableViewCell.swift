@@ -14,24 +14,28 @@ protocol VerseTableViewCellDelegate: class {
     func didRemoveCell(sender: VerseTableViewCell)
 }
 
-class VerseTableViewCell: UITableViewCell {
+class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
 
     @IBOutlet var labelHeader: UILabel!
     @IBOutlet var labelText: UILabel!
     @IBOutlet var searchIcon: UIImageView!
     @IBOutlet var mediaAccessory: UIImageView!
     @IBOutlet var moreButton: UIButton!
-    
+    @IBOutlet var quoteImage: UIImageView!
+
     weak var delegate:VerseTableViewCellDelegate?
     var verseInfo: VerseInfo?
     var enableMore: Bool = false
     let db = DBQuery.sharedInstance
     let themer = WYFISATheme.sharedInstance
+    let firDB = FBStorage()
+
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         self.labelHeader.textColor = self.themer.navyForLightOrTeal(1.0)
+        self.firDB.delegate = self
 
     }
 
@@ -67,6 +71,7 @@ class VerseTableViewCell: UITableViewCell {
             // all the text is in header
             self.labelHeader.lineBreakMode = .ByWordWrapping
             self.labelHeader.numberOfLines = 0
+            self.backgroundColor = self.themer.offWhiteForLightOrNavy(0.70)
         }
     }
     
@@ -77,6 +82,10 @@ class VerseTableViewCell: UITableViewCell {
         if  verse.id.characters.count > 0 {
             // cell has a verse
             self.verseInfo = verse
+            
+            // pull verse text matching version
+            // TODO: Only when verse.version is miss-match
+            firDB.getVerseDoc(verse.id)
             
             self.searchIcon.alpha = 0
             Animations.startAfter(1, forDuration: 0.2){
@@ -109,12 +118,18 @@ class VerseTableViewCell: UITableViewCell {
             
         }
         
-        self.labelHeader.text = verse.name
-        self.labelText.text = verse.text
-        self.labelText.textColor = self.themer.navyForLightOrWhite(1.0)
+        if verse.category == .Verse {
+            self.labelHeader.text = verse.name
+            self.labelText.text = verse.text
+            self.labelText.textColor = self.themer.navyForLightOrWhite(1.0)
+            self.quoteImage.hidden = true
+        }
         
         if verse.category == .Note { // add opening quote
-            self.labelHeader.text = "“\(verse.name)"
+            self.labelText.text = verse.name
+            self.labelHeader.text = ""
+            self.labelText.layer.borderColor = UIColor.fire().CGColor
+            self.quoteImage.hidden = false
         }
         
         if isExpanded == true {
@@ -163,7 +178,8 @@ class VerseTableViewCell: UITableViewCell {
 
         // append to cell
         if let verse = verseInfo {
-            let chapter = db.chapterForVerse(verse.id)
+            // start the caching and such
+            let chapter = "" //db.chapterForVerse(verse.id)
             let refs = db.crossReferencesForVerse(verse.id)
             let verses = db.versesForChapter(verse.id)
             verse.chapter = chapter
@@ -183,5 +199,19 @@ class VerseTableViewCell: UITableViewCell {
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
+    
+    
+    // MARK: - FIR Delegate
+    func didGetSingleVerse(sender: FBStorage, verse: VerseInfo){
+        self.verseInfo?.text = verse.text
+        self.labelText.text = verse.text
+        
+        // TODO: want to update the local db record for offline support
+    }
+    
+    func didGetVerseContext(sender: FBStorage, verses: [VerseInfo]){
+
+    }
+
     
 }

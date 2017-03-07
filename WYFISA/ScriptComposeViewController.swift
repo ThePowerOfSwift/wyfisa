@@ -31,6 +31,7 @@ class ScriptComposeViewController: UIViewController,
     @IBOutlet var notesButton: UIButton!
     @IBOutlet var captureContainerHeightConstraint: NSLayoutConstraint!
     
+    @IBOutlet var footerOverlay: UIView!
     @IBOutlet var captureViewOverlay: GPUImageView!
     var captureDelegate: CaptureButtonDelegate? = nil
     var scrollViewEscapeMask: UIView!
@@ -62,6 +63,7 @@ class ScriptComposeViewController: UIViewController,
         self.tableDataSource?.cellDelegate = self
         self.verseTable.dataSource = self.tableDataSource
         self.verseTable.isExpanded = true
+        self.verseTable.footerHeight = self.footerOverlay.frame.height
         self.verseTable.scrollNotifier = self.tableScrollNotifierFunc
         
         // setup picker view
@@ -84,12 +86,13 @@ class ScriptComposeViewController: UIViewController,
     
     override func viewDidAppear(animated: Bool) {
  
-        // scriptTitle
         
         self.updateSessionMatches()
         if let ds = self.tableDataSource {
             self.session.currentId = UInt64(ds.nVerses+1)
         }
+        
+        
         self.verseTable.reloadData()
         
         self.pickerView.selectItemByOption(.VerseOCR, animated: true)
@@ -169,7 +172,9 @@ class ScriptComposeViewController: UIViewController,
     
     func themeView(){
         // bg color
-        self.view.backgroundColor = themer.whiteForLightOrNavy(1.0)
+        //self.view.backgroundColor = themer.whiteForLightOrNavy(1.0)
+        self.view.backgroundColor = self.themer.offWhiteForLightOrNavy(0.70)
+
     }
     
     @IBAction func didPanRight(sender: AnyObject) {

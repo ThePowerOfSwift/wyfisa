@@ -237,10 +237,10 @@ class InitViewController: UIViewController {
             
             for var verseInfo in allVerses {
                 
-                if let verse = self.db.lookupVerse(verseInfo.id){
+    //            if let verse = self.db.lookupVerse(verseInfo.id){
                     
                     // we have match
-                    verseInfo.text = verse
+                    verseInfo.text = "" //verse
                     verseInfo.session = fromSession
                     verseInfo.image = image
                     
@@ -274,7 +274,7 @@ class InitViewController: UIViewController {
                     
                     self.session.newMatches += 1
                     self.session.matches.append(verseInfo.id)
-                }
+//                }
             }
         }
         

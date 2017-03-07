@@ -135,9 +135,9 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
             let verseId = String(format: "%03d", indexPath.item+1)
             let resultId = "\(bookIdStr)\(chapterId)\(verseId)"
             let name = "\(self.matchLabel!.text!)\(self.selectedChapter!+1):\(indexPath.item+1)"
-            let text = self.db.lookupVerse(resultId)
-            
-            self.resultInfo = VerseInfo(id: resultId, name:name, text: text)
+           // let text = self.db.lookupVerse(resultId)
+            // at least start the pull
+            self.resultInfo = VerseInfo(id: resultId, name:name, text: nil)
             self.resultInfo?.bookNo = self.selectedBook
             self.resultInfo?.chapterNo = self.selectedChapter!+1
 
@@ -285,7 +285,6 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.isVisible = false
         self.escapeImageMask?.hidden = true
     }
- 
  
 
 }

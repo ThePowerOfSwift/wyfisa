@@ -8,7 +8,7 @@
 
 import UIKit
 import Foundation
-
+import Regex
 
 enum ItemCategory: Int {
     case Verse = 0, Note, Image
@@ -40,6 +40,9 @@ class VerseInfo {
         self.text = text
         self.ts =  NSDate().timeIntervalSince1970
         self.createdAt = self.ts.description
+        if self.category == .Verse {
+            self.updateWithIdParts()
+        }
     }
     
     func toDocProperties() -> [String : AnyObject] {
@@ -99,6 +102,7 @@ class VerseInfo {
             v.chapterNo = verseDoc["chapterNo"] as? Int ?? 0
             v.bookNo = verseDoc["bookNo"] as? Int ?? 0
             v.verse = verseDoc["verse"] as? Int ?? 0
+            v.updateWithIdParts()
             verseInfo = v
         }
         
@@ -106,14 +110,48 @@ class VerseInfo {
         return verseInfo
     }
     
-    /*
-    func viewSpec() -> CBLView {
-        let map = CBLMapBlock,
-        return verseView.setMapBlock({ (doc, emit) in
-            if let session = doc["session"] {
-                emit(session, doc["id"])
+    func updateChapterForVerses(verses: [VerseInfo]){
+        // TODO: don't redo
+        
+        var i = 1
+        var chapterStr = ""
+        
+        for verse in verses {
+            if var rc = verse.text {
+                if (i == self.verse){ // this is context verse
+                    if i == 1 {
+                        rc = "\u{293}\(rc)\u{297}"
+                    } else {
+                        rc = "  \u{293}\(i) \(rc)\u{297}"
+                    }
+                } else {
+                    if i == 1 {
+                        rc = "\(rc)"
+                    } else {
+                        rc = "  \(i) \(rc)"
+                    }
+                }
+                chapterStr = chapterStr.stringByAppendingString(rc)
             }
-        }, version: "2")
+            i+=1
+        }
+        self.verses = verses
+        self.chapter = chapterStr
     }
-    */
+    
+    func updateWithIdParts() {
+        let pattern: Regex = Regex("(\\d{2})(\\d{3})(\\d{3})")
+        let match = pattern.match(self.id)
+        
+        if let book = match?.captures[0] {
+            self.bookNo = (Int(book)!)
+        }
+        if let chapter = match?.captures[1] {
+            self.chapterNo = Int(chapter)!
+        }
+        if let verse = match?.captures[2] {
+            self.verse = Int(verse)!
+        }
+    }
+
 }
