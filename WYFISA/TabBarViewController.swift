@@ -23,7 +23,7 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
         sharedOutlet.notifyTabEnabled = {
             self.selectedIndex = 1
         }
-        
+        self.tabBar.alpha = 1
     }
     
     override func tabBar(tabBar: UITabBar, didSelectItem item: UITabBarItem) {

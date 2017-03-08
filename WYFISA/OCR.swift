@@ -41,7 +41,7 @@ class OCR: NSObject, G8TesseractDelegate {
     func cropScaleAndFilter(sourceImage: UIImage!) -> UIImage {
         
         // crop
-        let cropFilter = ImageFilter.cropFilter(0.1, y: 0.15, width: 0.8, height: 0.25)
+        let cropFilter = ImageFilter.cropFilter(0, y: 0.15, width: 0.8, height: 0.4)
         let croppedImage = cropFilter.imageByFilteringImage(sourceImage)
         
         // threshold

@@ -581,7 +581,7 @@
                     <tabBar key="tabBar" contentMode="scaleToFill" id="eJG-ey-zTe">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <color key="selectedImageTintColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
@@ -1173,29 +1173,36 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VYX-hj-F83">
-                                <rect key="frame" x="0.0" y="499" width="375" height="99"/>
+                                <rect key="frame" x="0.0" y="502" width="375" height="96"/>
                                 <subviews>
                                     <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D0b-43-stY">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="99"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="lAN-lc-r2n">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="99"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </view>
                                         <blurEffect style="dark"/>
                                     </visualEffectView>
+                                    <visualEffectView opaque="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ISv-Kj-QAA">
+                                        <rect key="frame" x="67" y="-16" width="240" height="128"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Axy-Hs-DmU">
+                                            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </view>
+                                        <blurEffect style="light"/>
+                                    </visualEffectView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="D0b-43-stY" firstAttribute="centerX" secondItem="VYX-hj-F83" secondAttribute="centerX" id="8Ok-r4-qu0"/>
-                                    <constraint firstItem="D0b-43-stY" firstAttribute="centerY" secondItem="VYX-hj-F83" secondAttribute="centerY" id="Yda-Pf-snE"/>
-                                    <constraint firstItem="D0b-43-stY" firstAttribute="height" secondItem="VYX-hj-F83" secondAttribute="height" id="lqw-OB-Pxm"/>
-                                    <constraint firstItem="D0b-43-stY" firstAttribute="width" secondItem="VYX-hj-F83" secondAttribute="width" id="z24-uO-Zat"/>
+                                    <constraint firstAttribute="bottom" secondItem="ISv-Kj-QAA" secondAttribute="bottom" id="2FO-ct-UFn"/>
+                                    <constraint firstItem="ISv-Kj-QAA" firstAttribute="top" secondItem="D0b-43-stY" secondAttribute="bottom" id="npX-iX-2fL"/>
+                                    <constraint firstItem="ISv-Kj-QAA" firstAttribute="centerX" secondItem="VYX-hj-F83" secondAttribute="centerX" id="xhY-Rd-Ffb"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8BC-hv-SXP" customClass="AKPickerView" customModule="AKPickerView_Swift">
-                                <rect key="frame" x="28" y="499" width="319" height="60"/>
+                                <rect key="frame" x="28" y="502" width="319" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="Hjb-Tw-35t"/>
+                                    <constraint firstAttribute="height" constant="40" id="Hjb-Tw-35t"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="textColor">
@@ -1277,12 +1284,18 @@
                             <constraint firstItem="VYX-hj-F83" firstAttribute="top" secondItem="8BC-hv-SXP" secondAttribute="top" id="0MD-da-98l"/>
                             <constraint firstItem="Nrk-vu-fm4" firstAttribute="leading" secondItem="uZU-f9-P5K" secondAttribute="leadingMargin" constant="4" id="154-yd-pTu"/>
                             <constraint firstItem="fhI-5F-Vcr" firstAttribute="height" secondItem="d6t-QV-Itn" secondAttribute="height" id="5nM-2p-S14"/>
+                            <constraint firstItem="8BC-hv-SXP" firstAttribute="bottom" secondItem="wtt-6U-NOt" secondAttribute="top" constant="-5" id="7Mv-5l-sTJ"/>
                             <constraint firstItem="d6t-QV-Itn" firstAttribute="centerX" secondItem="uZU-f9-P5K" secondAttribute="centerX" id="Bsx-Kg-ptd"/>
+                            <constraint firstItem="ISv-Kj-QAA" firstAttribute="width" secondItem="uZU-f9-P5K" secondAttribute="width" id="EQO-mO-18W"/>
+                            <constraint firstItem="D0b-43-stY" firstAttribute="width" secondItem="uZU-f9-P5K" secondAttribute="width" id="N1t-H4-X9l"/>
                             <constraint firstItem="60N-Kx-OPC" firstAttribute="centerY" secondItem="wtt-6U-NOt" secondAttribute="centerY" id="Oak-g9-LYd"/>
+                            <constraint firstItem="D0b-43-stY" firstAttribute="centerY" secondItem="8BC-hv-SXP" secondAttribute="centerY" id="P1k-UJ-iQT"/>
                             <constraint firstItem="d6t-QV-Itn" firstAttribute="top" secondItem="oJV-XZ-QkS" secondAttribute="bottom" id="Qxp-7M-zFI"/>
                             <constraint firstItem="wtt-6U-NOt" firstAttribute="leading" secondItem="uZU-f9-P5K" secondAttribute="leadingMargin" id="TJ2-Mv-aJd"/>
                             <constraint firstItem="VYX-hj-F83" firstAttribute="width" secondItem="uZU-f9-P5K" secondAttribute="width" id="Vh6-FF-nQs"/>
                             <constraint firstItem="uOO-lg-AkI" firstAttribute="top" secondItem="VYX-hj-F83" secondAttribute="bottom" id="Waq-MW-khZ"/>
+                            <constraint firstItem="D0b-43-stY" firstAttribute="height" secondItem="8BC-hv-SXP" secondAttribute="height" id="Z1t-yN-n3N"/>
+                            <constraint firstItem="D0b-43-stY" firstAttribute="centerX" secondItem="8BC-hv-SXP" secondAttribute="centerX" id="a7r-EB-cIV"/>
                             <constraint firstItem="VYX-hj-F83" firstAttribute="centerX" secondItem="uZU-f9-P5K" secondAttribute="centerX" id="aNw-ie-vhz"/>
                             <constraint firstItem="nS7-BP-8AX" firstAttribute="centerX" secondItem="uZU-f9-P5K" secondAttribute="centerX" id="aqa-De-p7j"/>
                             <constraint firstItem="uOO-lg-AkI" firstAttribute="top" secondItem="wtt-6U-NOt" secondAttribute="bottom" multiplier="1.02" id="d0D-L0-ovM"/>
@@ -1296,7 +1309,6 @@
                             <constraint firstItem="nS7-BP-8AX" firstAttribute="width" secondItem="uZU-f9-P5K" secondAttribute="width" id="lEd-C4-rVP"/>
                             <constraint firstAttribute="trailingMargin" secondItem="d6t-QV-Itn" secondAttribute="trailing" id="mMC-xU-FtW"/>
                             <constraint firstItem="nS7-BP-8AX" firstAttribute="bottom" secondItem="oj5-4w-ccz" secondAttribute="top" id="o8m-hm-asr"/>
-                            <constraint firstItem="uOO-lg-AkI" firstAttribute="top" secondItem="8BC-hv-SXP" secondAttribute="bottom" multiplier="1.07" id="otc-2o-qSz"/>
                             <constraint firstItem="nS7-BP-8AX" firstAttribute="top" secondItem="oJV-XZ-QkS" secondAttribute="bottom" id="sPn-Dw-kyA"/>
                             <constraint firstItem="8BC-hv-SXP" firstAttribute="width" secondItem="uZU-f9-P5K" secondAttribute="width" multiplier="0.85" id="ufT-jM-mBK"/>
                             <constraint firstItem="fhI-5F-Vcr" firstAttribute="width" secondItem="d6t-QV-Itn" secondAttribute="width" id="veN-Xv-bSd"/>
@@ -1381,7 +1393,7 @@
             </objects>
             <point key="canvasLocation" x="-2975" y="2139"/>
         </scene>
-        <!--Scripts-->
+        <!--Read-->
         <scene sceneID="f0V-Es-y3x">
             <objects>
                 <viewController id="sye-YG-ssf" sceneMemberID="viewController">
@@ -1400,7 +1412,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Scripts" image="ios7-bookmarks-outline" id="f4H-Il-bsf"/>
+                    <tabBarItem key="tabBarItem" title="Read" image="ios7-bookmarks-outline" id="f4H-Il-bsf"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oJk-SG-iu4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1894,28 +1906,11 @@
             </objects>
             <point key="canvasLocation" x="-2185" y="1182"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="vCN-sL-2Jf">
-            <objects>
-                <viewController id="sr3-Qt-CX1" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="5O1-Yt-k7s"/>
-                        <viewControllerLayoutGuide type="bottom" id="gVk-i9-eq7"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="91X-ij-NjE">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nkK-4B-UYe" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="eqm-mh-Iyp">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="L9t-VH-K0O" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" id="bbp-fI-Gca"/>
+                    <tabBarItem key="tabBarItem" title="" image="ios7-circle-filled" id="bbp-fI-Gca"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="5Vy-SI-Qxi">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -1951,12 +1946,12 @@
         <image name="close-fire" width="19" height="19"/>
         <image name="footer-mask-white" width="375" height="50"/>
         <image name="highlighter" width="30" height="29"/>
-        <image name="ios7-Search" width="29" height="29"/>
+        <image name="ios7-Search" width="25" height="25"/>
         <image name="ios7-bookmarks-outline" width="29" height="27"/>
         <image name="ios7-circle-filled" width="33" height="33"/>
         <image name="ios7-gear-outline" width="26" height="26"/>
         <image name="ios7-refresh-empty" width="19" height="21"/>
-        <image name="ios7-trash-outline" width="21" height="27"/>
+        <image name="ios7-trash-outline" width="19" height="25"/>
         <image name="ios7-upload-outline" width="24" height="29"/>
         <image name="multiverse" width="914" height="576"/>
         <image name="search" width="24" height="23"/>

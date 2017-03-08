@@ -51,7 +51,6 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     func applyCategoryStyle(verse: VerseInfo){
         
         // general styles
-        self.backgroundColor = self.themer.whiteForLightOrNavy(0.8)
         self.mediaAccessory.hidden = true
         self.mediaAccessory.image =  nil
         self.labelHeader.lineBreakMode = .ByTruncatingTail
@@ -60,7 +59,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
         // support different cell styles
         switch verse.category {
         case .Verse:
-            break
+            self.backgroundColor = self.themer.whiteForLightOrNavy(0.8)
         case .Image:
             // show accesory view
             self.mediaAccessory.hidden = false
@@ -71,7 +70,8 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             // all the text is in header
             self.labelHeader.lineBreakMode = .ByWordWrapping
             self.labelHeader.numberOfLines = 0
-            self.backgroundColor = self.themer.offWhiteForLightOrNavy(0.70)
+            //self.backgroundColor = UIColor.clearColor()
+            self.backgroundColor = self.themer.offWhiteForLightOrNavy(0.7)
         }
     }
     
@@ -139,7 +139,6 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.labelText.numberOfLines = 0
             self.labelText.font = themer.currentFont()
             self.labelHeader.font = self.labelHeader.font.fontWithSize(themer.fontSize-3)
-
             
         } else {
             self.labelText.lineBreakMode = .ByTruncatingTail
