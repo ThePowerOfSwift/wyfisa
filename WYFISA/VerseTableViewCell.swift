@@ -55,7 +55,8 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
         self.mediaAccessory.image =  nil
         self.labelHeader.lineBreakMode = .ByTruncatingTail
         self.labelHeader.numberOfLines = 1
-        
+        self.labelText.hidden = false
+
         // support different cell styles
         switch verse.category {
         case .Verse:
@@ -66,6 +67,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.mediaAccessory.image =  verse.accessoryImage
             self.backgroundColor = UIColor.clearColor()
             self.mediaAccessory.layer.borderColor = UIColor.lightGrayColor().CGColor
+            self.labelText.hidden = true
         case .Note:
             // all the text is in header
             self.labelHeader.lineBreakMode = .ByWordWrapping

@@ -23,7 +23,6 @@ class ScriptComposeViewController: UIViewController,
     @IBOutlet var captureBox: UIImageView!
     @IBOutlet var captureBoxActive: UIImageView!
     @IBOutlet var pickerView: AKPickerView!
-    @IBOutlet var photoImageView: GPUImageView!
     @IBOutlet var noteTextInput: UITextField!
     @IBOutlet var notesBottomConstraint: NSLayoutConstraint!
     @IBOutlet var gradientMask: UIView!
@@ -71,13 +70,19 @@ class ScriptComposeViewController: UIViewController,
         self.pickerView.delegate = self
         self.pickerView.font = UIFont.systemFontOfSize(14, weight: UIFontWeightBold)
         self.pickerView.highlightedFont = UIFont.systemFontOfSize(14, weight: UIFontWeightBold)
-        self.pickerView.highlightedTextColor = UIColor.fire()
+        self.pickerView.highlightedTextColor = UIColor.offWhite(1.0)
+        self.pickerView.textColor = UIColor.fire()
         self.pickerView.maskDisabled = false
         self.pickerView.reloadData()
         
         // misc delegates
         self.noteTextInput.delegate = self
         self.sharedOutles.captureDelegate = self
+        
+        // photo preview
+    
+        self.captureImage.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
+        self.cam.addTarget(self.captureImage)
         
         // theme
         self.themeView()
@@ -96,17 +101,6 @@ class ScriptComposeViewController: UIViewController,
         self.verseTable.reloadData()
         
         self.pickerView.selectItemByOption(.VerseOCR, animated: true)
-
-        /*
-        if self.tableDataSource?.nVerses > 0 {
-            // hide picker and show current media
-            // allows middle to operate as down button
-            self.pickerView.selectItemByOption(.Script, animated: true)
-        } else {
-            // show the verse ocr
-            self.pickerView.selectItemByOption(.Photo, animated: true)
-        }
-        */
         
         // keyboard
         self.initKeyboardObserver()
@@ -138,7 +132,7 @@ class ScriptComposeViewController: UIViewController,
         Animations.start(0.3){
           //  self.gradientMask.hidden = true
         }
-        self.pickerView.selectItemByOption(.Script, animated: true)
+        self.pickerView.selectItemByOption(.Photo, animated: true)
     }
     
     
@@ -158,7 +152,7 @@ class ScriptComposeViewController: UIViewController,
         
         if self.isEditingMode == true {
             // hide capture container if showing
-            self.pickerView.selectItemByOption(.Script, animated: true)
+            //self.pickerView.selectItemByOption(.Script, animated: true)
         }
     }
 
@@ -224,9 +218,6 @@ class ScriptComposeViewController: UIViewController,
             // only do ocr-mode if in verse detection
              //self.startOCRCaptureAction()
             var ok = 23;
-        case .Script:
-            // scroll to end
-            self.verseTable.scrollToEnd()
         case .Photo:
             // add last image to list when in photo mode
             self.takePhoto()
@@ -276,14 +267,13 @@ class ScriptComposeViewController: UIViewController,
             self.verseTable.scrollToEnd()
         }
         
-        self.pickerView.selectItemByOption(.Script, animated: true)
-        
+        self.pickerView.selectItemByOption(.VerseOCR, animated: true)
     }
     
     
     // MARK: - picker view
     func numberOfItemsInPickerView(pickerView: AKPickerView) -> Int {
-        return 3
+        return 2
     }
 
     func pickerView(pickerView: AKPickerView, titleForItem item: Int) -> String {
@@ -293,36 +283,26 @@ class ScriptComposeViewController: UIViewController,
     func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
         
         let option = pickerView.selectedOption()
-        
+        self.cam.pause()
+
         func toggleViews(hidden: Bool) {
             Animations.start(0.3){
-                self.captureImage.hidden = hidden
+               // self.captureImage.hidden = hidden
                // self.captureViewOverlay.hidden = hidden
                 self.hideActionButtons(!hidden)
                 self.hideGradients(hidden)
                 self.hideCaptureContainer(hidden)
-                self.view.layoutIfNeeded()
+                //self.view.layoutIfNeeded()
             }
         }
         
         switch option {
-        case .Script:
-         //   self.cam.pause()
-            toggleViews(true)
-            self.verseTable.reloadData()
         case .Photo:
             self.resumeCam()
-            self.captureBox.alpha = 0
-          //  self.captureContainerHeightConstraint.constant = 0
             toggleViews(false)
         case .VerseOCR:
             self.captureBox.alpha = 0
             toggleViews(true)
-
-           // self.resumeCam()
-           // self.captureBox.alpha = 1
-           // self.captureContainerHeightConstraint.constant -= 100
-           // toggleViews(false)
         }
     }
     
@@ -617,13 +597,11 @@ class ScriptComposeViewController: UIViewController,
 
 enum PickerViewOption: Int {
     // as ordered in pickerview
-    case VerseOCR = 0, Photo, Script
+    case VerseOCR = 0, Photo
     func description() -> String {
         switch self{
         case .VerseOCR:
             return "SCAN"
-        case .Script:
-            return "AUDIO"
         case .Photo:
             return "PHOTO"
         }

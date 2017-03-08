@@ -127,7 +127,7 @@ extension AKPickerView {
 
     func itemToOption(item: Int) -> PickerViewOption {
         return PickerViewOption(rawValue: item) ??
-            PickerViewOption.Script
+            PickerViewOption.VerseOCR
     }
     func selectedOption() -> PickerViewOption {
         return self.itemToOption(self.selectedItem)

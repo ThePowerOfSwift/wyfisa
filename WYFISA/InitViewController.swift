@@ -30,6 +30,7 @@ class InitViewController: UIViewController {
     @IBOutlet var captureButton: UIButton!
     @IBOutlet var pageController: UIPageControl!
     @IBOutlet var captureView: GPUImageView!
+    @IBOutlet var captureIcon: UIImageView!
     
     let cam = CameraManager.sharedInstance
     let settings = SettingsManager.sharedInstance
@@ -81,6 +82,7 @@ class InitViewController: UIViewController {
             return
         }
         self.cam.resume()
+        self.captureIcon.alpha = 0
 
         Animations.start(0.3){
             let image = UIImage(named: "OvalLarge")
@@ -105,7 +107,7 @@ class InitViewController: UIViewController {
             return // release does not correspond to a capture
         }
         self.cam.pause()
-
+        self.captureIcon.alpha = 1
         Animations.start(0.3){
             self.captureView.alpha = 0
             let image = UIImage(named: "Oval 1")
