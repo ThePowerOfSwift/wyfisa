@@ -595,16 +595,4 @@ class ScriptComposeViewController: UIViewController,
     }
 }
 
-enum PickerViewOption: Int {
-    // as ordered in pickerview
-    case VerseOCR = 0, Photo
-    func description() -> String {
-        switch self{
-        case .VerseOCR:
-            return "SCAN"
-        case .Photo:
-            return "PHOTO"
-        }
-    }
-}
 

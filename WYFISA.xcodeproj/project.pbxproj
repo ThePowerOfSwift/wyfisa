@@ -55,6 +55,7 @@
 		C3AEF17C1DEB8D0C007750A8 /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AEF17B1DEB8D0C007750A8 /* NotesViewController.swift */; };
 		C3D5065A1D3932FB00A04C83 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D506591D3932FB00A04C83 /* Animations.swift */; };
 		C3E0712C1D4DB54900097D01 /* WYFISAFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E0712B1D4DB54900097D01 /* WYFISAFont.swift */; };
+		C3EE86B31E7111BC004CB24C /* CaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EE86B21E7111BC004CB24C /* CaptureViewController.swift */; };
 		C3F4FA221DF550CF00301445 /* ScriptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F4FA211DF550CF00301445 /* ScriptViewController.swift */; };
 		C3F53B711D36219400E2F80D /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F53B701D36219400E2F80D /* CameraManager.swift */; };
 		C3F53B761D36945900E2F80D /* VerseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F53B741D36945900E2F80D /* VerseTableViewCell.swift */; };
@@ -140,6 +141,7 @@
 		C3D506571D38D56200A04C83 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C3D506591D3932FB00A04C83 /* Animations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
 		C3E0712B1D4DB54900097D01 /* WYFISAFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISAFont.swift; sourceTree = "<group>"; };
+		C3EE86B21E7111BC004CB24C /* CaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureViewController.swift; sourceTree = "<group>"; };
 		C3F4FA211DF550CF00301445 /* ScriptViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScriptViewController.swift; path = ../ScriptViewController.swift; sourceTree = "<group>"; };
 		C3F53B701D36219400E2F80D /* CameraManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		C3F53B741D36945900E2F80D /* VerseTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseTableViewCell.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				C351DB4B1DEDE250009E853D /* CBStorage.swift */,
 				C3F53B701D36219400E2F80D /* CameraManager.swift */,
 				C3466D5E1E650EA3005EF365 /* CaptureSession.swift */,
+				C3EE86B21E7111BC004CB24C /* CaptureViewController.swift */,
 				C3F53B951D37499700E2F80D /* DBQuery.swift */,
 				C351DB511DEFCCEE009E853D /* FBStorage.swift */,
 				C351DB4F1DEF52D7009E853D /* Generics.swift */,
@@ -596,6 +599,7 @@
 				C351DB4E1DEE7668009E853D /* KeyboardObserver.swift in Sources */,
 				C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */,
 				C30963E11DF03112009CD474 /* ScriptCollection.swift in Sources */,
+				C3EE86B31E7111BC004CB24C /* CaptureViewController.swift in Sources */,
 				C374B4A01D8CF4600083366E /* SettingsViewController.swift in Sources */,
 				C3F53B761D36945900E2F80D /* VerseTableViewCell.swift in Sources */,
 				C3E0712C1D4DB54900097D01 /* WYFISAFont.swift in Sources */,

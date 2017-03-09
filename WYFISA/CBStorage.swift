@@ -26,7 +26,7 @@ class CBStorage {
         do {
             let db = try CBLManager.sharedInstance().databaseNamed(databaseName)
             self.db = db
-            //try db.deleteDatabase()
+            // try db.deleteDatabase()
 
             // auth
             self.auth = CBLAuthenticator.basicAuthenticatorWithName("ray", password: "pass")

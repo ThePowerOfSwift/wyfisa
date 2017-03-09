@@ -8,6 +8,7 @@
 
 import UIKit
 import GPUImage
+import AKPickerView_Swift
 
 protocol CaptureButtonDelegate: class {
     func didPressCaptureButton(sender: InitViewController)
@@ -22,17 +23,20 @@ class SharedOutlets {
     var notifyTabDisabled = notifyCallback
 }
 
-class InitViewController: UIViewController {
+class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDataSource, AKPickerViewDelegate {
 
     @IBOutlet var captureBoxActive: UIImageView!
     @IBOutlet var captureBox: UIImageView!
     @IBOutlet var captureVerseTable: VerseTableView!
     @IBOutlet var captureButton: UIButton!
-    @IBOutlet var pageController: UIPageControl!
     @IBOutlet var captureView: GPUImageView!
     @IBOutlet var captureIcon: UIImageView!
+    @IBOutlet var pickerView: AKPickerView!
+    @IBOutlet var actionScrollView: UIScrollView!
+
+    var ocrVC: CaptureViewController? = nil
+    var captureDelegate: CaptureButtonDelegate? = nil
     
-    let cam = CameraManager.sharedInstance
     let settings = SettingsManager.sharedInstance
     var session = CaptureSession.sharedInstance
     let db = DBQuery.sharedInstance
@@ -42,30 +46,44 @@ class InitViewController: UIViewController {
     var updateLock = NSLock()
     var tabVC: TabBarViewController? = nil
     var tableDataSource: VerseTableDataSource? = nil
-    var workingText = "Scanning"
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sharedOutlet.notifyTabDisabled = self.disableCaptureButton
         
-        self.captureView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
-        self.cam.addCameraBlurTargets(self.captureView)
-        
-        self.cam.zoom(1)
-        self.cam.focus(.ContinuousAutoFocus)
-        self.captureView.alpha = 0
-        self.cam.start()
-
         // setup a temp datasource
         self.tableDataSource = VerseTableDataSource.init(frameSize: self.view.frame.size, ephemeral: true)
         self.captureVerseTable.dataSource = self.tableDataSource
         self.captureVerseTable.isExpanded = false
         
+        // setup picker view
+        self.pickerView.dataSource = self
+        self.pickerView.delegate = self
+        self.pickerView.font = UIFont.systemFontOfSize(14, weight: UIFontWeightBold)
+        self.pickerView.highlightedFont = UIFont.systemFontOfSize(14, weight: UIFontWeightBold)
+        self.pickerView.highlightedTextColor = UIColor.fire()
+        self.pickerView.textColor = UIColor.offWhite(1.0)
+        self.pickerView.maskDisabled = false
+        self.pickerView.reloadData()
+        
+        // scroll view
+         let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        self.actionScrollView.contentSize = CGSize(width: self.view.frame.width * 3.0,
+                                                   height: self.view.frame.height)
+        self.actionScrollView.contentOffset.x = 900.0
+        self.ocrVC = storyboard.instantiateViewControllerWithIdentifier("ocrvc") as? CaptureViewController
+        self.ocrVC?.view.frame.origin.x = 0
+        self.ocrVC?.view.alpha = 0
+        self.ocrVC?.configure(self.view.frame.size)
+        self.actionScrollView.addSubview(self.ocrVC!.view)
+        self.captureDelegate = self.ocrVC
+        
+        
     }
     
-    override func viewDidAppear(animated: Bool) {
-        self.cam.pause()
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        print("ASLAN!!")
     }
 
     override func didReceiveMemoryWarning() {
@@ -81,9 +99,9 @@ class InitViewController: UIViewController {
             self.sharedOutlet.notifyTabEnabled()
             return
         }
-        self.cam.resume()
         self.captureIcon.alpha = 0
-
+        self.pickerView.hidden = true
+        /*
         Animations.start(0.3){
             let image = UIImage(named: "OvalLarge")
             self.captureButton.setImage(image, forState: .Normal)
@@ -91,12 +109,11 @@ class InitViewController: UIViewController {
             self.captureBoxActive.alpha = 0
             self.captureBox.hidden =  false
             self.captureVerseTable.hidden = false
-        }
+        }*/
         
         // decide what to do depending on what state we are in
-        self.sharedOutlet.captureDelegate?.didPressCaptureButton(self)
+        self.captureDelegate?.didPressCaptureButton(self)
 
-        self.startOCRCaptureAction()
     }
     
     
@@ -106,8 +123,11 @@ class InitViewController: UIViewController {
             self.enableCaptureButtn()
             return // release does not correspond to a capture
         }
-        self.cam.pause()
         self.captureIcon.alpha = 1
+        self.pickerView.hidden = false
+        self.captureDelegate?.didReleaseCaptureButton(self, verses: [])
+        
+        /*
         Animations.start(0.3){
             self.captureView.alpha = 0
             let image = UIImage(named: "Oval 1")
@@ -116,6 +136,9 @@ class InitViewController: UIViewController {
             self.captureBox.hidden =  true
             self.captureBoxActive.alpha = 0
         }
+        */
+        
+        /*
         let needsUpdate = self.handleCaptureRelease()
 
         if needsUpdate == true {
@@ -127,6 +150,7 @@ class InitViewController: UIViewController {
         }
         
         self.captureVerseTable.clear()
+        */
 
     }
     
@@ -149,175 +173,35 @@ class InitViewController: UIViewController {
         return true
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // going to script
+        print(segue.identifier)
+    }
+    
+    // MARK: - picker view
+    func numberOfItemsInPickerView(pickerView: AKPickerView) -> Int {
+        return 2
+    }
+    
+    func pickerView(pickerView: AKPickerView, titleForItem item: Int) -> String {
+        return pickerView.optionDescription(item)
+    }
 
-
-
-    // MARK: -Recognition Overlay
-    func startOCRCaptureAction(){
-        if self.captureLock.tryLock() {
-            
-            // show working text
-            let defaultVerse = VerseInfo(id: "", name: self.workingText, text: "")
-            self.tableDataSource?.appendVerse(defaultVerse)
-            self.captureVerseTable.addSection()
-            
-            // flash capture box
-            Animations.fadeOutIn(0.3, tsFadeOut: 0.3, view: captureBox, alpha: 0)
-            
-            if self.settings.useFlash == true {
-                self.cam.torch(.On)
-            }
-            
-            // session init
-            self.session.active = true
-            session.clearCache()
-            
-            // start capture loop
-            self.captureLoop()
-            
-            self.captureLock.unlock()
+    func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
+        
+        let option = pickerView.selectedOption()
+        // SLIDE THE BG
+        
+        switch option {
+        case .VerseOCR:
+            self.captureIcon.image = UIImage(named: "captureicon")
+            self.actionScrollView.contentOffset.x = 0.0
+        case .Photo:
+            self.captureIcon.image = UIImage(named: "Camera")
+            self.actionScrollView.contentOffset.x = self.view.frame.width
         }
     }
     
-    func captureLoop(){
-        let sessionId = self.session.currentId
-        
-        // capture frames
-        Timing.runAfterBg(0) {
-            while self.session.currentId == sessionId {
-                // grap frame from campera
-                
-                if let image = self.cam.imageFromFrame(){
-                    
-                    // do image recognition
-                    if let recognizedText = self.cam.processImage(image){
-                        self.didProcessFrame(withText: recognizedText, image: image, fromSession: sessionId)
-                    }
-                }
-                
-                if (self.session.misses >= 10) {
-                    self.session.misses = 0
-                    break
-                }
-            }
-            Timing.runAfterBg(2.0){
-                if (self.session.active == true){
-                    self.captureLoop()
-                }
-            }
-        }
-        
-        
-        
-    }
-    
-   
-    
-    // MARK: - Process
-    
-    // when frame has been processed we need to write it back to the cell
-    func didProcessFrame(withText text: String, image: UIImage, fromSession: UInt64) {
-        
-        
-        if fromSession != self.session.currentId {
-            return // Ignore: from old capture session
-        }
-        if (text.length == 0){
-            self.session.misses += 1
-            return // empty
-        } else {
-            self.session.misses = 0
-        }
-        
-        print(text)
-        Animations.fadeOutIn(0.3, tsFadeOut: 0.3, view: self.captureBox, alpha: 0)
-        
-        updateLock.lock()
-        let id = self.captureVerseTable.numberOfSections+1
-        
-        if let allVerses = TextMatcher().findVersesInText(text) {
-            
-            for var verseInfo in allVerses {
-                
-    //            if let verse = self.db.lookupVerse(verseInfo.id){
-                    
-                    // we have match
-                    verseInfo.text = "" //verse
-                    verseInfo.session = fromSession
-                    verseInfo.image = image
-                    
-                    
-                    // make sure not repeat match
-                    if self.session.matches.indexOf(verseInfo.id) == nil {
-                        
-                        // notify
-                        Animations.fadeInOut(0, tsFadeOut: 0.3, view: self.captureBoxActive, alpha: 0.6)
-                        
-                        // new match
-                        if self.session.newMatches == 0 {
-                            self.captureVerseTable.updateVerseAtIndex(id-1, withVerseInfo: verseInfo)
-                        } else {
-                            self.tableDataSource?.appendVerse(verseInfo)
-                            dispatch_async(dispatch_get_main_queue()) {
-                                self.captureVerseTable.addSection()
-                            }
-                        }
-                        self.captureVerseTable.updateVersePriority(verseInfo.id, priority: verseInfo.priority)
-                        
-                        // cache
-                        self.db.chapterForVerse(verseInfo.id)
-                        self.db.crossReferencesForVerse(verseInfo.id)
-                        self.db.versesForChapter(verseInfo.id)
-                        
-                    } else {
-                        // dupe
-                        continue
-                    }
-                    
-                    self.session.newMatches += 1
-                    self.session.matches.append(verseInfo.id)
-//                }
-            }
-        }
-        
-        updateLock.unlock()
-        
-    }
-    
-    
-    func handleCaptureRelease() -> Bool {
-        
-        var hasNewMatches = false
-        updateLock.lock()
-        Timing.runAfter(0.3){
-            self.captureBox.alpha = 1.0 // make sure capture box stays enabled
-        }
-        
-        if self.settings.useFlash == true {
-            self.cam.torch(.Off)
-        }
-        
-        // remove scanning box
-        if self.session.newMatches > 0 && self.session.active {
-            hasNewMatches = true
-        }
-        
-        // update session
-        self.session.updateCaptureId()
-        
-        self.session.newMatches = 0
-        self.session.active = false
-        self.session.misses = 0
-        
-        // resort verse table by priority
-        self.captureVerseTable.sortByPriority()
-        self.captureVerseTable.reloadData()
-        self.captureVerseTable.scrollToEnd()
-        
-        
-        updateLock.unlock()
-        return hasNewMatches
-    }
     
     
 

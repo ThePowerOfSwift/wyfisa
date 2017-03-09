@@ -53,6 +53,11 @@ extension String {
         return characters.count
     }
     
+    static var workingText: String {
+        return "Scanning"
+    }
+
+    
     func trunc(length: Int, trailing: String? = "...") -> String {
         if self.characters.count > length {
             return self.substringToIndex(self.startIndex.advancedBy(length)) + (trailing ?? "")
@@ -119,6 +124,19 @@ class UnderlinedLabel: UILabel {
             }
             
             self.attributedText = attributedText
+        }
+    }
+}
+
+enum PickerViewOption: Int {
+    // as ordered in pickerview
+    case VerseOCR = 0, Photo
+    func description() -> String {
+        switch self{
+        case .VerseOCR:
+            return "SCAN"
+        case .Photo:
+            return "PHOTO"
         }
     }
 }
