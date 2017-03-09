@@ -12,50 +12,22 @@ import AKPickerView_Swift
 
 protocol CaptureButtonDelegate: class {
     func didPressCaptureButton(sender: InitViewController)
-    func didReleaseCaptureButton(sender: InitViewController, verses: [VerseInfo]) -> Bool
-}
-
-class SharedOutlets {
-    static let instance = SharedOutlets()
-    weak var captureDelegate:CaptureButtonDelegate?
-    var tabBarFrame: CGRect? = nil
-    var notifyTabEnabled = notifyCallback
-    var notifyTabDisabled = notifyCallback
+    func didReleaseCaptureButton(sender: InitViewController) -> [VerseInfo]
 }
 
 class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDataSource, AKPickerViewDelegate {
 
-    @IBOutlet var captureBoxActive: UIImageView!
-    @IBOutlet var captureBox: UIImageView!
-    @IBOutlet var captureVerseTable: VerseTableView!
     @IBOutlet var captureButton: UIButton!
-    @IBOutlet var captureView: GPUImageView!
     @IBOutlet var captureIcon: UIImageView!
     @IBOutlet var pickerView: AKPickerView!
     @IBOutlet var actionScrollView: UIScrollView!
 
     var ocrVC: CaptureViewController? = nil
+    var scriptVC: ScriptComposeViewController? = nil
     var captureDelegate: CaptureButtonDelegate? = nil
-    
-    let settings = SettingsManager.sharedInstance
-    var session = CaptureSession.sharedInstance
-    let db = DBQuery.sharedInstance
-    let sharedOutlet = SharedOutlets.instance
-    var composeTabActive: Bool = true
-    var captureLock = NSLock()
-    var updateLock = NSLock()
-    var tabVC: TabBarViewController? = nil
-    var tableDataSource: VerseTableDataSource? = nil
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.sharedOutlet.notifyTabDisabled = self.disableCaptureButton
-        
-        // setup a temp datasource
-        self.tableDataSource = VerseTableDataSource.init(frameSize: self.view.frame.size, ephemeral: true)
-        self.captureVerseTable.dataSource = self.tableDataSource
-        self.captureVerseTable.isExpanded = false
         
         // setup picker view
         self.pickerView.dataSource = self
@@ -81,10 +53,6 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         
         
     }
-    
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        print("ASLAN!!")
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -94,23 +62,9 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     // entered capture tab
     @IBAction func didSPressCaptureButton(sender: AnyObject) {
         
-        if (self.composeTabActive == false) {
-            // just activate don't start scanning
-            self.sharedOutlet.notifyTabEnabled()
-            return
-        }
         self.captureIcon.alpha = 0
         self.pickerView.hidden = true
-        /*
-        Animations.start(0.3){
-            let image = UIImage(named: "OvalLarge")
-            self.captureButton.setImage(image, forState: .Normal)
-            self.captureView.alpha = 1
-            self.captureBoxActive.alpha = 0
-            self.captureBox.hidden =  false
-            self.captureVerseTable.hidden = false
-        }*/
-        
+
         // decide what to do depending on what state we are in
         self.captureDelegate?.didPressCaptureButton(self)
 
@@ -119,38 +73,15 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     
     @IBAction func didReleaseCaptureButton(sender: AnyObject){
         
-        if self.composeTabActive == false {
-            self.enableCaptureButtn()
-            return // release does not correspond to a capture
-        }
         self.captureIcon.alpha = 1
         self.pickerView.hidden = false
-        self.captureDelegate?.didReleaseCaptureButton(self, verses: [])
         
-        /*
-        Animations.start(0.3){
-            self.captureView.alpha = 0
-            let image = UIImage(named: "Oval 1")
-            self.captureButton.setImage(image, forState: .Normal)
-            self.captureVerseTable.hidden = true
-            self.captureBox.hidden =  true
-            self.captureBoxActive.alpha = 0
+        // get verses from capture session
+        if let verses = self.captureDelegate?.didReleaseCaptureButton(self) {
+    
+            // pass along to scriptvc
+            self.scriptVC?.addVersesToScript(verses)
         }
-        */
-        
-        /*
-        let needsUpdate = self.handleCaptureRelease()
-
-        if needsUpdate == true {
-            if let ds = self.tableDataSource {
-                self.sharedOutlet.captureDelegate?
-                        .didReleaseCaptureButton(self,
-                                                 verses: ds.recentVerses)
-            }
-        }
-        
-        self.captureVerseTable.clear()
-        */
 
     }
     
@@ -158,14 +89,12 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     func enableCaptureButtn(){
         let image = UIImage(named: "Oval 1")
         self.captureButton.setImage(image, forState: .Normal)
-        self.composeTabActive = true
     }
     
     func disableCaptureButton(){
         // just left middle
         let image = UIImage(named: "Oval 1-disabled")
         self.captureButton.setImage(image, forState: .Normal)
-        self.composeTabActive = false
     }
     
     // MARK: - Navigation
@@ -175,7 +104,11 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // going to script
-        print(segue.identifier)
+        if segue.identifier == "scriptsegue" {
+            if let scriptVC = segue.destinationViewController as? ScriptComposeViewController {
+                self.scriptVC = scriptVC
+            }
+        }
     }
     
     // MARK: - picker view

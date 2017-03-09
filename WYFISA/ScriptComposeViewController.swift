@@ -11,7 +11,6 @@ import GPUImage
 import AKPickerView_Swift
 
 class ScriptComposeViewController: UIViewController,
-                                CaptureButtonDelegate,
                                 AKPickerViewDataSource,
                                 AKPickerViewDelegate,
                                 VerseTableViewCellDelegate,
@@ -32,7 +31,6 @@ class ScriptComposeViewController: UIViewController,
     
     @IBOutlet var footerOverlay: UIView!
     @IBOutlet var captureViewOverlay: GPUImageView!
-    var captureDelegate: CaptureButtonDelegate? = nil
     var scrollViewEscapeMask: UIView!
 
     let themer = WYFISATheme.sharedInstance
@@ -40,7 +38,6 @@ class ScriptComposeViewController: UIViewController,
     let settings = SettingsManager.sharedInstance
     var session = CaptureSession.sharedInstance
     let db = DBQuery.sharedInstance
-    let sharedOutles = SharedOutlets.instance
     
     var scriptTitle: String? = nil
     var tableDataSource: VerseTableDataSource? = nil
@@ -77,7 +74,6 @@ class ScriptComposeViewController: UIViewController,
         
         // misc delegates
         self.noteTextInput.delegate = self
-        self.sharedOutles.captureDelegate = self
         
         // photo preview
     
@@ -225,12 +221,7 @@ class ScriptComposeViewController: UIViewController,
     }
     
     
-    func didReleaseCaptureButton(sender: InitViewController, verses: [VerseInfo]) -> Bool {
-        
-        if self.pickerView.selectedOption() != .VerseOCR {
-            return true // nothing to do
-        }
-
+    func addVersesToScript(verses: [VerseInfo]) {
         
         // carry verses over to editor table
         if let ds = self.tableDataSource {
@@ -246,7 +237,6 @@ class ScriptComposeViewController: UIViewController,
         self.verseTable.sortByPriority()
         self.verseTable.reloadData()
         self.verseTable.scrollToEnd()
-        return true
 
     }
     
@@ -573,7 +563,7 @@ class ScriptComposeViewController: UIViewController,
     
     func initKeyboardObserver(){
         let kbo = KeyboardObserver(self, constraint: self.notesBottomConstraint)
-        kbo.yOffset = self.sharedOutles.tabBarFrame?.height ?? 0
+        kbo.yOffset = 0
         kbo.frameOffset = 1
         self.kbo = kbo
     }

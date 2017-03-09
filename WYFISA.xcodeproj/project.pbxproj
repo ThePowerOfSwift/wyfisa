@@ -29,7 +29,6 @@
 		C351DB501DEF52D7009E853D /* Generics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB4F1DEF52D7009E853D /* Generics.swift */; };
 		C351DB521DEFCCEE009E853D /* FBStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB511DEFCCEE009E853D /* FBStorage.swift */; };
 		C3606CE81DBBBACD00AE2E8B /* ScriptComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3606CE71DBBBACD00AE2E8B /* ScriptComposeViewController.swift */; };
-		C362A4421DACD586002B1AF4 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362A4411DACD586002B1AF4 /* TabBarViewController.swift */; };
 		C362A4441DACD662002B1AF4 /* InitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362A4431DACD662002B1AF4 /* InitViewController.swift */; };
 		C36A24FE1DECB0CE00D2880E /* VerseInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36A24FD1DECB0CE00D2880E /* VerseInfo.swift */; };
 		C371D0931D44623F00F944CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C390907D1D2C9AF8000DFD15 /* Assets.xcassets */; };
@@ -108,7 +107,6 @@
 		C351DB4F1DEF52D7009E853D /* Generics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generics.swift; sourceTree = "<group>"; };
 		C351DB511DEFCCEE009E853D /* FBStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBStorage.swift; sourceTree = "<group>"; };
 		C3606CE71DBBBACD00AE2E8B /* ScriptComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptComposeViewController.swift; sourceTree = "<group>"; };
-		C362A4411DACD586002B1AF4 /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		C362A4431DACD662002B1AF4 /* InitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitViewController.swift; sourceTree = "<group>"; };
 		C36A24FD1DECB0CE00D2880E /* VerseInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseInfo.swift; sourceTree = "<group>"; };
 		C374B49F1D8CF4600083366E /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -252,7 +250,6 @@
 				C3355C581DE939380045E797 /* SearchViewController.swift */,
 				C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */,
 				C374B49F1D8CF4600083366E /* SettingsViewController.swift */,
-				C362A4411DACD586002B1AF4 /* TabBarViewController.swift */,
 				C3F53B8F1D372C0200E2F80D /* TextMatcher.swift */,
 				C39090781D2C9AF8000DFD15 /* ViewController.swift */,
 				C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */,
@@ -595,7 +592,6 @@
 				C3355C591DE939380045E797 /* SearchViewController.swift in Sources */,
 				C3F4FA221DF550CF00301445 /* ScriptViewController.swift in Sources */,
 				C39090791D2C9AF8000DFD15 /* ViewController.swift in Sources */,
-				C362A4421DACD586002B1AF4 /* TabBarViewController.swift in Sources */,
 				C351DB4E1DEE7668009E853D /* KeyboardObserver.swift in Sources */,
 				C316B6B21D3A11CC00E272A3 /* VerseDetailModalViewController.swift in Sources */,
 				C30963E11DF03112009CD474 /* ScriptCollection.swift in Sources */,

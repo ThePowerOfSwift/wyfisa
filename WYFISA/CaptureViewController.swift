@@ -36,18 +36,16 @@ class CaptureViewController: UIViewController, CaptureButtonDelegate {
         self.cam.focus(.ContinuousAutoFocus)
         self.cam.start()
         
-        
         // setup a temp datasource
         self.tableDataSource = VerseTableDataSource.init(frameSize: self.view.frame.size, ephemeral: true)
         self.captureVerseTable.dataSource = self.tableDataSource
         self.captureVerseTable.isExpanded = false
+        
+        // pause cam
+        self.cam.pause()
+
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        self.view.frame.size = self.frameSize
-        self.cam.pause()
-    }
 
     func configure(size: CGSize){
         self.frameSize = size
@@ -55,6 +53,8 @@ class CaptureViewController: UIViewController, CaptureButtonDelegate {
     
     // MARK: -CaptureButton Delegate
     func didPressCaptureButton(sender: InitViewController){
+        
+        self.view.frame.size = self.frameSize
         self.cam.resume()
         Animations.start(0.3){
             self.view.alpha = 1
@@ -63,18 +63,6 @@ class CaptureViewController: UIViewController, CaptureButtonDelegate {
 
     }
     
-    func didReleaseCaptureButton(sender: InitViewController, verses: [VerseInfo]) -> Bool {
-        self.cam.pause()
-        Animations.start(0.3){
-            self.view.alpha = 0
-        }
-        let needsUpdate = self.handleCaptureRelease()
-        self.captureVerseTable.clear()
-
-        return needsUpdate
-    }
-    
-    // MARK: -Recognition Overlay
     func startOCRCaptureAction(){
         if self.captureLock.tryLock() {
             
@@ -132,7 +120,6 @@ class CaptureViewController: UIViewController, CaptureButtonDelegate {
         
         
     }
-    
     
     
     // MARK: - OCRProcess
@@ -204,6 +191,29 @@ class CaptureViewController: UIViewController, CaptureButtonDelegate {
         
     }
     
+    func didReleaseCaptureButton(sender: InitViewController) -> [VerseInfo] {
+        var capturedVerses:[VerseInfo] = []
+        // stop camera
+        self.cam.pause()
+        Animations.start(0.3){
+            // fade out the view
+            self.view.alpha = 0
+        }
+        
+        // handle release
+        let hasNewMatches = self.handleCaptureRelease()
+        if hasNewMatches {
+            // get captured verses
+            if let ds = self.tableDataSource {
+                capturedVerses = ds.recentVerses
+            }
+        }
+        
+        // clear out the temp table
+        self.captureVerseTable.clear()
+        
+        return capturedVerses
+    }
     
     func handleCaptureRelease() -> Bool {
         
