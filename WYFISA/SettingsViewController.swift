@@ -276,6 +276,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 })
         } catch { print("update doc failed") }
     }
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return HIDE_STATUS_BAR
+    }
+    
     /*
     // MARK: - Navigation
 

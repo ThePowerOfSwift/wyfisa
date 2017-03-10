@@ -21,6 +21,7 @@
 		C323F3D71D86EE5B00A7EC95 /* SearchBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */; };
 		C3355C591DE939380045E797 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3355C581DE939380045E797 /* SearchViewController.swift */; };
 		C338AF381D964B2F004E5E97 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C338AF371D964B2F004E5E97 /* InfoViewController.swift */; };
+		C33C3AC21E727EBD00B3E3F1 /* SelectScriptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33C3AC11E727EBD00B3E3F1 /* SelectScriptViewController.swift */; };
 		C3466D5F1E650EA3005EF365 /* CaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3466D5E1E650EA3005EF365 /* CaptureSession.swift */; };
 		C3466D611E65109E005EF365 /* VerseRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3466D601E65109E005EF365 /* VerseRecognition.swift */; };
 		C34C52341D472E1A001E5F1A /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = C39090CF1D2C9C88000DFD15 /* tessdata */; };
@@ -101,6 +102,7 @@
 		C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchBarViewController.swift; path = ../SearchBarViewController.swift; sourceTree = "<group>"; };
 		C3355C581DE939380045E797 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		C338AF371D964B2F004E5E97 /* InfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoViewController.swift; path = ../InfoViewController.swift; sourceTree = "<group>"; };
+		C33C3AC11E727EBD00B3E3F1 /* SelectScriptViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectScriptViewController.swift; sourceTree = "<group>"; };
 		C3466D5E1E650EA3005EF365 /* CaptureSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureSession.swift; sourceTree = "<group>"; };
 		C3466D601E65109E005EF365 /* VerseRecognition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseRecognition.swift; sourceTree = "<group>"; };
 		C351DB4B1DEDE250009E853D /* CBStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBStorage.swift; sourceTree = "<group>"; };
@@ -252,6 +254,7 @@
 				C3F4FA211DF550CF00301445 /* ScriptViewController.swift */,
 				C3355C581DE939380045E797 /* SearchViewController.swift */,
 				C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */,
+				C33C3AC11E727EBD00B3E3F1 /* SelectScriptViewController.swift */,
 				C374B49F1D8CF4600083366E /* SettingsViewController.swift */,
 				C3F53B8F1D372C0200E2F80D /* TextMatcher.swift */,
 				C39090781D2C9AF8000DFD15 /* ViewController.swift */,
@@ -620,6 +623,7 @@
 				C39090771D2C9AF8000DFD15 /* AppDelegate.swift in Sources */,
 				C351DB4C1DEDE250009E853D /* CBStorage.swift in Sources */,
 				C3AEF17C1DEB8D0C007750A8 /* NotesViewController.swift in Sources */,
+				C33C3AC21E727EBD00B3E3F1 /* SelectScriptViewController.swift in Sources */,
 				C323F3D71D86EE5B00A7EC95 /* SearchBarViewController.swift in Sources */,
 				C3D5065A1D3932FB00A04C83 /* Animations.swift in Sources */,
 				C3F53B791D36973D00E2F80D /* VerseTableView.swift in Sources */,
