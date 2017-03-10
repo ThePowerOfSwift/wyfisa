@@ -9,7 +9,7 @@
 import UIKit
 import GPUImage
 
-class CaptureViewController: UIViewController, CaptureButtonDelegate {
+class CaptureViewController: UIViewController {
 
     @IBOutlet var captureBoxActive: UIImageView!
     @IBOutlet var captureBox: UIImageView!
@@ -32,17 +32,11 @@ class CaptureViewController: UIViewController, CaptureButtonDelegate {
         // configure camera
         self.captureView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
         self.cam.addCameraBlurTargets(self.captureView)
-        self.cam.zoom(1)
-        self.cam.focus(.ContinuousAutoFocus)
-        self.cam.start()
         
         // setup a temp datasource
         self.tableDataSource = VerseTableDataSource.init(frameSize: self.view.frame.size, ephemeral: true)
         self.captureVerseTable.dataSource = self.tableDataSource
         self.captureVerseTable.isExpanded = false
-        
-        // pause cam
-        self.cam.pause()
 
     }
     
@@ -52,7 +46,7 @@ class CaptureViewController: UIViewController, CaptureButtonDelegate {
     }
     
     // MARK: -CaptureButton Delegate
-    func didPressCaptureButton(sender: InitViewController){
+    func didPressCaptureButton(){
         
         self.view.frame.size = self.frameSize
         self.cam.resume()
@@ -191,7 +185,7 @@ class CaptureViewController: UIViewController, CaptureButtonDelegate {
         
     }
     
-    func didReleaseCaptureButton(sender: InitViewController) -> [VerseInfo] {
+    func didReleaseCaptureButton() -> [VerseInfo] {
         var capturedVerses:[VerseInfo] = []
         // stop camera
         self.cam.pause()
@@ -231,9 +225,6 @@ class CaptureViewController: UIViewController, CaptureButtonDelegate {
         if self.session.newMatches > 0 && self.session.active {
             hasNewMatches = true
         }
-        
-        // update session
-        self.session.updateCaptureId()
         
         self.session.newMatches = 0
         self.session.active = false

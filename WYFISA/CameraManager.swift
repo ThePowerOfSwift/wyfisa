@@ -24,16 +24,21 @@ class CameraManager {
     var simImage: UIImage! = UIImage(named: "oneanother")
     var state: CameraState = .Stopped
     var shouldResumeOnAppFG = false
+    var cameraZoom:CGFloat = 1.0
+    var cameraFocusMode: AVCaptureFocusMode = .ContinuousAutoFocus
+    
     static let sharedInstance = CameraManager()
 
 
-    init(){
+    init(zoom:CGFloat = 1, focus:AVCaptureFocusMode = .ContinuousAutoFocus){
         
         // init a still image camera
         self.camera = GPUImageStillCamera()
         self.camera.addTarget(filter)
         self.camera.outputImageOrientation = .Portrait;
         
+        self.cameraZoom = zoom
+        self.cameraFocusMode = focus
         
     }
     
@@ -103,6 +108,8 @@ class CameraManager {
     
     func start(){
         self.camera.startCameraCapture()
+        self.zoom(self.cameraZoom)
+        self.focus(self.cameraFocusMode)
         self.state = .InUse
     }
     
@@ -112,8 +119,15 @@ class CameraManager {
     }
     
     func resume(){
-        self.camera.resumeCameraCapture()
+        
+        // start camera if stopped, or resume
+        if self.state == .Stopped {
+            self.start()
+        } else {
+            self.camera.resumeCameraCapture()
+        }
         self.state = .InUse
+
     }
     
     func stop(){

@@ -67,7 +67,8 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.mediaAccessory.image =  verse.accessoryImage
             self.backgroundColor = UIColor.clearColor()
             self.mediaAccessory.layer.borderColor = UIColor.lightGrayColor().CGColor
-            self.labelText.hidden = true
+
+
         case .Note:
             // all the text is in header
             self.labelHeader.lineBreakMode = .ByWordWrapping
@@ -125,6 +126,12 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.labelText.text = verse.text
             self.labelText.textColor = self.themer.navyForLightOrWhite(1.0)
             self.quoteImage.hidden = true
+        }
+        
+        if verse.category == .Image {
+            self.quoteImage.hidden = true
+            self.labelText.hidden = true
+            self.labelHeader.hidden = true
         }
         
         if verse.category == .Note { // add opening quote

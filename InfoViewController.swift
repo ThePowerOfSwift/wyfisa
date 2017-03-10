@@ -8,6 +8,7 @@
 
 import UIKit
 import Social
+import GPUImage
 
 func defaultDoneCallback(){}
 
@@ -19,11 +20,10 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet var navyBrush: UIBarButtonItem!
     @IBOutlet var tmpImageView: UIImageView!
     @IBOutlet var highlightBrush: UIBarButtonItem!
-    
     @IBOutlet var navToolbar: UIToolbar!
+    
     var verseInfo: VerseInfo? = nil
     var themer = WYFISATheme.sharedInstance
-    let cam = CameraManager.sharedInstance
     
     var doneCallback: ()->Void = defaultDoneCallback
     var originalImage: UIImage? = nil
@@ -44,39 +44,25 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        if self.isUpdate == false || self.snaphot == nil {
-            // resume cam if on paused page
-            self.cam.resume()
-            self.snaphot = self.cam.imageFromFrame()
-            self.cam.pause()
+        
+        // check if editing saved image
+        if self.isUpdate == true || self.snaphot != nil {
+            self.capturedImage.image = self.snaphot
+            self.originalImage = self.snaphot
+            
+            if let image = self.verseInfo?.overlayImage {
+                self.tmpImageView.image = image
+            }
+ 
         }
-        
-        self.capturedImage.image = self.snaphot
-        self.originalImage = self.snaphot
-        
-        if let image = self.verseInfo?.overlayImage {
-            self.tmpImageView.image = image
-        }
-        
-        
+ 
     }
-    override func viewWillAppear(animated: Bool) {
 
-    }
-    
-    func setImageToSnapshot(){
 
-    }
-    
     func configure(size: CGSize){
         self.frameSize = size
     }
     
-    override func viewDidAppear(animated: Bool) {
-        
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

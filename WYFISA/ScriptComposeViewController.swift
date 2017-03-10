@@ -223,10 +223,17 @@ class ScriptComposeViewController: UIViewController,
     
     func addVersesToScript(verses: [VerseInfo]) {
         
+        // verses added will be part of same session
+        let currentSession = self.session.updateCaptureId()
+        
         // carry verses over to editor table
         if let ds = self.tableDataSource {
             for verseInfo in verses {
+                
                 ds.appendVerse(verseInfo)
+                verseInfo.session = currentSession
+                self.verseTable.updateVersePriority(verseInfo.id, priority: verseInfo.priority)
+
                 dispatch_async(dispatch_get_main_queue()) {
                     self.verseTable.addSection()
                     self.verseTable.updateVersePriority(verseInfo.id, priority: verseInfo.priority)
@@ -272,8 +279,8 @@ class ScriptComposeViewController: UIViewController,
     
     func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
         
+        /*
         let option = pickerView.selectedOption()
-        self.cam.pause()
 
         func toggleViews(hidden: Bool) {
             Animations.start(0.3){
@@ -294,6 +301,7 @@ class ScriptComposeViewController: UIViewController,
             self.captureBox.alpha = 0
             toggleViews(true)
         }
+         */
     }
     
     func hideGradients(hidden: Bool){
