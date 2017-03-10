@@ -1216,10 +1216,10 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="3788AA12-D292-4FCE-B354-AA0785470277" translatesAutoresizingMaskIntoConstraints="NO" id="PsW-mK-lvd">
+                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="20FAAB54-3CC2-41CF-AFE0-8E93056E41EB" translatesAutoresizingMaskIntoConstraints="NO" id="PsW-mK-lvd">
                                                 <rect key="frame" x="34" y="22.5" width="274" height="225"/>
                                             </imageView>
-                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FA40F2B0-8C30-4D7D-A86F-049362A56B40" translatesAutoresizingMaskIntoConstraints="NO" id="bhv-SC-t6e">
+                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="D40884C7-2340-43D1-8F8E-2F223DA5B29C" translatesAutoresizingMaskIntoConstraints="NO" id="bhv-SC-t6e">
                                                 <rect key="frame" x="34" y="22.5" width="274" height="225"/>
                                             </imageView>
                                         </subviews>
@@ -1244,9 +1244,6 @@
                                                 <integer key="value" value="10"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <outletCollection property="gestureRecognizers" destination="QsQ-xB-d8A" appends="YES" id="tG5-jT-Dh0"/>
-                                        </connections>
                                     </view>
                                 </subviews>
                             </stackView>
@@ -1341,11 +1338,6 @@
                                     <constraint firstItem="sNw-Go-KTm" firstAttribute="width" secondItem="nS7-BP-8AX" secondAttribute="width" id="dIo-xw-oRM"/>
                                     <constraint firstItem="sNw-Go-KTm" firstAttribute="centerX" secondItem="nS7-BP-8AX" secondAttribute="centerX" id="vWr-Y8-CdH"/>
                                 </constraints>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="ble-8M-TsW" appends="YES" id="dIS-Jb-NC7"/>
-                                    <outletCollection property="gestureRecognizers" destination="oPW-jI-Ch4" appends="YES" id="ooT-KX-PHr"/>
-                                    <outletCollection property="gestureRecognizers" destination="x8C-DS-wEm" appends="YES" id="VHo-Nf-j3C"/>
-                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1384,7 +1376,7 @@
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="IeP-Dh-9ck" appends="YES" id="HZz-9z-IqC"/>
-                            <outletCollection property="gestureRecognizers" destination="1l8-lY-kMM" appends="YES" id="nUS-B0-nxe"/>
+                            <outletCollection property="gestureRecognizers" destination="Kcz-4f-kc0" appends="YES" id="oYH-1l-RKR"/>
                         </connections>
                     </view>
                     <connections>
@@ -1395,6 +1387,7 @@
                         <outlet property="captureContainerHeightConstraint" destination="wEB-AG-4xz" id="YAQ-Lg-FTc"/>
                         <outlet property="captureImage" destination="26j-Cd-eU8" id="fju-0M-b2G"/>
                         <outlet property="captureViewOverlay" destination="fhI-5F-Vcr" id="EMf-d4-TYk"/>
+                        <outlet property="clearButton" destination="6cI-7V-uZw" id="scV-fj-W2p"/>
                         <outlet property="footerOverlay" destination="VYX-hj-F83" id="0s3-m8-dkQ"/>
                         <outlet property="gradientMask" destination="nS7-BP-8AX" id="Eus-MK-vsF"/>
                         <outlet property="noteTextInput" destination="Nrk-vu-fm4" id="bwE-u5-gpv"/>
@@ -1408,34 +1401,14 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mLY-iA-uzW" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer direction="left" id="1l8-lY-kMM">
-                    <connections>
-                        <action selector="didSwipePickerView:" destination="hxq-w5-FtD" id="QJo-s3-feU"/>
-                    </connections>
-                </swipeGestureRecognizer>
                 <swipeGestureRecognizer direction="right" id="IeP-Dh-9ck">
                     <connections>
-                        <action selector="didSwipePickerView:" destination="hxq-w5-FtD" id="p9v-bp-Z2Q"/>
+                        <action selector="didSwipeRight:" destination="hxq-w5-FtD" id="wZl-EZ-hRR"/>
                     </connections>
                 </swipeGestureRecognizer>
-                <tapGestureRecognizer id="ble-8M-TsW">
+                <swipeGestureRecognizer direction="left" id="Kcz-4f-kc0">
                     <connections>
-                        <action selector="hideGradientMask:" destination="hxq-w5-FtD" id="wt1-wn-YTG"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <swipeGestureRecognizer direction="up" id="oPW-jI-Ch4">
-                    <connections>
-                        <action selector="hideGradientMask:" destination="hxq-w5-FtD" id="Elm-oe-cSh"/>
-                    </connections>
-                </swipeGestureRecognizer>
-                <swipeGestureRecognizer direction="down" id="x8C-DS-wEm">
-                    <connections>
-                        <action selector="hideGradientMask:" destination="hxq-w5-FtD" id="Qbl-F5-eRG"/>
-                    </connections>
-                </swipeGestureRecognizer>
-                <swipeGestureRecognizer direction="down" id="QsQ-xB-d8A">
-                    <connections>
-                        <action selector="hideGradientMask:" destination="hxq-w5-FtD" id="3QB-zC-eEx"/>
+                        <action selector="didSwipeLeft:" destination="hxq-w5-FtD" id="sTO-29-Cz4"/>
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
@@ -1949,7 +1922,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="3788AA12-D292-4FCE-B354-AA0785470277" width="171" height="84">
+        <image name="20FAAB54-3CC2-41CF-AFE0-8E93056E41EB" width="171" height="84">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -2960,9 +2933,7 @@ AAAAAAAAAAAAAAAAAOq9A
         </image>
         <image name="Capture" width="375" height="667"/>
         <image name="Chevron-Right" width="10" height="16"/>
-        <image name="DoubleLeft" width="13" height="23"/>
-        <image name="DoubleRight" width="13" height="23"/>
-        <image name="FA40F2B0-8C30-4D7D-A86F-049362A56B40" width="171" height="84">
+        <image name="D40884C7-2340-43D1-8F8E-2F223DA5B29C" width="171" height="84">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -3971,6 +3942,8 @@ NOo56kHqROpJ6ljqXOpj6mvqeOp96n/qgeqG6o7qkeqW6p7qoeqz6rbquwAAAAAAAAIBAAAAAAAAAEEA
 AAAAAAAAAAAAAAAAAOq9A
 </mutableData>
         </image>
+        <image name="DoubleLeft" width="13" height="23"/>
+        <image name="DoubleRight" width="13" height="23"/>
         <image name="Find" width="375" height="667"/>
         <image name="Gradient" width="375" height="369"/>
         <image name="Gradient-navy" width="375" height="531"/>

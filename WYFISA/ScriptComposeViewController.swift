@@ -29,6 +29,7 @@ class ScriptComposeViewController: UIViewController,
     @IBOutlet var notesButton: UIButton!
     @IBOutlet var captureContainerHeightConstraint: NSLayoutConstraint!
     
+    @IBOutlet var clearButton: UIButton!
     @IBOutlet var footerOverlay: UIView!
     @IBOutlet var captureViewOverlay: GPUImageView!
     var scrollViewEscapeMask: UIView!
@@ -138,18 +139,22 @@ class ScriptComposeViewController: UIViewController,
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func didPressClearButton(sender: AnyObject) {
+    @IBAction func didPressClearButton(sender: UIButton) {
         
         // toggle editing mode
         self.isEditingMode = !self.isEditingMode
 
+        if self.isEditingMode == true {
+            let buttonIcon = UIImage.init(named: "ios7-trash-fire")
+            sender.setImage(buttonIcon, forState: .Normal)
+        } else {
+            let buttonIcon = UIImage.init(named: "ios7-trash-outline")
+            sender.setImage(buttonIcon, forState: .Normal)
+        }
+        
         // update editing state
         self.verseTable.setEditing(self.isEditingMode, animated: true)
         
-        if self.isEditingMode == true {
-            // hide capture container if showing
-            //self.pickerView.selectItemByOption(.Script, animated: true)
-        }
     }
 
     
@@ -329,29 +334,18 @@ class ScriptComposeViewController: UIViewController,
         }
     }
 
-    @IBAction func didSwipePickerView(sender: UISwipeGestureRecognizer) {
-        var selectedItem = self.pickerView.selectedItem
-
-        if sender.direction == .Right && selectedItem > 0 {
-            selectedItem -= 1
-            Animations.start(0.30){
-                self.pickerView.scrollToItem(selectedItem)
-            }
-            self.pickerView.selectItem(selectedItem)
-        }
-        if sender.direction == .Left && selectedItem < 2 {
-            selectedItem += 1
-            Animations.start(0.30){
-                self.pickerView.scrollToItem(selectedItem)
-            }
-            self.pickerView.selectItem(selectedItem)
-        }
-        
-        if sender.direction == .Up || sender.direction == .Down {
-            self.pickerView.selectItem(0, animated: true)
-        }
-
-        
+    @IBAction func didSwipeRight(sender: UISwipeGestureRecognizer) {
+        self.isEditingMode = true
+        self.verseTable.setEditing(self.isEditingMode, animated: true)
+        let buttonIcon = UIImage.init(named: "ios7-trash-fire")
+        self.clearButton.setImage(buttonIcon, forState: .Normal)
+    }
+    
+    @IBAction func didSwipeLeft(sender: UISwipeGestureRecognizer) {
+        self.isEditingMode = false
+        self.verseTable.setEditing(self.isEditingMode, animated: true)
+        let buttonIcon = UIImage.init(named: "ios7-trash-outline")
+        self.clearButton.setImage(buttonIcon, forState: .Normal)
     }
 
     // MARK: - navigation
@@ -528,8 +522,6 @@ class ScriptComposeViewController: UIViewController,
     func didRemoveCell(sender: VerseTableViewCell) {
         // just removed one cell
         self.syncWithDataSource()
-        self.exitEditingMode()
-        
     }
     
     // MARK: - notes handler

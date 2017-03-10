@@ -96,7 +96,7 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     @IBAction func didReleaseCaptureButton(sender: AnyObject){
         
         self.pickerView.hidden = false
-        self.fxView.hidden = false
+        self.fxView.hidden = true
 
         let normalButton = UIImage.init(named: "Oval 1")
         self.captureButton.setImage(normalButton, forState: .Normal)
