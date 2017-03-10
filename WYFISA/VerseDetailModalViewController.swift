@@ -208,7 +208,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     }
 
     override func prefersStatusBarHidden() -> Bool {
-        return true
+        return HIDE_STATUS_BAR
     }
     override func viewDidLayoutSubviews() {
         self.chapterTextView.setContentOffset(CGPointZero, animated: false)

@@ -8,6 +8,8 @@
 
 import UIKit
 
+let HIDE_STATUS_BAR = false
+
 enum Version: Int {
     case KJV = 0, ESV, NIV, NLT
     func text() -> String {

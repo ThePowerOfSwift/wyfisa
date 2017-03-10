@@ -12,7 +12,7 @@ import UIKit
 class ScriptCollection: UICollectionView, UICollectionViewDelegate, UICollectionViewDataSource {
 
     let themer: WYFISATheme = WYFISATheme.sharedInstance
-    let storage: CBStorage = CBStorage(databaseName: "verses")
+    let storage: CBStorage = CBStorage(databaseName: "scripts")
     var displayedVerses: [VerseInfo] = [VerseInfo]()
     var lastCellID: CellIdentifier = .None
     

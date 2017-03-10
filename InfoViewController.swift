@@ -268,7 +268,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
 
     override func prefersStatusBarHidden() -> Bool {
-        return true
+        return HIDE_STATUS_BAR
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

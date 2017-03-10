@@ -354,13 +354,17 @@ class ScriptComposeViewController: UIViewController,
     }
     
     override func prefersStatusBarHidden() -> Bool {
-        return true
+        return HIDE_STATUS_BAR
     }
     
+    @IBAction func unwindFromReader(segue: UIStoryboardSegue) {
+        //
+    }
     
     @IBAction func unwindFromSearchAndQuit(segue: UIStoryboardSegue) {
         //
     }
+    
     
     @IBAction func unwindFromSearchAndSave(segue: UIStoryboardSegue) {
         // add verse to datasource

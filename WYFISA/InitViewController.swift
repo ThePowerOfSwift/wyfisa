@@ -96,9 +96,9 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     @IBAction func didReleaseCaptureButton(sender: AnyObject){
         
         self.pickerView.hidden = false
-        self.fxView.hidden = true
+        self.fxView.hidden = false
 
-        let normalButton = UIImage.init(named: "Oval 1")
+        let normalButton = UIImage.init(named: "OvalSmall")
         self.captureButton.setImage(normalButton, forState: .Normal)
 
         // decide what to do depending on what state we are in
@@ -133,7 +133,7 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     
     // MARK: - Navigation
     override func prefersStatusBarHidden() -> Bool {
-        return true
+        return HIDE_STATUS_BAR
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

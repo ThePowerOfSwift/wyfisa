@@ -81,7 +81,7 @@ class NotesViewController: UIViewController {
     }
     
     override func prefersStatusBarHidden() -> Bool {
-        return true
+        return HIDE_STATUS_BAR
     }
     
     // MARK: - Navigation
