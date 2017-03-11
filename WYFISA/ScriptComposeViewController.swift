@@ -39,7 +39,8 @@ class ScriptComposeViewController: UIViewController,
     let settings = SettingsManager.sharedInstance
     var session = CaptureSession.sharedInstance
     let db = DBQuery.sharedInstance
-    
+    let storage = CBStorage.init(databaseName: SCRIPTS_DB, skipSetup: true)
+
     var scriptTitle: String? = nil
     var tableDataSource: VerseTableDataSource? = nil
     var isEditingMode: Bool = false
@@ -48,7 +49,7 @@ class ScriptComposeViewController: UIViewController,
     var updateLock = NSLock()
     var navNext = notifyCallback
     var kbo: KeyboardObserver? = nil
-    var scriptID: String = randomString(10)
+    var scriptId: String? = nil
 
     
     override func viewDidLoad() {
@@ -56,12 +57,14 @@ class ScriptComposeViewController: UIViewController,
         self.themeView()
 
         // setup datasource
-        self.tableDataSource = VerseTableDataSource.init(frameSize: self.view.frame.size)
+        self.tableDataSource = VerseTableDataSource.init(frameSize: self.view.frame.size, scriptId: scriptId!)
         self.tableDataSource?.cellDelegate = self
         self.verseTable.dataSource = self.tableDataSource
         self.verseTable.isExpanded = true
         self.verseTable.footerHeight = self.footerOverlay.frame.height
         self.verseTable.scrollNotifier = self.tableScrollNotifierFunc
+        self.verseTable.reloadData()
+        self.session.currentId = UInt64(self.tableDataSource!.nVerses+1)
         
         // setup picker view
         self.pickerView.dataSource = self
@@ -85,19 +88,14 @@ class ScriptComposeViewController: UIViewController,
         self.themeView()
 
     }
+
     
     override func viewDidAppear(animated: Bool) {
  
         
         self.updateSessionMatches()
-        if let ds = self.tableDataSource {
-            self.session.currentId = UInt64(ds.nVerses+1)
-        }
         
-        
-        self.verseTable.reloadData()
-        
-        self.pickerView.selectItemByOption(.VerseOCR, animated: true)
+        // self.pickerView.selectItemByOption(.VerseOCR, animated: true)
         
         // keyboard
         self.initKeyboardObserver()
@@ -228,48 +226,51 @@ class ScriptComposeViewController: UIViewController,
     
     func addVersesToScript(verses: [VerseInfo]) {
         
-        // verses added will be part of same session
-        let currentSession = self.session.updateCaptureId()
-        
         // carry verses over to editor table
-        if let ds = self.tableDataSource {
-            for verseInfo in verses {
-                
-                ds.appendVerse(verseInfo)
-                verseInfo.session = currentSession
-                self.verseTable.updateVersePriority(verseInfo.id, priority: verseInfo.priority)
+        for verseInfo in verses {
+            
+            // add verse to db
+            self.addVerseToDatastore(verseInfo)
+            
+        }
 
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.verseTable.addSection()
-                    self.verseTable.updateVersePriority(verseInfo.id, priority: verseInfo.priority)
-                }
+    }
+    
+    
+    func addVerseToDatastore(verse: VerseInfo){
+        // add verse to datasource
+        verse.scriptId = self.scriptId
+        verse.session = self.session.updateCaptureId()
+        self.tableDataSource?.appendVerse(verse)
+        self.verseTable.updateVersePriority(verse.id, priority: verse.priority)
+
+        
+        // add the section to capture table and then reload
+        dispatch_async(dispatch_get_main_queue()) {
+            if let table = self.verseTable {
+                table.addSection()
             }
-
         }
         self.verseTable.sortByPriority()
         self.verseTable.reloadData()
         self.verseTable.scrollToEnd()
-
+        
+        // update script count
+        storage.incrementScriptCountAndTimestamp(self.scriptId!, ts: verse.createdAt)
     }
     
     func takePhoto(){
         
+        // create a verseInfo with an image
         let verseInfo = VerseInfo.init(id: "0", name: "", text: nil)
-        verseInfo.session = self.session.updateCaptureId()
         verseInfo.category = .Image
         let captureImage =  self.cam.imageFromFrame()
         verseInfo.image = captureImage
         verseInfo.accessoryImage = captureImage
-        self.tableDataSource?.appendVerse(verseInfo)
         
-        // add the section to capture table and then reload pauseVC
-        dispatch_async(dispatch_get_main_queue()) {
-            self.verseTable.addSection()
-            self.verseTable.reloadData()
-            self.verseTable.scrollToEnd()
-        }
-        
-        self.pickerView.selectItemByOption(.VerseOCR, animated: true)
+        // add to ds
+        self.addVerseToDatastore(verseInfo)
+
     }
     
     
@@ -374,16 +375,7 @@ class ScriptComposeViewController: UIViewController,
         if let verseInfo = searchVC.verseInfo {
             
             // add verse to datasource
-            verseInfo.session = self.session.updateCaptureId()
-            
-            self.tableDataSource?.appendVerse(verseInfo)
-            
-            // add the section to capture table and then reload pauseVC
-            dispatch_async(dispatch_get_main_queue()) {
-                if let table = self.verseTable {
-                    table.addSection()
-                }
-            }
+            self.addVerseToDatastore(verseInfo)
             
             //self.captureVC?.session.newMatches += 1
             self.session.matches.append(verseInfo.id)
@@ -394,9 +386,7 @@ class ScriptComposeViewController: UIViewController,
                 self.db.crossReferencesForVerse(verseInfo.id)
                 self.db.versesForChapter(verseInfo.id)
             }
-            
-            self.verseTable.reloadData()
-            self.verseTable.scrollToEnd()
+
         }
     }
     
@@ -409,17 +399,7 @@ class ScriptComposeViewController: UIViewController,
         if let verseInfo = vc.verseInfo {
             
             if vc.isUpdate == false {
-                // add verse to datasource
-                verseInfo.session = self.session.updateCaptureId()
-                
-                self.tableDataSource?.appendVerse(verseInfo)
-                
-                // add the section to capture table and then reload pauseVC
-                dispatch_async(dispatch_get_main_queue()) {
-                    if let table = self.verseTable {
-                        table.addSection()
-                    }
-                }
+                self.addVerseToDatastore(verseInfo)
             } else {
                 // updating data at this session
                 self.tableDataSource?.updateRecentVerse(verseInfo)
@@ -437,22 +417,8 @@ class ScriptComposeViewController: UIViewController,
         let vc = segue.sourceViewController as! InfoViewController
         
         if let verseInfo = vc.verseInfo {
-            
-            if vc.isUpdate == false {
-                // add verse to datasource
-                verseInfo.session = self.session.updateCaptureId()
-                self.tableDataSource?.appendVerse(verseInfo)
-                
-                // add the section to capture table and then reload pauseVC
-                dispatch_async(dispatch_get_main_queue()) {
-                    if let table = self.verseTable {
-                        table.addSection()
-                    }
-                }
-            } else {
-                // updating data at this session
-                self.tableDataSource?.updateRecentVerse(verseInfo)
-            }
+            // updating the photo verse
+            self.tableDataSource?.updateRecentVerse(verseInfo)
             self.verseTable.reloadData()
         }
     }
@@ -490,6 +456,7 @@ class ScriptComposeViewController: UIViewController,
                 }
                 toVc.verseInfo = verse
             }
+
         case "searchsegue":
             // give last verse from datasource
             if let ds = self.tableDataSource {
@@ -544,16 +511,7 @@ class ScriptComposeViewController: UIViewController,
             verseInfo.category = .Note
             
             // add verse to datasource
-            verseInfo.session = self.session.updateCaptureId()
-            
-            self.tableDataSource?.appendVerse(verseInfo)
-            
-            // add the section to capture table and then reload pauseVC
-            dispatch_async(dispatch_get_main_queue()) {
-                if let table = self.verseTable {
-                    table.addSection()
-                }
-            }
+            self.addVerseToDatastore(verseInfo)
             
         }
         

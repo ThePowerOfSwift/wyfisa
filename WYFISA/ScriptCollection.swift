@@ -22,17 +22,15 @@ class ScriptCollection: UICollectionView, UICollectionViewDelegate, UICollection
         super.init(coder: aDecoder)
         self.delegate = self
         self.dataSource = self
-        
-        // setup verse items to display
-        self.initDisplayVerses()
+
     }
 
-    func initDisplayVerses(){
+    func initDisplayVerses(scriptId: String){
         self.displayedVerses = [VerseInfo]()
         self.lastCellID = .None
         
         // apply layout ID's to cells
-        for verse in storage.getRecentVerses() {
+        for verse in storage.getVersesForScript(scriptId) {
             let cellID = self.lastCellID.getNextID(verse)
             verse.cellID = cellID
             

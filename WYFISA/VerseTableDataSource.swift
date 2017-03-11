@@ -20,17 +20,17 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
     var hasHeader: Bool = true
     var cellDelegate: VerseTableViewCellDelegate?
     var themer = WYFISATheme.sharedInstance
-    var storage: CBStorage = CBStorage(databaseName: "scripts")
+    var storage = CBStorage.init(databaseName: SCRIPTS_DB)
     var ephemeral: Bool = false
     
-    init(frameSize: CGSize, ephemeral: Bool = false) {
+    init(frameSize: CGSize, scriptId: String?, ephemeral: Bool = false) {
         super.init()
         self.initHeaderHeight = frameSize.height
         self.initFrameWidth = frameSize.width
         if ephemeral == false {
-            self.storage.replicate(.Dual)
-            self.storage.createScriptView()
-            self.recentVerses = storage.getRecentVerses()
+            if let id = scriptId {
+                self.recentVerses = storage.getVersesForScript(id)
+            }
         }
         self.ephemeral = ephemeral
         self.nVerses = self.recentVerses.count
@@ -149,7 +149,7 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
         if editingStyle == .Delete {
             
             // remove from storage
-            let verseKey = self.recentVerses[indexPath.section-1].createdAt
+            let verseKey = self.recentVerses[indexPath.section-1].key
             self.storage.removeVerse(verseKey)
 
             // delete cell from datasource

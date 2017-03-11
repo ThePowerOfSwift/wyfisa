@@ -19,24 +19,56 @@ class CBStorage {
     var pull: CBLReplication?
     var auth: CBLAuthenticatorProtocol?
     var databaseName: String
-   // let firedb: FBStorage = FBStorage.sharedInstance
     
-    init(databaseName: String){
+    class func MakeCBStorage(databaseName: String) -> CBStorage {
+        let storage = CBStorage(databaseName: databaseName)
+        
+        switch databaseName {
+        case SCRIPTS_DB:
+            storage.replicate(.Dual)
+            storage.createScriptView()
+        default:
+            print("UNKNOWN DB", databaseName)
+        }
+        
+        return storage
+
+    }
+    init(databaseName: String, skipSetup: Bool = false){
         self.databaseName = databaseName
         do {
             let db = try CBLManager.sharedInstance().databaseNamed(databaseName)
             self.db = db
             // try db.deleteDatabase()
-
-            // auth
-            self.auth = CBLAuthenticator.basicAuthenticatorWithName("ray", password: "pass")
             
+            // setup db based on type
+            if skipSetup == false {
+                switch databaseName {
+                case SCRIPTS_DB:
+                    self.replicate(.Dual)
+                    self.createScriptView()
+                default:
+                    print("UNKNOWN DB", databaseName)
+                }
+            }
         } catch {
             // TODO: Handle this can be really bad!
             print("Unable to create database")
         }
+
+        
     }
     
+    func authUser(uid: String, password: String){
+        self.auth = CBLAuthenticator
+            .basicAuthenticatorWithName(uid,
+                                        password: password)
+    }
+    
+    
+    func verseByScript(){
+        
+    }
     func createScriptView(){
         
         // create views
@@ -46,6 +78,20 @@ class CBStorage {
                 emit(ts, doc)
             }
             }, version: "2")
+        
+        let scriptView = db?.viewNamed("scriptVerses")
+        scriptView?.setMapBlock({ (doc, emit) in
+            if let scriptId = doc["script"] {
+                emit(scriptId, doc["_id"])
+            }
+            }, version: "3")
+        
+        let scriptsForTopic = db?.viewNamed("scriptsForTopic")
+        scriptsForTopic?.setMapBlock({ (doc, emit) in
+            if let topicId = doc["topic"] {
+                emit(topicId, doc["_id"])
+            }
+            }, version: "1")
     }
     
     func createBibleViews(){
@@ -87,6 +133,10 @@ class CBStorage {
     
     func replicate(mode: StorageReplicationMode){
         
+        if self.auth == nil {
+            return // not authenticated
+        }
+        
         let url = NSURL(string: "http://10.0.0.5:4984/\(self.databaseName)")!
         
         switch mode {
@@ -115,26 +165,75 @@ class CBStorage {
         return verse
     }
     
-    func getRecentVerses() -> [VerseInfo]{
-        var recentVerses: [VerseInfo] = [VerseInfo]()
+    func getScriptDoc(id: String) -> UserScript? {
+        var script:UserScript? = nil
+        if let doc = self.db?.documentWithID(id) {
+            script = UserScript.DocPropertiesToObj(doc.properties!)
+        }
+        return script
+    }
+    // func getUserTopics
+    
+    func getScriptsForTopic(topicId: String) -> [UserScript] {
+        var topicScripts: [UserScript] = [UserScript]()
         if let db = self.db {
-            let query = db.viewNamed("versesByCreated").createQuery()
+            let query = db.viewNamed("scriptsForTopic").createQuery()
+            query.keys = [topicId]
             do {
                 let result = try query.run()
                 while let row = result.nextRow() {
-                    let doc = row.value
-                    if let verse = VerseInfo.DocPropertiesToObj(doc) {
-                        verse.image = self.getImageAttachment(verse.createdAt, named: "original.jpg")
-                        verse.overlayImage = self.getImageAttachment(verse.createdAt, named: "overlay.jpg")
-                        verse.accessoryImage = self.getImageAttachment(verse.createdAt, named: "accessory.jpg")
-                        recentVerses.append(verse)
+                    let scriptId = row.value as! String
+                    
+                    if let script = self.getScriptDoc(scriptId) {
+                        topicScripts.append(script)
                     }
                 }
             } catch {}
         }
-        return recentVerses
+        
+        return topicScripts
+    }
+    
+    func getVersesForScript(scriptId: String) -> [VerseInfo]{
+        var scriptVerses: [VerseInfo] = [VerseInfo]()
+        if let db = self.db {
+            let query = db.viewNamed("scriptVerses").createQuery()
+            query.keys = [scriptId]
+            do {
+                let result = try query.run()
+                while let row = result.nextRow() {
+                    let verseId = row.value as! String
+
+                    if let verse = self.getVerseDoc(verseId) {
+                        verse.image = self.getImageAttachment(verse.key, named: "original.jpg")
+                        verse.overlayImage = self.getImageAttachment(verse.key, named: "overlay.jpg")
+                        verse.accessoryImage = self.getImageAttachment(verse.key, named: "accessory.jpg")
+                        scriptVerses.append(verse)
+                    }
+                }
+            } catch {}
+        }
+        return scriptVerses
     }
 
+    func putScript(script: UserScript){
+        Timing.runAfter(0){
+            self._putScript(script)
+        }
+    }
+    
+    private func _putScript(script: UserScript) {
+        
+        if let doc = db?.documentWithID(script.id) {
+            let properties =  script.toDocProperties()
+            do {
+                try doc.putProperties(properties)
+            } catch {
+                print("save script failed")
+            }
+        }
+    }
+    
     // put verse into a database
     func putVerse(verse: VerseInfo){
         Timing.runAfter(0){
@@ -143,10 +242,9 @@ class CBStorage {
     }
     
     // non thread-safe implementation
-    func _putVerse(verse: VerseInfo) {
+    private func _putVerse(verse: VerseInfo) {
         // store in database
-        let key = verse.createdAt
-        if let doc = db?.documentWithID(key) {
+        if let doc = db?.documentWithID(verse.key) {
             let properties =  verse.toDocProperties()
             do {
                 try doc.putProperties(properties)
@@ -201,6 +299,37 @@ class CBStorage {
         }
     }
     
+    func incrementScriptCountAndTimestamp(id: String, ts: String){
+        if let doc = db?.existingDocumentWithID(id) {
+            do {
+                try doc.update({
+                    (newRevision) -> Bool in
+                    newRevision["count"] = (newRevision["count"] as! Int) + 1
+                    newRevision["lastUpdated"] = ts
+                    return true
+                })
+            } catch {
+                print("update doc failed")
+            }
+            
+        }
+    }
+    
+    func updateScriptTitle(id: String, title: String){
+        if let doc = db?.existingDocumentWithID(id) {
+            do {
+                try doc.update({
+                    (newRevision) -> Bool in
+                    newRevision["title"] = title
+                    return true
+                })
+            } catch {
+                print("update doc failed")
+            }
+            
+        }
+    }
+    
     func updateVerseNote(id: String, note: String){
 
         if let doc = db?.existingDocumentWithID(id) {
@@ -245,16 +374,3 @@ class CBStorage {
     
 
 }
-
-
-
-/*
- let phoneView = db.viewNamed("phones")
- phoneView.setMapBlock({ (doc, emit) in
- if let phones = doc["phones"] as? [String] {
- for phone in phones {
- emit(phone, doc["name"])
- }
- }
- }, version: "2")
- */

@@ -15,18 +15,22 @@ protocol CaptureButtonDelegate: class {
     func didReleaseCaptureButton(sender: InitViewController) -> [VerseInfo]
 }
 
-class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDataSource, AKPickerViewDelegate {
+class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDataSource, AKPickerViewDelegate, UITextFieldDelegate {
 
     @IBOutlet var captureButton: UIButton!
     @IBOutlet var pickerView: AKPickerView!
     @IBOutlet var actionScrollView: UIScrollView!
     @IBOutlet var fxView: UIVisualEffectView!
+    @IBOutlet var readerViewContainer: UIView!
+    @IBOutlet var scriptTitle: UITextField!
     
     var ocrVC: CaptureViewController? = nil
     var scriptVC: ScriptComposeViewController? = nil
+    var readerVC: ScriptViewController? = nil
     var photoVC: PhotoCaptureViewController? = nil
     var captureDelegate: CaptureButtonDelegate? = nil
-
+    var activeScriptId: String? = nil
+    let storage = CBStorage.init(databaseName: SCRIPTS_DB, skipSetup: true)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +65,18 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         self.photoVC?.configure(self.view.frame.size)
         self.actionScrollView.addSubview(self.photoVC!.view)
         
+        // readervc
+        self.readerVC = storyboard.instantiateViewControllerWithIdentifier("scriptvc") as? ScriptViewController
+        self.readerVC?.view.frame.origin.x = self.view.frame.width * 2.0
+        self.readerVC?.view.alpha = 0
+        self.readerVC?.scriptId = self.activeScriptId
+        self.readerVC?.configure(self.view.frame.size)
+        self.actionScrollView.addSubview(self.readerVC!.view)
+     
+        // text field
+        self.scriptTitle.delegate = self
+        
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -137,14 +153,47 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // going to script
+        // save embedded vcs for accessing later
+        
+        // compose vc
         if segue.identifier == "scriptsegue" {
-            if let scriptVC = segue.destinationViewController as? ScriptComposeViewController {
-                self.scriptVC = scriptVC
+            if let svc = segue.destinationViewController as? ScriptComposeViewController {
+                self.scriptVC = svc
+                svc.scriptId = self.activeScriptId!
+            }
+        }
+        
+        // reader vc
+        if segue.identifier == "scriptsegue" {
+            if let rvc = segue.destinationViewController as? ScriptViewController {
+                self.readerVC = rvc
+                self.readerVC?.scriptId = self.activeScriptId!
             }
         }
     }
-    
+    @IBAction func didPressReaderButton(sender: UIBarButtonItem) {
+
+        if let rvc = self.readerVC {
+            rvc.didPressReaderButton()
+
+            Animations.start(0.5){
+                if rvc.inReaderMode {
+                    self.readerViewContainer.alpha = 1.0
+                    self.pickerView.alpha = 0
+                    self.captureButton.alpha = 0
+                    self.fxView.alpha = 0
+                    sender.tintColor = UIColor.fire()
+                } else {
+                    self.readerViewContainer.alpha = 0.0
+                    self.pickerView.alpha = 1
+                    self.captureButton.alpha = 1
+                    self.fxView.alpha = 1
+                    sender.tintColor = UIColor.darkGrayColor()
+                }
+            }
+        }
+    }
+
     // MARK: - picker view
     func numberOfItemsInPickerView(pickerView: AKPickerView) -> Int {
         return 2
@@ -156,11 +205,22 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
 
     func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
         
-        let option = pickerView.selectedOption()
-        
         Animations.fadeOutIn(0.1, tsFadeOut: 0.3, view: self.pickerView, alpha: 0.2)
         self.pickerView.reloadData()
         
     }
+    
+    // MARK: - text field
+    func textFieldDidEndEditing(textField: UITextField) {
+        if let title = textField.text {
+            self.storage.updateScriptTitle(self.activeScriptId!, title: title)
+        }
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return false
+    }
+    
 
 }

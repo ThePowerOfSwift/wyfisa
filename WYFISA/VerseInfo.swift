@@ -16,6 +16,7 @@ enum ItemCategory: Int {
 
 class VerseInfo {
     let id: String
+    var key: String
     var name: String
     var priority: Float = -1.0
     var session: UInt64 = 0
@@ -33,16 +34,24 @@ class VerseInfo {
     var ts: NSTimeInterval
     var createdAt: String
     var cellID: CellIdentifier? = nil
-    
+    var scriptId: String? = nil
+
     init(id: String, name: String, text: String?){
         self.id = id
         self.name = name
         self.text = text
         self.ts =  NSDate().timeIntervalSince1970
         self.createdAt = self.ts.description
+        let seed = randomString(10)
+        self.key = "\(self.createdAt)\(seed)"
         if self.category == .Verse {
             self.updateWithIdParts()
         }
+    }
+    
+    func genKey(){
+        let seed = randomString(10)
+        self.key = "\(self.createdAt)\(seed)"
     }
     
     func toDocProperties() -> [String : AnyObject] {
@@ -53,7 +62,8 @@ class VerseInfo {
         let chapterNo = self.chapterNo ?? 0
         let bookNo = self.bookNo ?? 0
         let verse =  self.verse ?? 0
-        
+        let script = self.scriptId ?? ""
+
         // doc props
         let properties: [String : AnyObject] = ["id": self.id,
              "name": self.name,
@@ -67,7 +77,8 @@ class VerseInfo {
              "ts": self.ts,
              "text": text,
              "createdAt": self.createdAt,
-             "channels": ["ray@gmail.com"],
+             "script": script,
+             "key": self.key,
         ]
         
         return properties
@@ -96,12 +107,14 @@ class VerseInfo {
                 v.session = session.unsignedLongLongValue
             }
             
+            v.scriptId = verseDoc["script"] as? String ?? ""
             v.createdAt = verseDoc["createdAt"] as? String ?? ""
             v.priority = verseDoc["priority"] as? Float ?? -1
             v.chapter = verseDoc["chapter"] as? String ?? ""
             v.chapterNo = verseDoc["chapterNo"] as? Int ?? 0
             v.bookNo = verseDoc["bookNo"] as? Int ?? 0
             v.verse = verseDoc["verse"] as? Int ?? 0
+            v.key = verseDoc["key"] as? String ?? ""
             v.updateWithIdParts()
             verseInfo = v
         }

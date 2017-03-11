@@ -34,7 +34,9 @@ class CaptureViewController: UIViewController {
         self.cam.addCameraBlurTargets(self.captureView)
         
         // setup a temp datasource
-        self.tableDataSource = VerseTableDataSource.init(frameSize: self.view.frame.size, ephemeral: true)
+        self.tableDataSource = VerseTableDataSource.init(frameSize: self.view.frame.size,
+                                                         scriptId: nil,
+                                                         ephemeral: true)
         self.captureVerseTable.dataSource = self.tableDataSource
         self.captureVerseTable.isExpanded = false
 

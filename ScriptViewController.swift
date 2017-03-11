@@ -8,18 +8,31 @@
 
 import UIKit
 
-class ScriptViewController: UIViewController, UITextFieldDelegate {
+class ScriptViewController: UIViewController {
 
-    @IBOutlet var titleTextField: UITextField!
     @IBOutlet var scriptCollection: ScriptCollection!
-    
+    var frameSize = CGSize()
+    var inReaderMode = false
+    var scriptId: String? = nil
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        self.scriptCollection.initDisplayVerses()
-        self.titleTextField.delegate = self
     }
     
+    func configure(size: CGSize){
+        self.frameSize = size
+    }
+    
+    // MARK: -Show/Hide
+    func didPressReaderButton(){
+        
+        self.inReaderMode = !self.inReaderMode
+        self.view.frame.size = self.frameSize
+        self.scriptCollection.initDisplayVerses(self.scriptId!)
+        self.scriptCollection.scrollEnabled = true
+
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -31,17 +44,11 @@ class ScriptViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    
-    func refresh(){
-        self.scriptCollection.initDisplayVerses()
-    }
 
 
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let destVC = segue.destinationViewController as? ScriptComposeViewController {
-            destVC.scriptTitle = self.titleTextField.text
-        }
+
     }
 
 }
