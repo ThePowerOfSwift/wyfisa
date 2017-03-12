@@ -61,7 +61,7 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
         
         // ts
         let scriptTimestampLabel = cell.viewWithTag(2) as! UILabel
-        scriptTimestampLabel.text = "\(script.lastUpdated)"
+        scriptTimestampLabel.text = "\(script.getTimestamp())"
         
         // count
         let scriptVerseCountLabel = cell.viewWithTag(3) as! UILabel

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftMoment
 
 class UserScript {
     var id: String
@@ -23,6 +24,25 @@ class UserScript {
         self.id = "\(self.lastUpdated)\(seed)"
         self.owner = "TODO"
         self.topic = topic
+    }
+
+    func getTimestamp() -> String {
+        if let tsInterval: NSTimeInterval = NSTimeInterval.init(self.lastUpdated) {
+            let today = moment()
+            let tsMoment = moment(tsInterval)
+            var timestamp = tsMoment.format("h:mm a")
+            
+            if (today.hour - tsMoment.hour) < 7 {  // within 7 hours
+                timestamp = tsMoment.fromNow()
+            } else if (today.day - tsMoment.day) < 7 { // within 7 days
+                timestamp = "\(tsMoment.weekdayName)"
+            } else {  // long ago like 70 weeks
+                timestamp = "\(tsMoment.month)/\(tsMoment.day)/\(tsMoment.year)"
+            }
+            
+            return timestamp
+        }
+        return "just now"
     }
     
     func toDocProperties() -> [String : AnyObject] {
@@ -49,7 +69,6 @@ class UserScript {
         script.topic = doc["topic"] as! String
         return script
     }
-
 
 
 }

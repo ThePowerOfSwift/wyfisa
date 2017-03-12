@@ -15,6 +15,7 @@ target 'TurnTo' do
   pod 'Firebase/Core'
   pod 'Firebase/Database'
   pod "AKPickerView-Swift"
+  pod 'SwiftMoment'
 
   target 'WYFISATests' do
     inherit! :search_paths
