@@ -78,7 +78,9 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         
         // get script doc
         if let script = self.storage.getScriptDoc(self.activeScriptId!) {
-            self.scriptTitle.text = script.title
+            if (script.title != DEFAULT_SCRIPT_NAME)  && (script.title != "") {
+                self.scriptTitle.text = script.title
+            }
         }
         
 
