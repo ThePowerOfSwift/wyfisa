@@ -65,7 +65,7 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
         
         // count
         let scriptVerseCountLabel = cell.viewWithTag(3) as! UILabel
-        scriptVerseCountLabel.text = "\(script.count+1)"
+        scriptVerseCountLabel.text = "\(script.count)"
         
         return cell
     }
@@ -111,6 +111,7 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
                 
                 let newScriptId = script.id
                 initVC.activeScriptId = newScriptId
+
             }
         }
         

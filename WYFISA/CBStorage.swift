@@ -168,7 +168,9 @@ class CBStorage {
     func getScriptDoc(id: String) -> UserScript? {
         var script:UserScript? = nil
         if let doc = self.db?.documentWithID(id) {
-            script = UserScript.DocPropertiesToObj(doc.properties!)
+            if let properties = doc.properties {
+                script = UserScript.DocPropertiesToObj(properties)
+            }
         }
         return script
     }
@@ -191,6 +193,8 @@ class CBStorage {
             } catch {}
         }
         
+        topicScripts.sortInPlace{ s1, s2 in return s1.lastUpdated > s2.lastUpdated }
+
         return topicScripts
     }
     
