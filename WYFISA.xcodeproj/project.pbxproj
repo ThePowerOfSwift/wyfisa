@@ -26,6 +26,7 @@
 		C3466D611E65109E005EF365 /* VerseRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3466D601E65109E005EF365 /* VerseRecognition.swift */; };
 		C34A95541E742ABA0004A2D2 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34A95531E742ABA0004A2D2 /* AppConstants.swift */; };
 		C34A95561E743E170004A2D2 /* UserScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34A95551E743E170004A2D2 /* UserScript.swift */; };
+		C34A95581E74FEEC0004A2D2 /* TopicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34A95571E74FEEC0004A2D2 /* TopicViewController.swift */; };
 		C34C52341D472E1A001E5F1A /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = C39090CF1D2C9C88000DFD15 /* tessdata */; };
 		C351DB4C1DEDE250009E853D /* CBStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB4B1DEDE250009E853D /* CBStorage.swift */; };
 		C351DB4E1DEE7668009E853D /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB4D1DEE7668009E853D /* KeyboardObserver.swift */; };
@@ -109,6 +110,7 @@
 		C3466D601E65109E005EF365 /* VerseRecognition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseRecognition.swift; sourceTree = "<group>"; };
 		C34A95531E742ABA0004A2D2 /* AppConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		C34A95551E743E170004A2D2 /* UserScript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserScript.swift; path = ../UserScript.swift; sourceTree = "<group>"; };
+		C34A95571E74FEEC0004A2D2 /* TopicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopicViewController.swift; sourceTree = "<group>"; };
 		C351DB4B1DEDE250009E853D /* CBStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBStorage.swift; sourceTree = "<group>"; };
 		C351DB4D1DEE7668009E853D /* KeyboardObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		C351DB4F1DEF52D7009E853D /* Generics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generics.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				C33C3AC11E727EBD00B3E3F1 /* SelectScriptViewController.swift */,
 				C374B49F1D8CF4600083366E /* SettingsViewController.swift */,
 				C3F53B8F1D372C0200E2F80D /* TextMatcher.swift */,
+				C34A95571E74FEEC0004A2D2 /* TopicViewController.swift */,
 				C34A95551E743E170004A2D2 /* UserScript.swift */,
 				C39090781D2C9AF8000DFD15 /* ViewController.swift */,
 				C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */,
@@ -619,6 +622,7 @@
 				C312DE531D6C5A5E0098D0C5 /* WYFISATheme.swift in Sources */,
 				C3EE86B51E719A03004CB24C /* PhotoCaptureViewController.swift in Sources */,
 				C306DA0A1DB49B8300D1F962 /* VerseTableDataSource.swift in Sources */,
+				C34A95581E74FEEC0004A2D2 /* TopicViewController.swift in Sources */,
 				C3F53B901D372C0200E2F80D /* TextMatcher.swift in Sources */,
 				C3F53B961D37499700E2F80D /* DBQuery.swift in Sources */,
 				C3606CE81DBBBACD00AE2E8B /* ScriptComposeViewController.swift in Sources */,

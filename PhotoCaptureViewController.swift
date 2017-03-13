@@ -51,7 +51,7 @@ class PhotoCaptureViewController: UIViewController {
      func didReleaseCaptureButton() -> VerseInfo? {
      
         var verseInfo:VerseInfo? = nil
-        
+  
         // save frame as image
         if let frameSnapshot = self.cam.imageFromFrame() {
             verseInfo = VerseInfo.init(id: "0", name: "", text: nil)
@@ -65,8 +65,7 @@ class PhotoCaptureViewController: UIViewController {
         Animations.start(0.3){
             self.view.alpha = 0
         }
-        // stop camera
-        self.cam.pause()
+
         
          return verseInfo
      }

@@ -251,10 +251,10 @@ class VerseTableView: UITableView, UITableViewDelegate {
                 switch  verse.category {
                 case .Verse:
                     if let text = verse.text {
-                        sectionHeight = ds.cellHeightForText(text, width: self.frame.size.width)
+                        sectionHeight = ds.cellHeightForText(text, width: self.frame.size.width * 0.95)
                     }
                 case .Note:
-                     sectionHeight = ds.cellHeightForText(verse.name, width: self.frame.size.width) - 30
+                     sectionHeight = ds.cellHeightForText(verse.name, width: self.frame.size.width*0.80)
                 case .Image:
                     sectionHeight += 200
                 }

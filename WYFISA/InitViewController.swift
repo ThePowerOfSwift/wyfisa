@@ -21,15 +21,14 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     @IBOutlet var pickerView: AKPickerView!
     @IBOutlet var actionScrollView: UIScrollView!
     @IBOutlet var fxView: UIVisualEffectView!
-    @IBOutlet var readerViewContainer: UIView!
     @IBOutlet var scriptTitle: UITextField!
     
     var ocrVC: CaptureViewController? = nil
     var scriptVC: ScriptComposeViewController? = nil
-    var readerVC: ScriptViewController? = nil
     var photoVC: PhotoCaptureViewController? = nil
     var captureDelegate: CaptureButtonDelegate? = nil
     var activeScriptId: String? = nil
+    var activeScript: UserScript? = nil
     let storage = CBStorage.init(databaseName: SCRIPTS_DB, skipSetup: true)
     
     override func viewDidLoad() {
@@ -64,24 +63,21 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         self.photoVC?.view.alpha = 0
         self.photoVC?.configure(self.view.frame.size)
         self.actionScrollView.addSubview(self.photoVC!.view)
-        
-        // readervc
-        self.readerVC = storyboard.instantiateViewControllerWithIdentifier("scriptvc") as? ScriptViewController
-        self.readerVC?.view.frame.origin.x = self.view.frame.width * 2.0
-        self.readerVC?.view.alpha = 0
-        self.readerVC?.scriptId = self.activeScriptId
-        self.readerVC?.configure(self.view.frame.size)
-        self.actionScrollView.addSubview(self.readerVC!.view)
-     
+
         // text field
         self.scriptTitle.delegate = self
         
         // get script doc
         if let script = self.storage.getScriptDoc(self.activeScriptId!) {
+            self.activeScript = script
             if (script.title != DEFAULT_SCRIPT_NAME)  && (script.title != "") {
                 self.scriptTitle.text = script.title
             }
         }
+        
+        // start and pause camera
+        CameraManager.sharedInstance.start()
+        CameraManager.sharedInstance.pause()
         
 
     }
@@ -140,6 +136,8 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
                 self.scriptVC?.addVersesToScript([photoVerse])
             }
         }
+        // make sure camera is stopped
+        CameraManager.sharedInstance.pause()
     }
     
 
@@ -170,35 +168,7 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
             }
         }
         
-        // reader vc
-        if segue.identifier == "scriptsegue" {
-            if let rvc = segue.destinationViewController as? ScriptViewController {
-                self.readerVC = rvc
-                self.readerVC?.scriptId = self.activeScriptId!
-            }
-        }
-    }
-    @IBAction func didPressReaderButton(sender: UIBarButtonItem) {
 
-        if let rvc = self.readerVC {
-            rvc.didPressReaderButton()
-
-            Animations.start(0.5){
-                if rvc.inReaderMode {
-                    self.readerViewContainer.alpha = 1.0
-                    self.pickerView.alpha = 0
-                    self.captureButton.alpha = 0
-                    self.fxView.alpha = 0
-                    sender.tintColor = UIColor.fire()
-                } else {
-                    self.readerViewContainer.alpha = 0.0
-                    self.pickerView.alpha = 1
-                    self.captureButton.alpha = 1
-                    self.fxView.alpha = 1
-                    sender.tintColor = UIColor.darkGrayColor()
-                }
-            }
-        }
     }
 
     // MARK: - picker view

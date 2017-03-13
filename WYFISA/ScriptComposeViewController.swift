@@ -249,14 +249,15 @@ class ScriptComposeViewController: UIViewController,
         dispatch_async(dispatch_get_main_queue()) {
             if let table = self.verseTable {
                 table.addSection()
+                table.sortByPriority()
+                table.reloadData()
+                table.scrollToEnd()
             }
         }
-        self.verseTable.sortByPriority()
-        self.verseTable.reloadData()
-        self.verseTable.scrollToEnd()
+
         
         // update script count
-        storage.incrementScriptCountAndTimestamp(self.scriptId!, ts: verse.createdAt)
+        storage.incrementScriptCountAndTimestamp(self.scriptId!)
     }
     
     func takePhoto(){
@@ -403,6 +404,7 @@ class ScriptComposeViewController: UIViewController,
             } else {
                 // updating data at this session
                 self.tableDataSource?.updateRecentVerse(verseInfo)
+                self.storage.updateScriptTimestamp(self.scriptId!)
             }
             self.verseTable.reloadData()
         }
@@ -420,6 +422,8 @@ class ScriptComposeViewController: UIViewController,
             // updating the photo verse
             self.tableDataSource?.updateRecentVerse(verseInfo)
             self.verseTable.reloadData()
+            self.storage.updateScriptTimestamp(self.scriptId!)
+
         }
     }
 
@@ -492,6 +496,7 @@ class ScriptComposeViewController: UIViewController,
     
     func didRemoveCell(sender: VerseTableViewCell) {
         // just removed one cell
+        self.storage.decrementScriptCountAndTimestamp(self.scriptId!)
         self.syncWithDataSource()
     }
     

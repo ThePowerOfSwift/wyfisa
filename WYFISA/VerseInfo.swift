@@ -35,6 +35,7 @@ class VerseInfo {
     var createdAt: String
     var cellID: CellIdentifier? = nil
     var scriptId: String? = nil
+    var version: String = Version.KJV.text()
 
     init(id: String, name: String, text: String?){
         self.id = id
@@ -77,6 +78,7 @@ class VerseInfo {
              "ts": self.ts,
              "text": text,
              "createdAt": self.createdAt,
+             "version": SettingsManager.sharedInstance.version.text(),
              "script": script,
              "key": self.key,
         ]
@@ -92,7 +94,8 @@ class VerseInfo {
         if let verseDoc = doc as? [String: AnyObject] {
             let id = verseDoc["id"] as? String ?? ""
             let name = verseDoc["name"] as? String ?? ""
-            
+            let version = verseDoc["version"] as? String ?? Version.KJV.text()
+
             // get text from db
             var text:String? =  verseDoc["text"] as? String ?? ""
 
@@ -115,6 +118,7 @@ class VerseInfo {
             v.bookNo = verseDoc["bookNo"] as? Int ?? 0
             v.verse = verseDoc["verse"] as? Int ?? 0
             v.key = verseDoc["key"] as? String ?? ""
+            v.version = version
             v.updateWithIdParts()
             verseInfo = v
         }

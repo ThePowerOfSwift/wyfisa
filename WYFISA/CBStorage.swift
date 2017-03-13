@@ -19,7 +19,8 @@ class CBStorage {
     var pull: CBLReplication?
     var auth: CBLAuthenticatorProtocol?
     var databaseName: String
-    
+    var updateLock = NSLock()
+
     class func MakeCBStorage(databaseName: String) -> CBStorage {
         let storage = CBStorage(databaseName: databaseName)
         
@@ -303,12 +304,12 @@ class CBStorage {
         }
     }
     
-    func incrementScriptCountAndTimestamp(id: String, ts: String){
+    func updateScriptTimestamp(id: String){
+        let ts =  NSDate().timeIntervalSince1970.description
         if let doc = db?.existingDocumentWithID(id) {
             do {
                 try doc.update({
                     (newRevision) -> Bool in
-                    newRevision["count"] = (newRevision["count"] as! Int) + 1
                     newRevision["lastUpdated"] = ts
                     return true
                 })
@@ -317,6 +318,29 @@ class CBStorage {
             }
             
         }
+    }
+    func updateScriptCountAndTimestamp(id: String, counter: Int){
+        self.updateScriptTimestamp(id)
+        if let doc = db?.existingDocumentWithID(id) {
+            do {
+                try doc.update({
+                    (newRevision) -> Bool in
+                    newRevision["count"] = (newRevision["count"] as! Int) + counter
+                    return true
+                })
+            } catch {
+                print("update doc failed")
+            }
+            
+        }
+    }
+    
+    func incrementScriptCountAndTimestamp(id: String){
+        self.updateScriptCountAndTimestamp(id, counter: 1)
+    }
+    
+    func decrementScriptCountAndTimestamp(id: String){
+        self.updateScriptCountAndTimestamp(id, counter: -1)
     }
     
     func updateScriptTitle(id: String, title: String){
@@ -349,17 +373,40 @@ class CBStorage {
             
         }
     }
+    
+    func updateVerseTextVersion(id: String, text: String, version: String){
+        
+        updateLock.lock()
+        if let doc = db?.existingDocumentWithID(id) {
+            do {
+                try doc.update({
+                    (newRevision) -> Bool in
+                    newRevision["text"] = text
+                    newRevision["version"] = version
+                    return true
+                })
+            } catch {
+                print("update doc failed")
+            }
+            
+        }
+        updateLock.unlock()
+
+    }
+    
     func updateVerse(verse: VerseInfo){
         
-        let id = verse.createdAt
+        let id = verse.key
 
         switch verse.category {
         case .Note:
             self.updateVerseNote(id, note: verse.name)
         case .Image:
-            break // do something
+            break // TODO!!!! do something
         case .Verse:
-            break // cannot be updated
+            // updating verse just means to sync it's version with text we have
+            verse.version = SettingsManager.sharedInstance.version.text()
+            self.updateVerseTextVersion(id, text: verse.text!, version: verse.version)
 
         }
     }

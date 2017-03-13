@@ -13,10 +13,11 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
 
     @IBOutlet var scriptsTable: UITableView!
     var storage: CBStorage = CBStorage(databaseName: SCRIPTS_DB)
-    var selectedScriptId: String? = nil
+    var selectedScript: UserScript? = nil
     var selectedTopicId: String = "alpha"
     var myScripts: [UserScript] = []
-    
+    var highlightedIndexPath: NSIndexPath? = nil
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -76,8 +77,20 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
         }
         
         let script = self.myScripts[indexPath.row]
-        self.selectedScriptId = script.id
+        self.selectedScript = script
         self.performSegueWithIdentifier("showscriptsegue", sender: self)
+    }
+
+    func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
+        self.highlightedIndexPath = indexPath
+    }
+    
+    @IBAction func unwindFromReaderView(segue: UIStoryboardSegue) {
+        // MARK: - Navigation
+    }
+    
+    @IBAction func unwindFromTopicView(segue: UIStoryboardSegue) {
+        // MARK: - Navigation
     }
     
     
@@ -118,10 +131,26 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
         // showing a script
         if segue.identifier == "showscriptsegue" {
             if let initVC = segue.destinationViewController as? InitViewController {
-                initVC.activeScriptId = self.selectedScriptId
+                initVC.activeScriptId = self.selectedScript!.id
+            }
+        }
+        
+        if segue.identifier == "zensegue" {
+            if let readerVC = segue.destinationViewController as? ScriptViewController {
+                readerVC.prepareForScript(self.selectedScript!.id, title: self.selectedScript!.title)
             }
         }
     }
+    
+    
+    @IBAction func enterZenMode(sender: UILongPressGestureRecognizer) {
+        if let indexPath = self.highlightedIndexPath {
+            self.highlightedIndexPath = nil
+            self.selectedScript = self.myScripts[indexPath.row]
+            self.performSegueWithIdentifier("zensegue", sender: nil)
+        }
+    }
+    
     /*
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation

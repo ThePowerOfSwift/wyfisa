@@ -14,6 +14,8 @@ class NotesViewController: UIViewController {
     @IBOutlet var buttonBottomConstraint: NSLayoutConstraint!
     @IBOutlet var textView: UITextView!
     @IBOutlet var noteHeader: UILabel!
+    @IBOutlet var closeButton: UIButton!
+    @IBOutlet var saveButton: UIButton!
 
     var verseInfo: VerseInfo? = nil
     var editingText: String? = nil
@@ -45,6 +47,12 @@ class NotesViewController: UIViewController {
         let textFont = themer.currentFont()
         self.textView.font = textFont
         self.noteHeader.font = textFont.fontWithSize(48.0)
+        
+        if self.isUpdate == true {
+            // updating current note
+            self.closeButton.hidden = true
+            self.saveButton.setTitle("Done", forState: .Normal)
+        }
 
     }
 

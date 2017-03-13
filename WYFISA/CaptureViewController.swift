@@ -189,8 +189,7 @@ class CaptureViewController: UIViewController {
     
     func didReleaseCaptureButton() -> [VerseInfo] {
         var capturedVerses:[VerseInfo] = []
-        // stop camera
-        self.cam.pause()
+
         Animations.start(0.3){
             // fade out the view
             self.view.alpha = 0

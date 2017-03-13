@@ -29,6 +29,8 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     let db = DBQuery.sharedInstance
     let themer = WYFISATheme.sharedInstance
     let firDB = FBStorage()
+    let storage = CBStorage.init(databaseName: SCRIPTS_DB, skipSetup: true)
+
 
 
     override func awakeFromNib() {
@@ -78,17 +80,22 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
         }
     }
     
-    func updateWithVerseInfo(verse: VerseInfo, isExpanded: Bool) {
+    func updateWithVerseInfo(verse: VerseInfo, isExpanded: Bool) -> Bool {
 
         self.applyCategoryStyle(verse)
+        var needsUpdating = false
         
         if  verse.id.characters.count > 0 {
             // cell has a verse
             self.verseInfo = verse
             
-            // pull verse text matching version
-            // TODO: Only when verse.version is miss-match
-            firDB.getVerseDoc(verse.id)
+            // pull verse only when verse.version is miss-match, or there is no text
+            if verse.category == .Verse &&
+                (verse.version != SettingsManager.sharedInstance.version.text() ||
+                    verse.text == nil) {
+                firDB.getVerseDoc(verse.id)
+                needsUpdating = true
+            }
             
             self.searchIcon.alpha = 0
             Animations.startAfter(1, forDuration: 0.2){
@@ -134,8 +141,8 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.labelHeader.hidden = true
         }
         
-        if verse.category == .Note { // add opening quote
-            self.labelText.text = verse.name
+        if verse.category == .Note {
+            self.labelText.text = (verse.name)
             self.labelHeader.text = ""
             self.labelText.layer.borderColor = UIColor.fire().CGColor
             self.quoteImage.hidden = false
@@ -155,6 +162,8 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.labelText.font = themer.fontType.styleWithSize(16)
             self.labelHeader.font = self.labelHeader.font.fontWithSize(13)
         }
+        
+        return needsUpdating
 
     }
     
@@ -213,8 +222,8 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     func didGetSingleVerse(sender: FBStorage, verse: VerseInfo){
         self.verseInfo?.text = verse.text
         self.labelText.text = verse.text
-        
-        // TODO: want to update the local db record for offline support
+        self.verseInfo?.text = verse.text
+        self.storage.updateVerse(self.verseInfo!)
     }
     
     func didGetVerseContext(sender: FBStorage, verses: [VerseInfo]){

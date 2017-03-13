@@ -40,6 +40,8 @@ class CameraManager {
         self.cameraZoom = zoom
         self.cameraFocusMode = focus
         
+
+        
     }
     
     func focus(mode: AVCaptureFocusMode){
@@ -136,17 +138,22 @@ class CameraManager {
     }
     
     func appPause(){
+        self.pause()
+        /*
         if self.state == .InUse {
             self.shouldResumeOnAppFG = true
         }
         self.pause()
+        */
     }
     
     func appResume(){
+        /*
         if self.shouldResumeOnAppFG == true {
             self.resume()
         }
         self.shouldResumeOnAppFG = false
+        */
     }
     
     func setSimImage(image: UIImage){

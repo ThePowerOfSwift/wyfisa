@@ -12,27 +12,20 @@ class ScriptViewController: UIViewController {
 
     @IBOutlet var scriptCollection: ScriptCollection!
     var frameSize = CGSize()
-    var inReaderMode = false
     var scriptId: String? = nil
-
+    var scriptTitle: String? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-    }
-    
-    func configure(size: CGSize){
-        self.frameSize = size
-    }
-    
-    // MARK: -Show/Hide
-    func didPressReaderButton(){
-        
-        self.inReaderMode = !self.inReaderMode
-        self.view.frame.size = self.frameSize
         self.scriptCollection.initDisplayVerses(self.scriptId!)
         self.scriptCollection.scrollEnabled = true
-
     }
+    func prepareForScript(scriptId: String, title: String){
+        self.scriptId = scriptId
+        self.scriptTitle = title
+    }
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -44,11 +37,16 @@ class ScriptViewController: UIViewController {
         return true
     }
     
-
+    override func prefersStatusBarHidden() -> Bool {
+        return HIDE_STATUS_BAR
+    }
 
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 
+    }
+    @IBAction func exitReaderMode(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 
 }

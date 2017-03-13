@@ -39,6 +39,7 @@ class FBStorage {
                 // convert value to verse
                 let value = snapshot.value as?  [String : AnyObject]
                 if let verse = VerseInfo.DocPropertiesToObj(value) {
+                    verse.version = version
                     self.delegate?.didGetSingleVerse(self, verse: verse)
                 }
             })
