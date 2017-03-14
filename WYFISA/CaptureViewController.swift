@@ -31,7 +31,6 @@ class CaptureViewController: UIViewController {
 
         // configure camera
         self.captureView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
-        self.cam.addCameraBlurTargets(self.captureView)
         
         // setup a temp datasource
         self.tableDataSource = VerseTableDataSource.init(frameSize: self.view.frame.size,
@@ -51,6 +50,8 @@ class CaptureViewController: UIViewController {
     func didPressCaptureButton(){
         
         self.view.frame.size = self.frameSize
+        self.cam.addCameraBlurTargets(self.captureView)
+
         self.cam.resume()
         Animations.start(0.3){
             self.view.alpha = 1
@@ -207,6 +208,8 @@ class CaptureViewController: UIViewController {
         // clear out the temp table
         self.captureVerseTable.clear()
         
+        self.cam.removeTarget(self.captureView)
+
         return capturedVerses
     }
     

@@ -21,7 +21,6 @@ class PhotoCaptureViewController: UIViewController {
 
         // setup camera
         self.photoCaptureView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
-        self.cam.addTarget(self.photoCaptureView)
         
         // Do any additional setup after loading the view.
     }
@@ -40,6 +39,8 @@ class PhotoCaptureViewController: UIViewController {
      func didPressCaptureButton(){
      
          self.view.frame.size = self.frameSize
+        self.cam.addTarget(self.photoCaptureView)
+
          self.cam.resume()
          Animations.start(0.3){
              self.view.alpha = 1
@@ -65,6 +66,9 @@ class PhotoCaptureViewController: UIViewController {
         Animations.start(0.3){
             self.view.alpha = 0
         }
+        
+        // remove camera from target
+        self.cam.removeTarget(self.photoCaptureView)
 
         
          return verseInfo

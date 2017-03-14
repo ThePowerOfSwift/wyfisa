@@ -8,7 +8,7 @@
 
 import UIKit
 
-class VerseTableView: UITableView, UITableViewDelegate {
+class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
 
 
     var isExpanded: Bool = false
@@ -17,12 +17,16 @@ class VerseTableView: UITableView, UITableViewDelegate {
     var themer = WYFISATheme.sharedInstance
     var scrollNotifier: ()->() =  notifyCallback
     var footerHeight: CGFloat? = nil
+    let firDB = FBStorage()
+    let storage = CBStorage.init(databaseName: SCRIPTS_DB, skipSetup: true)
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
         // setup tableview
         self.delegate = self
+        self.firDB.delegate = self
+
     }
     
 
@@ -33,6 +37,7 @@ class VerseTableView: UITableView, UITableViewDelegate {
         }
         return UITableViewCellEditingStyle.None
     }
+
     func getDatasource() -> VerseTableDataSource? {
         if let ds = self.dataSource {
             return ds as? VerseTableDataSource
@@ -231,6 +236,17 @@ class VerseTableView: UITableView, UITableViewDelegate {
             }
         }
         
+        // update version if necessary
+        if let ds = self.getDatasource() {
+            if ds.recentVerses.count > indexPath.section {
+                let verse = ds.recentVerses[indexPath.section]
+                if (verse.category == .Verse) &&
+                    (verse.version != SettingsManager.sharedInstance.version.text()) {
+                    firDB.getVerseDoc(verse.id, section: indexPath.section)
+                }
+            }
+        }
+        
     }
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
@@ -287,5 +303,19 @@ class VerseTableView: UITableView, UITableViewDelegate {
         super.pressesBegan(presses, withEvent: event)
         self.scrollNotifier()
     }
+    
+    
+    // MARK: - FIR Delegate
+    func didGetSingleVerseForRow(sender: AnyObject, verse: AnyObject, section: Int){
+        
+        if let ds = self.getDatasource() {
+            let dsVerse = ds.recentVerses[section]
+            let fbVerse = verse as! VerseInfo
+            dsVerse.text = fbVerse.text
+            self.storage.updateVerse(dsVerse)
+            self.reloadData()
+        }
+    }
+    
 }
 

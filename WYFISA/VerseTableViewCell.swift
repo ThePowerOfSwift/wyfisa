@@ -28,8 +28,6 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     var enableMore: Bool = false
     let db = DBQuery.sharedInstance
     let themer = WYFISATheme.sharedInstance
-    let firDB = FBStorage()
-    let storage = CBStorage.init(databaseName: SCRIPTS_DB, skipSetup: true)
 
 
 
@@ -37,7 +35,6 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
         super.awakeFromNib()
         // Initialization code
         self.labelHeader.textColor = self.themer.navyForLightOrTeal(1.0)
-        self.firDB.delegate = self
 
     }
 
@@ -89,14 +86,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             // cell has a verse
             self.verseInfo = verse
             
-            // pull verse only when verse.version is miss-match, or there is no text
-            if verse.category == .Verse &&
-                (verse.version != SettingsManager.sharedInstance.version.text() ||
-                    verse.text == nil) {
-                firDB.getVerseDoc(verse.id)
-                needsUpdating = true
-            }
-            
+
             self.searchIcon.alpha = 0
             Animations.startAfter(1, forDuration: 0.2){
                 self.searchIcon.alpha = 0
@@ -215,15 +205,6 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-    }
-    
-    
-    // MARK: - FIR Delegate
-    func didGetSingleVerse(sender: FBStorage, verse: VerseInfo){
-        self.verseInfo?.text = verse.text
-        self.labelText.text = verse.text
-        self.verseInfo?.text = verse.text
-        self.storage.updateVerse(self.verseInfo!)
     }
     
     func didGetVerseContext(sender: FBStorage, verses: [VerseInfo]){

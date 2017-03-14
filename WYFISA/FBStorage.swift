@@ -10,9 +10,10 @@ import Foundation
 import Firebase
 import FirebaseDatabase
 
-protocol FBStorageDelegate: class {
-    func didGetSingleVerse(sender: FBStorage, verse: VerseInfo)
-    func didGetVerseContext(sender: FBStorage, verses: [VerseInfo])
+@objc protocol FBStorageDelegate: class {
+    optional func didGetSingleVerse(sender: AnyObject, verse: AnyObject)
+    optional func didGetSingleVerseForRow(sender: AnyObject, verse: AnyObject, section: Int)
+    optional func didGetVerseContext(sender: AnyObject, verses: [AnyObject])
 }
 
 
@@ -31,7 +32,7 @@ class FBStorage {
     }
     
     
-    func getVerseDoc(id: String) {
+    func getVerseDoc(id: String, section: Int? = nil) {
         let version = settings.version.text()
         self.databaseRef.child(version)
             .child(id)
@@ -40,7 +41,11 @@ class FBStorage {
                 let value = snapshot.value as?  [String : AnyObject]
                 if let verse = VerseInfo.DocPropertiesToObj(value) {
                     verse.version = version
-                    self.delegate?.didGetSingleVerse(self, verse: verse)
+                    if section == nil {
+                        self.delegate?.didGetSingleVerse?(self, verse: verse)
+                    } else {
+                        self.delegate?.didGetSingleVerseForRow?(self, verse: verse, section: section!)
+                    }
                 }
             })
     }
@@ -70,7 +75,7 @@ class FBStorage {
                         }
                     }
                     context.sortInPlace{ s1, s2 in return s1.id < s2.id }
-                    self.delegate?.didGetVerseContext(self, verses: context)
+                    self.delegate?.didGetVerseContext?(self, verses: context)
                 }
             })
     }

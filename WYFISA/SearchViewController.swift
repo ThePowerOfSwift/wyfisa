@@ -142,12 +142,14 @@ class SearchViewController: UIViewController, FBStorageDelegate {
     }
 
     // MARK: - FIR Delegate
-    func didGetSingleVerse(sender: FBStorage, verse: VerseInfo){
-        self.verseText.text = verse.text
+    func didGetSingleVerse(sender: AnyObject, verse: AnyObject){
+        let fbVerse = verse as! VerseInfo
+        self.verseText.text = fbVerse.text
         if self.verseInfo != nil {
-            self.verseInfo!.text = verse.text
+            self.verseInfo!.text = fbVerse.text
         }
     }
+    
     
     func didGetVerseContext(sender: FBStorage, verses: [VerseInfo]){
         

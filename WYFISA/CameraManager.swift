@@ -104,6 +104,11 @@ class CameraManager {
         self.camera.addTarget(target)
     }
     
+    
+    func removeTarget(target: GPUImageInput!){
+        self.camera.removeTarget(target)
+    }
+    
     func addDebugTarget(target: GPUImageInput!){
         // self.debugTarget = target
     }

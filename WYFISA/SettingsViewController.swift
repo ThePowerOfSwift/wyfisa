@@ -31,7 +31,7 @@ class SettingsManager {
     static let sharedInstance = SettingsManager()
     var nightMode: Bool = false
     var useFlash: Bool = false
-    var version: Version = Version.KJV
+    var version: Version = Version.ESV
     
     init(){
         do {
