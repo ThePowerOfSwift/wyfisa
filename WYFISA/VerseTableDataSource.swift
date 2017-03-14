@@ -78,11 +78,11 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
-    
+
     @objc func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return self.nVerses + 1
     }
-    
+
     func cellHeightForText(text: String, width: CGFloat) -> CGFloat {
         let font = themer.currentFont()
         var height = text.heightWithConstrainedWidth(width*0.90,
@@ -95,7 +95,6 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
         return height
     }
 
-    
     // MARK: update datasource
     func appendVerse(verse: VerseInfo){
         self.recentVerses.append(verse)
@@ -108,8 +107,7 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
         }
     }
 
-    
-    
+
     func updateVersePending(id: Int){
         self.recentVerses[id-1].name = self.recentVerses[id-1].name+"."
     }
@@ -127,13 +125,14 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
             i=i+1
         }
     }
+
     func updateCellHeightVal(verse: VerseInfo){
         if let text = verse.text {
             let height = self.cellHeightForText(text, width: self.initFrameWidth)
             expandedCellHeights += height
         }
     }
-    
+
     func getLastVerseItem() -> VerseInfo? {
         for v in self.recentVerses.reverse() {
             if v.category == .Verse {
@@ -142,9 +141,8 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
         }
         return nil
     }
-    
-    
-    
+
+
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             

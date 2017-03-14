@@ -10,21 +10,6 @@ import UIKit
 
 let HIDE_STATUS_BAR = false
 
-enum Version: Int {
-    case KJV = 0, ESV, NIV, NLT
-    func text() -> String {
-        switch self{
-        case .KJV:
-            return "kjv"
-        case .ESV:
-            return "esv"
-        case .NIV:
-            return "niv"
-        case .NLT:
-            return "nlt"
-        }
-    }
-}
 
 class SettingsManager {
     // is singleton
@@ -40,7 +25,9 @@ class SettingsManager {
                 // restore settings
                 self.nightMode = doc.propertyForKey("night") as! Bool
                 self.useFlash = doc.propertyForKey("flash") as! Bool
-                // TODO self.version = doc.propertyForKey("version") as! Bool
+                if let versionProperty = doc.propertyForKey("version") {
+                    self.version = Version(rawValue: versionProperty as! Int)!
+                }
             }
         } catch {}
         
@@ -55,6 +42,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     let settings = SettingsManager.sharedInstance
     let themer = WYFISATheme.sharedInstance
     var settingsDoc: CBLDocument? = nil
+    var lastFontSize: Float? = nil
+    var lastFontType: ThemeFont? = nil
+    var lastVersion: Version? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,12 +70,43 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let properties = ["night": false,
                                   "flash": false,
                                   "font": themer.fontType.rawValue,
-                                  "fontSize": themer.fontSize]
+                                  "fontSize": themer.fontSize,
+                                  "version": settings.version.rawValue]
                 try self.settingsDoc?.putProperties(properties as! [String : AnyObject])
             }
             
         } catch { print("No db") }
         
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        
+        // save any settings that have changed
+        let currFontSize = Float(themer.fontSize)
+        let currFontType = themer.fontType
+        let currentVersion = settings.version
+        
+        if let old = self.lastFontSize {
+            if old != currFontSize {
+                self.updateSettings("fontSize", value: currFontSize)
+            }
+        }
+        if let old = self.lastFontType {
+            if old != currFontType {
+                self.updateSettings("font", value: currFontType.rawValue)
+            }
+        }
+        if let old = self.lastVersion {
+            if old != currentVersion {
+                self.updateSettings("version", value: currentVersion.rawValue)
+            }
+        }
+
+        lastFontSize = currFontSize
+        lastFontType = currFontType
+        lastVersion = currentVersion
+        self.settingsTable.reloadData()
+        return
     }
     
     func themeView(){
@@ -101,6 +122,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     
     func cellForGeneralSection(row: Int) -> UITableViewCell {
+
         let cell = self.settingsTable.dequeueReusableCellWithIdentifier("cellchoice")!
         let label = cell.viewWithTag(1) as! UILabel
         
@@ -123,7 +145,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         // theme
         cell.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
         label.textColor = self.themer.navyForLightOrWhite(1.0)
-        
+ 
         return cell
     }
     
@@ -172,20 +194,72 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return cell
     }
     
+    func cellForVersionSection(row: Int) -> UITableViewCell {
+
+        let cell = self.settingsTable.dequeueReusableCellWithIdentifier("cellselect")!
+        let label = cell.viewWithTag(1) as! UILabel
+        
+        let version = Version(rawValue: row)
+        label.text = version?.text()
+        
+        if row == self.settings.version.rawValue {
+            cell.accessoryType = .Checkmark
+        } else {
+            cell.accessoryType = .None
+        }
+        
+        return cell
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        switch indexPath.section {
+        var cell = self.settingsTable.dequeueReusableCellWithIdentifier("cellsubnav")!
+        switch indexPath.row {
+        case 0:
+            let label = cell.viewWithTag(1) as! UILabel
+            label.text = "Version"
+            
+            let currentLabel = cell.viewWithTag(2) as! UILabel
+            let currentVersion = self.settings.version.text()
+            currentLabel.text = currentVersion.uppercaseString
+            
         case 1:
+            let label = cell.viewWithTag(1) as! UILabel
+            label.text = "Font"
+            
+            let currentLabel = cell.viewWithTag(2) as! UILabel
+            let currentFont = "\(self.themer.fontType.name()) \(Int(themer.fontSize))px"
+            currentLabel.text = currentFont
+
+        default:
+            cell = self.settingsTable.dequeueReusableCellWithIdentifier("cellchoice")!
+        }
+        
+        return cell
+        /*
+        switch indexPath.section {
+        case 0:
+            return cellForVersionSection(indexPath.row)
+        case 2:
             return cellForFontSection(indexPath.row)
         default:
             return cellForGeneralSection(indexPath.row)
         }
+        */
 
     }
     
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
+        switch indexPath.row {
+        case 0:
+            self.performSegueWithIdentifier("versionsegue", sender: nil)
+        default:
+            self.performSegueWithIdentifier("fontsegue", sender: nil)
+        }
+
+        /*
         if indexPath.section == 1 {  // selected a font
             if let newFont = ThemeFont(rawValue: indexPath.row) {
                 self.themer.setFontStyle(newFont)
@@ -195,19 +269,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // update view
         tableView.reloadData()
+        */
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 1: // font section
-            return 5
-        default: // general section
-            return 2
-        }
+        return 3
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
 
@@ -216,17 +286,22 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return HEIGHT_FOR_HEADER
+        return 0
+       // return HEIGHT_FOR_HEADER
     }
     
+    /*
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         view.backgroundColor = themer.offWhiteForLightOrNavy(0.1)
         let label = UILabel(frame: CGRectMake(10, 0, tableView.frame.width, HEIGHT_FOR_HEADER))
         if section == 0 {
-            label.text = "Lighting"
+            label.text = "Version"
         }
         if section == 1 {
+            label.text = "Lighting"
+        }
+        if section == 2 {
             label.text = "Font"
         }
         label.font = ThemeFont.system(14, weight: UIFontWeightLight)
@@ -234,6 +309,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         view.addSubview(label)
         return view
     }
+    */
 
     // MARK: - targets
     func toggleNightMode(){
@@ -281,14 +357,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return HIDE_STATUS_BAR
     }
     
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
