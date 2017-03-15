@@ -50,6 +50,9 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func handleAddTopic(sender: AnyObject) {
+        
+    }
 
     /*
     // MARK: - Navigation

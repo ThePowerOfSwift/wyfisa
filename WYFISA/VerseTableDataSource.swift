@@ -142,6 +142,15 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
         return nil
     }
 
+    func getMaxSessionID() -> UInt64 {
+        var maxId:UInt64 = 0
+        for verse in self.recentVerses {
+            if verse.session > maxId {
+                maxId = verse.session
+            }
+        }
+        return maxId+1
+    }
 
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
 

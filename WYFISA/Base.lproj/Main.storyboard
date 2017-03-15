@@ -90,6 +90,9 @@
                                 <state key="normal" title="+">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="handleAddTopic:" destination="jHn-9q-1V7" eventType="touchUpInside" id="eqV-l7-fGA"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
@@ -1671,10 +1674,10 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="7A8DF077-B7BD-4BC9-BAD1-34E03A67E588" translatesAutoresizingMaskIntoConstraints="NO" id="PsW-mK-lvd">
+                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="803AC778-BA3F-4142-AD82-24B2F3CCE18F" translatesAutoresizingMaskIntoConstraints="NO" id="PsW-mK-lvd">
                                                 <rect key="frame" x="34" y="0.0" width="274" height="0.0"/>
                                             </imageView>
-                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="00E27D4D-2437-435D-A99A-DAC25BEF6266" translatesAutoresizingMaskIntoConstraints="NO" id="bhv-SC-t6e">
+                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="51EC8485-343B-4234-A0FC-DDFE83D0B441" translatesAutoresizingMaskIntoConstraints="NO" id="bhv-SC-t6e">
                                                 <rect key="frame" x="34" y="0.0" width="274" height="0.0"/>
                                             </imageView>
                                         </subviews>
@@ -2603,7 +2606,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="00E27D4D-2437-435D-A99A-DAC25BEF6266" width="171" height="84">
+        <image name="51EC8485-343B-4234-A0FC-DDFE83D0B441" width="171" height="84">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -3612,7 +3615,7 @@ NOo56kHqROpJ6ljqXOpj6mvqeOp96n/qgeqG6o7qkeqW6p7qoeqz6rbquwAAAAAAAAIBAAAAAAAAAEEA
 AAAAAAAAAAAAAAAAAOq9A
 </mutableData>
         </image>
-        <image name="7A8DF077-B7BD-4BC9-BAD1-34E03A67E588" width="171" height="84">
+        <image name="803AC778-BA3F-4142-AD82-24B2F3CCE18F" width="171" height="84">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

@@ -133,7 +133,7 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
             }
         case .Photo:
             if let photoVerse = self.photoVC?.didReleaseCaptureButton() {
-                self.scriptVC?.addVersesToScript([photoVerse])
+                self.scriptVC?.addVerseToDatastore(photoVerse)
             }
         }
         // make sure camera is stopped

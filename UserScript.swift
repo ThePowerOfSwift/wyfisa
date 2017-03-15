@@ -34,12 +34,12 @@ class UserScript {
             
 
             if (tsMoment.day == today.day) { // today
-                if (tsMoment.hour - today.hour) < 7 {  // and within 7 hours
+                if (today.hour - tsMoment.hour) < 7 {  // and within 7 hours
                     timestamp = tsMoment.fromNow()
                 }
             } else if ((tsMoment.day + 1) == today.day) { // yesterday
                 timestamp = "yesterday"
-            } else if (tsMoment.day - today.day) < 7 { // within 7 days
+            } else if (today.day - tsMoment.day) < 7 { // within 7 days
                 timestamp = "\(tsMoment.weekdayName)"
             } else {  // long ago like 70 weeks
                 timestamp = "\(tsMoment.month)/\(tsMoment.day)/\(tsMoment.year)"

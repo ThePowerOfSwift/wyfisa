@@ -64,7 +64,7 @@ class ScriptComposeViewController: UIViewController,
         self.verseTable.footerHeight = self.footerOverlay.frame.height
         self.verseTable.scrollNotifier = self.tableScrollNotifierFunc
         self.verseTable.reloadData()
-        self.session.currentId = UInt64(self.tableDataSource!.nVerses+1)
+        self.session.currentId = self.tableDataSource!.getMaxSessionID()
         
         // setup picker view
         self.pickerView.dataSource = self
@@ -231,11 +231,6 @@ class ScriptComposeViewController: UIViewController,
             self.addVerseToDatastore(verseInfo)
             
         }
-    
-        if verses.count > 0 {
-            self.verseTable.reloadData()
-            self.verseTable.scrollToEnd()
-        }
 
     }
     
@@ -245,16 +240,16 @@ class ScriptComposeViewController: UIViewController,
         verse.scriptId = self.scriptId
         verse.session = self.session.updateCaptureId()
         self.tableDataSource?.appendVerse(verse)
-        self.verseTable.sortByPriority()
         self.verseTable.updateVersePriority(verse.id, priority: verse.priority)
+  //      let before = self.tableDataSource?.recentVerses
+  //      print(before)
+        self.verseTable?.sortByPriority()
+   //     let after = self.tableDataSource?.recentVerses
+   //     print(before)
 
         
         // add the section to capture table and then reload
-        dispatch_async(dispatch_get_main_queue()) {
-            if let table = self.verseTable {
-                table.addSection()
-            }
-        }
+        self.verseTable?.addSection()
         
         // update script count
         storage.incrementScriptCountAndTimestamp(self.scriptId!)
