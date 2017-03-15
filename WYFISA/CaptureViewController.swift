@@ -90,7 +90,8 @@ class CaptureViewController: UIViewController {
         let sessionId = self.session.currentId
         
         // capture frames
-        Timing.runAfterBg(0) {
+        Timing.runAfterBg(2.0) {
+            self.cam.ocr.processing = true
             while self.session.currentId == sessionId {
                 
                 // grap frame from campera
@@ -103,20 +104,10 @@ class CaptureViewController: UIViewController {
                 }
                 
                 if (self.session.active == false){
+                    self.cam.ocr.processing = false
                     break
                 }
-                /*
-                if (self.session.misses >= 10) {
-                    self.session.misses = 0
-                    break
-                }*/
             }
-            /*
-            Timing.runAfterBg(2.0){
-                if (self.session.active == true){
-                    self.captureLoop()
-                }
-            }*/
         }
         
         
@@ -139,7 +130,7 @@ class CaptureViewController: UIViewController {
         }
         
         print(text)
-        Animations.fadeOutIn(0.3, tsFadeOut: 0.3, view: self.captureBox, alpha: 0)
+        Animations.fadeOutIn(0.2, tsFadeOut: 0.6, view: self.captureBox, alpha: 0)
         
         updateLock.lock()
         let id = self.captureVerseTable.numberOfSections+1

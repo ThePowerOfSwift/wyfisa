@@ -9,12 +9,15 @@
 import Foundation
 import TesseractOCR
 import GPUImage
-
+import SwiftOCR
 
 class OCR: NSObject, G8TesseractDelegate {
     let tesseract:G8Tesseract = G8Tesseract(language:"eng");
-    var ocrLock = NSLock()
+    let swiftOCRInstance   = SwiftOCR()
 
+    var ocrLock = NSLock()
+    var processing = false
+    
     override init(){
         super.init()
         tesseract.maximumRecognitionTime = 10
@@ -25,37 +28,43 @@ class OCR: NSObject, G8TesseractDelegate {
     
     func process(image: UIImage!) -> String? {
 
-        // do image recognition
-        self.ocrLock.lock()
+        if (processing == false ||  self.ocrLock.tryLock() == false) {
+            return nil
+        }
+        
         var recognizedText: String?
+        
         tesseract.image = image
+        
         if tesseract.recognize() == true {
             recognizedText = tesseract.recognizedText
         }
-
         self.ocrLock.unlock()
+
         return recognizedText
 
     }
-    
+
     func cropScaleAndFilter(sourceImage: UIImage!) -> UIImage {
         
         // crop
-        let cropFilter = ImageFilter.cropFilter(0, y: 0.15, width: 0.8, height: 0.4)
+        let cropFilter = ImageFilter.cropFilter(0.2, y: 0.1, width: 0.6, height: 0.1)
         let croppedImage = cropFilter.imageByFilteringImage(sourceImage)
         
         // threshold
         let thresholdFilter = ImageFilter.thresholdFilter(4)
         let image = thresholdFilter.imageByFilteringImage(croppedImage)
+
         return image
     }
+    
     
     // gpuimge pre-processing delegate for tesseract recognize()
     @objc func preprocessedImageForTesseract(tesseract: G8Tesseract!, sourceImage: UIImage!) -> UIImage! {
         return self.cropScaleAndFilter(sourceImage)
     }
     func shouldCancelImageRecognitionForTesseract(tesseract: G8Tesseract!) -> Bool {
-        return false
+        return !self.processing
     }
     
     func imageToFile(image: UIImage, named: String){

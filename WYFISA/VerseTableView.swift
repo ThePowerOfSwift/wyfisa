@@ -330,11 +330,13 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
     func didGetSingleVerseForRow(sender: AnyObject, verse: AnyObject, section: Int){
         
         if let ds = self.getDatasource() {
-            let dsVerse = ds.recentVerses[section]
-            let fbVerse = verse as! VerseInfo
-            dsVerse.text = fbVerse.text
-            self.storage.updateVerse(dsVerse)
-            self.reloadData()
+            if ds.recentVerses.count > section {
+                let dsVerse = ds.recentVerses[section]
+                let fbVerse = verse as! VerseInfo
+                dsVerse.text = fbVerse.text
+                self.storage.updateVerse(dsVerse)
+                self.reloadData()
+            }
         }
     }
     
