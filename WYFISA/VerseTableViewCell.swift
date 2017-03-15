@@ -29,22 +29,22 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     let db = DBQuery.sharedInstance
     let themer = WYFISATheme.sharedInstance
 
-
-
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         self.labelHeader.textColor = self.themer.navyForLightOrTeal(1.0)
-
     }
 
     func highlightText() {
+        
+        /*
         let font = themer.currentFont()
         
         let attrs = [NSForegroundColorAttributeName: self.themer.fireForLightOrTurquoise(),
                      NSFontAttributeName: font]
         let attributedText = NSMutableAttributedString.init(string: self.labelText.text!, attributes: attrs)
         self.labelText.attributedText = attributedText
+        */
     }
 
     func applyCategoryStyle(verse: VerseInfo){
@@ -123,6 +123,9 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.labelText.text = verse.text
             self.labelText.textColor = self.themer.navyForLightOrWhite(1.0)
             self.quoteImage.hidden = true
+            self.labelHeader.hidden = false
+            self.labelText.hidden = false
+            
         }
         
         if verse.category == .Image {
@@ -136,6 +139,8 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.labelHeader.text = ""
             self.labelText.layer.borderColor = UIColor.fire().CGColor
             self.quoteImage.hidden = false
+            self.labelText.hidden = false
+
         }
         
         if isExpanded == true {
@@ -186,12 +191,9 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
         // append to cell
         if let verse = verseInfo {
             // start the caching and such
-            let chapter = "" //db.chapterForVerse(verse.id)
             let refs = db.crossReferencesForVerse(verse.id)
             let verses = db.versesForChapter(verse.id)
-            verse.chapter = chapter
             verse.refs = refs
-            verse.verses = verses
             self.delegate?.didTapMoreButtonForCell(self, withVerseInfo: verse)
         }
         
@@ -206,10 +208,5 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-    
-    func didGetVerseContext(sender: FBStorage, verses: [VerseInfo]){
-
-    }
-
     
 }

@@ -144,6 +144,7 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
 
 
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+
         if editingStyle == .Delete {
             
             // remove from storage

@@ -92,26 +92,31 @@ class CaptureViewController: UIViewController {
         // capture frames
         Timing.runAfterBg(0) {
             while self.session.currentId == sessionId {
-                // grap frame from campera
                 
+                // grap frame from campera
                 if let image = self.cam.imageFromFrame(){
-                    
+
                     // do image recognition
                     if let recognizedText = self.cam.processImage(image){
                         self.didProcessFrame(withText: recognizedText, image: image, fromSession: sessionId)
                     }
                 }
                 
+                if (self.session.active == false){
+                    break
+                }
+                /*
                 if (self.session.misses >= 10) {
                     self.session.misses = 0
                     break
-                }
+                }*/
             }
+            /*
             Timing.runAfterBg(2.0){
                 if (self.session.active == true){
                     self.captureLoop()
                 }
-            }
+            }*/
         }
         
         
@@ -142,45 +147,46 @@ class CaptureViewController: UIViewController {
         if let allVerses = TextMatcher().findVersesInText(text) {
             
             for var verseInfo in allVerses {
+                if BooksData.sharedInstance.exists(verseInfo.bookNo!,
+                                                   chapter: verseInfo.chapterNo!,
+                                                   verse: verseInfo.verse!) {
                 
-                //            if let verse = self.db.lookupVerse(verseInfo.id){
-                
-                // we have match
-                verseInfo.text = "" //verse
-                verseInfo.session = fromSession
-                verseInfo.image = image
-                
-                
-                // make sure not repeat match
-                if self.session.matches.indexOf(verseInfo.id) == nil {
+                    // we have match
+                    verseInfo.text = "" //verse
+                    verseInfo.session = fromSession
+                    verseInfo.image = image
                     
-                    // notify
-                    Animations.fadeInOut(0, tsFadeOut: 0.3, view: self.captureBoxActive, alpha: 0.6)
                     
-                    // new match
-                    if self.session.newMatches == 0 {
-                        self.captureVerseTable.updateVerseAtIndex(id-1, withVerseInfo: verseInfo)
-                    } else {
-                        self.tableDataSource?.appendVerse(verseInfo)
-                        dispatch_async(dispatch_get_main_queue()) {
-                            self.captureVerseTable.addSection()
+                    // make sure not repeat match
+                    if self.session.matches.indexOf(verseInfo.id) == nil {
+                        
+                        // notify
+                        Animations.fadeInOut(0, tsFadeOut: 0.3, view: self.captureBoxActive, alpha: 0.6)
+                        
+                        // new match
+                        if self.session.newMatches == 0 {
+                            self.captureVerseTable.updateVerseAtIndex(id-1, withVerseInfo: verseInfo)
+                        } else {
+                            self.tableDataSource?.appendVerse(verseInfo)
+                            dispatch_async(dispatch_get_main_queue()) {
+                                self.captureVerseTable.addSection()
+                            }
                         }
+                        self.captureVerseTable.updateVersePriority(verseInfo.id, priority: verseInfo.priority)
+                        
+                        // cache
+                        self.db.chapterForVerse(verseInfo.id)
+                        self.db.crossReferencesForVerse(verseInfo.id)
+                        self.db.versesForChapter(verseInfo.id)
+                        
+                    } else {
+                        // dupe
+                        continue
                     }
-                    self.captureVerseTable.updateVersePriority(verseInfo.id, priority: verseInfo.priority)
                     
-                    // cache
-                    self.db.chapterForVerse(verseInfo.id)
-                    self.db.crossReferencesForVerse(verseInfo.id)
-                    self.db.versesForChapter(verseInfo.id)
-                    
-                } else {
-                    // dupe
-                    continue
+                    self.session.newMatches += 1
+                    self.session.matches.append(verseInfo.id)
                 }
-                
-                self.session.newMatches += 1
-                self.session.matches.append(verseInfo.id)
-                //                }
             }
         }
         

@@ -10,6 +10,8 @@ import UIKit
 import Foundation
 import Regex
 
+var CHAPTER_CACHE = [String: [VerseInfo]]()
+
 enum ItemCategory: Int {
     case Verse = 0, Note, Image
 }
@@ -128,11 +130,11 @@ class VerseInfo {
     }
     
     func updateChapterForVerses(verses: [VerseInfo]){
-        // TODO: don't redo
+        // TODO: cache this... and ie the cache db is deleted on app reset
         
         var i = 1
         var chapterStr = ""
-        
+        var chapterVerses = [VerseInfo]()
         for verse in verses {
             if var rc = verse.text {
                 if (i == self.verse){ // this is context verse
@@ -149,11 +151,37 @@ class VerseInfo {
                     }
                 }
                 chapterStr = chapterStr.stringByAppendingString(rc)
+                let chapterVerse = self.makeChapterVerse(i, verseText: verse.text)
+                chapterVerses.append(chapterVerse)
             }
             i+=1
         }
-        self.verses = verses
+        self.verses = chapterVerses
         self.chapter = chapterStr
+        self.cacheVerses()
+    }
+    
+    func cacheVerses(){
+        if CHAPTER_CACHE.count > CHAPTER_CACHE_MAX {
+            CHAPTER_CACHE = [String: [VerseInfo]]()
+        }
+        CHAPTER_CACHE["\(self.bookNo!)\(self.chapterNo!)"] = self.verses
+
+    }
+    
+    func makeChapterVerse(verseNo: Int, verseText: String?) -> VerseInfo {
+        let bookIdStr = String(format: "%02d", self.bookNo!)
+        let chapterId = String(format: "%03d", Int(self.chapterNo!))
+        let verseId = String(format: "%03d", verseNo)
+        let id = "\(bookIdStr)\(chapterId)\(verseId)"
+        let bookName = Books(rawValue: self.bookNo!)!.name()
+        let chName = "\(bookName) \(chapterNo!):\(verseNo)"
+        let chapterVerse = VerseInfo.init(id: id, name: chName, text: verseText)
+        chapterVerse.bookNo = self.bookNo
+        chapterVerse.chapterNo = self.chapterNo
+        chapterVerse.verse = verseNo
+        
+        return chapterVerse
     }
     
     func updateWithIdParts() {

@@ -140,18 +140,16 @@ class ScriptComposeViewController: UIViewController,
     @IBAction func didPressClearButton(sender: UIButton) {
         
         // toggle editing mode
-        self.isEditingMode = !self.isEditingMode
-
-        if self.isEditingMode == true {
-            let buttonIcon = UIImage.init(named: "ios7-trash-fire")
+        self.settings.useFlash = !self.settings.useFlash
+        
+        if self.settings.useFlash == true {
+            let buttonIcon = UIImage.init(named: "flash-fire")
             sender.setImage(buttonIcon, forState: .Normal)
         } else {
-            let buttonIcon = UIImage.init(named: "ios7-trash-outline")
+            let buttonIcon = UIImage.init(named: "flash")
             sender.setImage(buttonIcon, forState: .Normal)
         }
         
-        // update editing state
-        self.verseTable.setEditing(self.isEditingMode, animated: true)
         
     }
 
@@ -233,6 +231,11 @@ class ScriptComposeViewController: UIViewController,
             self.addVerseToDatastore(verseInfo)
             
         }
+    
+        if verses.count > 0 {
+            self.verseTable.reloadData()
+            self.verseTable.scrollToEnd()
+        }
 
     }
     
@@ -242,6 +245,7 @@ class ScriptComposeViewController: UIViewController,
         verse.scriptId = self.scriptId
         verse.session = self.session.updateCaptureId()
         self.tableDataSource?.appendVerse(verse)
+        self.verseTable.sortByPriority()
         self.verseTable.updateVersePriority(verse.id, priority: verse.priority)
 
         
@@ -249,12 +253,8 @@ class ScriptComposeViewController: UIViewController,
         dispatch_async(dispatch_get_main_queue()) {
             if let table = self.verseTable {
                 table.addSection()
-                table.sortByPriority()
-                table.reloadData()
-                table.scrollToEnd()
             }
         }
-
         
         // update script count
         storage.incrementScriptCountAndTimestamp(self.scriptId!)
@@ -339,15 +339,11 @@ class ScriptComposeViewController: UIViewController,
     @IBAction func didSwipeRight(sender: UISwipeGestureRecognizer) {
         self.isEditingMode = true
         self.verseTable.setEditing(self.isEditingMode, animated: true)
-        let buttonIcon = UIImage.init(named: "ios7-trash-fire")
-        self.clearButton.setImage(buttonIcon, forState: .Normal)
     }
     
     @IBAction func didSwipeLeft(sender: UISwipeGestureRecognizer) {
         self.isEditingMode = false
         self.verseTable.setEditing(self.isEditingMode, animated: true)
-        let buttonIcon = UIImage.init(named: "ios7-trash-outline")
-        self.clearButton.setImage(buttonIcon, forState: .Normal)
     }
 
     // MARK: - navigation
@@ -498,6 +494,7 @@ class ScriptComposeViewController: UIViewController,
         // just removed one cell
         self.storage.decrementScriptCountAndTimestamp(self.scriptId!)
         self.syncWithDataSource()
+        self.verseTable.setEditing(false, animated: true)
     }
     
     // MARK: - notes handler

@@ -15,6 +15,7 @@ class PhotoCaptureViewController: UIViewController {
     let cam = CameraManager.sharedInstance
     var frameSize = CGSize()
     var session = CaptureSession.sharedInstance
+    let settings = SettingsManager.sharedInstance
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,13 +39,17 @@ class PhotoCaptureViewController: UIViewController {
      // MARK: -CaptureButton Delegate
      func didPressCaptureButton(){
      
-         self.view.frame.size = self.frameSize
+        self.view.frame.size = self.frameSize
         self.cam.addTarget(self.photoCaptureView)
-
+        
          self.cam.resume()
          Animations.start(0.3){
              self.view.alpha = 1
          }
+        
+        if self.settings.useFlash == true {
+            self.cam.torch(.On)
+        }
      
      }
     
@@ -70,7 +75,9 @@ class PhotoCaptureViewController: UIViewController {
         // remove camera from target
         self.cam.removeTarget(self.photoCaptureView)
 
-        
+        if self.settings.useFlash == true {
+            self.cam.torch(.Off)
+        }
          return verseInfo
      }
  

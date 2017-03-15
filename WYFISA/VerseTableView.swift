@@ -47,7 +47,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
     
 
     func updateVerseAtIndex(id: Int, withVerseInfo verse: VerseInfo){
-        if(id==0){
+        if(id<=1){
             return
         }
         let section = id-1
@@ -93,6 +93,9 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
             nSections = ds.nVerses
         }
         
+        // get verse text
+        self.fetchVerseText(nSections-1)
+        
         let idxSet = NSIndexSet(index: nSections)
 
         self.insertSections(idxSet, withRowAnimation: .None)
@@ -102,6 +105,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
 
         // scroll down to new section to create a 'scroll up' effect
         self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
+
 
     }
     
@@ -227,6 +231,31 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
     }
     
     
+    func fetchVerseText(section: Int){
+        var verseToFetch:VerseInfo? = nil
+        
+        if let ds = self.getDatasource() {
+            if ds.recentVerses.count > section {
+                let verse = ds.recentVerses[section]
+                if (verse.category == .Verse && verse.id != "") {
+                    if (verse.version != SettingsManager.sharedInstance.version.text()){
+                        // version missmatch
+                        verseToFetch = verse
+                    } else if let vtext = verse.text {
+                        if vtext == "" {
+                            verseToFetch = verse
+                        }
+                    }
+                }
+            }
+        }
+        
+        if verseToFetch != nil {
+            firDB.getVerseDoc(verseToFetch!.id, section: section)
+        }
+        
+    }
+    
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if self.isExpanded == false {
             // fade in new cells
@@ -237,15 +266,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
         }
         
         // update version if necessary
-        if let ds = self.getDatasource() {
-            if ds.recentVerses.count > indexPath.section {
-                let verse = ds.recentVerses[indexPath.section]
-                if (verse.category == .Verse) &&
-                    (verse.version != SettingsManager.sharedInstance.version.text()) {
-                    firDB.getVerseDoc(verse.id, section: indexPath.section)
-                }
-            }
-        }
+        self.fetchVerseText(indexPath.section)
         
     }
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

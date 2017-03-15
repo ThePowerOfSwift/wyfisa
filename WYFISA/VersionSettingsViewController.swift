@@ -54,5 +54,6 @@ class VersionSettingsViewController: UIViewController, UITableViewDataSource, UI
         }
         self.versionTable.reloadData()
     }
+    
 
 }

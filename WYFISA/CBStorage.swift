@@ -49,7 +49,7 @@ class CBStorage {
                     self.replicate(.Dual)
                     self.createScriptView()
                 default:
-                    print("UNKNOWN DB", databaseName)
+                    print("No setup for", databaseName)
                 }
             }
         } catch {

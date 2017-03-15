@@ -24,7 +24,6 @@ class SettingsManager {
             if let doc = db.existingDocumentWithID("settings") {
                 // restore settings
                 self.nightMode = doc.propertyForKey("night") as! Bool
-                self.useFlash = doc.propertyForKey("flash") as! Bool
                 if let versionProperty = doc.propertyForKey("version") {
                     self.version = Version(rawValue: versionProperty as! Int)!
                 }
@@ -120,132 +119,41 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         // Dispose of any resources that can be recreated.
     }
     
-    
-    func cellForGeneralSection(row: Int) -> UITableViewCell {
-
-        let cell = self.settingsTable.dequeueReusableCellWithIdentifier("cellchoice")!
-        let label = cell.viewWithTag(1) as! UILabel
-        
-        switch row {
-        case 0:
-            label.text = "Night Mode"
-            let nightSwitch = cell.viewWithTag(2) as! UISwitch
-            nightSwitch.addTarget(self, action:  #selector(self.toggleNightMode), forControlEvents: .ValueChanged)
-            nightSwitch.setOn(settings.nightMode, animated: false)
-        case 1:
-            label.text = "Use Flash"
-            let flashSwitch = cell.viewWithTag(2) as! UISwitch
-            flashSwitch.addTarget(self, action:  #selector(self.toggleUseFlash), forControlEvents: .ValueChanged)
-            flashSwitch.setOn(settings.useFlash, animated: false)
-        default:
-            (cell.viewWithTag(2) as! UISwitch).hidden = true
-            label.text = nil
-        }
-        
-        // theme
-        cell.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
-        label.textColor = self.themer.navyForLightOrWhite(1.0)
- 
-        return cell
-    }
-    
-    
-    func fontSliderCell() -> UITableViewCell {
-        // customize slider cell
-        let cell = self.settingsTable.dequeueReusableCellWithIdentifier("cellslider")!
-        let label = cell.viewWithTag(1) as! UILabel
-        let slider = cell.viewWithTag(2) as! UISlider
-
-        // style
-        let currentVal = Float(themer.fontSize)
-        slider.value = currentVal
-        label.text = "\(Int(currentVal))px"
-        
-        // theme
-        cell.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
-        label.textColor = self.themer.navyForLightOrWhite(1.0)
-        
-        return cell
-    }
-
-    func cellForFontSection(row: Int) -> UITableViewCell {
-        
-        if row == 4 { // is slider
-            return fontSliderCell()
-        }
-        
-        let cell = self.settingsTable.dequeueReusableCellWithIdentifier("cellselect")!
-        let label = cell.viewWithTag(1) as! UILabel
-        
-        let font = ThemeFont(rawValue: row)
-        label.text = font?.name()
-        label.font = font?.styleWithSize(label.font.pointSize)
-        
-        if row == themer.fontType.rawValue {
-            cell.accessoryType = .Checkmark
-        } else {
-            cell.accessoryType = .None
-        }
-        
-        // theme
-        cell.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
-        label.textColor = self.themer.navyForLightOrWhite(1.0)
-        
-        return cell
-    }
-    
-    func cellForVersionSection(row: Int) -> UITableViewCell {
-
-        let cell = self.settingsTable.dequeueReusableCellWithIdentifier("cellselect")!
-        let label = cell.viewWithTag(1) as! UILabel
-        
-        let version = Version(rawValue: row)
-        label.text = version?.text()
-        
-        if row == self.settings.version.rawValue {
-            cell.accessoryType = .Checkmark
-        } else {
-            cell.accessoryType = .None
-        }
-        
-        return cell
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         var cell = self.settingsTable.dequeueReusableCellWithIdentifier("cellsubnav")!
+        let label = cell.viewWithTag(1) as! UILabel
+
         switch indexPath.row {
         case 0:
-            let label = cell.viewWithTag(1) as! UILabel
             label.text = "Version"
-            
             let currentLabel = cell.viewWithTag(2) as! UILabel
             let currentVersion = self.settings.version.text()
             currentLabel.text = currentVersion.uppercaseString
             
         case 1:
-            let label = cell.viewWithTag(1) as! UILabel
             label.text = "Font"
-            
             let currentLabel = cell.viewWithTag(2) as! UILabel
             let currentFont = "\(self.themer.fontType.name()) \(Int(themer.fontSize))px"
             currentLabel.text = currentFont
 
         default:
             cell = self.settingsTable.dequeueReusableCellWithIdentifier("cellchoice")!
+            label.text = "Night Mode"
+            let nightSwitch = cell.viewWithTag(2) as! UISwitch
+            nightSwitch.addTarget(self, action:  #selector(self.toggleNightMode), forControlEvents: .ValueChanged)
+            nightSwitch.setOn(settings.nightMode, animated: false)
+            
+            // update theme
+            cell.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+            label.textColor = self.themer.navyForLightOrWhite(1.0)
         }
         
         return cell
-        /*
-        switch indexPath.section {
-        case 0:
-            return cellForVersionSection(indexPath.row)
-        case 2:
-            return cellForFontSection(indexPath.row)
-        default:
-            return cellForGeneralSection(indexPath.row)
-        }
-        */
 
     }
     
@@ -259,17 +167,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             self.performSegueWithIdentifier("fontsegue", sender: nil)
         }
 
-        /*
-        if indexPath.section == 1 {  // selected a font
-            if let newFont = ThemeFont(rawValue: indexPath.row) {
-                self.themer.setFontStyle(newFont)
-                self.updateSettings("font", value: indexPath.row)
-            }
-        }
-        
-        // update view
-        tableView.reloadData()
-        */
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -281,36 +178,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
 
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0.01
-    }
-    
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
-       // return HEIGHT_FOR_HEADER
     }
     
-    /*
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = themer.offWhiteForLightOrNavy(0.1)
-        let label = UILabel(frame: CGRectMake(10, 0, tableView.frame.width, HEIGHT_FOR_HEADER))
-        if section == 0 {
-            label.text = "Version"
-        }
-        if section == 1 {
-            label.text = "Lighting"
-        }
-        if section == 2 {
-            label.text = "Font"
-        }
-        label.font = ThemeFont.system(14, weight: UIFontWeightLight)
-        label.textColor = themer.navyForLightOrOffWhite(0.8)
-        view.addSubview(label)
-        return view
-    }
-    */
-
     // MARK: - targets
     func toggleNightMode(){
         self.settings.nightMode = !self.settings.nightMode
@@ -332,15 +203,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             self.themer.setMode(Scheme.Light)
         }
         self.themeView()
-    }
-    
-    @IBAction func didChangeFontSizeSlider(sender: UISlider) {
-        let value = CGFloat(sender.value)
-        self.themer.setFontSize(value)
-        let path = NSIndexPath.init(forRow: 4, inSection: 1)
-        self.settingsTable.reloadRowsAtIndexPaths([path], withRowAnimation: .None)
-        self.updateSettings("fontSize", value: value)
-
     }
     
     func updateSettings(_ key: String, value: AnyObject){

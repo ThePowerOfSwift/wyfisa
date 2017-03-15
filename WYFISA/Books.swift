@@ -10,11 +10,13 @@ import Foundation
 
 struct BooksData {
     var data: [[String:AnyObject]]
+    var stats: [String:[String:Int]]
     static let sharedInstance = BooksData()
 
     init(){
         self.data = [[String:AnyObject]]()
-        let filePath = NSBundle.mainBundle().pathForResource("books",ofType:"json")
+        self.stats = [String:[String:Int]]()
+        var filePath = NSBundle.mainBundle().pathForResource("books",ofType:"json")
         if let jsonData = NSData.init(contentsOfFile: filePath!) {
             do {
                 let jsonDict = try NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments)
@@ -24,6 +26,32 @@ struct BooksData {
             }
             
         }
+        filePath = NSBundle.mainBundle().pathForResource("stats",ofType:"json")
+        if let jsonData = NSData.init(contentsOfFile: filePath!) {
+            do {
+                let jsonDict = try NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments)
+                self.stats = jsonDict as! [String:[String:Int]]
+            } catch  let err {
+                print(err, "json load error")
+            }
+            
+        }
+    }
+    
+    func exists(book: Int, chapter: Int, verse: Int) -> Bool {
+        
+        // check that book, chapter and verse are within range
+        let b = "\(book)"
+        let c = "\(chapter)"
+        if self.stats[b] != nil &&
+            self.stats[b]![c] != nil
+        {
+            if verse <= self.stats[b]![c]! {
+                return true
+            }
+        }
+        
+        return false
     }
 }
 

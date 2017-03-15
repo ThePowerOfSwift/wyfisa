@@ -22,7 +22,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     @IBOutlet var navBackgroundView: UIView!
     @IBOutlet var nextChapterButton: UIButton!
     @IBOutlet var prevChapterButton: UIButton!
-    
+    @IBOutlet var loadSpinner: UIActivityIndicatorView!
     
     var themer = WYFISATheme.sharedInstance
     var db = DBQuery.sharedInstance
@@ -43,7 +43,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         
         if let verse = verseInfo {
             if (verse.bookNo != nil) && (verse.chapterNo != nil){
-                self.firDB.getVerseContext(verse.bookNo!, chapterNo: verse.chapterNo!)
+                self.fetchCurrentChapter()
             }
         }
     }
@@ -58,7 +58,6 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         
         // Do any additional setup after loading the view.
         if let verse = verseInfo {
-            self.verseLabel.text = verse.name
             
             if verse.chapter == nil { return } // nothing can be done
             
@@ -259,11 +258,13 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         
         if let verseCell = cell {
             if let refs = self.versesForCell() {
-                let refInfo = refs[indexPath.section]
-                verseCell.updateWithVerseInfo(refInfo, isExpanded: true)
-                if let activeVerse = self.verseInfo?.verse {
-                    if activeVerse == indexPath.section+1 {
-                        verseCell.highlightText()
+                if refs.count > indexPath.section {
+                    let refInfo = refs[indexPath.section]
+                    verseCell.updateWithVerseInfo(refInfo, isExpanded: true)
+                    if let activeVerse = self.verseInfo?.verse {
+                        if activeVerse == indexPath.section+1 {
+                            verseCell.highlightText()
+                        }
                     }
                 }
             }
@@ -274,6 +275,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         }
 
     }
+    
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
@@ -430,14 +432,31 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
 
     @IBAction func didPressNextChapterButton(sender: AnyObject) {
         self.verseInfo = self.nextVerse
-        self.handleChapterChange()
+        self.fetchCurrentChapter()
+
     }
     
     @IBAction func didPressPrevChapterButton(sender: AnyObject) {
         self.verseInfo = self.prevVerse
-        self.handleChapterChange()
+        self.fetchCurrentChapter()
     }
     
+    func fetchCurrentChapter(){
+        self.loadSpinner.startAnimating()
+        self.splitSwitch.hidden = true
+
+        let bookNo = self.verseInfo!.bookNo!
+        let chapterNo = self.verseInfo!.chapterNo!
+        let cacheKey = "\(bookNo)\(chapterNo)"
+        self.verseLabel.text = self.verseInfo!.name
+
+        if let verses = CHAPTER_CACHE[cacheKey] {
+            self.didGetVerseContext(self, verses: verses)
+        } else {
+            self.firDB.getVerseContext(bookNo,
+                                       chapterNo:  chapterNo)
+        }
+    }
     func handleChapterChange(){
         
         // reset state
@@ -504,13 +523,11 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     }
     
     // MARK: - FIR Delegate
-    func didGetSingleVerse(sender: FBStorage, verse: VerseInfo){
-        
-    }
-    
-    func didGetVerseContext(sender: FBStorage, verses: [VerseInfo]){
-        self.verseInfo?.updateChapterForVerses(verses)
-        initView()
+    func didGetVerseContext(sender: AnyObject, verses: [AnyObject]){
+        self.verseInfo?.updateChapterForVerses(verses as! [VerseInfo])
+        self.handleChapterChange()
+        self.loadSpinner.stopAnimating()
+        self.splitSwitch.hidden = false
     }
 
 }
