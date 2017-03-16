@@ -117,7 +117,7 @@ class CaptureViewController: UIViewController {
     func didProcessFrame(withText text: String, image: UIImage, fromSession: UInt64) {
         
         
-        if fromSession != self.session.currentId {
+        if fromSession != self.activeCaptureSession {
             return // Ignore: from old capture session
         }
         if (text.length == 0){

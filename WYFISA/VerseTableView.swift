@@ -54,6 +54,9 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
         let idxSet = NSIndexSet(index: section)
         
         if let ds = self.getDatasource() {
+            if ds.recentVerses.count == 0 {
+                return
+            }
             ds.recentVerses[section-1] = verse
             ds.updateCellHeightVal(verse)
             if ds.ephemeral == false {
@@ -124,6 +127,8 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
     func sortByPriority(){
         if let ds = self.getDatasource() {
             ds.recentVerses.sortInPlace {
+                print("P0", $0.priority, "P1", $1.priority)
+                print("S0", $0.session, "S1", $1.session)
                 if ($0.session != $1.session){
                     return $0.session < $1.session
                 }
@@ -139,6 +144,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
             for var v in ds.recentVerses {
                 if v.id == id {
                     ds.recentVerses[i].priority = priority
+                    print("Set", ds.recentVerses[i].name,  priority)
                 }
                 i+=1
             }

@@ -224,9 +224,6 @@ class ScriptComposeViewController: UIViewController,
     
     func addVersesToScript(verses: [VerseInfo]) {
         
-        // update session for all verses
-        CaptureSession.sharedInstance.updateCaptureId()
-
         // carry verses over to editor table
         for verseInfo in verses {
             
@@ -234,22 +231,21 @@ class ScriptComposeViewController: UIViewController,
             self.addVerseToDatastore(verseInfo, updateSession: false)
             
         }
+        
+        // update session for all verses
+        CaptureSession.sharedInstance.updateCaptureId()
 
     }
     
     
     func addVerseToDatastore(verse: VerseInfo, updateSession: Bool = true){
         
-        // create a new session
-        if updateSession == true {
-            CaptureSession.sharedInstance.updateCaptureId()
-        }
-        
+
         // add verse to datasource
         verse.scriptId = self.scriptId
         verse.session = self.session.currentId
         self.tableDataSource?.appendVerse(verse)
-        self.verseTable.updateVersePriority(verse.id, priority: verse.priority)
+       // self.verseTable.updateVersePriority(verse.id, priority: verse.priority)
         self.verseTable?.sortByPriority()
         
         // add the section to capture table and then reload
@@ -259,6 +255,12 @@ class ScriptComposeViewController: UIViewController,
         
         // update script count
         storage.incrementScriptCountAndTimestamp(self.scriptId!)
+        
+        // create a new session
+        if updateSession == true {
+            CaptureSession.sharedInstance.updateCaptureId()
+        }
+        
     }
     
     func takePhoto(){

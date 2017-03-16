@@ -87,7 +87,7 @@ class TextMatcher {
                 verseInfos = [VerseInfo]()
             }
             // set priority based on line verse occurs
-            let charsToBookStr: Regex = Regex("(.*)\(bookStr)",  options: [])
+            let charsToBookStr: Regex = Regex("(.*?)\(bookStr)",  options: [])
             let charMatches = charsToBookStr.allMatches(textPriority)
             if charMatches.count > 0 {
                 let lMatch = charMatches[0].captures[0]!
