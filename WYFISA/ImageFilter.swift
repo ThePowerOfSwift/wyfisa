@@ -23,7 +23,6 @@ class ImageFilter {
         let guassFilter = GPUImageGaussianSelectiveBlurFilter()
         guassFilter.excludeCircleRadius = radius
         guassFilter.excludeCirclePoint = CGPoint(x: x, y: y)
-        guassFilter.aspectRatio = 1.5
         return guassFilter
     }
     

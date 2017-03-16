@@ -21,7 +21,8 @@ class NotesViewController: UIViewController {
     var editingText: String? = nil
     let themer = WYFISATheme.sharedInstance
     var isUpdate: Bool = false
-    
+    var isShowingKeyboard: Bool = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -55,7 +56,7 @@ class NotesViewController: UIViewController {
         }
 
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -65,11 +66,21 @@ class NotesViewController: UIViewController {
     // Keyboard management
     // http://blog.apoorvmote.com/move-uitextfield-up-when-keyboard-appears/
     func keyboardWillShow(notification:NSNotification) {
+        if self.isShowingKeyboard {
+            return // already showing
+        }
+
         adjustingHeight(true, notification: notification)
+        self.isShowingKeyboard = true
     }
     
     func keyboardWillHide(notification:NSNotification) {
+        if !self.isShowingKeyboard {
+            return // already hiding
+        }
+
         adjustingHeight(false, notification: notification)
+        self.isShowingKeyboard = false
     }
     
     func adjustingHeight(show:Bool, notification:NSNotification) {

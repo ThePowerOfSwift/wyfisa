@@ -52,18 +52,19 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
         }
         let section = id-1
         let idxSet = NSIndexSet(index: section)
-    
+        
         if let ds = self.getDatasource() {
             ds.recentVerses[section-1] = verse
             ds.updateCellHeightVal(verse)
             if ds.ephemeral == false {
                 ds.storage.putVerse(verse)
             }
+            self.fetchVerseText(section-1)
         }
         
         dispatch_async(dispatch_get_main_queue()) {
              let path = NSIndexPath(forRow: 0, inSection: section)
-             self.reloadSections(idxSet, withRowAnimation: .None)
+             self.reloadSections(idxSet, withRowAnimation: .Fade)
              self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
         }
     }
@@ -108,8 +109,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
 
             // scroll down to new section to create a 'scroll up' effect
             self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
-            
-            nLock.unlock()
+            self.nLock.unlock()
         }
 
     }

@@ -136,9 +136,6 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
             }
         }
         
-        // create a new session
-        CaptureSession.sharedInstance.updateCaptureId()
-        
         // pass along to scriptvc
         self.scriptVC?.addVersesToScript(newItems)
 
@@ -188,7 +185,7 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
 
     func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
         
-        Animations.fadeOutIn(0.1, tsFadeOut: 0.3, view: self.pickerView, alpha: 0.2)
+        Animations.fadeOutIn(0, tsFadeOut: 0.3, view: self.pickerView, alpha: 0.2)
         self.pickerView.reloadData()
         
     }

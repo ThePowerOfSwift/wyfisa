@@ -59,9 +59,7 @@ class CaptureViewController: UIViewController {
                 self.view.alpha = 1
             }
             self.startOCRCaptureAction()
-            //Timing.runAfterBg(2){
-                self.captureLock.unlock()
-           // }
+            self.captureLock.unlock()
         }
 
     }
@@ -129,7 +127,6 @@ class CaptureViewController: UIViewController {
             self.session.misses = 0
         }
         
-        print(text)
         Animations.fadeOutIn(0.2, tsFadeOut: 0.6, view: self.captureBox, alpha: 0)
         
         updateLock.lock()
