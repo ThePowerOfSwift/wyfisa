@@ -157,7 +157,11 @@ class CaptureViewController: UIViewController {
                         } else {
                             self.tableDataSource?.appendVerse(verseInfo)
                             dispatch_async(dispatch_get_main_queue()) {
-                                self.captureVerseTable.addSection()
+                                if self.session.active {
+                                    self.updateLock.lock()
+                                    self.captureVerseTable.addSection()
+                                    self.updateLock.unlock()
+                                }
                             }
                         }
                         self.captureVerseTable.updateVersePriority(verseInfo.id, priority: verseInfo.priority)
@@ -189,6 +193,8 @@ class CaptureViewController: UIViewController {
             return []
         }
 
+        updateLock.lock()
+
         var capturedVerses:[VerseInfo] = []
 
         Animations.start(0.3){
@@ -209,6 +215,7 @@ class CaptureViewController: UIViewController {
         self.captureVerseTable.clear()
         
         self.cam.removeTarget(self.captureView)
+        updateLock.unlock()
 
         return capturedVerses
     }

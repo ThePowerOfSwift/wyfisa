@@ -47,28 +47,35 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
     
 
     func updateVerseAtIndex(id: Int, withVerseInfo verse: VerseInfo){
-        if(id<=1){
+        if(id<=1 ||  self.getDatasource()?.recentVerses.count == 0){
             return
         }
-        let section = id-1
-        let idxSet = NSIndexSet(index: section)
         
-        if let ds = self.getDatasource() {
-            if ds.recentVerses.count == 0 {
-                return
+        if nLock.tryLock() {
+            let section = id-1
+            let idxSet = NSIndexSet(index: section)
+            
+            if let ds = self.getDatasource() {
+                ds.recentVerses[section-1] = verse
+                ds.updateCellHeightVal(verse)
+                if ds.ephemeral == false {
+                    ds.storage.putVerse(verse)
+                }
+                self.fetchVerseText(section-1)
             }
-            ds.recentVerses[section-1] = verse
-            ds.updateCellHeightVal(verse)
-            if ds.ephemeral == false {
-                ds.storage.putVerse(verse)
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                 // update tableview on main thread
+                 if self.nLock.tryLock() {
+                    if self.getDatasource()?.recentVerses.count > section {
+                         let path = NSIndexPath(forRow: 0, inSection: section)
+                         self.reloadSections(idxSet, withRowAnimation: .Fade)
+                         self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
+                    }
+                    self.nLock.unlock()
+                }
             }
-            self.fetchVerseText(section-1)
-        }
-        
-        dispatch_async(dispatch_get_main_queue()) {
-             let path = NSIndexPath(forRow: 0, inSection: section)
-             self.reloadSections(idxSet, withRowAnimation: .Fade)
-             self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
+            self.nLock.unlock()
         }
     }
     
@@ -76,18 +83,23 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
     // and the array value is the last one added
     func removeFailedVerse(){
 
-        let idxSet = NSIndexSet(index: self.numberOfSections-1)
+        if nLock.tryLock() {
+            let idxSet = NSIndexSet(index: self.numberOfSections-1)
 
-        Animations.start(0.2) {
-            if let ds = self.getDatasource(){
+            Animations.start(0.2) {
+                if let ds = self.getDatasource(){
 
-                ds.nVerses = ds.nVerses - 1
-                ds.recentVerses.removeAtIndex(ds.recentVerses.count-1)
+                    ds.nVerses = ds.nVerses - 1
+                    ds.recentVerses.removeAtIndex(ds.recentVerses.count-1)
+
+                }
+                self.deleteSections(idxSet, withRowAnimation: .Top)
 
             }
-            self.deleteSections(idxSet, withRowAnimation: .Top)
-
+            
+            self.nLock.unlock()
         }
+
     }
     
     func addSection() {
@@ -127,8 +139,6 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
     func sortByPriority(){
         if let ds = self.getDatasource() {
             ds.recentVerses.sortInPlace {
-                print("P0", $0.priority, "P1", $1.priority)
-                print("S0", $0.session, "S1", $1.session)
                 if ($0.session != $1.session){
                     return $0.session < $1.session
                 }
@@ -141,10 +151,9 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
     func updateVersePriority(id: String, priority: Float){
         var i = 0
         if let ds = self.getDatasource() {
-            for var v in ds.recentVerses {
+            for v in ds.recentVerses {
                 if v.id == id {
                     ds.recentVerses[i].priority = priority
-                    print("Set", ds.recentVerses[i].name,  priority)
                 }
                 i+=1
             }
