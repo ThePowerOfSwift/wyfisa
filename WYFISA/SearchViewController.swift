@@ -18,9 +18,11 @@ class SearchViewController: UIViewController, FBStorageDelegate {
     @IBOutlet var verseTitle: UILabel!
     @IBOutlet var closeButton: UIButton!
     @IBOutlet var saveButton: UIButton!
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
 
     
     let themer = WYFISATheme.sharedInstance
+    let storage = CBStorage.init(databaseName: SCRIPTS_DB, skipSetup: true)
     let firDB = FBStorage()
 
     var frameSize: CGSize = CGSize()
@@ -98,9 +100,16 @@ class SearchViewController: UIViewController, FBStorageDelegate {
             self.verseTitle.text = verseInfo.name
             self.verseText.text = verseInfo.text
             self.verseInfo = verseInfo
-            self.firDB.getVerseDoc(verseInfo.id)
-
-            
+            if let verse = self.storage.getVerseDocById(verseInfo.id){
+                if verse.version == SettingsManager.sharedInstance.version.text() {
+                    self.verseInfo!.text = verse.text
+                    self.verseText!.text = verse.text  // update ui
+                }
+            }
+            if verseInfo.text == nil || verseInfo.text == "Not Found" {  // ui default
+                self.firDB.getVerseDoc(verseInfo.id)
+                self.activityIndicator.startAnimating()
+            }
         }
         
     }
@@ -145,6 +154,7 @@ class SearchViewController: UIViewController, FBStorageDelegate {
     func didGetSingleVerse(sender: AnyObject, verse: AnyObject){
         let fbVerse = verse as! VerseInfo
         self.verseText.text = fbVerse.text
+        self.activityIndicator.stopAnimating()
         if self.verseInfo != nil {
             self.verseInfo!.text = fbVerse.text
         }

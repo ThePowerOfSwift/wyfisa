@@ -80,6 +80,13 @@ class CBStorage {
             }
             }, version: "2")
         
+        let verseIdView = db?.viewNamed("verseById")
+        verseIdView?.setMapBlock({ (doc, emit) in
+            if let vkey = doc["key"] {
+                emit(doc["id"]!, vkey)
+            }
+            }, version: "1")
+        
         let scriptView = db?.viewNamed("scriptVerses")
         scriptView?.setMapBlock({ (doc, emit) in
             if let scriptId = doc["script"] {
@@ -158,10 +165,28 @@ class CBStorage {
         
     }
     
-    func getVerseDoc(id: String) -> VerseInfo? {
+    func getVerseDoc(key: String) -> VerseInfo? {  // by doc.key
         var verse:VerseInfo? = nil
-        if let doc = self.db?.documentWithID(id) {
+        if let doc = self.db?.documentWithID(key) {
             verse = VerseInfo.DocPropertiesToObj(doc.properties)
+        }
+        return verse
+    }
+    
+    func getVerseDocById(id: String) -> VerseInfo? {  // by doc.id
+        var verse:VerseInfo? = nil
+        
+        if let db = self.db {
+            let query = db.viewNamed("verseById").createQuery()
+            query.keys = [id]
+            do {
+                let result = try query.run()
+                if result.count > 0 {
+                    let row = result.rowAtIndex(0)
+                    let key = row.value as! String
+                    verse = self.getVerseDoc(key)
+                }
+            } catch {}
         }
         return verse
     }
