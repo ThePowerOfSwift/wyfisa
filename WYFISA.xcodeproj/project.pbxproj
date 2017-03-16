@@ -219,6 +219,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C304CC451E7A8DC200FBC7D1 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				C3355C581DE939380045E797 /* SearchViewController.swift */,
+				C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */,
+			);
+			name = Search;
+			sourceTree = "<group>";
+		};
 		C37B1BC21E77914000786412 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -280,8 +289,7 @@
 				C30963E01DF03112009CD474 /* ScriptCollection.swift */,
 				C3606CE71DBBBACD00AE2E8B /* ScriptComposeViewController.swift */,
 				C3F4FA211DF550CF00301445 /* ScriptViewController.swift */,
-				C3355C581DE939380045E797 /* SearchViewController.swift */,
-				C323F3D61D86EE5B00A7EC95 /* SearchBarViewController.swift */,
+				C304CC451E7A8DC200FBC7D1 /* Search */,
 				C33C3AC11E727EBD00B3E3F1 /* SelectScriptViewController.swift */,
 				C37B1BC21E77914000786412 /* Settings */,
 				C3F53B8F1D372C0200E2F80D /* TextMatcher.swift */,

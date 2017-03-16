@@ -102,7 +102,6 @@ class SearchViewController: UIViewController, FBStorageDelegate {
 
             
         }
-        self.escapeMask.hidden = true
         
     }
     
@@ -130,6 +129,7 @@ class SearchViewController: UIViewController, FBStorageDelegate {
         if segue.identifier == "searchsegue" {
             let toVc = segue.destinationViewController as! SearchBarViewController
             toVc.escapeImageMask = self.escapeImageMask
+            toVc.escapeMask = self.escapeMask
             toVc.searchView = self.searchView
             self.searchBar.delegate = toVc
             self.escapeMask.hidden = false
@@ -150,9 +150,5 @@ class SearchViewController: UIViewController, FBStorageDelegate {
         }
     }
     
-    
-    func didGetVerseContext(sender: FBStorage, verses: [VerseInfo]){
-        
-    }
 
 }

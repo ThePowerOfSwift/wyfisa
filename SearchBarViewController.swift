@@ -19,6 +19,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     var searchBarRef: UISearchBar?
     var searchView: UIView?
     var escapeImageMask: UIImageView?
+    var escapeMask: UIView?
     var resultInfo: VerseInfo?
     var isVisible: Bool = false
     let themer = WYFISATheme.sharedInstance
@@ -52,6 +53,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.searchBarRef = searchBar
         self.chapterCollection.reloadData()
         self.isVisible = true
+        self.escapeMask?.hidden = false
         Animations.start(0.3){
             self.escapeImageMask?.hidden = false
             self.escapeImageMask?.alpha = 1
@@ -73,9 +75,10 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         
         if searchText == "" {
-            // exit
-            self.performSegueWithIdentifier("unwindToMain", sender: self)
-            return
+            // hide search view to allow user to click out
+            Animations.start(0.3){
+                self.searchView?.alpha = 0
+            }
 
         } else {
             // text being added show view if first time
@@ -284,6 +287,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         // Pass the selected object to the new view controller.
         self.isVisible = false
         self.escapeImageMask?.hidden = true
+        self.escapeMask?.hidden = true
     }
  
 
