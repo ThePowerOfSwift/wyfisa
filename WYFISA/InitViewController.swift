@@ -17,18 +17,21 @@ protocol CaptureButtonDelegate: class {
 
 class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDataSource, AKPickerViewDelegate, UITextFieldDelegate {
 
+    @IBOutlet var maskGradientOverlay: UIView!
     @IBOutlet var captureButton: UIButton!
     @IBOutlet var pickerView: AKPickerView!
     @IBOutlet var actionScrollView: UIScrollView!
     @IBOutlet var fxView: UIVisualEffectView!
     @IBOutlet var scriptTitle: UITextField!
-    
+    @IBOutlet var maskGradient: UIImageView!
+    @IBOutlet var maskGestureRecognizer: UITapGestureRecognizer!
     var ocrVC: CaptureViewController? = nil
     var scriptVC: ScriptComposeViewController? = nil
     var photoVC: PhotoCaptureViewController? = nil
     var captureDelegate: CaptureButtonDelegate? = nil
     var activeScriptId: String? = nil
     var activeScript: UserScript? = nil
+    var isNewScript = false
     let storage = CBStorage.init(databaseName: SCRIPTS_DB, skipSetup: true)
     
     override func viewDidLoad() {
@@ -66,6 +69,9 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
 
         // text field
         self.scriptTitle.delegate = self
+        if self.isNewScript {
+            self.scriptTitle.becomeFirstResponder()
+        }
         
         // get script doc
         if let script = self.storage.getScriptDoc(self.activeScriptId!) {
@@ -191,10 +197,33 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     }
     
     // MARK: - text field
+    func textFieldDidBeginEditing(textField: UITextField) {
+        
+        // allow tap to end editing
+        self.maskGestureRecognizer.enabled = true
+        
+        // show gradient
+        self.maskGradient.hidden = false
+        self.maskGradientOverlay.hidden = false
+        Animations.start(0.3){
+            self.maskGradient.alpha = 0.8
+        }
+        
+        // prevent segues in script vc
+        self.scriptVC?.isEditingMode = true
+    }
+    
     func textFieldDidEndEditing(textField: UITextField) {
         if let title = textField.text {
             self.storage.updateScriptTitle(self.activeScriptId!, title: title)
         }
+        self.maskGestureRecognizer.enabled = false
+        self.maskGradientOverlay.hidden = true
+        Animations.start(0.3){
+            self.maskGradient.alpha = 0
+            self.maskGradient.hidden = true
+        }
+        self.scriptVC?.isEditingMode = false
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -202,5 +231,8 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         return false
     }
     
+    @IBAction func didTapViewMask(sender: AnyObject) {
+        self.scriptTitle.endEditing(true)
+    }
 
 }

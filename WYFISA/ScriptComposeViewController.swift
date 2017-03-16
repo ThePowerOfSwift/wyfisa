@@ -472,10 +472,13 @@ class ScriptComposeViewController: UIViewController,
 
     }
 
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+        return !isEditingMode
+    }
     
     // MARK: - versetablecell delegate
     func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo){
-        if sender.editing == false { // don't segue if cell is being edited
+        if sender.editing == false && self.isEditingMode == false { // don't segue if cell is being edited
             switch verse.category {
             case .Verse:
                 performSegueWithIdentifier("VerseDetail", sender: (verse as AnyObject))

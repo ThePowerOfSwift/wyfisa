@@ -58,7 +58,11 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
         
         // title
         let scriptNameLabel = cell.viewWithTag(1) as! UILabel
-        scriptNameLabel.text = script.title
+        if script.title.length > 0 {
+            scriptNameLabel.text = script.title
+        } else {
+            scriptNameLabel.text = DEFAULT_SCRIPT_NAME
+        }
         
         // ts
         let scriptTimestampLabel = cell.viewWithTag(2) as! UILabel
@@ -124,6 +128,7 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
                 
                 let newScriptId = script.id
                 initVC.activeScriptId = newScriptId
+                initVC.isNewScript = true
 
             }
         }
