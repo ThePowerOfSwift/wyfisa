@@ -122,20 +122,26 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
 
         // decide what to do depending on what state we are in
         let option = pickerView.selectedOption()
+        var newItems = [VerseInfo]()
         
         switch option {
         case .VerseOCR:
             // get verses from capture session
             if let verses = self.ocrVC?.didReleaseCaptureButton() {
-                
-                // pass along to scriptvc
-                self.scriptVC?.addVersesToScript(verses)
+                newItems = verses
             }
         case .Photo:
             if let photoVerse = self.photoVC?.didReleaseCaptureButton() {
-                self.scriptVC?.addVerseToDatastore(photoVerse)
+                newItems = [photoVerse]
             }
         }
+        
+        // create a new session
+        CaptureSession.sharedInstance.updateCaptureId()
+        
+        // pass along to scriptvc
+        self.scriptVC?.addVersesToScript(newItems)
+
         // make sure camera is stopped
         CameraManager.sharedInstance.pause()
     }

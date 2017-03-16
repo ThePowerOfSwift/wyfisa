@@ -24,8 +24,8 @@ class CaptureViewController: UIViewController {
     var captureLock = NSLock()
     var updateLock = NSLock()
     var frameSize = CGSize()
+    var activeCaptureSession: UInt64 = 0
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -49,41 +49,44 @@ class CaptureViewController: UIViewController {
     // MARK: -CaptureButton Delegate
     func didPressCaptureButton(){
         
-        self.view.frame.size = self.frameSize
-        self.cam.addCameraBlurTargets(self.captureView)
+        if self.captureLock.tryLock() {
+            self.activeCaptureSession = self.session.currentId
+            self.view.frame.size = self.frameSize
+            self.cam.addCameraBlurTargets(self.captureView)
 
-        self.cam.resume()
-        Animations.start(0.3){
-            self.view.alpha = 1
+            self.cam.resume()
+            Animations.start(0.3){
+                self.view.alpha = 1
+            }
+            self.startOCRCaptureAction()
+            //Timing.runAfterBg(2){
+                self.captureLock.unlock()
+           // }
         }
-        self.startOCRCaptureAction()
 
     }
     
     func startOCRCaptureAction(){
-        if self.captureLock.tryLock() {
-            
-            // show working text
-            let defaultVerse = VerseInfo(id: "", name: String.workingText, text: "")
-            self.tableDataSource?.appendVerse(defaultVerse)
-            self.captureVerseTable.addSection()
-            
-            // flash capture box
-            Animations.fadeOutIn(0.3, tsFadeOut: 0.3, view: captureBox, alpha: 0)
-            
-            if self.settings.useFlash == true {
-                self.cam.torch(.On)
-            }
-            
-            // session init
-            self.session.active = true
-            session.clearCache()
-            
-            // start capture loop
-            self.captureLoop()
-            
-            self.captureLock.unlock()
+        
+        // show working text
+        let defaultVerse = VerseInfo(id: "", name: String.workingText, text: "")
+        self.tableDataSource?.appendVerse(defaultVerse)
+        self.captureVerseTable.addSection()
+        
+        // flash capture box
+        Animations.fadeOutIn(0.3, tsFadeOut: 0.3, view: captureBox, alpha: 0)
+        
+        if self.settings.useFlash == true {
+            self.cam.torch(.On)
         }
+        
+        // session init
+        self.session.active = true
+        session.clearCache()
+        
+        // start capture loop
+        self.captureLoop()
+            
     }
     
     func captureLoop(){
@@ -109,9 +112,6 @@ class CaptureViewController: UIViewController {
                 }
             }
         }
-        
-        
-        
     }
     
     
@@ -186,6 +186,12 @@ class CaptureViewController: UIViewController {
     }
     
     func didReleaseCaptureButton() -> [VerseInfo] {
+        
+        if self.activeCaptureSession != session.currentId {
+            // session does not correspond with initial button press
+            return []
+        }
+
         var capturedVerses:[VerseInfo] = []
 
         Animations.start(0.3){
@@ -212,8 +218,8 @@ class CaptureViewController: UIViewController {
     
     func handleCaptureRelease() -> Bool {
         
+
         var hasNewMatches = false
-        updateLock.lock()
         Timing.runAfter(0.3){
             self.captureBox.alpha = 1.0 // make sure capture box stays enabled
         }
@@ -228,7 +234,6 @@ class CaptureViewController: UIViewController {
         }
         
         self.session.newMatches = 0
-        self.session.active = false
         self.session.misses = 0
         
         // resort verse table by priority
@@ -236,8 +241,8 @@ class CaptureViewController: UIViewController {
         self.captureVerseTable.reloadData()
         self.captureVerseTable.scrollToEnd()
         
-        
-        updateLock.unlock()
+        self.session.active = false
+
         return hasNewMatches
     }
 

@@ -238,15 +238,10 @@ class ScriptComposeViewController: UIViewController,
     func addVerseToDatastore(verse: VerseInfo){
         // add verse to datasource
         verse.scriptId = self.scriptId
-        verse.session = self.session.updateCaptureId()
+        verse.session = self.session.currentId
         self.tableDataSource?.appendVerse(verse)
         self.verseTable.updateVersePriority(verse.id, priority: verse.priority)
-  //      let before = self.tableDataSource?.recentVerses
-  //      print(before)
         self.verseTable?.sortByPriority()
-   //     let after = self.tableDataSource?.recentVerses
-   //     print(before)
-
         
         // add the section to capture table and then reload
         self.verseTable?.addSection()

@@ -1674,10 +1674,10 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="A928F2F1-F618-4C95-AAD5-638D6A42E88C" translatesAutoresizingMaskIntoConstraints="NO" id="PsW-mK-lvd">
+                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="D4BF815E-47AF-4C44-B6B9-E4D4C74A4C02" translatesAutoresizingMaskIntoConstraints="NO" id="PsW-mK-lvd">
                                                 <rect key="frame" x="34" y="22.5" width="274" height="225"/>
                                             </imageView>
-                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="08C1B2F6-4B67-41B1-9C55-7C548DF59F90" translatesAutoresizingMaskIntoConstraints="NO" id="bhv-SC-t6e">
+                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="A78DF3A5-9D53-4903-868F-2ED6F157FA36" translatesAutoresizingMaskIntoConstraints="NO" id="bhv-SC-t6e">
                                                 <rect key="frame" x="34" y="22.5" width="274" height="225"/>
                                             </imageView>
                                         </subviews>
@@ -2606,7 +2606,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="08C1B2F6-4B67-41B1-9C55-7C548DF59F90" width="171" height="84">
+        <image name="A78DF3A5-9D53-4903-868F-2ED6F157FA36" width="171" height="84">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -3615,7 +3615,10 @@ NOo56kHqROpJ6ljqXOpj6mvqeOp96n/qgeqG6o7qkeqW6p7qoeqz6rbquwAAAAAAAAIBAAAAAAAAAEEA
 AAAAAAAAAAAAAAAAAOq9A
 </mutableData>
         </image>
-        <image name="A928F2F1-F618-4C95-AAD5-638D6A42E88C" width="171" height="84">
+        <image name="Capture" width="375" height="667"/>
+        <image name="CaptureSmallFire" width="300" height="102"/>
+        <image name="CaptureSmallWhite" width="300" height="100"/>
+        <image name="D4BF815E-47AF-4C44-B6B9-E4D4C74A4C02" width="171" height="84">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -4624,9 +4627,6 @@ NOo56kHqROpJ6ljqXOpj6mvqeOp96n/qgeqG6o7qkeqW6p7qoeqz6rbquwAAAAAAAAIBAAAAAAAAAEEA
 AAAAAAAAAAAAAAAAAOq9A
 </mutableData>
         </image>
-        <image name="Capture" width="375" height="667"/>
-        <image name="CaptureSmallFire" width="300" height="48"/>
-        <image name="CaptureSmallWhite" width="300" height="49"/>
         <image name="DoubleLeft" width="13" height="23"/>
         <image name="DoubleRight" width="13" height="23"/>
         <image name="Find" width="375" height="667"/>

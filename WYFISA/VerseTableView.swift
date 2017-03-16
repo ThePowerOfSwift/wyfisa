@@ -76,8 +76,10 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
 
         Animations.start(0.2) {
             if let ds = self.getDatasource(){
+
                 ds.nVerses = ds.nVerses - 1
                 ds.recentVerses.removeAtIndex(ds.recentVerses.count-1)
+
             }
             self.deleteSections(idxSet, withRowAnimation: .Top)
 
@@ -85,27 +87,30 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
     }
     
     func addSection() {
-        
-        var nSections = self.numberOfSections
-        // add section after dummy section
-        if let ds = self.getDatasource(){
-            ds.nVerses += 1
-            nSections = ds.nVerses
+
+        if nLock.tryLock() {
+            var nSections = self.numberOfSections
+            // add section after dummy section
+            if let ds = self.getDatasource(){
+
+                ds.nVerses += 1
+                nSections = ds.nVerses
+            }
+            
+            // get verse text
+            self.fetchVerseText(nSections-1)
+            
+            let idxSet = NSIndexSet(index: nSections)
+            self.insertSections(idxSet, withRowAnimation: .None)
+            let path = NSIndexPath(forRow: 0, inSection: nSections)
+            
+            self.reloadSections(idxSet, withRowAnimation: .None)
+
+            // scroll down to new section to create a 'scroll up' effect
+            self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
+            
+            nLock.unlock()
         }
-        
-        // get verse text
-        self.fetchVerseText(nSections-1)
-        
-        let idxSet = NSIndexSet(index: nSections)
-
-        self.insertSections(idxSet, withRowAnimation: .None)
-        let path = NSIndexPath(forRow: 0, inSection: nSections)
-        
-        self.reloadSections(idxSet, withRowAnimation: .None)
-
-        // scroll down to new section to create a 'scroll up' effect
-        self.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
-
 
     }
     
@@ -168,6 +173,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
     
     func clear(){
         
+        nLock.lock()
         
         // fade out table
         Animations.start(0.3) {
@@ -189,11 +195,14 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
             ds.hasHeader = true
         }
         
-        // clear table rows
-        Timing.runAfter(0.5) {
-            self.reloadData()
+        // reload
+        self.reloadData()
+        
+        // fade in
+        Animations.start(0.5) {
             self.alpha = 1
         }
+        nLock.unlock()
     }
     
     
