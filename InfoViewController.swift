@@ -30,6 +30,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     var frameSize: CGSize = CGSize()
     var snaphot: UIImage? = nil
     var isUpdate: Bool = false
+    var didModifyOverlay: Bool = false
     
     // drawing vars
     var swiped: Bool = false
@@ -183,6 +184,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         }
         
         self.tmpImageView.image = nil
+        self.didModifyOverlay = true
     }
     
     
@@ -274,6 +276,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.verseInfo?.overlayImage = self.tmpImageView.image
+        self.didModifyOverlay = true
     }
 
     override func prefersStatusBarHidden() -> Bool {

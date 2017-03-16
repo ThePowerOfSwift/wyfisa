@@ -425,8 +425,10 @@ class ScriptComposeViewController: UIViewController,
             self.tableDataSource?.updateRecentVerse(verseInfo)
             self.verseTable.reloadData()
             self.storage.updateScriptTimestamp(self.scriptId!)
-            self.storage.updateVerseImage(verseInfo)
-
+            if vc.didModifyOverlay {
+                // save new overlay
+                self.storage.updateVerseImage(verseInfo)
+            }
         }
     }
 
