@@ -236,7 +236,7 @@ class CBStorage {
 
                     if let verse = self.getVerseDoc(verseId) {
                         verse.image = self.getImageAttachment(verse.key, named: "original.jpg")
-                        verse.overlayImage = self.getImageAttachment(verse.key, named: "overlay.jpg")
+                        verse.overlayImage = self.getImageAttachment(verse.key, named: "overlay.png")
                         verse.accessoryImage = self.getImageAttachment(verse.key, named: "accessory.jpg")
                         scriptVerses.append(verse)
                     }
@@ -280,7 +280,7 @@ class CBStorage {
                 try doc.putProperties(properties)
                 if verse.category == .Image {
                     self.attachImage(doc, image: verse.image, named: "original.jpg")
-                    self.attachImage(doc, image: verse.overlayImage, named: "overlay.jpg")
+                    self.attachImage(doc, image: verse.overlayImage, named: "overlay.png", format: "png")
                     self.attachImage(doc, image: verse.accessoryImage, named: "accessory.jpg")
                 }
             } catch {
@@ -311,15 +311,21 @@ class CBStorage {
         return nil
     }
     
-    func attachImage(doc: CBLDocument, image: UIImage?, named: String)  {
+    
+    func attachImage(doc: CBLDocument, image: UIImage?, named: String, format: String? = "jpg"){
         
         // attach image
         if let rev = doc.currentRevision {
-            let newRev = rev.createRevision()
-            
+            var newRev = rev.createRevision()
             if let img = image {
-                let imageData = UIImageJPEGRepresentation(img, 0.75)
-                newRev.setAttachmentNamed(named, withContentType: "image/jpeg", content: imageData)
+                if format == "jpg" {
+                    let imageData = UIImageJPEGRepresentation(img, 0.70)
+                    newRev.setAttachmentNamed(named, withContentType: "image/jpeg", content: imageData)
+                }
+                if format == "png" {
+                    let imageData =  UIImagePNGRepresentation(img)
+                    newRev.setAttachmentNamed(named, withContentType: "image/png", content: imageData)
+                }
                 do {
                     try newRev.save()
                 } catch {
@@ -419,6 +425,14 @@ class CBStorage {
 
     }
     
+    func updateVerseImage(verse: VerseInfo){
+        
+        if let doc = db?.existingDocumentWithID(verse.key) {
+           self.attachImage(doc, image: verse.overlayImage, named: "overlay.png", format: "png")
+           self.attachImage(doc, image: verse.accessoryImage, named: "accessory.jpg")
+        }
+    }
+
     func updateVerse(verse: VerseInfo){
         
         let id = verse.key
@@ -427,7 +441,8 @@ class CBStorage {
         case .Note:
             self.updateVerseNote(id, note: verse.name)
         case .Image:
-            break // TODO!!!! do something
+            break
+            // self.updateVerseImage(verse)
         case .Verse:
             // updating verse just means to sync it's version with text we have
             verse.version = SettingsManager.sharedInstance.version.text()

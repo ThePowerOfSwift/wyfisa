@@ -47,18 +47,27 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         // check if editing saved image
         if self.isUpdate == true || self.snaphot != nil {
+            self.imageToFile(self.snaphot!, named: "original")
             self.capturedImage.image = self.snaphot
             self.originalImage = self.snaphot
             
             if let image = self.verseInfo?.overlayImage {
                 self.tmpImageView.image = image
+                self.tmpImageView.backgroundColor = UIColor.clearColor()
             }
  
         }
  
     }
 
-
+    func imageToFile(image: UIImage, named: String){
+        if let data = UIImageJPEGRepresentation(image, 0.8) {
+            let filename = getDocumentsDirectory().stringByAppendingPathComponent(named)
+            print(filename)
+            data.writeToFile(filename, atomically: true)
+        }
+    }
+    
     func configure(size: CGSize){
         self.frameSize = size
     }

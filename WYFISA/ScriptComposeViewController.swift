@@ -425,6 +425,7 @@ class ScriptComposeViewController: UIViewController,
             self.tableDataSource?.updateRecentVerse(verseInfo)
             self.verseTable.reloadData()
             self.storage.updateScriptTimestamp(self.scriptId!)
+            self.storage.updateVerseImage(verseInfo)
 
         }
     }
