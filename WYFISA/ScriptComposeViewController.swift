@@ -273,7 +273,6 @@ class ScriptComposeViewController: UIViewController,
         verseInfo.category = .Image
         let captureImage =  self.cam.imageFromFrame()
         verseInfo.image = captureImage
-        verseInfo.accessoryImage = captureImage
         
         // add to ds
         self.addVerseToDatastore(verseInfo)

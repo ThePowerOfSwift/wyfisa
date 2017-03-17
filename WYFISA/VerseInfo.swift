@@ -29,7 +29,6 @@ class VerseInfo {
     var verse: Int?
     var image: UIImage?
     var overlayImage: UIImage?
-    var accessoryImage: UIImage?
     var refs: [VerseInfo]?
     var verses: [VerseInfo]?
     var category: ItemCategory = .Verse

@@ -48,9 +48,9 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         // check if editing saved image
         if self.isUpdate == true || self.snaphot != nil {
-            self.imageToFile(self.snaphot!, named: "original")
             self.capturedImage.image = self.snaphot
             self.originalImage = self.snaphot
+            
             
             if let image = self.verseInfo?.overlayImage {
                 self.tmpImageView.image = image
@@ -58,7 +58,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             }
  
         }
- 
+         
     }
 
     func imageToFile(image: UIImage, named: String){
@@ -280,7 +280,7 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
 
     override func prefersStatusBarHidden() -> Bool {
-        return HIDE_STATUS_BAR
+        return true
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -288,8 +288,8 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             self.verseInfo = VerseInfo.init(id: "0", name: "", text: nil)
             self.verseInfo?.category = .Image
         }
-        self.verseInfo?.accessoryImage = self.makeShareImage()
-        self.verseInfo?.overlayImage = self.tmpImageView.image
+      //  self.verseInfo?.accessoryImage =  self.tmpImageView.image // self.makeShareImage()
+       // self.verseInfo?.overlayImage = self.tmpImageView.image
         self.verseInfo?.image = self.snaphot
 
     }

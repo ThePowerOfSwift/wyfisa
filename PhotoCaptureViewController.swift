@@ -62,8 +62,9 @@ class PhotoCaptureViewController: UIViewController {
         if let frameSnapshot = self.cam.imageFromFrame() {
             verseInfo = VerseInfo.init(id: "0", name: "", text: nil)
             verseInfo!.category = .Image
-            verseInfo!.image = frameSnapshot
-            verseInfo!.accessoryImage = frameSnapshot
+            let cropFilter = ImageFilter.cropFilter(0, y: 0.0, width: 1, height: 0.38)
+            let croppedImage = cropFilter.imageByFilteringImage(frameSnapshot)
+            verseInfo!.image = croppedImage
         }
 
  

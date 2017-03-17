@@ -161,7 +161,6 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
             self.storage.removeVerse(verseKey)
 
             // delete cell from datasource
-            let idxSet = NSIndexSet(index: indexPath.section)
             self.nVerses -= 1
             self.recentVerses.removeAtIndex(indexPath.section-1)
             
@@ -170,8 +169,12 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
             cell.delegate?.didRemoveCell(cell)
             
             // drop celll from section
-            tableView.deleteSections(idxSet, withRowAnimation: .Automatic)
-            tableView.reloadData()            
+            print(indexPath.section)
+            if indexPath.section > 1 {
+                let idxSet = NSIndexSet(index: indexPath.section)
+                tableView.deleteSections(idxSet, withRowAnimation: .Automatic)
+            }
+            tableView.reloadData()
         }
     }
 }

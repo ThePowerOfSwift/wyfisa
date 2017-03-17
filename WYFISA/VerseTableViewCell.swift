@@ -22,6 +22,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     @IBOutlet var mediaAccessory: UIImageView!
     @IBOutlet var moreButton: UIButton!
     @IBOutlet var quoteImage: UIImageView!
+    @IBOutlet var overlayImage: UIImageView!
 
     weak var delegate:VerseTableViewCellDelegate?
     var verseInfo: VerseInfo?
@@ -51,6 +52,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
         
         // general styles
         self.mediaAccessory.hidden = true
+        self.overlayImage.hidden = true
         self.mediaAccessory.image =  nil
         self.labelHeader.lineBreakMode = .ByTruncatingTail
         self.labelHeader.numberOfLines = 1
@@ -63,7 +65,10 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
         case .Image:
             // show accesory view
             self.mediaAccessory.hidden = false
-            self.mediaAccessory.image =  verse.accessoryImage
+            self.overlayImage.hidden = false
+            self.mediaAccessory.image =  verse.image
+            self.overlayImage.image = verse.overlayImage
+            
             self.backgroundColor = UIColor.clearColor()
             self.mediaAccessory.layer.borderColor = UIColor.lightGrayColor().CGColor
 

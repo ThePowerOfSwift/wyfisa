@@ -126,13 +126,6 @@ class CBStorage {
                 let result = try query.run()
                 while let row = result.nextRow() {
                     let verse = row.value
-                    /*
-                    if let verse = VerseInfo.DocPropertiesToObj(doc) {
-                        verse.image = self.getImageAttachment(verse.createdAt, named: "original.jpg")
-                        verse.overlayImage = self.getImageAttachment(verse.createdAt, named: "overlay.jpg")
-                        verse.accessoryImage = self.getImageAttachment(verse.createdAt, named: "accessory.jpg")
-                        recentVerses.append(verse)
-                    }*/
                 }
             } catch {}
         }
@@ -237,7 +230,6 @@ class CBStorage {
                     if let verse = self.getVerseDoc(verseId) {
                         verse.image = self.getImageAttachment(verse.key, named: "original.jpg")
                         verse.overlayImage = self.getImageAttachment(verse.key, named: "overlay.png")
-                        verse.accessoryImage = self.getImageAttachment(verse.key, named: "accessory.jpg")
                         scriptVerses.append(verse)
                     }
                 }
@@ -281,7 +273,6 @@ class CBStorage {
                 if verse.category == .Image {
                     self.attachImage(doc, image: verse.image, named: "original.jpg")
                     self.attachImage(doc, image: verse.overlayImage, named: "overlay.png", format: "png")
-                    self.attachImage(doc, image: verse.accessoryImage, named: "accessory.jpg")
                 }
             } catch {
                 print("save verse failed")
@@ -429,7 +420,6 @@ class CBStorage {
         
         if let doc = db?.existingDocumentWithID(verse.key) {
            self.attachImage(doc, image: verse.overlayImage, named: "overlay.png", format: "png")
-           self.attachImage(doc, image: verse.accessoryImage, named: "accessory.jpg")
         }
     }
 

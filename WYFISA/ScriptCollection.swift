@@ -93,7 +93,7 @@ class ScriptCollection: UICollectionView, UICollectionViewDelegate, UICollection
             let reuseId = cellID.reuseId()
             cell = self.dequeueReusableCellWithReuseIdentifier(reuseId, forIndexPath: indexPath)
             if let imageView = cell.viewWithTag(1) as? UIImageView {
-                imageView.image = verse.accessoryImage
+                imageView.image = verse.image
                 imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
             }
         }
