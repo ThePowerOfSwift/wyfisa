@@ -136,7 +136,7 @@ enum PickerViewOption: Int {
         case .VerseOCR:
             return "SCAN"
         case .Photo:
-            return "PHOTO"
+            return "HIGHLIGHT"
         }
     }
 }

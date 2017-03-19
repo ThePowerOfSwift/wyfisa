@@ -80,6 +80,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             //self.backgroundColor = UIColor.clearColor()
             self.backgroundColor = self.themer.offWhiteForLightOrNavy(0.7)
         }
+    
     }
     
     func updateWithVerseInfo(verse: VerseInfo, isExpanded: Bool) -> Bool {

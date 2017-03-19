@@ -317,7 +317,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
                 case .Note:
                      sectionHeight = ds.cellHeightForText(verse.name, width: self.frame.size.width*0.80)
                 case .Image:
-                    sectionHeight += 200
+                    sectionHeight = self.frame.size.width*0.8 // += 150
                 }
             }
         } else { // non expanded

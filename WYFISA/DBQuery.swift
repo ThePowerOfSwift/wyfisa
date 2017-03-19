@@ -114,7 +114,7 @@ class DBQuery {
         // check if prev chapter has verses
         var bookNo = bookId
         var chapterNo = chapterId - 1
-        if let book = Books(rawValue: bookNo) {
+        if Books(rawValue: bookNo) != nil {
             if chapterNo == 0 { // check if previous book has verses
                 bookNo = bookId-1
                 if bookNo == 0 {

@@ -21,7 +21,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GuE-N4-XAx">
-                        <rect key="frame" x="16" y="12" width="288" height="36"/>
+                        <rect key="frame" x="16" y="6.5" width="288" height="47.5"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                 <integer key="value" value="10"/>
@@ -33,27 +33,27 @@
                         </userDefinedRuntimeAttributes>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BKh-rl-OQs">
-                        <rect key="frame" x="16" y="12" width="288" height="36"/>
+                        <rect key="frame" x="16" y="6.5" width="288" height="47.5"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </imageView>
                     <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="f9U-2C-adP">
                         <rect key="frame" x="8" y="0.0" width="304" height="59"/>
                         <subviews>
                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="“" translatesAutoresizingMaskIntoConstraints="NO" id="u0Z-Aw-CSh">
-                                <rect key="frame" x="0.0" y="24" width="0.0" height="12"/>
+                                <rect key="frame" x="0.0" y="23.5" width="30.5" height="12"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" layoutMarginsFollowReadableWidth="YES" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="AuM-TO-WBP">
-                                <rect key="frame" x="0.0" y="3" width="304" height="54"/>
+                                <rect key="frame" x="50.5" y="2.5" width="253.5" height="54"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Scanning" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yHE-rL-3z3">
-                                        <rect key="frame" x="0.0" y="0.0" width="59" height="22"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="59" height="21.5"/>
                                         <fontDescription key="fontDescription" name="Kailasa-Bold" family="Kailasa" pointSize="13"/>
                                         <color key="textColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                         <size key="shadowOffset" width="0.0" height="1"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scanning" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hx6-rj-7bM">
-                                        <rect key="frame" x="0.0" y="22" width="65" height="32"/>
+                                        <rect key="frame" x="0.0" y="21.5" width="65" height="32.5"/>
                                         <fontDescription key="fontDescription" name="IowanOldStyle-Roman" family="Iowan Old Style" pointSize="16"/>
                                         <color key="textColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -71,7 +71,7 @@
                         <rect key="frame" x="8" y="33" width="21" height="18"/>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tiK-xj-sWk">
-                        <rect key="frame" x="8" y="3" width="304" height="54"/>
+                        <rect key="frame" x="58.5" y="2.5" width="253.5" height="54"/>
                         <gestureRecognizers/>
                         <connections>
                             <action selector="didCancelCellTap:" destination="KGk-i7-Jjw" eventType="touchUpOutside" id="oxg-wl-ghz"/>
@@ -100,7 +100,7 @@
                     <constraint firstItem="f9U-2C-adP" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="nPQ-07-jiK"/>
                     <constraint firstAttribute="leadingMargin" secondItem="O57-JO-AUF" secondAttribute="leading" id="qAO-op-KQn"/>
                     <constraint firstItem="tiK-xj-sWk" firstAttribute="centerY" secondItem="AuM-TO-WBP" secondAttribute="centerY" id="sTl-qg-tLy"/>
-                    <constraint firstItem="GuE-N4-XAx" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" multiplier="0.6" id="tFg-c1-bXM"/>
+                    <constraint firstItem="GuE-N4-XAx" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" multiplier="0.8" id="tFg-c1-bXM"/>
                     <constraint firstItem="tiK-xj-sWk" firstAttribute="centerX" secondItem="AuM-TO-WBP" secondAttribute="centerX" id="tgc-2c-byh"/>
                     <constraint firstItem="GuE-N4-XAx" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.9" id="uTb-EQ-HQK"/>
                     <constraint firstItem="GuE-N4-XAx" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="vQA-Wy-5Y9"/>

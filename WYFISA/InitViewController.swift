@@ -56,6 +56,8 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         // ocr
         self.ocrVC = storyboard.instantiateViewControllerWithIdentifier("ocrvc") as? CaptureViewController
         self.ocrVC?.view.frame.origin.x = 0
+        self.ocrVC?.view.frame.origin.y = 0
+
         self.ocrVC?.view.alpha = 0
         self.ocrVC?.configure(self.view.frame.size)
         self.actionScrollView.addSubview(self.ocrVC!.view)
@@ -63,8 +65,11 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         // photo
         self.photoVC = storyboard.instantiateViewControllerWithIdentifier("photocapturevc") as? PhotoCaptureViewController
         self.photoVC?.view.frame.origin.x = self.view.frame.width
+        self.photoVC?.view.frame.origin.y = 0
+
         self.photoVC?.view.alpha = 0
         self.photoVC?.configure(self.view.frame.size)
+        self.photoVC?.doneEditingCallback = self.unwindFromPhotoCapture
         self.actionScrollView.addSubview(self.photoVC!.view)
 
         // text field
@@ -96,9 +101,8 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     // entered capture tab
     @IBAction func didSPressCaptureButton(sender: AnyObject) {
         
-        self.pickerView.hidden = true
-        self.fxView.hidden = true
-        
+        self.hideToolbar(true)
+
         // transition to larger button
         let largeButton = UIImage.init(named: "OvalLarge")
         self.captureButton.setImage(largeButton, forState: .Normal)
@@ -109,10 +113,13 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         switch option {
         case .VerseOCR:
             self.actionScrollView.contentOffset.x = 0
+            self.actionScrollView.contentOffset.y = 0
             self.ocrVC?.didPressCaptureButton()
         case .Photo:
-             self.actionScrollView.contentOffset.x = self.view.frame.width
+            self.actionScrollView.contentOffset.x = self.view.frame.width
+            self.actionScrollView.contentOffset.y = 0
             self.photoVC?.didPressCaptureButton()
+            self.actionScrollView.userInteractionEnabled = true
         }
         
     }
@@ -120,9 +127,6 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     
     @IBAction func didReleaseCaptureButton(sender: AnyObject){
         
-        self.pickerView.hidden = false
-        self.fxView.hidden = false
-
         let normalButton = UIImage.init(named: "OvalSmall")
         self.captureButton.setImage(normalButton, forState: .Normal)
 
@@ -136,10 +140,10 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
             if let verses = self.ocrVC?.didReleaseCaptureButton() {
                 newItems = verses
             }
+            self.hideToolbar(false)
         case .Photo:
-            if let photoVerse = self.photoVC?.didReleaseCaptureButton() {
-                newItems = [photoVerse]
-            }
+            self.photoVC?.didReleaseCaptureButton()
+            self.captureButton.hidden = true
         }
         
         // pass along to scriptvc
@@ -147,6 +151,11 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
 
         // make sure camera is stopped
         CameraManager.sharedInstance.pause()
+    }
+    
+    func hideToolbar(hidden: Bool){
+        self.pickerView.hidden = hidden
+        self.fxView.hidden = hidden
     }
     
 
@@ -199,15 +208,11 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     // MARK: - text field
     func textFieldDidBeginEditing(textField: UITextField) {
         
-        // allow tap to end editing
+        // a;;pw ability to tap to end editing
         self.maskGestureRecognizer.enabled = true
         
         // show gradient
-        self.maskGradient.hidden = false
-        self.maskGradientOverlay.hidden = false
-        Animations.start(0.3){
-            self.maskGradient.alpha = 0.8
-        }
+        self.hideGradient(false)
         
         // prevent segues in script vc
         self.scriptVC?.isEditingMode = true
@@ -217,22 +222,40 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         if let title = textField.text {
             self.storage.updateScriptTitle(self.activeScriptId!, title: title)
         }
+        // disable ability to tap to end editing
         self.maskGestureRecognizer.enabled = false
-        self.maskGradientOverlay.hidden = true
-        Animations.start(0.3){
-            self.maskGradient.alpha = 0
-            self.maskGradient.hidden = true
-        }
+        self.hideGradient(true)
         self.scriptVC?.isEditingMode = false
     }
+
+    func hideGradient(hidden: Bool){
     
+        self.maskGradientOverlay.hidden = hidden
+        Animations.start(0.3){
+            self.maskGradient.alpha = hidden ? 0 : 0.8
+            self.maskGradient.hidden = hidden
+        }
+    }
+
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return false
     }
     
     @IBAction func didTapViewMask(sender: AnyObject) {
-        self.scriptTitle.endEditing(true)
+        if self.scriptTitle.editing {
+            self.scriptTitle.endEditing(true)
+        }
     }
+    
+    func unwindFromPhotoCapture(verse: VerseInfo?) {
+        self.actionScrollView.userInteractionEnabled = false
+        self.hideToolbar(false)
+        self.captureButton.hidden = false
+        if verse != nil {
+            self.scriptVC?.addVerseToDatastore(verse!)
+        }
+    }
+
 
 }
