@@ -506,6 +506,7 @@ class ScriptComposeViewController: UIViewController,
         self.storage.decrementScriptCountAndTimestamp(self.scriptId!)
         self.syncWithDataSource()
         self.verseTable.setEditing(false, animated: true)
+        self.isEditingMode = false
     }
     
     // MARK: - notes handler

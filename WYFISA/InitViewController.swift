@@ -207,7 +207,7 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     // MARK: - text field
     func textFieldDidBeginEditing(textField: UITextField) {
         
-        // a;;pw ability to tap to end editing
+        // allow ability to tap to end editing
         self.maskGestureRecognizer.enabled = true
         
         // show gradient
