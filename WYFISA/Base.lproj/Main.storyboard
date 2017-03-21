@@ -1698,14 +1698,14 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="d6t-QV-Itn">
                                 <rect key="frame" x="16" y="0.0" width="343" height="554"/>
                                 <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="755" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="icb-FZ-6ef" customClass="VerseTableView" customModule="TurnTo" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="84"/>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="755" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="icb-FZ-6ef" customClass="VerseTableView" customModule="TurnTo" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="554"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableView>
                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oj5-4w-ccz">
-                                        <rect key="frame" x="0.0" y="104" width="343" height="450"/>
+                                        <rect key="frame" x="0.0" y="554" width="343" height="0.0"/>
                                         <subviews>
-                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="26j-Cd-eU8" customClass="GPUImageView">
+                                            <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26j-Cd-eU8" customClass="GPUImageView">
                                                 <rect key="frame" x="0.0" y="0.0" width="343" height="324.5"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <userDefinedRuntimeAttributes>
@@ -1718,11 +1718,11 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="E19B2A0E-D786-4B5F-B052-EB199AFE9FA6" translatesAutoresizingMaskIntoConstraints="NO" id="PsW-mK-lvd">
-                                                <rect key="frame" x="34" y="22.5" width="274" height="225"/>
+                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="4CF07C67-9C46-437F-A255-7FF564294701" translatesAutoresizingMaskIntoConstraints="NO" id="PsW-mK-lvd">
+                                                <rect key="frame" x="34" y="0.0" width="274" height="0.0"/>
                                             </imageView>
-                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="81339E56-4429-47AE-9212-3BF57B07AD77" translatesAutoresizingMaskIntoConstraints="NO" id="bhv-SC-t6e">
-                                                <rect key="frame" x="34" y="22.5" width="274" height="225"/>
+                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="48B3764F-9BD7-430E-A737-EF6A5ACA01BA" translatesAutoresizingMaskIntoConstraints="NO" id="bhv-SC-t6e">
+                                                <rect key="frame" x="34" y="0.0" width="274" height="0.0"/>
                                             </imageView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1753,9 +1753,9 @@
                                 <rect key="frame" x="0.0" y="471" width="375" height="83"/>
                                 <subviews>
                                     <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ISv-Kj-QAA">
-                                        <rect key="frame" x="-0.5" y="0.0" width="375" height="83"/>
+                                        <rect key="frame" x="-1" y="0.0" width="376" height="83"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Axy-Hs-DmU">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="83"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="376" height="83"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </view>
                                         <blurEffect style="light"/>
@@ -1827,10 +1827,10 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                             </textField>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nS7-BP-8AX">
-                                <rect key="frame" x="-0.5" y="0.0" width="375" height="104"/>
+                                <rect key="frame" x="-1" y="0.0" width="376" height="554"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Gradient-white-6030" translatesAutoresizingMaskIntoConstraints="NO" id="sNw-Go-KTm">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="104"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="376" height="554"/>
                                     </imageView>
                                 </subviews>
                                 <gestureRecognizers/>
@@ -2116,10 +2116,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="multiverse" translatesAutoresizingMaskIntoConstraints="NO" id="oWP-3t-aXX">
-                                <rect key="frame" x="0.5" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="shX-qq-UA9">
-                                <rect key="frame" x="0.5" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xJV-KG-xHK">
@@ -2146,7 +2146,7 @@
                                 <blurEffect style="extraLight"/>
                             </visualEffectView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mpF-Vi-iSR">
-                                <rect key="frame" x="176.5" y="623" width="22" height="29"/>
+                                <rect key="frame" x="177" y="623" width="22" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" image="dropview">
                                     <color key="titleColor" red="1" green="0.24313725489999999" blue="0.047058823530000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -2633,7 +2633,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="81339E56-4429-47AE-9212-3BF57B07AD77" width="171" height="84">
+        <image name="48B3764F-9BD7-430E-A737-EF6A5ACA01BA" width="171" height="84">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -3642,12 +3642,7 @@ NOo56kHqROpJ6ljqXOpj6mvqeOp96n/qgeqG6o7qkeqW6p7qoeqz6rbquwAAAAAAAAIBAAAAAAAAAEEA
 AAAAAAAAAAAAAAAAAOq9A
 </mutableData>
         </image>
-        <image name="Capture" width="375" height="667"/>
-        <image name="CaptureSmallFire" width="300" height="102"/>
-        <image name="CaptureSmallWhite" width="300" height="100"/>
-        <image name="DoubleLeft" width="13" height="23"/>
-        <image name="DoubleRight" width="13" height="23"/>
-        <image name="E19B2A0E-D786-4B5F-B052-EB199AFE9FA6" width="171" height="84">
+        <image name="4CF07C67-9C46-437F-A255-7FF564294701" width="171" height="84">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -4656,6 +4651,11 @@ NOo56kHqROpJ6ljqXOpj6mvqeOp96n/qgeqG6o7qkeqW6p7qoeqz6rbquwAAAAAAAAIBAAAAAAAAAEEA
 AAAAAAAAAAAAAAAAAOq9A
 </mutableData>
         </image>
+        <image name="Capture" width="375" height="667"/>
+        <image name="CaptureSmallFire" width="300" height="102"/>
+        <image name="CaptureSmallWhite" width="300" height="100"/>
+        <image name="DoubleLeft" width="13" height="23"/>
+        <image name="DoubleRight" width="13" height="23"/>
         <image name="Find" width="375" height="667"/>
         <image name="Gradient" width="375" height="369"/>
         <image name="Gradient-white" width="375" height="667"/>

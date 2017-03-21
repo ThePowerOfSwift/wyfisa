@@ -115,13 +115,52 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             sender.setTranslation(CGPointZero, inView: self.view)
             self.verseInfo?.imageCroppedOffset = yOffsetRatio
         }
-
  
     }
     
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
+    
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+       // self.swiped = false
+        
+        if let touch = touches.first {
+            let yOffsetPos = touch.locationInView(self.view).y
+            let yOffsetRatio = yOffsetPos/self.view.frame.height
+            if (yOffsetRatio >= 0.1) && (yOffsetRatio <= 0.85) {
+                self.didModifyOverlay = true
+                Animations.start(0.15){
+                    let newCenter = CGPoint(x: self.view.center.x, y: yOffsetPos)
+                    self.middleMask.center = newCenter
+                    self.middleMaskLarge.center = newCenter
+                    self.verseInfo?.imageCroppedOffset = yOffsetRatio
+                }
+            }
+        }
+    }
+
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    
+        if let touch = touches.first {
+            let yOffsetPos = touch.locationInView(self.view).y
+            let yOffsetRatio = yOffsetPos/self.view.frame.height
+            if (yOffsetRatio >= 0.1) && (yOffsetRatio <= 0.85) {
+                let newCenter = CGPoint(x: self.view.center.x, y: yOffsetPos)
+                self.middleMask.center = newCenter
+                self.middleMaskLarge.center = newCenter
+                self.verseInfo?.imageCroppedOffset = yOffsetRatio
+            }
+        }
+        
+    }
+    
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+      //  self.verseInfo?.overlayImage = self.tmpImageView.image
+      //  self.didModifyOverlay = true
+    }
+
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if isUpdate == false {

@@ -21,7 +21,8 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GuE-N4-XAx">
-                        <rect key="frame" x="4" y="6" width="72" height="47"/>
+                        <rect key="frame" x="0.0" y="6" width="317" height="47"/>
+                        <gestureRecognizers/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                 <integer key="value" value="10"/>
@@ -32,83 +33,115 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </imageView>
+                    <view hidden="YES" alpha="0.14999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JWa-cn-u84">
+                        <rect key="frame" x="0.0" y="22" width="317" height="14"/>
+                        <color key="backgroundColor" red="1" green="1" blue="0.039215686270000001" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BKh-rl-OQs">
-                        <rect key="frame" x="4" y="6" width="72" height="47"/>
+                        <rect key="frame" x="0.0" y="6" width="317" height="47"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </imageView>
                     <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="f9U-2C-adP">
-                        <rect key="frame" x="8" y="0.0" width="65" height="59"/>
+                        <rect key="frame" x="8" y="0.0" width="3" height="59"/>
                         <subviews>
                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="“" translatesAutoresizingMaskIntoConstraints="NO" id="u0Z-Aw-CSh">
                                 <rect key="frame" x="0.0" y="24" width="0.0" height="12"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" layoutMarginsFollowReadableWidth="YES" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="AuM-TO-WBP">
-                                <rect key="frame" x="0.0" y="3" width="65" height="54"/>
+                                <rect key="frame" x="0.0" y="3" width="3" height="54"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Scanning" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yHE-rL-3z3">
-                                        <rect key="frame" x="0.0" y="0.0" width="59" height="22"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="3" height="22"/>
                                         <fontDescription key="fontDescription" name="Kailasa-Bold" family="Kailasa" pointSize="13"/>
                                         <color key="textColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                         <size key="shadowOffset" width="0.0" height="1"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scanning" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hx6-rj-7bM">
-                                        <rect key="frame" x="0.0" y="22" width="65" height="32"/>
+                                        <rect key="frame" x="0.0" y="22" width="3" height="32"/>
                                         <fontDescription key="fontDescription" name="IowanOldStyle-Roman" family="Iowan Old Style" pointSize="16"/>
                                         <color key="textColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="Hx6-rj-7bM" secondAttribute="trailing" constant="10" id="h94-5v-yW6"/>
+                                </constraints>
                             </stackView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="AuM-TO-WBP" firstAttribute="height" secondItem="f9U-2C-adP" secondAttribute="height" multiplier="0.9" id="Y3n-be-7MV"/>
+                            <constraint firstAttribute="trailing" secondItem="AuM-TO-WBP" secondAttribute="trailing" id="hhw-8b-JfT"/>
                             <constraint firstItem="u0Z-Aw-CSh" firstAttribute="width" secondItem="f9U-2C-adP" secondAttribute="width" multiplier="0.1" id="kbK-bb-GXy"/>
                         </constraints>
                     </stackView>
                     <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chatbox-working-navy" translatesAutoresizingMaskIntoConstraints="NO" id="O57-JO-AUF">
                         <rect key="frame" x="8" y="33" width="21" height="18"/>
                     </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tiK-xj-sWk">
-                        <rect key="frame" x="8" y="3" width="65" height="54"/>
-                        <gestureRecognizers/>
-                        <connections>
-                            <action selector="didCancelCellTap:" destination="KGk-i7-Jjw" eventType="touchUpOutside" id="oxg-wl-ghz"/>
-                            <action selector="didTapCellView:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="yo0-tn-EBb"/>
-                            <action selector="touchCancel:" destination="KGk-i7-Jjw" eventType="touchCancel" id="437-DC-pnX"/>
-                            <action selector="touchOut:" destination="KGk-i7-Jjw" eventType="touchDragOutside" id="GqC-6C-pBo"/>
-                            <action selector="willSelectCellView:" destination="KGk-i7-Jjw" eventType="touchDown" id="6vX-wS-fLo"/>
-                        </connections>
-                    </button>
+                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eDN-qE-d3A">
+                        <rect key="frame" x="0.0" y="6" width="320" height="48"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tiK-xj-sWk">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="48"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <action selector="didCancelCellTap:" destination="KGk-i7-Jjw" eventType="touchUpOutside" id="oxg-wl-ghz"/>
+                                    <action selector="didTapCellView:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="yo0-tn-EBb"/>
+                                    <action selector="touchCancel:" destination="KGk-i7-Jjw" eventType="touchCancel" id="437-DC-pnX"/>
+                                    <action selector="touchOut:" destination="KGk-i7-Jjw" eventType="touchDragOutside" id="GqC-6C-pBo"/>
+                                    <action selector="willSelectCellView:" destination="KGk-i7-Jjw" eventType="touchDown" id="6vX-wS-fLo"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dmw-0f-R7L">
+                                <rect key="frame" x="320" y="0.0" width="0.0" height="48"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Delete">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="didTapDeleteButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="a0H-ju-MCZ"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Dmw-0f-R7L" firstAttribute="width" secondItem="eDN-qE-d3A" secondAttribute="width" multiplier="0.2" id="7QC-sl-8PA"/>
+                        </constraints>
+                    </stackView>
                 </subviews>
                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                 <gestureRecognizers/>
                 <constraints>
-                    <constraint firstItem="GuE-N4-XAx" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="5M8-5s-ciQ"/>
+                    <constraint firstItem="BKh-rl-OQs" firstAttribute="width" secondItem="GuE-N4-XAx" secondAttribute="width" id="06A-1d-YiQ"/>
                     <constraint firstItem="BKh-rl-OQs" firstAttribute="centerX" secondItem="GuE-N4-XAx" secondAttribute="centerX" id="5PC-XA-gv8"/>
                     <constraint firstAttribute="leadingMargin" secondItem="f9U-2C-adP" secondAttribute="leading" id="7Be-vp-XR5"/>
                     <constraint firstItem="f9U-2C-adP" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" id="A1P-av-IW9"/>
-                    <constraint firstItem="tiK-xj-sWk" firstAttribute="width" secondItem="AuM-TO-WBP" secondAttribute="width" id="A24-P5-VPH"/>
                     <constraint firstItem="BKh-rl-OQs" firstAttribute="height" secondItem="GuE-N4-XAx" secondAttribute="height" id="GEB-Ct-sEQ"/>
+                    <constraint firstItem="JWa-cn-u84" firstAttribute="height" secondItem="GuE-N4-XAx" secondAttribute="height" multiplier="0.3" id="JIX-hC-FZJ"/>
+                    <constraint firstItem="JWa-cn-u84" firstAttribute="centerY" secondItem="GuE-N4-XAx" secondAttribute="centerY" id="M8u-pN-wai"/>
+                    <constraint firstItem="f9U-2C-adP" firstAttribute="trailing" secondItem="Dmw-0f-R7L" secondAttribute="leading" id="N5P-l7-fut"/>
                     <constraint firstItem="BKh-rl-OQs" firstAttribute="centerY" secondItem="GuE-N4-XAx" secondAttribute="centerY" id="NY4-bQ-UnZ"/>
-                    <constraint firstItem="BKh-rl-OQs" firstAttribute="width" secondItem="GuE-N4-XAx" secondAttribute="width" id="NqM-mf-n5i"/>
                     <constraint firstItem="O57-JO-AUF" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" multiplier="0.3" id="Omf-td-bOw"/>
-                    <constraint firstItem="tiK-xj-sWk" firstAttribute="height" secondItem="AuM-TO-WBP" secondAttribute="height" id="Q09-Kt-Z4s"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="f9U-2C-adP" secondAttribute="trailing" id="VYb-Ug-qm4"/>
+                    <constraint firstItem="JWa-cn-u84" firstAttribute="width" secondItem="GuE-N4-XAx" secondAttribute="width" id="UMj-7I-Fht"/>
+                    <constraint firstItem="GuE-N4-XAx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="WiT-Cn-dDo"/>
+                    <constraint firstItem="GuE-N4-XAx" firstAttribute="trailing" secondItem="Dmw-0f-R7L" secondAttribute="leading" multiplier="0.99" id="dA6-gb-c0a"/>
                     <constraint firstItem="O57-JO-AUF" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" multiplier="1.4" id="gvi-ts-Om0"/>
                     <constraint firstItem="f9U-2C-adP" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="nPQ-07-jiK"/>
                     <constraint firstAttribute="leadingMargin" secondItem="O57-JO-AUF" secondAttribute="leading" id="qAO-op-KQn"/>
-                    <constraint firstItem="tiK-xj-sWk" firstAttribute="centerY" secondItem="AuM-TO-WBP" secondAttribute="centerY" id="sTl-qg-tLy"/>
+                    <constraint firstItem="eDN-qE-d3A" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="qmh-r7-yFC"/>
                     <constraint firstItem="GuE-N4-XAx" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" multiplier="0.8" id="tFg-c1-bXM"/>
-                    <constraint firstItem="tiK-xj-sWk" firstAttribute="centerX" secondItem="AuM-TO-WBP" secondAttribute="centerX" id="tgc-2c-byh"/>
-                    <constraint firstItem="GuE-N4-XAx" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.9" id="uTb-EQ-HQK"/>
                     <constraint firstItem="GuE-N4-XAx" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="vQA-Wy-5Y9"/>
+                    <constraint firstItem="JWa-cn-u84" firstAttribute="centerX" secondItem="GuE-N4-XAx" secondAttribute="centerX" id="wA0-V6-uwK"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
             <color key="tintColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <gestureRecognizers/>
+            <constraints>
+                <constraint firstItem="eDN-qE-d3A" firstAttribute="width" secondItem="KGk-i7-Jjw" secondAttribute="width" id="0wm-LT-JgR"/>
+                <constraint firstItem="eDN-qE-d3A" firstAttribute="height" secondItem="KGk-i7-Jjw" secondAttribute="height" multiplier="0.8" id="1eg-ZJ-2Fp"/>
+                <constraint firstItem="eDN-qE-d3A" firstAttribute="centerY" secondItem="KGk-i7-Jjw" secondAttribute="centerY" id="4vE-yn-mSo"/>
+            </constraints>
             <userDefinedRuntimeAttributes>
                 <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                     <integer key="value" value="2"/>
@@ -116,6 +149,8 @@
                 <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
             </userDefinedRuntimeAttributes>
             <connections>
+                <outlet property="deleteButton" destination="Dmw-0f-R7L" id="fAw-gg-GTH"/>
+                <outlet property="highLightBar" destination="JWa-cn-u84" id="GYR-w1-ZgH"/>
                 <outlet property="labelHeader" destination="yHE-rL-3z3" id="1bP-2J-L4a"/>
                 <outlet property="labelText" destination="Hx6-rj-7bM" id="p8l-6G-1ok"/>
                 <outlet property="mediaAccessory" destination="GuE-N4-XAx" id="dBI-29-Ywh"/>

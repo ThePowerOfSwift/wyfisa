@@ -12,6 +12,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
 
 
     var isExpanded: Bool = false
+    var isDeleteMode: Bool = false
     var nLock: NSLock = NSLock()
     var cellDelegate: VerseTableViewCellDelegate?
     var themer = WYFISATheme.sharedInstance
@@ -246,7 +247,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
                 footerHeight = height*1.5
             }
         }
-    
+
         return footerHeight
     }
     
@@ -337,6 +338,34 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
         }
         
         return sectionHeight
+    }
+    
+    func enableDeleteMode(){
+        self.isDeleteMode = true
+        Timing.runAfter(0.2){
+            self.reloadData()
+        }
+    }
+    
+    func disableDeleteMode(){
+        self.isDeleteMode = false
+        Timing.runAfter(0.2){
+            self.reloadData()
+        }
+    }
+    
+    
+    func deleteVerse(verse: VerseInfo){
+        let section = self.getDatasource()!.getSectionForKey(verse.key)
+        
+        // drop celll from section
+        let index = NSIndexSet.init(index: section)
+        self.getDatasource()!.removeSection(section)
+
+        self.deleteSections(index, withRowAnimation: .Automatic)
+        
+        self.reloadSections(NSIndexSet.init(index: section), withRowAnimation: .Automatic)
+
     }
     
     // MARK - scroll

@@ -69,6 +69,8 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
                 let verse = self.recentVerses[index]
                 verseCell.enableMore = vTableView.isExpanded == true
                 verseCell.updateWithVerseInfo(verse, isExpanded: vTableView.isExpanded)
+                verseCell.resetDeleteMode()
+    
                 return verseCell
             }
         }
@@ -150,6 +152,28 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
             }
         }
         return maxId+1
+    }
+    
+    func getSectionForKey(key: String) -> Int {
+        var i = 0
+        for verse in self.recentVerses {
+            if verse.key == key {
+                break
+            }
+            i++
+        }
+        return i
+    }
+    
+    func removeSection(section: Int) {
+        // remove from storage
+        let verseKey = self.recentVerses[section].key
+        self.storage.removeVerse(verseKey)
+        
+        // delete cell from datasource
+        self.nVerses -= 1
+        self.recentVerses.removeAtIndex(section)
+
     }
 
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {

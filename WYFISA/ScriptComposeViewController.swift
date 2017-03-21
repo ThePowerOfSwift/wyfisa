@@ -156,8 +156,9 @@ class ScriptComposeViewController: UIViewController,
     
     
     func exitEditingMode(){
-        if self.verseTable.editing == true {
-            self.verseTable.setEditing(false, animated: true)
+        if self.verseTable.isDeleteMode == true {
+            self.verseTable.isDeleteMode = false
+            self.verseTable.reloadData()
         }
     }
     
@@ -168,16 +169,6 @@ class ScriptComposeViewController: UIViewController,
 
     }
     
-    @IBAction func didPanRight(sender: AnyObject) {
-    
-        if self.isEditingMode == false {
-            // toggle editing mode
-            self.isEditingMode = !self.isEditingMode
-            
-            // update editing state
-            self.verseTable.setEditing(self.isEditingMode, animated: true)
-        }
-    }
 
     // MARK: - Capture management    
     func updateSessionMatches(){
@@ -342,13 +333,19 @@ class ScriptComposeViewController: UIViewController,
     }
 
     @IBAction func didSwipeRight(sender: UISwipeGestureRecognizer) {
-        self.isEditingMode = true
-        self.verseTable.setEditing(self.isEditingMode, animated: true)
+        /*
+        if self.verseTable.isDeleteMode == false {
+            // swipe back to script to selector
+            self.parentViewController?.performSegueWithIdentifier("scriptunwind", sender: self)
+        } else {
+            // disable delete mode
+            self.verseTable.disableDeleteMode()
+        }*/
+
     }
     
     @IBAction func didSwipeLeft(sender: UISwipeGestureRecognizer) {
-        self.isEditingMode = false
-        self.verseTable.setEditing(self.isEditingMode, animated: true)
+       // self.verseTable.enableDeleteMode()
     }
 
     // MARK: - navigation
@@ -480,12 +477,12 @@ class ScriptComposeViewController: UIViewController,
     }
 
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
-        return !isEditingMode
+        return true
     }
     
     // MARK: - versetablecell delegate
     func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo){
-        if sender.editing == false && self.isEditingMode == false { // don't segue if cell is being edited
+        if sender.editing == false { // don't segue if cell is being edited
             switch verse.category {
             case .Verse:
                 performSegueWithIdentifier("VerseDetail", sender: (verse as AnyObject))
@@ -503,10 +500,14 @@ class ScriptComposeViewController: UIViewController,
     
     func didRemoveCell(sender: VerseTableViewCell) {
         // just removed one cell
+        let verse = sender.verseInfo!
+        self.verseTable.deleteVerse(verse)
+        
+        
         self.storage.decrementScriptCountAndTimestamp(self.scriptId!)
         self.syncWithDataSource()
-        self.verseTable.setEditing(false, animated: true)
-        self.isEditingMode = false
+        
+        
     }
     
     // MARK: - notes handler

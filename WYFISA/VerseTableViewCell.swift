@@ -23,18 +23,50 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     @IBOutlet var moreButton: UIButton!
     @IBOutlet var quoteImage: UIImageView!
     @IBOutlet var overlayImage: UIImageView!
+    @IBOutlet var deleteButton: UIButton!
+    @IBOutlet var highLightBar: UIView!
 
     weak var delegate:VerseTableViewCellDelegate?
     var verseInfo: VerseInfo?
     var enableMore: Bool = false
     let db = DBQuery.sharedInstance
     let themer = WYFISATheme.sharedInstance
-
+    var swipe: UISwipeGestureRecognizer? = nil
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         self.labelHeader.textColor = self.themer.navyForLightOrTeal(1.0)
+        
+        swipe = UISwipeGestureRecognizer(target: self, action: #selector(VerseTableViewCell.handleSwipe(_:)))
+        swipe!.direction = .Left
+        self.deleteButton.hidden = true
+        self.addGestureRecognizer(swipe!)
     }
+    
+    func handleSwipe(sender: AnyObject?){
+
+        if self.swipe!.direction == .Left {
+            Animations.start(0.2){
+                self.deleteButton.hidden = false
+            }
+            self.swipe!.direction = .Right
+        } else {
+            Animations.start(0.2){
+                self.deleteButton.hidden = true
+            }
+            self.swipe!.direction = .Left
+        }
+    }
+    
+    func resetDeleteMode(){
+        /*
+        self.swipe?.direction = .Left
+        Animations.start(0.2){
+            self.deleteButton.hidden = true
+        }*/
+    }
+    
 
     func highlightText() {
         
@@ -49,6 +81,8 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     }
 
     func applyCategoryStyle(verse: VerseInfo){
+        swipe!.direction = .Left
+        self.deleteButton.hidden = true
         
         // general styles
         self.mediaAccessory.hidden = true
@@ -80,6 +114,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             //self.backgroundColor = UIColor.clearColor()
             self.backgroundColor = self.themer.offWhiteForLightOrNavy(0.7)
         }
+        
     
     }
     
@@ -131,6 +166,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.quoteImage.hidden = true
             self.labelHeader.hidden = false
             self.labelText.hidden = false
+            self.highLightBar.hidden = true
             
         }
         
@@ -138,6 +174,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.quoteImage.hidden = true
             self.labelText.hidden = true
             self.labelHeader.hidden = true
+            self.highLightBar.hidden = false
         }
         
         if verse.category == .Note {
@@ -146,6 +183,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.labelText.layer.borderColor = UIColor.fire().CGColor
             self.quoteImage.hidden = false
             self.labelText.hidden = false
+            self.highLightBar.hidden = true
 
         }
         
@@ -209,6 +247,9 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
         if let verse = verseInfo {
             self.delegate?.didTapInfoButtonForVerse(verse)
         }
+    }
+    @IBAction func didTapDeleteButton(sender: AnyObject) {
+        self.delegate?.didRemoveCell(self)
     }
     
     override func setSelected(selected: Bool, animated: Bool) {
