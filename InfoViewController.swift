@@ -22,6 +22,8 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet var highlightBrush: UIBarButtonItem!
     @IBOutlet var navToolbar: UIToolbar!
     
+    @IBOutlet var showHighlightButton: UIButton!
+    @IBOutlet var clearHighlightButton: UIButton!
     @IBOutlet var middleMaskLarge: UIView!
     @IBOutlet var middleMask: UIView!
     var verseInfo: VerseInfo? = nil
@@ -52,20 +54,40 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         if self.isUpdate == true || self.snaphot != nil {
             self.capturedImage.image = self.snaphot
             self.originalImage = self.snaphot
-
         }
          
+    }
+    
+    func moveMasksBy(yOffsetVal: CGFloat){
+
+        if yOffsetVal < 0 {
+            return // invalid offset
+        }
+        
+        let yOffsetRatio = yOffsetVal/self.view.frame.height
+        if (yOffsetRatio >= 0.1) && (yOffsetRatio <= 0.85) {
+            let point = CGPoint(x: self.view.center.x,
+                                y: yOffsetVal)
+            self.middleMask.center = point
+            self.middleMaskLarge.center = point
+            self.clearHighlightButton.center = CGPoint(x: self.clearHighlightButton.center.x,
+                                                       y: yOffsetVal)
+            self.showHighlightButton.center = CGPoint(x: self.showHighlightButton.center.x,
+                                                      y: yOffsetVal)
+            self.verseInfo?.imageCroppedOffset = yOffsetRatio
+            self.didModifyOverlay = true
+        }
+
     }
     
     override func viewDidAppear(animated: Bool) {
         if let yOffset = self.verseInfo?.imageCroppedOffset {
             let yOffsetVal = self.view.frame.height * yOffset
+
             Animations.start(0.15){
                 self.middleMask.alpha = 0.15
-                if yOffset >= 0 {
-                    self.middleMask.center = CGPoint(x: self.view.center.x,
-                                                     y: yOffsetVal)
-                }
+                self.moveMasksBy(yOffsetVal)
+                self.styleHighlightMask(self.verseInfo!.isHighlighted)
             }
         }
     }
@@ -102,18 +124,13 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
     @IBAction func didDragHighlightMask(sender: UIPanGestureRecognizer) {
         
-        self.didModifyOverlay = true
         let translation = sender.translationInView(self.view)
         let yOffsetPos = sender.view!.center.y + translation.y
         let yOffsetRatio = yOffsetPos/self.view.frame.height
         
         if (yOffsetRatio >= 0.1) && (yOffsetRatio <= 0.85) {
-            sender.view!.center = CGPoint(x: sender.view!.center.x,
-                                          y: yOffsetPos)
-            self.middleMaskLarge.center = CGPoint(x: sender.view!.center.x,
-                                                  y: yOffsetPos)
+            self.moveMasksBy(yOffsetPos)
             sender.setTranslation(CGPointZero, inView: self.view)
-            self.verseInfo?.imageCroppedOffset = yOffsetRatio
         }
  
     }
@@ -128,15 +145,8 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         if let touch = touches.first {
             let yOffsetPos = touch.locationInView(self.view).y
-            let yOffsetRatio = yOffsetPos/self.view.frame.height
-            if (yOffsetRatio >= 0.1) && (yOffsetRatio <= 0.85) {
-                self.didModifyOverlay = true
-                Animations.start(0.15){
-                    let newCenter = CGPoint(x: self.view.center.x, y: yOffsetPos)
-                    self.middleMask.center = newCenter
-                    self.middleMaskLarge.center = newCenter
-                    self.verseInfo?.imageCroppedOffset = yOffsetRatio
-                }
+            Animations.start(0.15){
+                self.moveMasksBy(yOffsetPos)
             }
         }
     }
@@ -145,20 +155,35 @@ class InfoViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
         if let touch = touches.first {
             let yOffsetPos = touch.locationInView(self.view).y
-            let yOffsetRatio = yOffsetPos/self.view.frame.height
-            if (yOffsetRatio >= 0.1) && (yOffsetRatio <= 0.85) {
-                let newCenter = CGPoint(x: self.view.center.x, y: yOffsetPos)
-                self.middleMask.center = newCenter
-                self.middleMaskLarge.center = newCenter
-                self.verseInfo?.imageCroppedOffset = yOffsetRatio
-            }
+            self.moveMasksBy(yOffsetPos)
         }
         
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-      //  self.verseInfo?.overlayImage = self.tmpImageView.image
-      //  self.didModifyOverlay = true
+    func styleHighlightMask(enabled: Bool){
+        
+        self.didModifyOverlay = true
+        if enabled {
+            self.middleMask.backgroundColor = UIColor.highlighter()
+        } else {
+            self.middleMask.backgroundColor =   UIColor.whiteColor()
+        }
+        
+        self.clearHighlightButton.alpha = enabled ? 1: 0
+        self.showHighlightButton.alpha = enabled ? 0: 1
+        self.verseInfo!.isHighlighted = enabled
+    }
+    
+    @IBAction func didPressHideButton(sender: AnyObject) {
+        Animations.start(0.3){
+            self.styleHighlightMask(false)
+        }
+    }
+    
+    @IBAction func didPressShowButton(sender: AnyObject) {
+        Animations.start(0.3){
+            self.styleHighlightMask(true)
+        }
     }
 
     

@@ -425,6 +425,7 @@ class CBStorage {
                 try doc.update({
                     (newRevision) -> Bool in
                     newRevision["cropOffset"] = verse.imageCroppedOffset
+                    newRevision["highlighted"] = verse.isHighlighted
                     return true
                 })
             } catch {

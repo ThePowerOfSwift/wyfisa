@@ -106,8 +106,8 @@ extension UIColor {
     class func hiNavyBlue() -> CGFloat { return  82/244 }
     
     
-    class func highlighter() -> UIColor {
-        return UIColor.init(red: UIColor.hiRed(), green: UIColor.hiGreen(), blue: UIColor.hiBlue(), alpha: 1.0)
+    class func highlighter(alpha: CGFloat = 1.0) -> UIColor {
+        return UIColor.init(red: UIColor.hiRed(), green: UIColor.hiGreen(), blue: UIColor.hiBlue(), alpha: alpha)
     }
 }
 

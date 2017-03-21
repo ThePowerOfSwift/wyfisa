@@ -31,6 +31,7 @@ class VerseInfo {
     var imageCropped: UIImage?
     var overlayImage: UIImage?
     var imageCroppedOffset: CGFloat = -1.0
+    var isHighlighted: Bool = true
     var refs: [VerseInfo]?
     var verses: [VerseInfo]?
     var category: ItemCategory = .Verse
@@ -83,6 +84,7 @@ class VerseInfo {
              "createdAt": self.createdAt,
              "version": SettingsManager.sharedInstance.version.text(),
              "cropOffset": self.imageCroppedOffset,
+             "highlighted": self.isHighlighted,
              "script": script,
              "key": self.key,
         ]
@@ -121,6 +123,7 @@ class VerseInfo {
             v.bookNo = verseDoc["bookNo"] as? Int ?? 0
             v.verse = verseDoc["verse"] as? Int ?? 0
             v.imageCroppedOffset = verseDoc["cropOffset"] as? CGFloat ?? -1.0
+            v.isHighlighted = verseDoc["highlighted"] as? Bool ?? true
             v.key = verseDoc["key"] as? String ?? ""
             v.version = version
             v.updateWithIdParts()

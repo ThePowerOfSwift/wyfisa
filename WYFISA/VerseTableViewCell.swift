@@ -174,7 +174,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.quoteImage.hidden = true
             self.labelText.hidden = true
             self.labelHeader.hidden = true
-            self.highLightBar.hidden = false
+            self.highLightBar.hidden = !verse.isHighlighted
         }
         
         if verse.category == .Note {
