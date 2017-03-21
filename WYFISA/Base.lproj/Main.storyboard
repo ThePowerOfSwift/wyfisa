@@ -1718,10 +1718,10 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="C00635FD-CA01-4B6E-896D-5C360D0A70A3" translatesAutoresizingMaskIntoConstraints="NO" id="PsW-mK-lvd">
+                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="72FEDC78-E208-4B61-825A-B1144F60A415" translatesAutoresizingMaskIntoConstraints="NO" id="PsW-mK-lvd">
                                                 <rect key="frame" x="34" y="0.0" width="274" height="0.0"/>
                                             </imageView>
-                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DD7F8E72-783D-463D-BE56-9745C2E9FD89" translatesAutoresizingMaskIntoConstraints="NO" id="bhv-SC-t6e">
+                                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="B1C305F9-5CD8-4FED-B9D2-B5F439F65394" translatesAutoresizingMaskIntoConstraints="NO" id="bhv-SC-t6e">
                                                 <rect key="frame" x="34" y="0.0" width="274" height="0.0"/>
                                             </imageView>
                                         </subviews>
@@ -2190,7 +2190,6 @@
                             <constraint firstItem="2it-wm-UFz" firstAttribute="centerY" secondItem="MFd-CO-4Ck" secondAttribute="centerY" id="I5H-Nk-MJl"/>
                             <constraint firstItem="xJV-KG-xHK" firstAttribute="height" secondItem="hA7-TC-04J" secondAttribute="height" multiplier="3" id="Jhr-sZ-cEr"/>
                             <constraint firstItem="oWP-3t-aXX" firstAttribute="centerY" secondItem="Gb6-3N-3A7" secondAttribute="centerY" id="Jou-xI-11x"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="mpF-Vi-iSR" secondAttribute="trailing" constant="160" id="Ldo-li-nA4"/>
                             <constraint firstItem="hA7-TC-04J" firstAttribute="centerY" secondItem="Gb6-3N-3A7" secondAttribute="centerY" multiplier="0.5" id="LhU-0q-WDW"/>
                             <constraint firstItem="oWP-3t-aXX" firstAttribute="centerX" secondItem="Gb6-3N-3A7" secondAttribute="centerX" id="NHL-Uu-vK4"/>
                             <constraint firstItem="MFd-CO-4Ck" firstAttribute="trailing" secondItem="hA7-TC-04J" secondAttribute="trailing" id="Xha-7P-3LR"/>
@@ -2209,6 +2208,7 @@
                             <constraint firstItem="2it-wm-UFz" firstAttribute="height" secondItem="MFd-CO-4Ck" secondAttribute="height" id="vDW-Q0-Cxe"/>
                             <constraint firstItem="2it-wm-UFz" firstAttribute="centerX" secondItem="MFd-CO-4Ck" secondAttribute="centerX" id="vbN-rt-w3g"/>
                             <constraint firstItem="shX-qq-UA9" firstAttribute="height" secondItem="oWP-3t-aXX" secondAttribute="height" id="wvb-6U-Mr8"/>
+                            <constraint firstItem="mpF-Vi-iSR" firstAttribute="centerX" secondItem="Gb6-3N-3A7" secondAttribute="centerX" id="zR7-ed-HQb"/>
                         </constraints>
                     </view>
                     <connections>
@@ -2665,7 +2665,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="C00635FD-CA01-4B6E-896D-5C360D0A70A3" width="171" height="84">
+        <image name="72FEDC78-E208-4B61-825A-B1144F60A415" width="171" height="84">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -3674,10 +3674,7 @@ NOo56kHqROpJ6ljqXOpj6mvqeOp96n/qgeqG6o7qkeqW6p7qoeqz6rbquwAAAAAAAAIBAAAAAAAAAEEA
 AAAAAAAAAAAAAAAAAOq9A
 </mutableData>
         </image>
-        <image name="Capture" width="375" height="667"/>
-        <image name="CaptureSmallFire" width="300" height="102"/>
-        <image name="CaptureSmallWhite" width="300" height="100"/>
-        <image name="DD7F8E72-783D-463D-BE56-9745C2E9FD89" width="171" height="84">
+        <image name="B1C305F9-5CD8-4FED-B9D2-B5F439F65394" width="171" height="84">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
@@ -4686,6 +4683,9 @@ NOo56kHqROpJ6ljqXOpj6mvqeOp96n/qgeqG6o7qkeqW6p7qoeqz6rbquwAAAAAAAAIBAAAAAAAAAEEA
 AAAAAAAAAAAAAAAAAOq9A
 </mutableData>
         </image>
+        <image name="Capture" width="375" height="667"/>
+        <image name="CaptureSmallFire" width="300" height="102"/>
+        <image name="CaptureSmallWhite" width="300" height="100"/>
         <image name="DoubleLeft" width="13" height="23"/>
         <image name="DoubleRight" width="13" height="23"/>
         <image name="Find" width="375" height="667"/>

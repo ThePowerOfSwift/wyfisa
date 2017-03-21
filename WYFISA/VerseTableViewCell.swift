@@ -25,6 +25,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     @IBOutlet var overlayImage: UIImageView!
     @IBOutlet var deleteButton: UIButton!
     @IBOutlet var highLightBar: UIView!
+    @IBOutlet var textStackView: UIStackView!
 
     weak var delegate:VerseTableViewCellDelegate?
     var verseInfo: VerseInfo?
@@ -167,6 +168,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.labelHeader.hidden = false
             self.labelText.hidden = false
             self.highLightBar.hidden = true
+            self.textStackView.spacing = -20
             
         }
         
@@ -175,6 +177,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.labelText.hidden = true
             self.labelHeader.hidden = true
             self.highLightBar.hidden = !verse.isHighlighted
+            self.textStackView.spacing = 0
         }
         
         if verse.category == .Note {
@@ -184,6 +187,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.quoteImage.hidden = false
             self.labelText.hidden = false
             self.highLightBar.hidden = true
+            self.textStackView.spacing = 0
 
         }
         
