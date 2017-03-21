@@ -69,7 +69,6 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
 
         self.photoVC?.view.alpha = 0
         self.photoVC?.configure(self.view.frame.size)
-        self.photoVC?.doneEditingCallback = self.unwindFromPhotoCapture
         self.actionScrollView.addSubview(self.photoVC!.view)
 
         // text field
@@ -119,9 +118,7 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
             self.actionScrollView.contentOffset.x = self.view.frame.width
             self.actionScrollView.contentOffset.y = 0
             self.photoVC?.didPressCaptureButton()
-            self.actionScrollView.userInteractionEnabled = true
         }
-        
     }
     
     
@@ -140,11 +137,13 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
             if let verses = self.ocrVC?.didReleaseCaptureButton() {
                 newItems = verses
             }
-            self.hideToolbar(false)
         case .Photo:
-            self.photoVC?.didReleaseCaptureButton()
-            self.captureButton.hidden = true
+            if let verse = self.photoVC?.didReleaseCaptureButton(){
+                newItems = [verse]
+            }
         }
+        self.hideToolbar(false)
+
         
         // pass along to scriptvc
         self.scriptVC?.addVersesToScript(newItems)
@@ -245,15 +244,6 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     @IBAction func didTapViewMask(sender: AnyObject) {
         if self.scriptTitle.editing {
             self.scriptTitle.endEditing(true)
-        }
-    }
-    
-    func unwindFromPhotoCapture(verse: VerseInfo?) {
-        self.actionScrollView.userInteractionEnabled = false
-        self.hideToolbar(false)
-        self.captureButton.hidden = false
-        if verse != nil {
-            self.scriptVC?.addVerseToDatastore(verse!)
         }
     }
 

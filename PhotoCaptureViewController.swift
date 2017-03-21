@@ -17,7 +17,9 @@ class PhotoCaptureViewController: UIViewController {
     var imageVerseInfo: VerseInfo? = nil
     var session = CaptureSession.sharedInstance
     let settings = SettingsManager.sharedInstance
-    var doneEditingCallback:(verse: VerseInfo?) -> () = notifyImageCallback
+    
+    @IBOutlet var middleMask: UIView!
+    @IBOutlet var middleMaskLarge: UIView!
     
     // drawing vars
     var swiped: Bool = false
@@ -28,8 +30,6 @@ class PhotoCaptureViewController: UIViewController {
     var green = UIColor.hiGreen()
     var blue = UIColor.hiBlue()
     
-    @IBOutlet var tmpImageView: UIImageView!
-    @IBOutlet var buttonStack: UIStackView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -52,8 +52,6 @@ class PhotoCaptureViewController: UIViewController {
      // MARK: -CaptureButton Delegate
      func didPressCaptureButton(){
      
-        self.buttonStack.alpha = 0
-        self.tmpImageView.image = nil
         self.view.frame.size = self.frameSize
         self.cam.addTarget(self.photoCaptureView)
         
@@ -69,28 +67,37 @@ class PhotoCaptureViewController: UIViewController {
      }
     
 
-     func didReleaseCaptureButton() {
+     func didReleaseCaptureButton() -> VerseInfo? {
        
         // save frame as image
         if let frameSnapshot = self.cam.imageFromFrame() {
             self.imageVerseInfo = VerseInfo.init(id: "0", name: "", text: nil)
             imageVerseInfo!.category = .Image
-            let cropFilter = ImageFilter.cropFilter(0, y: 0.0, width: 1, height: 0.55)
+            imageVerseInfo!.image = frameSnapshot
+
+            let yOffset:CGFloat = self.middleMaskLarge.frame.origin.y/self.frameSize.height
+            let height:CGFloat = self.middleMaskLarge.frame.height/self.frameSize.height
+            print(yOffset, height)
+
+            let cropFilter = ImageFilter.cropFilter(0, y: yOffset, width: 1, height: height)
             let croppedImage = cropFilter.imageByFilteringImage(frameSnapshot)
-            imageVerseInfo!.image = croppedImage
+            imageVerseInfo!.imageCropped = croppedImage
+
         }
 
  
         // hide camera and show underlying vc for editing frame
         Animations.start(0.3){
-          //  self.view.alpha = 0
-            self.buttonStack.alpha = 1
+            self.view.alpha = 0
         }
         
 
         if self.settings.useFlash == true {
             self.cam.torch(.Off)
         }
+        self.cam.removeTarget(self.photoCaptureView)
+        
+        return imageVerseInfo
 
      }
     
@@ -102,7 +109,6 @@ class PhotoCaptureViewController: UIViewController {
         // remove camera from target
         self.cam.removeTarget(self.photoCaptureView)
         
-        self.doneEditingCallback(verse: self.imageVerseInfo)
         
     }
     
@@ -112,12 +118,12 @@ class PhotoCaptureViewController: UIViewController {
         }
         // remove camera from target
         self.cam.removeTarget(self.photoCaptureView)
-        self.doneEditingCallback(verse: nil)
 
     }
  
     
     // MARK: - Drawing
+    /*
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.swiped = false
         
@@ -176,7 +182,7 @@ class PhotoCaptureViewController: UIViewController {
        // self.verseInfo?.overlayImage = self.tmpImageView.image
         //self.didModifyOverlay = true
     }
-
+*/
     
     // MARK: - Navigation
     /*

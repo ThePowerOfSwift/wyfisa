@@ -28,7 +28,9 @@ class VerseInfo {
     var bookNo: Int?
     var verse: Int?
     var image: UIImage?
+    var imageCropped: UIImage?
     var overlayImage: UIImage?
+    var imageCroppedOffset: CGFloat = -1.0
     var refs: [VerseInfo]?
     var verses: [VerseInfo]?
     var category: ItemCategory = .Verse
@@ -80,6 +82,7 @@ class VerseInfo {
              "text": text,
              "createdAt": self.createdAt,
              "version": SettingsManager.sharedInstance.version.text(),
+             "cropOffset": self.imageCroppedOffset,
              "script": script,
              "key": self.key,
         ]
@@ -90,7 +93,6 @@ class VerseInfo {
     class func DocPropertiesToObj(doc: AnyObject?) -> VerseInfo? {
         
         var verseInfo:VerseInfo? = nil
-        let dbq: DBQuery = DBQuery.sharedInstance
 
         if let verseDoc = doc as? [String: AnyObject] {
             let id = verseDoc["id"] as? String ?? ""
@@ -98,7 +100,7 @@ class VerseInfo {
             let version = verseDoc["version"] as? String ?? Version.KJV.text()
 
             // get text from db
-            var text:String? =  verseDoc["text"] as? String ?? ""
+            let text:String? =  verseDoc["text"] as? String ?? ""
 
             let v = VerseInfo.init(id: id, name: name, text: text)
    
@@ -118,6 +120,7 @@ class VerseInfo {
             v.chapterNo = verseDoc["chapterNo"] as? Int ?? 0
             v.bookNo = verseDoc["bookNo"] as? Int ?? 0
             v.verse = verseDoc["verse"] as? Int ?? 0
+            v.imageCroppedOffset = verseDoc["cropOffset"] as? CGFloat ?? -1.0
             v.key = verseDoc["key"] as? String ?? ""
             v.version = version
             v.updateWithIdParts()

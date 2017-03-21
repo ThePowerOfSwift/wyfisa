@@ -66,7 +66,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             // show accesory view
             self.mediaAccessory.hidden = false
             self.overlayImage.hidden = false
-            self.mediaAccessory.image =  verse.image
+            self.mediaAccessory.image =  verse.imageCropped
             self.overlayImage.image = verse.overlayImage
             
             self.backgroundColor = UIColor.clearColor()

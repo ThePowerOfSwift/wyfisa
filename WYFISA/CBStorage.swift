@@ -229,6 +229,7 @@ class CBStorage {
 
                     if let verse = self.getVerseDoc(verseId) {
                         verse.image = self.getImageAttachment(verse.key, named: "original.jpg")
+                        verse.imageCropped = self.getImageAttachment(verse.key, named: "cropped.jpg")
                         verse.overlayImage = self.getImageAttachment(verse.key, named: "overlay.png")
                         scriptVerses.append(verse)
                     }
@@ -272,6 +273,7 @@ class CBStorage {
                 try doc.putProperties(properties)
                 if verse.category == .Image {
                     self.attachImage(doc, image: verse.image, named: "original.jpg")
+                    self.attachImage(doc, image: verse.imageCropped, named: "cropped.jpg")
                     self.attachImage(doc, image: verse.overlayImage, named: "overlay.png", format: "png")
                 }
             } catch {
@@ -419,7 +421,16 @@ class CBStorage {
     func updateVerseImage(verse: VerseInfo){
         
         if let doc = db?.existingDocumentWithID(verse.key) {
-           self.attachImage(doc, image: verse.overlayImage, named: "overlay.png", format: "png")
+            do {
+                try doc.update({
+                    (newRevision) -> Bool in
+                    newRevision["cropOffset"] = verse.imageCroppedOffset
+                    return true
+                })
+            } catch {
+                print("update doc failed")
+            }
+            self.attachImage(doc, image: verse.imageCropped, named: "cropped.jpg")
         }
     }
 

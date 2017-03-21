@@ -261,7 +261,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
         if let ds = self.getDatasource() {
             if ds.recentVerses.count > section {
                 let verse = ds.recentVerses[section]
-                if (verse.category == .Verse && verse.id != "") {
+                if ((verse.category == .Verse) && (verse.id != "")) {
                     if (verse.version != SettingsManager.sharedInstance.version.text()){
                         // version missmatch
                         verseToFetch = verse
@@ -317,7 +317,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
                 case .Note:
                      sectionHeight = ds.cellHeightForText(verse.name, width: self.frame.size.width*0.80)
                 case .Image:
-                    sectionHeight = self.frame.size.width*0.8 // += 150
+                    sectionHeight = self.frame.size.width*0.6 // += 150
                 }
             }
         } else { // non expanded
