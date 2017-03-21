@@ -117,7 +117,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
             self.fetchVerseText(nSections-1)
             
             let idxSet = NSIndexSet(index: nSections)
-            self.insertSections(idxSet, withRowAnimation: .None)
+            self.insertSections(idxSet, withRowAnimation: .Middle)
             let path = NSIndexPath(forRow: 0, inSection: nSections)
             
             self.reloadSections(idxSet, withRowAnimation: .None)
@@ -243,7 +243,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
         // use a larger footer when rendering last section in table
         if section == (self.numberOfSections - 1){
             if let height = self.footerHeight {
-                footerHeight = height
+                footerHeight = height*1.5
             }
         }
     
