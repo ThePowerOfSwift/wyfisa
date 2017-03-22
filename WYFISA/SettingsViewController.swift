@@ -126,7 +126,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         var cell = self.settingsTable.dequeueReusableCellWithIdentifier("cellsubnav")!
-        let label = cell.viewWithTag(1) as! UILabel
+        var label = cell.viewWithTag(1) as! UILabel
 
         switch indexPath.row {
         case 0:
@@ -143,16 +143,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         default:
             cell = self.settingsTable.dequeueReusableCellWithIdentifier("cellchoice")!
+            label = cell.viewWithTag(1) as! UILabel
             label.text = "Night Mode"
             let nightSwitch = cell.viewWithTag(2) as! UISwitch
             nightSwitch.addTarget(self, action:  #selector(self.toggleNightMode), forControlEvents: .ValueChanged)
             nightSwitch.setOn(settings.nightMode, animated: false)
-            
-            // update theme
-            cell.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
-            label.textColor = self.themer.navyForLightOrWhite(1.0)
         }
-        
+
+        // update theme
+        cell.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+        label.textColor = self.themer.navyForLightOrOffWhite(1.0)
         return cell
 
     }

@@ -18,6 +18,7 @@ class FontSettingsViewController: UIViewController, UITableViewDataSource, UITab
         super.viewDidLoad()
         self.fontTable.dataSource = self
         self.fontTable.delegate = self
+        self.themeView()
     }
     
     override func didReceiveMemoryWarning() {
@@ -37,8 +38,7 @@ class FontSettingsViewController: UIViewController, UITableViewDataSource, UITab
         label.text = "\(Int(currentVal))px"
         
         // theme
-        cell.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
-        label.textColor = self.themer.navyForLightOrWhite(1.0)
+        label.textColor = self.themer.navyForLightOrOffWhite(1.0)
         
         return cell
     }
@@ -97,5 +97,11 @@ class FontSettingsViewController: UIViewController, UITableViewDataSource, UITab
         
     }
     
+    // MARK: - Theme
+    func themeView(){
+        self.view.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+        self.fontTable.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+        self.fontTable.reloadData()
+    }
     
 }

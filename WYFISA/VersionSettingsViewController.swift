@@ -11,11 +11,13 @@ import UIKit
 class VersionSettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     @IBOutlet var versionTable: UITableView!
     let settings = SettingsManager.sharedInstance
+    let themer = WYFISATheme.sharedInstance
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.versionTable.dataSource = self
         self.versionTable.delegate = self
+        self.themeView()
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,6 +39,7 @@ class VersionSettingsViewController: UIViewController, UITableViewDataSource, UI
             cell.accessoryType = .None
         }
         
+        label.textColor = self.themer.navyForLightOrOffWhite(1.0)
         return cell
     }
 
@@ -52,6 +55,13 @@ class VersionSettingsViewController: UIViewController, UITableViewDataSource, UI
         if let newVersion = Version(rawValue: indexPath.row){
             self.settings.version = newVersion
         }
+        self.versionTable.reloadData()
+    }
+
+    // MARK: - Theme
+    func themeView(){
+        self.view.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+        self.versionTable.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
         self.versionTable.reloadData()
     }
     

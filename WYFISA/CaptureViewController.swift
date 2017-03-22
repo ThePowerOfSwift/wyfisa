@@ -50,8 +50,6 @@ class CaptureViewController: UIViewController {
     // MARK: -CaptureButton Delegate
     func didPressCaptureButton(){
         
-        self.cam.printTargets()
-
         if self.captureLock.tryLock() {
             self.cam.addCameraBlurTargets(self.captureView)
 

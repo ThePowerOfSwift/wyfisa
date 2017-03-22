@@ -54,7 +54,6 @@ class PhotoCaptureViewController: UIViewController {
         
         self.cam.addTarget(self.photoCaptureView)
          self.cam.resume()
-         self.cam.printTargets()
          Animations.start(0.3){
              self.view.alpha = 1
          }
