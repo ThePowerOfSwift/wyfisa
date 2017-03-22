@@ -2339,10 +2339,11 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Qzo-PW-cbO" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="zkP-Lb-S34">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="zkP-Lb-S34">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <color key="textColor" red="0.25098039220000001" green="0.30196078430000001" blue="0.32156862749999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2557,10 +2558,11 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="uQK-9L-h9u" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" backIndicatorImage="chevron-left-fire" id="inn-T4-aQx">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" backIndicatorImage="chevron-left-fire" id="inn-T4-aQx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.89411764709999997" green="0.2156862745" blue="0.047058823530000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>

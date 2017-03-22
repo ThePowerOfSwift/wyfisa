@@ -122,6 +122,9 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
         return HIDE_STATUS_BAR
     }
     
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return self.themer.statusBarStyle()
+    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         

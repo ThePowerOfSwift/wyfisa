@@ -40,6 +40,10 @@ class ScriptViewController: UIViewController {
     override func prefersStatusBarHidden() -> Bool {
         return HIDE_STATUS_BAR
     }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return WYFISATheme.sharedInstance.statusBarStyle()
+    }
 
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

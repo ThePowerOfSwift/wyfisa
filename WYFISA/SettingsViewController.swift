@@ -219,6 +219,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return HIDE_STATUS_BAR
     }
     
-
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return self.themer.statusBarStyle()
+    }
 
 }

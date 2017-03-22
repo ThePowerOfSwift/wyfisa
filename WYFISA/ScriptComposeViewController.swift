@@ -193,6 +193,10 @@ class ScriptComposeViewController: UIViewController,
         return HIDE_STATUS_BAR
     }
     
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return self.themer.statusBarStyle()
+    }
+    
     @IBAction func unwindFromReader(segue: UIStoryboardSegue) {
         //
     }

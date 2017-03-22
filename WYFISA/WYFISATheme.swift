@@ -171,4 +171,12 @@ class WYFISATheme {
         return bgView
     }
     
+    func statusBarStyle() -> UIStatusBarStyle {
+        switch  self.mode {
+        case .Light:
+            return .Default
+        default:
+            return .LightContent
+        }
+    }
 }

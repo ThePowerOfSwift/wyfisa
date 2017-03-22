@@ -152,6 +152,10 @@ class SearchViewController: UIViewController, FBStorageDelegate {
     override func prefersStatusBarHidden() -> Bool {
         return HIDE_STATUS_BAR
     }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return self.themer.statusBarStyle()
+    }
 
     // MARK: - FIR Delegate
     func didGetSingleVerse(sender: AnyObject, verse: AnyObject){

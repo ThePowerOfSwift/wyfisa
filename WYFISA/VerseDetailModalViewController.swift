@@ -48,12 +48,12 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         }
         
         self.segmentBar.selectedSegmentIndex = 1
+        
+        // apply color schema
+        self.applyColorSchema()
     }
     
     func initView() {
-
-        // apply color schema
-        self.applyColorSchema()
 
         // show hide next/prev buttons
         self.setupNextPrevButtons()
@@ -204,6 +204,11 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     override func prefersStatusBarHidden() -> Bool {
         return HIDE_STATUS_BAR
     }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return self.themer.statusBarStyle()
+    }
+    
     override func viewDidLayoutSubviews() {
         self.chapterTextView.setContentOffset(CGPointZero, animated: false)
     }

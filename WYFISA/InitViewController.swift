@@ -174,6 +174,10 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         return HIDE_STATUS_BAR
     }
     
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return WYFISATheme.sharedInstance.statusBarStyle()
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // save embedded vcs for accessing later
         

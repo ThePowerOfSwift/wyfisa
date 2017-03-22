@@ -103,6 +103,10 @@ class NotesViewController: UIViewController {
         return HIDE_STATUS_BAR
     }
     
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return self.themer.statusBarStyle()
+    }
+    
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
