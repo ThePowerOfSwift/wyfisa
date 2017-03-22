@@ -313,7 +313,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
                 switch  verse.category {
                 case .Verse:
                     if let text = verse.text {
-                        sectionHeight = ds.cellHeightForText(text, width: self.frame.size.width * 1.2)
+                        sectionHeight = ds.cellHeightForText(text, width: self.frame.size.width * 1)
                     }
                 case .Note:
                      sectionHeight = ds.cellHeightForText(verse.name, width: self.frame.size.width*0.80)

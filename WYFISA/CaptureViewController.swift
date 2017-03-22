@@ -39,6 +39,8 @@ class CaptureViewController: UIViewController {
         self.captureVerseTable.dataSource = self.tableDataSource
         self.captureVerseTable.isExpanded = false
 
+        self.cam.addCameraBlurTargets(self.captureView)
+
     }
     
 
@@ -52,7 +54,6 @@ class CaptureViewController: UIViewController {
         if self.captureLock.tryLock() {
             self.activeCaptureSession = self.session.currentId
             self.view.frame.size = self.frameSize
-            self.cam.addCameraBlurTargets(self.captureView)
 
             self.cam.resume()
             Animations.start(0.3){
@@ -188,6 +189,8 @@ class CaptureViewController: UIViewController {
     
     func didReleaseCaptureButton() -> [VerseInfo] {
         
+        self.cam.resume()
+
         if self.activeCaptureSession != session.currentId {
             // session does not correspond with initial button press
             return []
@@ -214,7 +217,6 @@ class CaptureViewController: UIViewController {
         // clear out the temp table
         self.captureVerseTable.clear()
         
-        self.cam.removeTarget(self.captureView)
         updateLock.unlock()
 
         return capturedVerses

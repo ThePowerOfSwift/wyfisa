@@ -35,7 +35,6 @@ class ScriptComposeViewController: UIViewController,
     var scrollViewEscapeMask: UIView!
 
     let themer = WYFISATheme.sharedInstance
-    let cam = CameraManager.sharedInstance
     let settings = SettingsManager.sharedInstance
     var session = CaptureSession.sharedInstance
     let db = DBQuery.sharedInstance
@@ -62,7 +61,6 @@ class ScriptComposeViewController: UIViewController,
         self.verseTable.dataSource = self.tableDataSource
         self.verseTable.isExpanded = true
         self.verseTable.footerHeight = self.footerOverlay.frame.height
-        self.verseTable.scrollNotifier = self.tableScrollNotifierFunc
         self.verseTable.reloadData()
         self.session.currentId = self.tableDataSource!.getMaxSessionID()
         
@@ -76,13 +74,11 @@ class ScriptComposeViewController: UIViewController,
         self.pickerView.maskDisabled = false
         self.pickerView.reloadData()
         
+        // flash
+        self.configureFlashIcon()
+        
         // misc delegates
         self.noteTextInput.delegate = self
-        
-        // photo preview
-    
-        self.captureImage.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
-        self.cam.addTarget(self.captureImage)
         
         // theme
         self.themeView()
@@ -102,26 +98,7 @@ class ScriptComposeViewController: UIViewController,
         
     }
     
-
-    func tableScrollNotifierFunc(){
-        /*
-        if self.pickerView.selectedOption() != .Script {
-            self.pickerView.selectItemByOption(.Script, animated: true)
-        }
-        */
-    }
     
-    
-    func initCamera(){
-        // check camera permissions
-        self.checkCameraAccess()
-        if self.cameraEnabled { // start
-            self.cam.start()
-            self.cam.zoom(1)
-            self.cam.focus(.ContinuousAutoFocus)
-        }
-    }
-
 
     @IBAction func hideGradientMask(sender: AnyObject) {
         Animations.start(0.3){
@@ -137,19 +114,22 @@ class ScriptComposeViewController: UIViewController,
         // Dispose of any resources that can be recreated.
     }
     
+    func configureFlashIcon(){
+        
+        if self.settings.useFlash == true {
+            let buttonIcon = UIImage.init(named: "flash-fire")
+            self.clearButton.setImage(buttonIcon, forState: .Normal)
+        } else {
+            let buttonIcon = UIImage.init(named: "flash")
+            self.clearButton.setImage(buttonIcon, forState: .Normal)
+        }
+    }
+    
     @IBAction func didPressClearButton(sender: UIButton) {
         
         // toggle editing mode
         self.settings.useFlash = !self.settings.useFlash
-        
-        if self.settings.useFlash == true {
-            let buttonIcon = UIImage.init(named: "flash-fire")
-            sender.setImage(buttonIcon, forState: .Normal)
-        } else {
-            let buttonIcon = UIImage.init(named: "flash")
-            sender.setImage(buttonIcon, forState: .Normal)
-        }
-        
+        self.configureFlashIcon()
         
     }
 
@@ -183,34 +163,8 @@ class ScriptComposeViewController: UIViewController,
         }
     }
     
-    func checkCameraAccess() {
-        
-        if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) !=  AVAuthorizationStatus.Authorized
-        {
-            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { (granted :Bool) -> Void in
-                if granted == false
-                {
-                   self.cameraEnabled = false
-                }
-            });
-        }
-    }
     
     // MARK: - CaptureButtonDelegate
-    func didPressCaptureButton(sender: InitViewController){
-        
-        let option = self.pickerView.selectedOption()
-        
-        switch option {
-        case .VerseOCR:
-            // only do ocr-mode if in verse detection
-             //self.startOCRCaptureAction()
-            var ok = 23;
-        case .Photo:
-            // add last image to list when in photo mode
-            self.takePhoto()
-        }
-    }
     
     
     func addVersesToScript(verses: [VerseInfo]) {
@@ -256,21 +210,7 @@ class ScriptComposeViewController: UIViewController,
         }
         
     }
-    
-    func takePhoto(){
-        
-        // create a verseInfo with an image
-        let verseInfo = VerseInfo.init(id: "0", name: "", text: nil)
-        verseInfo.category = .Image
-        let captureImage =  self.cam.imageFromFrame()
-        verseInfo.image = captureImage
-        
-        // add to ds
-        self.addVerseToDatastore(verseInfo)
 
-    }
-    
-    
     // MARK: - picker view
     func numberOfItemsInPickerView(pickerView: AKPickerView) -> Int {
         return 2
@@ -326,11 +266,6 @@ class ScriptComposeViewController: UIViewController,
         self.captureContainer.hidden = hidden
     }
     
-    func resumeCam(){
-        if self.cam.state == .Paused {
-            self.cam.resume()
-        }
-    }
 
     @IBAction func didSwipeRight(sender: UISwipeGestureRecognizer) {
         /*

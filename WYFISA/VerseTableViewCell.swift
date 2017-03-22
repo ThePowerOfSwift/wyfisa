@@ -169,7 +169,6 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.labelText.hidden = false
             self.highLightBar.hidden = true
             self.textStackView.spacing = -20
-            
         }
         
         if verse.category == .Image {

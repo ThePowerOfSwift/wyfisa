@@ -26,7 +26,7 @@ class CameraManager {
     var shouldResumeOnAppFG = false
     var cameraZoom:CGFloat = 1.0
     var cameraFocusMode: AVCaptureFocusMode = .ContinuousAutoFocus
-    
+    var cameraEnabled: Bool = true
     static let sharedInstance = CameraManager()
 
 
@@ -178,6 +178,19 @@ class CameraManager {
     
     func processImage(image: UIImage) -> String? {
         return self.ocr.process(image)
+    }
+    
+    func checkCameraAccess() {
+        
+        if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) !=  AVAuthorizationStatus.Authorized
+        {
+            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { (granted :Bool) -> Void in
+                if granted == false
+                {
+                    self.cameraEnabled = false
+                }
+            });
+        }
     }
     
     

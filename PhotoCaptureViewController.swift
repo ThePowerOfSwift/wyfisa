@@ -35,7 +35,8 @@ class PhotoCaptureViewController: UIViewController {
 
         // setup camera
         self.photoCaptureView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
-        
+        self.cam.addTarget(self.photoCaptureView)
+
         // Do any additional setup after loading the view.
     }
 
@@ -53,7 +54,6 @@ class PhotoCaptureViewController: UIViewController {
      func didPressCaptureButton(){
      
         self.view.frame.size = self.frameSize
-        self.cam.addTarget(self.photoCaptureView)
         
          self.cam.resume()
          Animations.start(0.3){
@@ -77,7 +77,6 @@ class PhotoCaptureViewController: UIViewController {
 
             let yOffset:CGFloat = self.middleMaskLarge.frame.origin.y/self.frameSize.height
             let height:CGFloat = self.middleMaskLarge.frame.height/self.frameSize.height
-            print(yOffset, height)
 
             let cropFilter = ImageFilter.cropFilter(0, y: yOffset, width: 1, height: height)
             let croppedImage = cropFilter.imageByFilteringImage(frameSnapshot)
@@ -95,8 +94,8 @@ class PhotoCaptureViewController: UIViewController {
         if self.settings.useFlash == true {
             self.cam.torch(.Off)
         }
-        self.cam.removeTarget(self.photoCaptureView)
         
+        self.cam.pause()
         return imageVerseInfo
 
      }
