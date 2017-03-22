@@ -35,9 +35,6 @@ class PhotoCaptureViewController: UIViewController {
 
         // setup camera
         self.photoCaptureView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
-        self.cam.addTarget(self.photoCaptureView)
-
-        // Do any additional setup after loading the view.
     }
 
     func configure(size: CGSize){
@@ -55,7 +52,9 @@ class PhotoCaptureViewController: UIViewController {
      
         self.view.frame.size = self.frameSize
         
+        self.cam.addTarget(self.photoCaptureView)
          self.cam.resume()
+         self.cam.printTargets()
          Animations.start(0.3){
              self.view.alpha = 1
          }
@@ -68,7 +67,9 @@ class PhotoCaptureViewController: UIViewController {
     
 
      func didReleaseCaptureButton() -> VerseInfo? {
-       
+
+        var rc: VerseInfo? = nil
+
         // save frame as image
         if let frameSnapshot = self.cam.imageFromFrame() {
             self.imageVerseInfo = VerseInfo.init(id: "0", name: "", text: nil)
@@ -81,7 +82,7 @@ class PhotoCaptureViewController: UIViewController {
             let cropFilter = ImageFilter.cropFilter(0, y: yOffset, width: 1, height: height)
             let croppedImage = cropFilter.imageByFilteringImage(frameSnapshot)
             imageVerseInfo!.imageCropped = croppedImage
-
+            rc = imageVerseInfo
         }
 
  
@@ -90,106 +91,18 @@ class PhotoCaptureViewController: UIViewController {
             self.view.alpha = 0
         }
         
-
         if self.settings.useFlash == true {
             self.cam.torch(.Off)
         }
         
+        // pause the cam
         self.cam.pause()
-        return imageVerseInfo
+        self.cam.removeTarget(self.photoCaptureView)
+        
+        return rc
 
      }
     
-    @IBAction func addPhotoAction(sender: AnyObject) {
-        // save the overlay
-        Animations.start(0.3){
-            self.view.alpha = 0
-        }
-        // remove camera from target
-        self.cam.removeTarget(self.photoCaptureView)
-        
-        
-    }
-    
-    @IBAction func cancelAddPhoto(sender: AnyObject) {
-        Animations.start(0.3){
-            self.view.alpha = 0
-        }
-        // remove camera from target
-        self.cam.removeTarget(self.photoCaptureView)
 
-    }
- 
     
-    // MARK: - Drawing
-    /*
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        self.swiped = false
-        
-        if let touch = touches.first {
-            self.lastPoint = touch.locationInView(self.tmpImageView)
-        }
-    }
-    
-    
-    func drawLineFrom(fromPoint: CGPoint, toPoint: CGPoint) {
-        
-        UIGraphicsBeginImageContextWithOptions(self.tmpImageView.frame.size, false, 0.0)
-        
-        let dist =  abs(fromPoint.x - toPoint.x)
-        if (opacity == 0.10 && dist < 2 ){
-            // gentle on highlighter ending
-            self.lastPoint = fromPoint
-            return
-        }
-        let rect = CGRect(x: 0, y: 0,
-                          width: self.tmpImageView.frame.size.width,
-                          height: self.tmpImageView.frame.size.height)
-        self.tmpImageView.image?.drawInRect(rect)
-        
-        if  let context = UIGraphicsGetCurrentContext(){
-            
-            CGContextMoveToPoint(context, fromPoint.x, fromPoint.y)
-            CGContextAddLineToPoint(context, toPoint.x, toPoint.y)
-            
-            CGContextSetLineCap(context, .Square)
-            CGContextSetLineWidth(context, brushWidth)
-            CGContextSetRGBStrokeColor(context, red, green, blue, opacity)
-            CGContextSetBlendMode(context, .Overlay)
-            CGContextStrokePath(context)
-        }
-        
-        self.tmpImageView.image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-    }
-    
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
-        self.swiped = true
-        if let touch = touches.first {
-            let currentPoint = touch.locationInView(self.tmpImageView)
-            drawLineFrom(self.lastPoint, toPoint: currentPoint)
-            
-            self.lastPoint = currentPoint
-            //   self.undoButton.enabled = true
-        }
-    }
-    
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        self.imageVerseInfo?.overlayImage = self.tmpImageView.image
-       // self.verseInfo?.overlayImage = self.tmpImageView.image
-        //self.didModifyOverlay = true
-    }
-*/
-    
-    // MARK: - Navigation
-    /*
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

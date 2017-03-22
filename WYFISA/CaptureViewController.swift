@@ -39,7 +39,6 @@ class CaptureViewController: UIViewController {
         self.captureVerseTable.dataSource = self.tableDataSource
         self.captureVerseTable.isExpanded = false
 
-        self.cam.addCameraBlurTargets(self.captureView)
 
     }
     
@@ -51,7 +50,11 @@ class CaptureViewController: UIViewController {
     // MARK: -CaptureButton Delegate
     func didPressCaptureButton(){
         
+        self.cam.printTargets()
+
         if self.captureLock.tryLock() {
+            self.cam.addCameraBlurTargets(self.captureView)
+
             self.activeCaptureSession = self.session.currentId
             self.view.frame.size = self.frameSize
 
@@ -219,6 +222,7 @@ class CaptureViewController: UIViewController {
         
         updateLock.unlock()
 
+        self.cam.removeAllTargets()
         return capturedVerses
     }
     

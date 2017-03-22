@@ -18,7 +18,7 @@ enum CameraState: Int {
 }
 
 class CameraManager {
-    let camera: GPUImageStillCamera
+    var camera: GPUImageVideoCamera
     let filter = ImageFilter.genericFilter()
     let ocr: OCR = OCR()
     var simImage: UIImage! = UIImage(named: "oneanother")
@@ -33,15 +33,17 @@ class CameraManager {
     init(zoom:CGFloat = 1, focus:AVCaptureFocusMode = .ContinuousAutoFocus){
         
         // init a still image camera
-        self.camera = GPUImageStillCamera()
+        self.camera = GPUImageVideoCamera.init()
         self.camera.addTarget(filter)
         self.camera.outputImageOrientation = .Portrait;
         
         self.cameraZoom = zoom
         self.cameraFocusMode = focus
         
-
-        
+    }
+    
+    func printTargets(){
+        print(self.camera.targets())
     }
     
     func focus(mode: AVCaptureFocusMode){
@@ -102,6 +104,7 @@ class CameraManager {
         guassFilter.addTarget(target)
     }
     
+    
     func addTarget(target: GPUImageInput!){
         self.camera.addTarget(target)
     }
@@ -109,6 +112,11 @@ class CameraManager {
     
     func removeTarget(target: GPUImageInput!){
         self.camera.removeTarget(target)
+    }
+    
+    func removeAllTargets(){
+        self.camera.removeAllTargets()
+        self.camera.addTarget(filter)
     }
     
     func addDebugTarget(target: GPUImageInput!){
@@ -145,22 +153,21 @@ class CameraManager {
     }
     
     func appPause(){
-        self.pause()
-        /*
-        if self.state == .InUse {
-            self.shouldResumeOnAppFG = true
-        }
-        self.pause()
-        */
+        self.stop()
+        self.camera.removeAllTargets()
+        
     }
     
     func appResume(){
-        /*
-        if self.shouldResumeOnAppFG == true {
-            self.resume()
+        // re-init
+        self.camera = GPUImageVideoCamera.init()
+        self.camera.addTarget(filter)
+        self.camera.outputImageOrientation = .Portrait;
+        // warm up cam
+        self.start()
+        Timing.runAfter(2){
+            self.pause()
         }
-        self.shouldResumeOnAppFG = false
-        */
     }
     
     func setSimImage(image: UIImage){
