@@ -165,9 +165,7 @@ class CameraManager {
         self.camera.outputImageOrientation = .Portrait;
         // warm up cam
         self.start()
-        Timing.runAfter(2){
-            self.pause()
-        }
+        self.pause()
     }
     
     func setSimImage(image: UIImage){

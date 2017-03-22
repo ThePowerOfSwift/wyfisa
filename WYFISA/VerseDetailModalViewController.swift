@@ -17,7 +17,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     @IBOutlet var referenceTable: UITableView!
     @IBOutlet var versesTable: UITableView!
     @IBOutlet var footerMask: UIImageView!
-    @IBOutlet var splitSwitch: UISwitch!
+    @IBOutlet var closeButton: UIButton!
     @IBOutlet var navStackView: UIStackView!
     @IBOutlet var navBackgroundView: UIView!
     @IBOutlet var nextChapterButton: UIButton!
@@ -46,6 +46,8 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
                 self.fetchCurrentChapter()
             }
         }
+        
+        self.segmentBar.selectedSegmentIndex = 1
     }
     
     func initView() {
@@ -110,7 +112,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             self.chapterTextView.scrollRangeToVisible(NSMakeRange(yPos, 0))
         }
         
-        if self.segmentBar.selectedSegmentIndex == 0 {
+        if self.segmentBar.selectedSegmentIndex == 1 {
             Timing.runAfter(0.5){
                 self.showFooterMask()
             }
@@ -153,43 +155,36 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
                               animations: self.setChapterVerseShowAlpha)
     }
     
-
-    
-    @IBAction func didToggleSplitSwitch(sender: UISwitch) {
-        
-        // toggles between showing chapter or split view of verses
-        self.splitMode = !self.splitMode
-        
-        // go to highligted verse on first time triggered
-        if self.splitMode == true && self.didShowSplitVerseOnce == false{
-            
-            // scroll to verse
-            if let activeVerse = self.verseInfo?.verse {
-                let path = NSIndexPath.init(forRow: 0, inSection: activeVerse-1)
-                self.versesTable.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
-                Timing.runAfter(0.5){
-                    self.showFooterMask()
-                }
-                self.didShowSplitVerseOnce = true
-            }
-        }
-        
-        // hide unlreated views
-        self.fadeOutInChapterVerseStack()
-        
-        // make sure nav is showing
-        self.showNavArea()
-    }
-    
-    
     @IBAction func didTapBarSegment(sender: UISegmentedControl) {
         
         if sender.selectedSegmentIndex == 0 {
+            self.splitMode = true
+            // go to highligted verse on first time triggered
+            if self.didShowSplitVerseOnce == false{
+                
+                // scroll to verse
+                if let activeVerse = self.verseInfo?.verse {
+                    let path = NSIndexPath.init(forRow: 0, inSection: activeVerse-1)
+                    self.versesTable.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
+                    Timing.runAfter(0.5){
+                        self.showFooterMask()
+                    }
+                    self.didShowSplitVerseOnce = true
+                }
+            }
+            
+            // hide unlreated views
+            self.fadeOutInChapterVerseStack()
+        } else {
+            self.splitMode = false
+        }
+        
+        if sender.selectedSegmentIndex == 1 {
             self.fadeOutInChapterVerseStack()
             self.showFooterMask()
         }
         
-        if sender.selectedSegmentIndex == 1 {
+        if sender.selectedSegmentIndex == 2 {
             self.referenceTable.reloadData()
             
             // hide chapter and verses
@@ -197,7 +192,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
                 self.chapterTextView.alpha = 0
                 self.versesTable.alpha = 0
             }
-            self.hideFooterMask()
+           // self.hideFooterMask()
             
             // show related
             Animations.startAfter(0.2, forDuration: 0.2){
@@ -221,7 +216,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     func versesForCell() -> [VerseInfo]? {
         
         // can either be verses or cross references
-        if self.segmentBar.selectedSegmentIndex == 1 {
+        if self.segmentBar.selectedSegmentIndex == 2 {
             return self.verseInfo?.refs
         }
         return  self.verseInfo?.verses
@@ -333,12 +328,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             if self.footerIsHidden == false {
                 self.hideFooterMask()
             }
-        } else {  // show when dragging up
-            if self.footerIsHidden == true {
-                self.showFooterMask()
-            }
         }
-        
     }
     
     
@@ -349,13 +339,14 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     
     func hideFooterMask(){
         
-        if self.splitSwitch.on == true && self.segmentBar.selectedSegmentIndex == 0 {
-            return // cannot be in split mode on screen 0
+        
+        if self.segmentBar.selectedSegmentIndex != 1 {
+            return // must be in chapter mode
         }
         
         Animations.start(0.2){
             self.footerMask.alpha = 0
-            self.splitSwitch.alpha = 0
+            self.closeButton.alpha = 0
             if self.nextVerse != nil {
                 self.nextChapterButton.alpha = 0
             }
@@ -365,16 +356,17 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         }
         self.footerIsHidden = true
         
-        if self.navIsHidden == false && self.segmentBar.selectedSegmentIndex == 0 {
+        if self.navIsHidden == false && self.segmentBar.selectedSegmentIndex == 1 {
             self.hideNavArea()
         }
+ 
         
     }
     
     func showFooterMask(){
         Animations.start(0.2){
             self.footerMask.alpha = 0.90
-            self.splitSwitch.alpha = 1
+            self.closeButton.alpha = 1
             if self.nextVerse != nil {
                 self.nextChapterButton.alpha = 1
             }
@@ -423,7 +415,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     
     
     func footerMaskEnabled() -> Bool {
-        return self.segmentBar.selectedSegmentIndex == 0
+        return self.segmentBar.selectedSegmentIndex == 1
     }
     
     @IBAction func didPressCloseButton(sender: AnyObject) {
@@ -443,7 +435,6 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     
     func fetchCurrentChapter(){
         self.loadSpinner.startAnimating()
-        self.splitSwitch.hidden = true
 
         let bookNo = self.verseInfo!.bookNo!
         let chapterNo = self.verseInfo!.chapterNo!
@@ -527,7 +518,6 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         self.verseInfo?.updateChapterForVerses(verses as! [VerseInfo])
         self.handleChapterChange()
         self.loadSpinner.stopAnimating()
-        self.splitSwitch.hidden = false
     }
 
 }
