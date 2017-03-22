@@ -43,7 +43,7 @@ class NotesViewController: UIViewController {
         self.view.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
         self.textView.textColor = self.themer.navyForLightOrTan(1.0)
         self.textView.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
-        
+
         // fonts
         let textFont = themer.currentFont()
         self.textView.font = textFont

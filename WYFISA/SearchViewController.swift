@@ -44,6 +44,9 @@ class SearchViewController: UIViewController, FBStorageDelegate {
         self.view.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
         self.verseTitle.textColor = self.themer.darkGreyForLightOrLightGrey()
         self.verseText.textColor = self.themer.navyForLightOrWhite(1.0)
+        if !self.themer.isLight() {
+            self.escapeImageMask.image = UIImage.init(named: "Gradient-navy")
+        }
 
         // theme - fonts
         let textFont = themer.currentFont()
