@@ -17,7 +17,8 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
     var selectedTopicId: String = "alpha"
     var myScripts: [UserScript] = []
     var highlightedIndexPath: NSIndexPath? = nil
-
+    let themer = WYFISATheme.sharedInstance
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,6 +27,9 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
         self.scriptsTable.delegate = self
         
         self.myScripts = storage.getScriptsForTopic(self.selectedTopicId)
+        
+        self.themeView()
+        
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -72,6 +76,12 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
         let scriptVerseCountLabel = cell.viewWithTag(3) as! UILabel
         scriptVerseCountLabel.text = "\(script.count)"
         
+        // theme
+        scriptNameLabel.textColor = themer.navyForLightOrOffWhite(1.0)
+        scriptVerseCountLabel.textColor = themer.navyForLightOrOffWhite(1.0)
+        scriptTimestampLabel.textColor = themer.navyForLightOrOffWhite(1.0)
+        cell.selectedBackgroundView = themer.greyViewForLightOrTurquoise()
+        
         return cell
     }
     
@@ -89,6 +99,7 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
         self.highlightedIndexPath = indexPath
     }
     
+    
     @IBAction func unwindFromReaderView(segue: UIStoryboardSegue) {
         // MARK: - Navigation
     }
@@ -104,6 +115,7 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
     
     @IBAction func unwindFromSettings(segue: UIStoryboardSegue) {
         // MARK: - Navigation
+        self.themeView()
     }
     
     override func prefersStatusBarHidden() -> Bool {
@@ -156,13 +168,10 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    /*
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    // MARK: - Theme
+    func themeView(){
+        self.view.backgroundColor = self.themer.tanForLightOrNavy(1.0)
+        self.scriptsTable.backgroundColor = self.themer.tanForLightOrNavy(1.0)
+        self.scriptsTable.reloadData()
     }
-    */
-
 }

@@ -124,6 +124,33 @@ class WYFISATheme {
         }
     }
     
+    func tanForLightOrNavy(alpha: CGFloat) -> UIColor {
+        switch  self.mode {
+        case .Light:
+            return UIColor.tan(alpha)
+        default:
+            return UIColor.navy(alpha)
+        }
+    }
+    
+    func navyForLightOrTan(alpha: CGFloat) -> UIColor {
+        switch  self.mode {
+        case .Light:
+        return UIColor.navy(alpha)
+        default:
+        return UIColor.tan(alpha)
+        }
+    }
+    
+    func clearForLightOrNavy(alpha: CGFloat) -> UIColor {
+        switch  self.mode {
+        case .Light:
+            return UIColor.clearColor()
+        default:
+            return UIColor.navy(alpha)
+        }
+    }
+
     func fireForLightOrTurquoise() -> UIColor {
         switch  self.mode {
         case .Light:
@@ -131,6 +158,17 @@ class WYFISATheme {
         default:
             return UIColor.turquoise()
         }
+    }
+    
+    func greyViewForLightOrTurquoise() -> UIView {
+        let bgView = UIView.init()
+        switch  self.mode {
+        case .Light:
+            bgView.backgroundColor = UIColor.groupTableViewBackgroundColor()
+        default:
+            bgView.backgroundColor = UIColor.turquoise(0.2)
+        }
+        return bgView
     }
     
 }

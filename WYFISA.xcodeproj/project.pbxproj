@@ -228,6 +228,15 @@
 			name = Search;
 			sourceTree = "<group>";
 		};
+		C35A24431E83255E002AA136 /* Select */ = {
+			isa = PBXGroup;
+			children = (
+				C33C3AC11E727EBD00B3E3F1 /* SelectScriptViewController.swift */,
+				C34A95571E74FEEC0004A2D2 /* TopicViewController.swift */,
+			);
+			name = Select;
+			sourceTree = "<group>";
+		};
 		C37B1BC21E77914000786412 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -290,10 +299,9 @@
 				C3606CE71DBBBACD00AE2E8B /* ScriptComposeViewController.swift */,
 				C3F4FA211DF550CF00301445 /* ScriptViewController.swift */,
 				C304CC451E7A8DC200FBC7D1 /* Search */,
-				C33C3AC11E727EBD00B3E3F1 /* SelectScriptViewController.swift */,
+				C35A24431E83255E002AA136 /* Select */,
 				C37B1BC21E77914000786412 /* Settings */,
 				C3F53B8F1D372C0200E2F80D /* TextMatcher.swift */,
-				C34A95571E74FEEC0004A2D2 /* TopicViewController.swift */,
 				C34A95551E743E170004A2D2 /* UserScript.swift */,
 				C39090781D2C9AF8000DFD15 /* ViewController.swift */,
 				C316B6B11D3A11CC00E272A3 /* VerseDetailModalViewController.swift */,

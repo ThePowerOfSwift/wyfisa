@@ -69,12 +69,16 @@ extension String {
 
 extension UIColor {
     
-    class func turquoise() -> UIColor {
-       return UIColor.init(red: (139/255), green: (225/255), blue: (207/255), alpha: 0.80)
+    class func turquoise(alpha: CGFloat = 0.80) -> UIColor {
+       return UIColor.init(red: (139/255), green: (225/255), blue: (207/255), alpha: alpha)
     }
     
     class func fire() -> UIColor {
         return UIColor.init(red: 1, green: (87/255), blue: (34/255), alpha: 1.0)
+    }
+    
+    class func tan(alpha: CGFloat = 1) -> UIColor {
+        return UIColor.init(red: 0.921431, green: 0.921453, blue: 0.921441, alpha: alpha)
     }
     
     class func navy(alpha: CGFloat) -> UIColor {

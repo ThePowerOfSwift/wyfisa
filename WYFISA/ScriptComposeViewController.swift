@@ -118,9 +118,8 @@ class ScriptComposeViewController: UIViewController,
     
     func themeView(){
         // bg color
-        //self.view.backgroundColor = themer.whiteForLightOrNavy(1.0)
         self.view.backgroundColor = self.themer.offWhiteForLightOrNavy(0.70)
-
+        self.footerOverlay.backgroundColor = self.themer.clearForLightOrNavy(1.0)
     }
     
 

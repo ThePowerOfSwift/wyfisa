@@ -11,13 +11,17 @@ import UIKit
 class TopicViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet var topicTable: UITableView!
-    
+    let themer = WYFISATheme.sharedInstance
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         self.topicTable.dataSource = self
         self.topicTable.delegate = self
+        
+        // apply theme
+        self.themeView()
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -30,6 +34,8 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("topiccell")!
+        let label = cell.viewWithTag(1) as! UILabel
+        label.textColor = themer.navyForLightOrOffWhite(1.0)
         return cell
     }
 
@@ -54,14 +60,11 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
         
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    // MARK: - Theme
+    func themeView(){
+        self.view.backgroundColor = self.themer.tanForLightOrNavy(1.0)
+        self.topicTable.backgroundColor = self.themer.tanForLightOrNavy(1.0)
+        self.topicTable.reloadData()
     }
-    */
 
 }

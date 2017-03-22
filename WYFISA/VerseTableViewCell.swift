@@ -163,7 +163,6 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
         if verse.category == .Verse {
             self.labelHeader.text = verse.name
             self.labelText.text = verse.text
-            self.labelText.textColor = self.themer.navyForLightOrWhite(1.0)
             self.quoteImage.hidden = true
             self.labelHeader.hidden = false
             self.labelText.hidden = false
@@ -189,7 +188,9 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.textStackView.spacing = 0
 
         }
-        
+
+        self.labelText.textColor = self.themer.navyForLightOrOffWhite(1.0)
+
         if isExpanded == true {
             
             // show full text

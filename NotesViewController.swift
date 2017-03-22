@@ -41,7 +41,7 @@ class NotesViewController: UIViewController {
         
         // colors
         self.view.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
-        self.textView.textColor = self.themer.navyForLightOrWhite(1.0)
+        self.textView.textColor = self.themer.navyForLightOrTan(1.0)
         self.textView.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
         
         // fonts
