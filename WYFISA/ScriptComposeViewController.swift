@@ -11,23 +11,15 @@ import GPUImage
 import AKPickerView_Swift
 
 class ScriptComposeViewController: UIViewController,
-                                AKPickerViewDataSource,
-                                AKPickerViewDelegate,
                                 VerseTableViewCellDelegate,
                                 UITextFieldDelegate {
 
     @IBOutlet var verseTable: VerseTableView!
-    @IBOutlet var captureImage: GPUImageView!
-    @IBOutlet var captureContainer: UIView!
-    @IBOutlet var captureBox: UIImageView!
-    @IBOutlet var captureBoxActive: UIImageView!
-    @IBOutlet var pickerView: AKPickerView!
     @IBOutlet var noteTextInput: UITextField!
     @IBOutlet var notesBottomConstraint: NSLayoutConstraint!
     @IBOutlet var gradientMask: UIView!
     @IBOutlet var buttonStackView: UIStackView!
     @IBOutlet var notesButton: UIButton!
-    @IBOutlet var captureContainerHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet var clearButton: UIButton!
     @IBOutlet var footerOverlay: UIView!
@@ -64,16 +56,6 @@ class ScriptComposeViewController: UIViewController,
         self.verseTable.reloadData()
         self.session.currentId = self.tableDataSource!.getMaxSessionID()
         
-        // setup picker view
-        self.pickerView.dataSource = self
-        self.pickerView.delegate = self
-        self.pickerView.font = UIFont.systemFontOfSize(14, weight: UIFontWeightBold)
-        self.pickerView.highlightedFont = UIFont.systemFontOfSize(14, weight: UIFontWeightBold)
-        self.pickerView.highlightedTextColor = UIColor.offWhite(1.0)
-        self.pickerView.textColor = UIColor.fire()
-        self.pickerView.maskDisabled = false
-        self.pickerView.reloadData()
-        
         // flash
         self.configureFlashIcon()
         
@@ -98,14 +80,6 @@ class ScriptComposeViewController: UIViewController,
         
     }
     
-    
-
-    @IBAction func hideGradientMask(sender: AnyObject) {
-        Animations.start(0.3){
-          //  self.gradientMask.hidden = true
-        }
-        self.pickerView.selectItemByOption(.Photo, animated: true)
-    }
     
     
 
@@ -209,78 +183,6 @@ class ScriptComposeViewController: UIViewController,
             CaptureSession.sharedInstance.updateCaptureId()
         }
         
-    }
-
-    // MARK: - picker view
-    func numberOfItemsInPickerView(pickerView: AKPickerView) -> Int {
-        return 2
-    }
-
-    func pickerView(pickerView: AKPickerView, titleForItem item: Int) -> String {
-        return pickerView.optionDescription(item)
-    }
-    
-    func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
-        
-        /*
-        let option = pickerView.selectedOption()
-
-        func toggleViews(hidden: Bool) {
-            Animations.start(0.3){
-               // self.captureImage.hidden = hidden
-               // self.captureViewOverlay.hidden = hidden
-                self.hideActionButtons(!hidden)
-                self.hideGradients(hidden)
-                self.hideCaptureContainer(hidden)
-                //self.view.layoutIfNeeded()
-            }
-        }
-        
-        switch option {
-        case .Photo:
-            self.resumeCam()
-            toggleViews(false)
-        case .VerseOCR:
-            self.captureBox.alpha = 0
-            toggleViews(true)
-        }
-         */
-    }
-    
-    func hideGradients(hidden: Bool){
-        self.gradientMask.hidden = hidden
-       // self.scrollViewEscapeMask.hidden = hidden
-    }
-    
-    func hideActionButtons(hidden: Bool){
-        self.buttonStackView.hidden = hidden
-        self.notesButton.hidden = hidden
-    }
-
-    func captureAssetsAlpha(alpha: CGFloat) {
-       // self.captureImage.alpha = alpha
-        self.captureBox.alpha = alpha
-    }
-    
-    func hideCaptureContainer(hidden: Bool){
-        self.captureContainer.hidden = hidden
-    }
-    
-
-    @IBAction func didSwipeRight(sender: UISwipeGestureRecognizer) {
-        /*
-        if self.verseTable.isDeleteMode == false {
-            // swipe back to script to selector
-            self.parentViewController?.performSegueWithIdentifier("scriptunwind", sender: self)
-        } else {
-            // disable delete mode
-            self.verseTable.disableDeleteMode()
-        }*/
-
-    }
-    
-    @IBAction func didSwipeLeft(sender: UISwipeGestureRecognizer) {
-       // self.verseTable.enableDeleteMode()
     }
 
     // MARK: - navigation
@@ -428,11 +330,7 @@ class ScriptComposeViewController: UIViewController,
             }
         }
     }
-    
-    func didTapInfoButtonForVerse(verse: VerseInfo){
-        // depreciated
-    }
-    
+
     func didRemoveCell(sender: VerseTableViewCell) {
         // just removed one cell
         let verse = sender.verseInfo!
@@ -441,8 +339,10 @@ class ScriptComposeViewController: UIViewController,
         
         self.storage.decrementScriptCountAndTimestamp(self.scriptId!)
         self.syncWithDataSource()
-        
-        
+    }
+    
+    func didTapInfoButtonForVerse(verse: VerseInfo) {
+        // implement prototype
     }
     
     // MARK: - notes handler
@@ -488,7 +388,6 @@ class ScriptComposeViewController: UIViewController,
     
     @IBAction func didTapEscapeMask(sender: AnyObject) {
         self.closeNotesInput()
-        self.hideGradientMask(sender)
     }
     
     func closeNotesInput(){
