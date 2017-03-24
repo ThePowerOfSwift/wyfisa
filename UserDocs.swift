@@ -25,6 +25,7 @@ class TopicDoc {
     var owner: String
     var title: String?
     var lastUpdated: String
+    var count: Int = 0
     var type = "topic"
 
     init(owner: String){
@@ -41,6 +42,7 @@ class TopicDoc {
                                                 "title": self.title ?? "",
                                                 "lastUpdated": self.lastUpdated,
                                                 "owner": self.owner,
+                                                "count": self.count,
                                                 "type": self.type]
         return properties
     }
@@ -50,6 +52,7 @@ class TopicDoc {
         let owner = doc["owner"] as! String
         let topic = TopicDoc.init(owner: owner)
         topic.id = doc["id"] as! String
+        topic.count = doc["count"]as! Int
         topic.lastUpdated = doc["lastUpdated"] as! String
         if let title = doc["title"] as? String {
             topic.title = title

@@ -201,6 +201,10 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
                 self.scriptVC = svc
                 svc.scriptId = self.activeScriptId!
             }
+        } else {
+            // going elsewhere
+            self.cam.cam?.pause()
+            self.cam.cam?.torch(.Off)
         }
         
 

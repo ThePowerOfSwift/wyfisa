@@ -328,8 +328,11 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             return
         }
         
-        // hide scroll when dragging down
-        if lastScrollPos < scrollView.contentOffset.y {
+        let segmentPos = self.segmentBar.center.y
+        if scrollView.contentOffset.y <= segmentPos {
+            self.showFooterMask()
+            self.showNavArea()
+        } else if lastScrollPos < scrollView.contentOffset.y {
             if self.footerIsHidden == false {
                 self.hideFooterMask()
             }
@@ -474,6 +477,10 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         }
     }
     func setupNextPrevButtons(){
+        self.nextChapterButton.hidden = true
+        self.prevChapterButton.hidden = true
+
+        /* DEPRECIATED
         var bookNo = -1
         var chapterNo = -1
         
@@ -502,6 +509,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         } else {
             self.prevChapterButton.alpha = 0.0
         }
+        */
         
     }
     func applyColorSchema(){

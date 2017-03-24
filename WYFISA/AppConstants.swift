@@ -9,3 +9,4 @@ let SCRIPTS_DB = "scripts"
 let CACHE_DB = "cache"
 let DEFAULT_SCRIPT_NAME = "untitled"
 let CHAPTER_CACHE_MAX = 50
+let REPL_URL = "http://10.0.0.5:4984/"

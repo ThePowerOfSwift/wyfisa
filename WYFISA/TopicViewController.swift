@@ -9,8 +9,8 @@
 import UIKit
 
 class TopicViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
-
     @IBOutlet var topicTable: UITableView!
+    
     let themer = WYFISATheme.sharedInstance
     var storage: CBStorage = CBStorage(databaseName: SCRIPTS_DB)
     var topics = [TopicDoc]()
@@ -27,10 +27,18 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.topicTable.delegate = self
         
         self.ownerId = SettingsManager.sharedInstance.ownerId()
-        self.topics = storage.getTopicsForOwner(self.ownerId!)
 
         // apply theme
         self.themeView()
+
+        // self.selectedTopic = self.topics[0]
+       // self.performSegueWithIdentifier("selectscriptsegue", sender: self)
+
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        self.topics = storage.getTopicsForOwner(self.ownerId!)
+        self.topicTable.reloadData()
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -57,7 +65,13 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
         } else {
             let label = cell.viewWithTag(1) as! UILabel
             label.textColor = themer.navyForLightOrOffWhite(1.0)
-            label.text = self.topics[indexPath.row].title
+            label.text = topic.title
+            let countLabel = cell.viewWithTag(2) as! UILabel
+            if topic.count > 0 {
+                countLabel.text = "\(topic.count)"
+            } else {
+                countLabel.hidden = true
+            }
         }
 
         // allow editing new topic
@@ -137,6 +151,10 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
         return indexPath
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.performSegueWithIdentifier("selectscriptsegue", sender: self)
+    }
+    
     // MARK: - TextField Delegate
     func textFieldDidEndEditing(textField: UITextField) {
 
@@ -163,6 +181,11 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     // MARK: - Navigation
+    @IBAction func unwindFromSettings(segue: UIStoryboardSegue) {
+        // MARK: - Navigation
+        self.themeView()
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let destVC = segue.destinationViewController as? SelectScriptViewController {
             destVC.activeTopic = self.selectedTopic

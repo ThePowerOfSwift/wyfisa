@@ -30,16 +30,18 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
 
         // theme
         self.themeView()
-        
+
     }
 
     override func viewWillAppear(animated: Bool) {
         self.getScriptsForTopic()
         self.scriptsTable.reloadData()
-        if self.myScripts.count == 0 {
 
-        }
-
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        // self.selectedScript = self.myScripts[0]
+       // self.performSegueWithIdentifier("showscriptsegue", sender: self)
     }
     
     func getScriptsForTopic(){
@@ -157,11 +159,6 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
         // MARK: - Navigation
     }
     
-    @IBAction func unwindFromSettings(segue: UIStoryboardSegue) {
-        // MARK: - Navigation
-        self.themeView()
-    }
-    
     override func prefersStatusBarHidden() -> Bool {
         return HIDE_STATUS_BAR
     }
@@ -219,8 +216,8 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
     func themeView(){
         self.view.backgroundColor = self.themer.tanForLightOrNavy(1.0)
         self.scriptsTable.backgroundColor = self.themer.tanForLightOrNavy(1.0)
-        self.addScriptButton.layer.borderColor = UIColor.darkGrayColor().CGColor
-        self.addScriptButton.layer.borderWidth = 3.0
+        //self.addScriptButton.layer.borderColor = UIColor.darkGrayColor().CGColor
+        //self.addScriptButton.layer.borderWidth = 3.0
 
         self.scriptsTable.reloadData()
     }

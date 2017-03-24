@@ -39,7 +39,7 @@ class CameraManager {
     var camera: GPUImageVideoCamera
     let filter = ImageFilter.genericFilter()
     let ocr: OCR = OCR()
-    var simImage: UIImage! = UIImage(named: "oneanother")
+    var simImage: UIImage! = UIImage(named: "AddNote")
     var state: CameraState = .Stopped
     var shouldResumeOnAppFG = false
     var cameraZoom:CGFloat = 1.0

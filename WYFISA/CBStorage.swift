@@ -131,7 +131,7 @@ class CBStorage {
             return // not authenticated
         }
         
-        let url = NSURL(string: "http://10.0.0.5:4984/\(self.databaseName)")!
+        let url = NSURL(string: "\(REPL_URL)\(self.databaseName)")!
         
         switch mode {
         case .Push:
@@ -341,6 +341,19 @@ class CBStorage {
                 try doc.putProperties(properties)
             } catch {
                 print("save script failed")
+            }
+        }
+        
+        // update the topic script count
+        if let doc = db?.existingDocumentWithID(script.topic) {
+            do {
+                try doc.update({
+                    (newRevision) -> Bool in
+                    newRevision["count"] = (newRevision["count"] as! Int) + 1
+                    return true
+                })
+            } catch {
+                print("update topic count failed")
             }
         }
     }
