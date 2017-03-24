@@ -99,7 +99,17 @@ class CBStorage {
             if let topicId = doc["topic"] {
                 emit(topicId, doc["_id"])
             }
-            }, version: "1")
+        }, version: "1")
+        
+        let topicsForOwner = db?.viewNamed("topicsForOwner")
+        topicsForOwner?.setMapBlock({ (doc, emit) in
+            if let doc_type = doc["type"] {
+                if doc_type as! String == "topic" {
+                    emit(doc["owner"]!, doc["_id"])
+                }
+            }
+        }, version: "2")
+
     }
     
     func createBibleViews(){
@@ -113,23 +123,6 @@ class CBStorage {
                 }
             }
             }, version: "3")
-    }
-    
-    func getChapterVerses(bookNo: Int, chapterNo: Int) -> [String]{
-        var verses: [String] = []
-        
-        
-        if let db = self.db {
-            let query = db.viewNamed("versesByCh").createQuery()
-            query.keys = [[bookNo, chapterNo]]
-            do {
-                let result = try query.run()
-                while let row = result.nextRow() {
-                    let verse = row.value
-                }
-            } catch {}
-        }
-        return verses
     }
     
     func replicate(mode: StorageReplicationMode){
@@ -172,6 +165,7 @@ class CBStorage {
         if let db = self.db {
             let query = db.viewNamed("verseById").createQuery()
             query.keys = [id]
+
             do {
                 let result = try query.run()
                 if result.count > 0 {
@@ -184,19 +178,60 @@ class CBStorage {
         return verse
     }
     
-    func getScriptDoc(id: String) -> UserScript? {
-        var script:UserScript? = nil
+    func getScriptDoc(id: String) -> ScriptDoc? {
+        var script:ScriptDoc? = nil
         if let doc = self.db?.documentWithID(id) {
             if let properties = doc.properties {
-                script = UserScript.DocPropertiesToObj(properties)
+                script = ScriptDoc.DocPropertiesToObj(properties)
             }
         }
         return script
     }
-    // func getUserTopics
+
+    func getTopicDoc(id: String) -> TopicDoc? {
+        var topic:TopicDoc? = nil
+        if let doc = self.db?.documentWithID(id) {
+            if let properties = doc.properties {
+                topic = TopicDoc.DocPropertiesToObj(properties)
+            }
+        }
+        return topic
+    }
     
-    func getScriptsForTopic(topicId: String) -> [UserScript] {
-        var topicScripts: [UserScript] = [UserScript]()
+
+    func getTopicsForOwner(ownerId: String) -> [TopicDoc] {
+        var topics: [TopicDoc] = [TopicDoc]()
+        
+        if let db = self.db {
+            let query = db.viewNamed("topicsForOwner").createQuery()
+            query.keys = [ownerId]
+            do {
+                let result = try query.run()
+                while let row = result.nextRow() {
+                    let topicId = row.value as! String
+                    if let topic = self.getTopicDoc(topicId){
+                        topics.append(topic)
+                    }
+                }
+            } catch {}
+        }
+        
+        topics.sortInPlace{ s1, s2 in return s1.title < s2.title }
+        return topics
+    }
+    
+    func getRecentTopic(ownerId: String) -> TopicDoc? {
+        let topics = self.getTopicsForOwner(ownerId)
+        
+        // needs to sort by last updated
+        if topics.count > 0 {
+            return topics[0]
+        }
+        return nil
+    }
+    
+    func getScriptsForTopic(topicId: String) -> [ScriptDoc] {
+        var topicScripts: [ScriptDoc] = [ScriptDoc]()
         if let db = self.db {
             let query = db.viewNamed("scriptsForTopic").createQuery()
             query.keys = [topicId]
@@ -239,13 +274,66 @@ class CBStorage {
         return scriptVerses
     }
 
-    func putScript(script: UserScript){
+    
+    func deleteScript(script: ScriptDoc){
+
+        // get verses
+        let verses = self.getVersesForScript(script.id)
+        
+        // remove verses
+        for verse in verses {
+            self.removeDoc(verse.key)
+        }
+        
+        // delete script
+        self.removeDoc(script.id)
+    }
+    
+    func deleteTopic(topic: TopicDoc){
+        // remove scripts
+        let scripts = self.getScriptsForTopic(topic.id)
+        for script in scripts {
+            self.deleteScript(script)
+        }
+        
+        // delete topic
+        self.removeDoc(topic.id)
+    }
+    func putTopic(topic: TopicDoc){
+        Timing.runAfter(0){
+            self._putTopic(topic)
+        }
+    }
+    
+    private func _putTopic(topic: TopicDoc) {
+        
+        if let doc = db?.existingDocumentWithID(topic.id) {
+            do {
+                try doc.update({
+                    (newRevision) -> Bool in
+                    newRevision["title"] = topic.title
+                    return true
+                })
+            } catch {
+                print("update topic failed")
+            }
+        } else if let doc = db?.documentWithID(topic.id) {
+            let properties =  topic.toDocProperties()
+            do {
+                try doc.putProperties(properties)
+            } catch {
+                print("save topic failed")
+            }
+        }
+    }
+    
+    func putScript(script: ScriptDoc){
         Timing.runAfter(0){
             self._putScript(script)
         }
     }
     
-    private func _putScript(script: UserScript) {
+    private func _putScript(script: ScriptDoc) {
         
         if let doc = db?.documentWithID(script.id) {
             let properties =  script.toDocProperties()
@@ -453,7 +541,7 @@ class CBStorage {
         }
     }
     
-    func removeVerse(id: String){
+    func removeDoc(id: String){
         if let doc = db?.existingDocumentWithID(id) {
             do {
                 try doc.deleteDocument()

@@ -113,7 +113,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.labelHeader.lineBreakMode = .ByWordWrapping
             self.labelHeader.numberOfLines = 0
             //self.backgroundColor = UIColor.clearColor()
-            self.backgroundColor = self.themer.offWhiteForLightOrNavy(0.7)
+            self.backgroundColor = self.themer.offWhiteForLightOrClear(1.0)
         }
         
     

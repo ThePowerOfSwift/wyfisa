@@ -17,6 +17,24 @@ enum CameraState: Int {
     case Stopped = 0, InUse, Paused
 }
 
+class SharedCameraManager {
+    static let instance = SharedCameraManager()
+    var cam: CameraManager? = nil
+    var ready = false
+    
+    func prepareCamera(){
+        // make sure camera is ready
+        if self.ready == false {
+            // we need to init the camera
+            self.cam = CameraManager.init()
+            if self.cam?.cameraEnabled == true {
+                self.ready = true
+            }
+        }
+    }
+
+}
+
 class CameraManager {
     var camera: GPUImageVideoCamera
     let filter = ImageFilter.genericFilter()
@@ -26,19 +44,21 @@ class CameraManager {
     var shouldResumeOnAppFG = false
     var cameraZoom:CGFloat = 1.0
     var cameraFocusMode: AVCaptureFocusMode = .ContinuousAutoFocus
-    var cameraEnabled: Bool = true
-    static let sharedInstance = CameraManager()
+    var cameraEnabled: Bool = false
 
 
     init(zoom:CGFloat = 1, focus:AVCaptureFocusMode = .ContinuousAutoFocus){
         
         // init a still image camera
         self.camera = GPUImageVideoCamera.init()
-        self.camera.addTarget(filter)
-        self.camera.outputImageOrientation = .Portrait;
-        
         self.cameraZoom = zoom
         self.cameraFocusMode = focus
+        
+        self.checkCameraAccess()
+        if self.cameraEnabled {
+            self.camera.addTarget(filter)
+            self.camera.outputImageOrientation = .Portrait;
+        }
         
     }
     
@@ -190,11 +210,13 @@ class CameraManager {
         if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) !=  AVAuthorizationStatus.Authorized
         {
             AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { (granted :Bool) -> Void in
-                if granted == false
+                if granted == true
                 {
-                    self.cameraEnabled = false
+                    self.cameraEnabled = true
                 }
             });
+        } else {
+            self.cameraEnabled = true
         }
     }
     

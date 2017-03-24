@@ -168,7 +168,7 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
     func removeSection(section: Int) {
         // remove from storage
         let verseKey = self.recentVerses[section].key
-        self.storage.removeVerse(verseKey)
+        self.storage.removeDoc(verseKey)
         
         // delete cell from datasource
         self.nVerses -= 1
@@ -182,7 +182,7 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
             
             // remove from storage
             let verseKey = self.recentVerses[indexPath.section-1].key
-            self.storage.removeVerse(verseKey)
+            self.storage.removeDoc(verseKey)
 
             // delete cell from datasource
             self.nVerses -= 1

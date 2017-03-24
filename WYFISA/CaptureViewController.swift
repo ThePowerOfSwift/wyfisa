@@ -16,7 +16,7 @@ class CaptureViewController: UIViewController {
     @IBOutlet var captureVerseTable: VerseTableView!
     @IBOutlet var captureView: GPUImageView!
     
-    let cam = CameraManager.sharedInstance
+    var cam: CameraManager? = nil
     let settings = SettingsManager.sharedInstance
     var session = CaptureSession.sharedInstance
     var tableDataSource: VerseTableDataSource? = nil
@@ -50,13 +50,17 @@ class CaptureViewController: UIViewController {
     // MARK: -CaptureButton Delegate
     func didPressCaptureButton(){
         
+        self.cam = SharedCameraManager.instance.cam
+        if self.cam == nil { return }
+    
         if self.captureLock.tryLock() {
-            self.cam.addCameraBlurTargets(self.captureView)
+            
+            self.cam!.addCameraBlurTargets(self.captureView)
 
             self.activeCaptureSession = self.session.currentId
             self.view.frame.size = self.frameSize
 
-            self.cam.resume()
+            self.cam!.resume()
             Animations.start(0.3){
                 self.view.alpha = 1
             }
@@ -77,7 +81,7 @@ class CaptureViewController: UIViewController {
         Animations.fadeOutIn(0.3, tsFadeOut: 0.3, view: captureBox, alpha: 0)
         
         if self.settings.useFlash == true {
-            self.cam.torch(.On)
+            self.cam?.torch(.On)
         }
         
         // session init
@@ -94,20 +98,20 @@ class CaptureViewController: UIViewController {
         
         // capture frames
         Timing.runAfterBg(2.0) {
-            self.cam.ocr.processing = true
+            self.cam!.ocr.processing = true
             while self.session.currentId == sessionId {
                 
                 // grap frame from campera
-                if let image = self.cam.imageFromFrame(){
+                if let image = self.cam!.imageFromFrame(){
 
                     // do image recognition
-                    if let recognizedText = self.cam.processImage(image){
+                    if let recognizedText = self.cam!.processImage(image){
                         self.didProcessFrame(withText: recognizedText, image: image, fromSession: sessionId)
                     }
                 }
                 
                 if (self.session.active == false){
-                    self.cam.ocr.processing = false
+                    self.cam!.ocr.processing = false
                     break
                 }
             }
@@ -136,7 +140,7 @@ class CaptureViewController: UIViewController {
         
         if let allVerses = TextMatcher().findVersesInText(text) {
             
-            for var verseInfo in allVerses {
+            for verseInfo in allVerses {
                 if BooksData.sharedInstance.exists(verseInfo.bookNo!,
                                                    chapter: verseInfo.chapterNo!,
                                                    verse: verseInfo.verse!) {
@@ -190,7 +194,7 @@ class CaptureViewController: UIViewController {
     
     func didReleaseCaptureButton() -> [VerseInfo] {
         
-        self.cam.resume()
+        self.cam?.resume()
 
         if self.activeCaptureSession != session.currentId {
             // session does not correspond with initial button press
@@ -220,7 +224,7 @@ class CaptureViewController: UIViewController {
         
         updateLock.unlock()
 
-        self.cam.removeAllTargets()
+        self.cam?.removeAllTargets()
         return capturedVerses
     }
     
@@ -233,7 +237,7 @@ class CaptureViewController: UIViewController {
         }
         
         if self.settings.useFlash == true {
-            self.cam.torch(.Off)
+            self.cam?.torch(.Off)
         }
         
         // remove scanning box

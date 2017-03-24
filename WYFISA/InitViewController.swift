@@ -30,9 +30,11 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     var photoVC: PhotoCaptureViewController? = nil
     var captureDelegate: CaptureButtonDelegate? = nil
     var activeScriptId: String? = nil
-    var activeScript: UserScript? = nil
+    var activeScript: ScriptDoc? = nil
     var isNewScript = false
     let storage = CBStorage.init(databaseName: SCRIPTS_DB, skipSetup: true)
+    let themer = WYFISATheme.sharedInstance
+    var cam = SharedCameraManager.instance
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,7 +76,7 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         // text field
         self.scriptTitle.delegate = self
         if self.isNewScript {
-            self.scriptTitle.becomeFirstResponder()
+           // self.scriptTitle.becomeFirstResponder()
         }
         
         // get script doc
@@ -85,11 +87,9 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
             }
         }
         
-        // start and pause camera
-        CameraManager.sharedInstance.start()
-        CameraManager.sharedInstance.pause()
+        // theme
+        self.view.backgroundColor = self.themer.offWhiteForLightOrNavy(0.7)
         
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -97,14 +97,23 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewWillAppear(animated: Bool) {
+
+    }
+    
     // entered capture tab
     @IBAction func didSPressCaptureButton(sender: AnyObject) {
         
-        self.hideToolbar(true)
-
+        
         // transition to larger button
         let largeButton = UIImage.init(named: "OvalLarge")
         self.captureButton.setImage(largeButton, forState: .Normal)
+        self.hideToolbar(true)
+        
+        if self.cam.ready == false {
+            self.cam.prepareCamera()
+            return
+        }
         
         // decide what to do depending on what state we are in
         let option = pickerView.selectedOption()
@@ -126,6 +135,14 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         
         let normalButton = UIImage.init(named: "OvalSmall")
         self.captureButton.setImage(normalButton, forState: .Normal)
+        self.hideToolbar(false)
+
+        if self.cam.ready == false {
+            // prompt to enable camera!
+            print("AAYYE")
+            return // not camera yet
+        }
+
 
         // decide what to do depending on what state we are in
         let option = pickerView.selectedOption()
@@ -142,14 +159,11 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
                 newItems = [verse]
             }
         }
-        self.hideToolbar(false)
 
-        
+
         // pass along to scriptvc
         self.scriptVC?.addVersesToScript(newItems)
 
-        // make sure camera is stopped
-        CameraManager.sharedInstance.pause()
     }
     
     func hideToolbar(hidden: Bool){

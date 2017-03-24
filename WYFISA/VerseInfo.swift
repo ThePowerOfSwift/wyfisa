@@ -40,6 +40,7 @@ class VerseInfo {
     var cellID: CellIdentifier? = nil
     var scriptId: String? = nil
     var version: String = Version.KJV.text()
+    var type = "verse"
 
     init(id: String, name: String, text: String?){
         self.id = id
@@ -86,6 +87,7 @@ class VerseInfo {
              "cropOffset": self.imageCroppedOffset,
              "highlighted": self.isHighlighted,
              "script": script,
+             "type": self.type,
              "key": self.key,
         ]
         

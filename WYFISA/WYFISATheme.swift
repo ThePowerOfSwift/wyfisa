@@ -83,11 +83,21 @@ class WYFISATheme {
     func offWhiteForLightOrNavy(alpha: CGFloat) -> UIColor {
         switch  self.mode {
         case .Light:
-            return UIColor.offWhite(alpha)
+            return UIColor.offWhite(1.0)
         default:
             return UIColor.navy(alpha)
         }
     }
+    
+    func offWhiteForLightOrClear(alpha: CGFloat) -> UIColor {
+        switch  self.mode {
+        case .Light:
+            return UIColor.offWhite(alpha)
+        default:
+            return UIColor.clearColor()
+        }
+    }
+    
     func whiteForLightOrNavy(alpha: CGFloat) -> UIColor {
         switch  self.mode {
         case .Light:

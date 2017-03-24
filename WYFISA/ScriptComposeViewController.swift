@@ -21,6 +21,7 @@ class ScriptComposeViewController: UIViewController,
     @IBOutlet var buttonStackView: UIStackView!
     @IBOutlet var notesButton: UIButton!
     
+    @IBOutlet var footerFx: UIVisualEffectView!
     @IBOutlet var clearButton: UIButton!
     @IBOutlet var footerOverlay: UIView!
     @IBOutlet var captureViewOverlay: GPUImageView!
@@ -120,6 +121,9 @@ class ScriptComposeViewController: UIViewController,
         // bg color
         self.view.backgroundColor = self.themer.offWhiteForLightOrNavy(0.70)
         self.footerOverlay.backgroundColor = self.themer.clearForLightOrNavy(1.0)
+        if !self.themer.isLight() {
+            self.footerFx.hidden = true
+        }
     }
     
 

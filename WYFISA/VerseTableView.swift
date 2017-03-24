@@ -200,7 +200,7 @@ class VerseTableView: UITableView, UITableViewDelegate, FBStorageDelegate {
             // remove from db
             if ds.ephemeral == false {
                 for v in ds.recentVerses {
-                    ds.storage.removeVerse(v.createdAt)
+                    ds.storage.removeDoc(v.createdAt)
                 }
             }
             

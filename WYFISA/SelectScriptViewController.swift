@@ -11,11 +11,13 @@ import UIKit
 
 class SelectScriptViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    @IBOutlet var addScriptButton: UIButton!
     @IBOutlet var scriptsTable: UITableView!
+    @IBOutlet var scriptTitle: UILabel!
     var storage: CBStorage = CBStorage(databaseName: SCRIPTS_DB)
-    var selectedScript: UserScript? = nil
-    var selectedTopicId: String = "alpha"
-    var myScripts: [UserScript] = []
+    var selectedScript: ScriptDoc? = nil
+    var activeTopic: TopicDoc? = nil
+    var myScripts: [ScriptDoc] = []
     var highlightedIndexPath: NSIndexPath? = nil
     let themer = WYFISATheme.sharedInstance
     
@@ -25,18 +27,37 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
         // Do any additional setup after loading the view.
         self.scriptsTable.dataSource = self
         self.scriptsTable.delegate = self
-        
-        self.myScripts = storage.getScriptsForTopic(self.selectedTopicId)
-        
+
+        // theme
         self.themeView()
         
     }
 
     override func viewWillAppear(animated: Bool) {
-        self.myScripts = storage.getScriptsForTopic(self.selectedTopicId)
+        self.getScriptsForTopic()
         self.scriptsTable.reloadData()
+        if self.myScripts.count == 0 {
+
+        }
 
     }
+    
+    func getScriptsForTopic(){
+        // show last viewed topic or recently selected topic
+        if self.activeTopic == nil {
+            let ownerId = SettingsManager.sharedInstance.ownerId()
+            if let topic = storage.getRecentTopic(ownerId) {
+                self.activeTopic = topic
+            } else { // no topics!
+                self.activeTopic = TopicDoc.init(owner: ownerId)
+                self.activeTopic?.title = "New Topic"
+                self.storage.putTopic(self.activeTopic!)
+            }
+        }
+        self.myScripts = storage.getScriptsForTopic(self.activeTopic!.id)
+        self.scriptTitle.text = self.activeTopic!.title
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -70,7 +91,8 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
         
         // ts
         let scriptTimestampLabel = cell.viewWithTag(2) as! UILabel
-        scriptTimestampLabel.text = "\(script.getTimestamp())"
+        let ts = GetTimestamp(script.lastUpdated)
+        scriptTimestampLabel.text = "\(ts)"
         
         // count
         let scriptVerseCountLabel = cell.viewWithTag(3) as! UILabel
@@ -98,6 +120,28 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
     func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
         self.highlightedIndexPath = indexPath
     }
+    
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        
+        let deleteAction = UITableViewRowAction(style: .Default, title: "Delete") { (action, indexPath) -> Void in
+            
+            // handle delete action
+            tableView.editing = false
+            let row = indexPath.row
+            let script = self.myScripts[row]
+            self.storage.deleteScript(script)
+            self.myScripts.removeAtIndex(row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        }
+        
+        return [deleteAction]
+    }
+    
+    func tableView(tableView: UITableView, didEndEditingRowAtIndexPath indexPath: NSIndexPath?) {
+        // do something if you want
+    }
+    
+
     
     
     @IBAction func unwindFromReaderView(segue: UIStoryboardSegue) {
@@ -133,8 +177,8 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
             if let initVC = segue.destinationViewController as? InitViewController {
                 
                 // create new script
-                let script = UserScript.init(title: DEFAULT_SCRIPT_NAME,
-                                             topic: self.selectedTopicId)
+                let script = ScriptDoc.init(title: DEFAULT_SCRIPT_NAME,
+                                             topic: self.activeTopic!.id)
                 // store into db
                 storage.putScript(script)
                 
@@ -175,6 +219,9 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
     func themeView(){
         self.view.backgroundColor = self.themer.tanForLightOrNavy(1.0)
         self.scriptsTable.backgroundColor = self.themer.tanForLightOrNavy(1.0)
+        self.addScriptButton.layer.borderColor = UIColor.darkGrayColor().CGColor
+        self.addScriptButton.layer.borderWidth = 3.0
+
         self.scriptsTable.reloadData()
     }
 }

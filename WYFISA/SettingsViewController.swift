@@ -17,19 +17,60 @@ class SettingsManager {
     var nightMode: Bool = false
     var useFlash: Bool = false
     var version: Version = Version.ESV
-    
+    var owner: OwnerDoc
+    var firstLaunch: Bool = false
+
     init(){
+        
+        // set owner as random
+        self.owner = OwnerDoc()
+
         do {
+            // open config db
             let db = try CBLManager.sharedInstance().databaseNamed("config")
+            
+            // get settings
             if let doc = db.existingDocumentWithID("settings") {
                 // restore settings
                 self.nightMode = doc.propertyForKey("night") as! Bool
-                if let versionProperty = doc.propertyForKey("version") {
-                    self.version = Version(rawValue: versionProperty as! Int)!
+                if let versionProperty = doc.propertyForKey("version") as? Int {
+                    self.version = Version(rawValue: versionProperty)!
                 }
             }
-        } catch {}
+            
+            // get user info
+            if let doc = db.existingDocumentWithID("owner") {
+
+                // restore owner info
+                self.owner.id = doc.propertyForKey("id") as! String
+                if let ownerName = doc.propertyForKey("name") as? String {
+                    self.owner.name = ownerName
+                }
+            } else {
+                // create this owner doc
+                let ownerDoc = db.documentWithID("owner")
+                let properties = ["id": owner.id]
+                try ownerDoc?.putProperties(properties)
+            }
+
+        } catch {
+            print("error during config setup")
+        }
         
+        self.detectFirstLaunch()
+        print("1TIME")
+    }
+    
+    func ownerId() -> String{
+        return self.owner.id
+    }
+    
+    func detectFirstLaunch(){
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if defaults.stringForKey("isAppAlreadyLaunchedOnce") == nil {
+            self.firstLaunch = true
+            defaults.setBool(true, forKey: "isAppAlreadyLaunchedOnce")
+        }
     }
 }
 

@@ -12,7 +12,7 @@ import GPUImage
 class PhotoCaptureViewController: UIViewController {
 
     @IBOutlet var photoCaptureView: GPUImageView!
-    let cam = CameraManager.sharedInstance
+    var cam: CameraManager? = nil
     var frameSize = CGSize()
     var imageVerseInfo: VerseInfo? = nil
     var session = CaptureSession.sharedInstance
@@ -52,14 +52,17 @@ class PhotoCaptureViewController: UIViewController {
      
         self.view.frame.size = self.frameSize
         
-        self.cam.addTarget(self.photoCaptureView)
-         self.cam.resume()
-         Animations.start(0.3){
-             self.view.alpha = 1
-         }
-        
-        if self.settings.useFlash == true {
-            self.cam.torch(.On)
+        self.cam = SharedCameraManager.instance.cam
+        if let cam = self.cam {
+            cam.addTarget(self.photoCaptureView)
+             cam.resume()
+             Animations.start(0.3){
+                 self.view.alpha = 1
+             }
+            
+            if self.settings.useFlash == true {
+                cam.torch(.On)
+            }
         }
      
      }
@@ -70,7 +73,7 @@ class PhotoCaptureViewController: UIViewController {
         var rc: VerseInfo? = nil
 
         // save frame as image
-        if let frameSnapshot = self.cam.imageFromFrame() {
+        if let frameSnapshot = self.cam?.imageFromFrame() {
             self.imageVerseInfo = VerseInfo.init(id: "0", name: "", text: nil)
             imageVerseInfo!.category = .Image
             imageVerseInfo!.image = frameSnapshot
@@ -91,12 +94,12 @@ class PhotoCaptureViewController: UIViewController {
         }
         
         if self.settings.useFlash == true {
-            self.cam.torch(.Off)
+            self.cam?.torch(.Off)
         }
         
         // pause the cam
-        self.cam.pause()
-        self.cam.removeTarget(self.photoCaptureView)
+        self.cam?.pause()
+        self.cam?.removeTarget(self.photoCaptureView)
         
         return rc
 
