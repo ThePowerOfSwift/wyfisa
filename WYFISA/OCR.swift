@@ -9,12 +9,9 @@
 import Foundation
 import TesseractOCR
 import GPUImage
-import SwiftOCR
 
 class OCR: NSObject, G8TesseractDelegate {
     let tesseract:G8Tesseract = G8Tesseract(language:"eng");
-    let swiftOCRInstance   = SwiftOCR()
-
     var ocrLock = NSLock()
     var processing = false
     

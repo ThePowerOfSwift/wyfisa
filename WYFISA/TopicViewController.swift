@@ -9,6 +9,7 @@
 import UIKit
 
 class TopicViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
+
     @IBOutlet var topicTable: UITableView!
     
     let themer = WYFISATheme.sharedInstance
@@ -37,17 +38,16 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.topics = storage.getTopicsForOwner(self.ownerId!)
         self.topicTable.reloadData()
         
-        // auto-segue to notes on first launch
+        // detect first launch
         if SettingsManager.sharedInstance.firstLaunch == true {
+           SettingsManager.sharedInstance.firstLaunch == false
+            // segue to getting started script
             if self.topics.count == 1 {
                 self.selectedTopic = self.topics[0]
                 self.performSegueWithIdentifier("selectscriptsegue", sender: self)
             }
-        }
-    }
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        }
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

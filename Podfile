@@ -16,6 +16,7 @@ target 'TurnTo' do
   pod 'Firebase/Database'
   pod "AKPickerView-Swift"
   pod 'SwiftMoment'
+  pod 'paper-onboarding', '~> 1.1.3'
 
   target 'WYFISATests' do
     inherit! :search_paths

@@ -39,14 +39,7 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     override func viewDidAppear(animated: Bool) {
-        // auto traverse to first script on initial launch
-        if SettingsManager.sharedInstance.firstLaunch == true {
-            SettingsManager.sharedInstance.firstLaunch = false
-            if self.myScripts.count > 0 {
-                self.selectedScript = self.myScripts[0]
-                self.performSegueWithIdentifier("showscriptsegue", sender: self)
-            }
-        }
+
     }
     
     func getScriptsForTopic(){

@@ -58,6 +58,8 @@
 		C3AEF17C1DEB8D0C007750A8 /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AEF17B1DEB8D0C007750A8 /* NotesViewController.swift */; };
 		C3D5065A1D3932FB00A04C83 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D506591D3932FB00A04C83 /* Animations.swift */; };
 		C3DF5FC91E861E5C001B0B20 /* tut.cblite2 in Resources */ = {isa = PBXBuildFile; fileRef = C3DF5FC81E861E5C001B0B20 /* tut.cblite2 */; };
+		C3DF5FCB1E864D8B001B0B20 /* FirstNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DF5FCA1E864D8B001B0B20 /* FirstNavigationViewController.swift */; };
+		C3DF5FCD1E864DF9001B0B20 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DF5FCC1E864DF9001B0B20 /* OnboardingViewController.swift */; };
 		C3E0712C1D4DB54900097D01 /* WYFISAFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E0712B1D4DB54900097D01 /* WYFISAFont.swift */; };
 		C3EE86B31E7111BC004CB24C /* CaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EE86B21E7111BC004CB24C /* CaptureViewController.swift */; };
 		C3EE86B51E719A03004CB24C /* PhotoCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EE86B41E719A03004CB24C /* PhotoCaptureViewController.swift */; };
@@ -149,6 +151,8 @@
 		C3D506571D38D56200A04C83 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C3D506591D3932FB00A04C83 /* Animations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
 		C3DF5FC81E861E5C001B0B20 /* tut.cblite2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tut.cblite2; sourceTree = SOURCE_ROOT; };
+		C3DF5FCA1E864D8B001B0B20 /* FirstNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstNavigationViewController.swift; sourceTree = "<group>"; };
+		C3DF5FCC1E864DF9001B0B20 /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		C3E0712B1D4DB54900097D01 /* WYFISAFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISAFont.swift; sourceTree = "<group>"; };
 		C3EE86B21E7111BC004CB24C /* CaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureViewController.swift; sourceTree = "<group>"; };
 		C3EE86B41E719A03004CB24C /* PhotoCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhotoCaptureViewController.swift; path = ../PhotoCaptureViewController.swift; sourceTree = "<group>"; };
@@ -290,12 +294,14 @@
 				C3EE86B21E7111BC004CB24C /* CaptureViewController.swift */,
 				C3F53B951D37499700E2F80D /* DBQuery.swift */,
 				C351DB511DEFCCEE009E853D /* FBStorage.swift */,
+				C3DF5FCA1E864D8B001B0B20 /* FirstNavigationViewController.swift */,
 				C351DB4F1DEF52D7009E853D /* Generics.swift */,
 				C37951651D44306C003FB4F5 /* ImageFilter.swift */,
 				C362A4431DACD662002B1AF4 /* InitViewController.swift */,
 				C338AF371D964B2F004E5E97 /* InfoViewController.swift */,
 				C3AEF17B1DEB8D0C007750A8 /* NotesViewController.swift */,
 				C37951611D442023003FB4F5 /* OCR.swift */,
+				C3DF5FCC1E864DF9001B0B20 /* OnboardingViewController.swift */,
 				C3EE86B41E719A03004CB24C /* PhotoCaptureViewController.swift */,
 				C351DB4D1DEE7668009E853D /* KeyboardObserver.swift */,
 				C3606CE71DBBBACD00AE2E8B /* ScriptComposeViewController.swift */,
@@ -664,6 +670,7 @@
 				C338AF381D964B2F004E5E97 /* InfoViewController.swift in Sources */,
 				C362A4441DACD662002B1AF4 /* InitViewController.swift in Sources */,
 				C3F53B711D36219400E2F80D /* CameraManager.swift in Sources */,
+				C3DF5FCD1E864DF9001B0B20 /* OnboardingViewController.swift in Sources */,
 				C351DB501DEF52D7009E853D /* Generics.swift in Sources */,
 				C39090771D2C9AF8000DFD15 /* AppDelegate.swift in Sources */,
 				C351DB4C1DEDE250009E853D /* CBStorage.swift in Sources */,
@@ -677,6 +684,7 @@
 				C351DB521DEFCCEE009E853D /* FBStorage.swift in Sources */,
 				C37B1BC61E77917600786412 /* VersionSettingsViewController.swift in Sources */,
 				C3466D5F1E650EA3005EF365 /* CaptureSession.swift in Sources */,
+				C3DF5FCB1E864D8B001B0B20 /* FirstNavigationViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
