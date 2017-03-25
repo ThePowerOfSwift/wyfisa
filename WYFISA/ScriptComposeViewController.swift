@@ -229,10 +229,31 @@ class ScriptComposeViewController: UIViewController,
                 self.db.crossReferencesForVerse(verseInfo.id)
                 self.db.versesForChapter(verseInfo.id)
             }
+            
+            // note can become title
+            if self.scriptTitle == nil {
+                if let text = verseInfo.text {
+                    self.setScriptTitleFromContext(text)
+                }
+            }
 
         }
     }
     
+    
+    
+    func setScriptTitleFromContext(text: String){
+        var i = 0
+        var title:String = ""
+        for word in (text.componentsSeparatedByString(" ")) {
+            title.appendContentsOf("\(word) ")
+            if i > 2 { break }
+            i += 1
+        }
+        self.scriptTitle = title
+        self.storage.updateScriptTitle(self.scriptId!, title: title)
+        (self.parentViewController as! InitViewController).scriptTitle.text = title
+    }
     
     
     @IBAction func unwindFromNotes(segue: UIStoryboardSegue) {
@@ -249,6 +270,11 @@ class ScriptComposeViewController: UIViewController,
                 self.storage.updateScriptTimestamp(self.scriptId!)
             }
             self.verseTable.reloadData()
+            
+            // note can become title
+            if self.scriptTitle == nil {
+                self.setScriptTitleFromContext(verseInfo.name)
+            }
         }
     }
     

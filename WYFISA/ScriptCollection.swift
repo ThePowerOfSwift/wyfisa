@@ -13,7 +13,8 @@ class ScriptCollection: UICollectionView, UICollectionViewDelegate, UICollection
 
     let themer: WYFISATheme = WYFISATheme.sharedInstance
     let storage: CBStorage = CBStorage(databaseName: SCRIPTS_DB)
-    var displayedVerses: [VerseInfo] = [VerseInfo]()
+    var scripts: [ScriptDoc] = [ScriptDoc]()
+    var displayedVerses: [Int:[VerseInfo]] = [Int:[VerseInfo]]()
     var lastCellID: CellIdentifier = .None
     
     required init?(coder aDecoder: NSCoder) {
@@ -25,48 +26,57 @@ class ScriptCollection: UICollectionView, UICollectionViewDelegate, UICollection
 
     }
 
-    func initDisplayVerses(scriptId: String){
-        self.displayedVerses = [VerseInfo]()
+    func initDisplayVerses(){
+        self.displayedVerses = [Int:[VerseInfo]]()
         self.lastCellID = .None
-        
+        var section = 0
+
         // apply layout ID's to cells
-        for verse in storage.getVersesForScript(scriptId) {
-            let cellID = self.lastCellID.getNextID(verse)
-            verse.cellID = cellID
-            
-            if cellID == .Verse { // re-format
-                let verseText = "\(verse.text!)  (\(verse.name))"
-                verse.text = verseText
-            }
-            
-            // if about to display a grid, make sure last image is also grided
-            if cellID == .ImageGrid && self.lastCellID == .Image {
-                if let lastVerse = self.displayedVerses.last {
-                    lastVerse.cellID = .ImageGrid
+        for script in self.scripts {
+            let scriptId = script.id
+            self.displayedVerses[section] = [VerseInfo]()
+
+            for verse in storage.getVersesForScript(scriptId) {
+                let cellID = self.lastCellID.getNextID(verse)
+                verse.cellID = cellID
+                
+                if cellID == .Verse { // re-format
+                    let verseText = "\(verse.text!)  (\(verse.name))"
+                    verse.text = verseText
                 }
-            }
-            
-            // combine consecutive verses & notes
-            if cellID == .Verse && self.lastCellID == .Verse {
-                if let lastVerse = self.displayedVerses.last {
-                    lastVerse.text = "\(lastVerse.text!) \(verse.text!)"
+                
+                // if about to display a grid, make sure last image is also grided
+                if cellID == .ImageGrid && self.lastCellID == .Image {
+                    if let lastVerse = self.displayedVerses[section]!.last {
+                        lastVerse.cellID = .ImageGrid
+                    }
                 }
-            } else if cellID == .Quote && self.lastCellID == .Quote {
-                if let lastVerse = self.displayedVerses.last {
-                    lastVerse.name = "\(lastVerse.name)\n\n\(verse.name)"
+                
+                // combine consecutive verses & notes
+                if cellID == .Verse && self.lastCellID == .Verse {
+                    if let lastVerse = self.displayedVerses[section]!.last {
+                        lastVerse.text = "\(lastVerse.text!) \(verse.text!)"
+                    }
+                } else if cellID == .Quote && self.lastCellID == .Quote {
+                    if let lastVerse = self.displayedVerses[section]!.last {
+                        lastVerse.name = "\(lastVerse.name)\n\n\(verse.name)"
+                    }
+                } else {
+                    self.displayedVerses[section]!.append(verse)
                 }
-            } else {
-                self.displayedVerses.append(verse)
+                
+                self.lastCellID = cellID
             }
-            self.lastCellID = cellID
+            self.lastCellID = .None
+            section += 1
         }
+
         
-        self.lastCellID = .None
         self.reloadData()
     }
 
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let verse = self.displayedVerses[indexPath.row]
+        let verse = self.displayedVerses[indexPath.section]![indexPath.row]
         let cell: UICollectionViewCell
         let cellID = verse.cellID!
         let fontOffset = cellID.getFontOffset()
@@ -93,8 +103,14 @@ class ScriptCollection: UICollectionView, UICollectionViewDelegate, UICollection
             let reuseId = cellID.reuseId()
             cell = self.dequeueReusableCellWithReuseIdentifier(reuseId, forIndexPath: indexPath)
             if let imageView = cell.viewWithTag(1) as? UIImageView {
-                imageView.image = verse.image
+                imageView.image = verse.imageCropped
                 imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
+                let highlightView = cell.viewWithTag(2)
+                if verse.isHighlighted {
+                    highlightView!.hidden = false
+                } else {
+                    highlightView!.hidden = true
+                }
             }
         }
 
@@ -105,7 +121,7 @@ class ScriptCollection: UICollectionView, UICollectionViewDelegate, UICollection
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         
         var size:CGSize = CGSize.init(width: self.frame.width*0.90, height: 0)
-        let verse = self.displayedVerses[indexPath.row]
+        let verse = self.displayedVerses[indexPath.section]![indexPath.row]
 
         let cellID = verse.cellID!
         let fontOffset = cellID.getFontOffset()
@@ -113,7 +129,7 @@ class ScriptCollection: UICollectionView, UICollectionViewDelegate, UICollection
         switch verse.category {
         case .Image:
             if cellID == .Image {
-                size = CGSize.init(width: self.frame.width, height: self.frame.width*0.80) // todo scale accordingly
+                size = CGSize.init(width: self.frame.width, height: self.frame.width*0.38) // todo scale accordingly
             }
             if cellID == .ImageGrid {
                 size = CGSize.init(width: self.frame.width * 0.48, height: self.frame.width*0.35)
@@ -123,7 +139,10 @@ class ScriptCollection: UICollectionView, UICollectionViewDelegate, UICollection
             if cellID == .Quote {
                 width = self.frame.width*0.65
             }
-            let height = self.cellHeightForText(verse.name, width: width, fontOffset: fontOffset)
+            var height = self.cellHeightForText(verse.name, width: width, fontOffset: fontOffset)
+            if cellID == .Header {
+                height = 36
+            }
             size = CGSize.init(width: self.frame.width, height: height)
         case .Verse:
             if let text = verse.text {
@@ -145,11 +164,11 @@ class ScriptCollection: UICollectionView, UICollectionViewDelegate, UICollection
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.displayedVerses.count
+        return self.scripts[section].count
     }
     
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return 1
+        return self.scripts.count
     }
 
     func scrollToEnd(){
@@ -159,7 +178,7 @@ class ScriptCollection: UICollectionView, UICollectionViewDelegate, UICollection
             self.scrollToItemAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
         }
     }
-    
+
 }
 
 
@@ -222,11 +241,11 @@ enum CellIdentifier: Int {
             case .Verse:
                 // large following scipture is indented quote
                 // as intended to be an elaboration
-                if verse.name.length > 25 {
+               // if verse.name.length > 25 {
                     cellID = CellIdentifier.Quote
-                } else { // make it a header
-                    cellID = CellIdentifier.Header
-                }
+               // } else { // make it a header
+               //     cellID = CellIdentifier.Header
+                //}
             default:
                 // following quote or header
                 cellID = CellIdentifier.Quote
@@ -234,7 +253,7 @@ enum CellIdentifier: Int {
             
         case .Image:
             if self == .Image {
-                cellID = CellIdentifier.ImageGrid
+                cellID = CellIdentifier.Image // ImageGrid
             } else {
                 cellID = CellIdentifier.Image
             }

@@ -36,12 +36,17 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
     override func viewWillAppear(animated: Bool) {
         self.getScriptsForTopic()
         self.scriptsTable.reloadData()
-
     }
     
     override func viewDidAppear(animated: Bool) {
-        // self.selectedScript = self.myScripts[0]
-       // self.performSegueWithIdentifier("showscriptsegue", sender: self)
+        // auto traverse to first script on initial launch
+        if SettingsManager.sharedInstance.firstLaunch == true {
+            SettingsManager.sharedInstance.firstLaunch = false
+            if self.myScripts.count > 0 {
+                self.selectedScript = self.myScripts[0]
+                self.performSegueWithIdentifier("showscriptsegue", sender: self)
+            }
+        }
     }
     
     func getScriptsForTopic(){
@@ -196,9 +201,9 @@ class SelectScriptViewController: UIViewController, UITableViewDataSource, UITab
             }
         }
         
-        if segue.identifier == "zensegue" {
+        if segue.identifier == "readsegue" {
             if let readerVC = segue.destinationViewController as? ScriptViewController {
-                readerVC.prepareForScript(self.selectedScript!.id, title: self.selectedScript!.title)
+                readerVC.prepareForScripts(self.myScripts)
             }
         }
     }

@@ -17,6 +17,7 @@ protocol CaptureButtonDelegate: class {
 
 class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDataSource, AKPickerViewDelegate, UITextFieldDelegate {
 
+    @IBOutlet var disabledCamView: UIView!
     @IBOutlet var maskGradientOverlay: UIView!
     @IBOutlet var captureButton: UIButton!
     @IBOutlet var pickerView: AKPickerView!
@@ -97,9 +98,6 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewWillAppear(animated: Bool) {
-
-    }
     
     // entered capture tab
     @IBAction func didSPressCaptureButton(sender: AnyObject) {
@@ -111,8 +109,19 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         self.hideToolbar(true)
         
         if self.cam.ready == false {
-            self.cam.prepareCamera()
-            return
+            
+            // try to get a camera instance
+            let ready = self.cam.prepareCamera()
+            if !ready {
+                if SettingsManager.sharedInstance.askedForCamera == true {
+                    // user actively rejected camera usage
+                    Animations.start(0.3){
+                        self.disabledCamView.hidden = false
+                    }
+                }
+                return
+            }
+            
         }
         
         // decide what to do depending on what state we are in
@@ -139,7 +148,9 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
 
         if self.cam.ready == false {
             // prompt to enable camera!
-            print("AAYYE")
+            Animations.start(0.3){
+                self.disabledCamView.hidden = true
+            }
             return // not camera yet
         }
 
@@ -200,6 +211,7 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
             if let svc = segue.destinationViewController as? ScriptComposeViewController {
                 self.scriptVC = svc
                 svc.scriptId = self.activeScriptId!
+                svc.scriptTitle = self.scriptTitle.text
             }
         } else {
             // going elsewhere

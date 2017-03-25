@@ -22,7 +22,7 @@ class SharedCameraManager {
     var cam: CameraManager? = nil
     var ready = false
     
-    func prepareCamera(){
+    func prepareCamera() -> Bool {
         // make sure camera is ready
         if self.ready == false {
             // we need to init the camera
@@ -31,6 +31,7 @@ class SharedCameraManager {
                 self.ready = true
             }
         }
+        return self.ready
     }
 
 }
@@ -39,7 +40,7 @@ class CameraManager {
     var camera: GPUImageVideoCamera
     let filter = ImageFilter.genericFilter()
     let ocr: OCR = OCR()
-    var simImage: UIImage! = UIImage(named: "AddNote")
+    var simImage: UIImage! = UIImage(named: "hi02")
     var state: CameraState = .Stopped
     var shouldResumeOnAppFG = false
     var cameraZoom:CGFloat = 1.0
@@ -218,6 +219,9 @@ class CameraManager {
         } else {
             self.cameraEnabled = true
         }
+        
+        // remember for later that we've asked for acces already
+        SettingsManager.sharedInstance.detectFirstCameraUsage()
     }
     
     

@@ -19,6 +19,7 @@ class SettingsManager {
     var version: Version = Version.ESV
     var owner: OwnerDoc
     var firstLaunch: Bool = false
+    var askedForCamera: Bool = false
 
     init(){
         
@@ -27,7 +28,7 @@ class SettingsManager {
 
         do {
             // open config db
-            let db = try CBLManager.sharedInstance().databaseNamed("config")
+            let db = try CBLManager.sharedInstance().databaseNamed(CONFIG_DB)
             
             // get settings
             if let doc = db.existingDocumentWithID("settings") {
@@ -58,7 +59,6 @@ class SettingsManager {
         }
         
         self.detectFirstLaunch()
-        print("1TIME")
     }
     
     func ownerId() -> String{
@@ -70,6 +70,15 @@ class SettingsManager {
         if defaults.stringForKey("isAppAlreadyLaunchedOnce") == nil {
             self.firstLaunch = true
             defaults.setBool(true, forKey: "isAppAlreadyLaunchedOnce")
+        }
+    }
+    
+    func detectFirstCameraUsage(){
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if defaults.stringForKey("isAppAlreadyAuthCamera") == nil {
+            defaults.setBool(true, forKey: "isAppAlreadyAuthCamera")
+        } else {
+            self.askedForCamera = true
         }
     }
 }
@@ -100,7 +109,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // settings db
         do {
-            let db = try CBLManager.sharedInstance().databaseNamed("config")
+            let db = try CBLManager.sharedInstance().databaseNamed(CONFIG_DB)
             if let doc = db.existingDocumentWithID("settings"){
                 self.settingsDoc = doc
             } else {

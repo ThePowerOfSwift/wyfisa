@@ -18,12 +18,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         FIRApp.configure()
         
-        // prep camera
-        if SettingsManager.sharedInstance.firstLaunch == false {
+        // load canned data if this is first launch
+        if SettingsManager.sharedInstance.firstLaunch == true {
+            let db = CBStorage.init(databaseName: SCRIPTS_DB)
+            db.initFromTut()
+        }
+
+        // prep camera if we've already asked to use it
+        if SettingsManager.sharedInstance.askedForCamera == true {
             Timing.runAfterBg(0){
                 SharedCameraManager.instance.prepareCamera()
             }
         }
+
         return true
     }
 

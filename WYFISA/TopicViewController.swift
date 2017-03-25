@@ -31,14 +31,19 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
         // apply theme
         self.themeView()
 
-        // self.selectedTopic = self.topics[0]
-       // self.performSegueWithIdentifier("selectscriptsegue", sender: self)
-
     }
     
     override func viewWillAppear(animated: Bool) {
         self.topics = storage.getTopicsForOwner(self.ownerId!)
         self.topicTable.reloadData()
+        
+        // auto-segue to notes on first launch
+        if SettingsManager.sharedInstance.firstLaunch == true {
+            if self.topics.count == 1 {
+                self.selectedTopic = self.topics[0]
+                self.performSegueWithIdentifier("selectscriptsegue", sender: self)
+            }
+        }
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -69,6 +74,7 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
             let countLabel = cell.viewWithTag(2) as! UILabel
             if topic.count > 0 {
                 countLabel.text = "\(topic.count)"
+                countLabel.hidden = false
             } else {
                 countLabel.hidden = true
             }
@@ -144,6 +150,7 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
         let topic = TopicDoc.init(owner: self.ownerId!)
         self.topics.insert(topic, atIndex: 0)
         self.topicTable.reloadData()
+
     }
     
     func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {

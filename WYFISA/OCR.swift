@@ -54,7 +54,6 @@ class OCR: NSObject, G8TesseractDelegate {
         // threshold
         let thresholdFilter = ImageFilter.thresholdFilter(4)
         let image = thresholdFilter.imageByFilteringImage(croppedImage)
-
         return image
     }
     

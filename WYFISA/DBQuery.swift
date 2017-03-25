@@ -41,9 +41,8 @@ class DBQuery {
     var storage: CBStorage = CBStorage(databaseName: "bibles")
     
     init(){
-        var path = NSBundle.mainBundle().pathForResource("t_kjv", ofType: "db")!
-        self.conn = try! Connection(path, readonly: true)
-        path = NSBundle.mainBundle().pathForResource("cross_ref", ofType: "db")!
+        self.conn = try! Connection("", readonly: true)
+        let path = NSBundle.mainBundle().pathForResource("cross_ref", ofType: "db")!
         self.refconn = try! Connection(path, readonly: true)
         self.storage.replicate(.Pull)
         self.storage.createBibleViews()

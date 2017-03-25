@@ -25,7 +25,7 @@
 	<key>NSAppleMusicUsageDescription</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Enable to scan verses!</string>
+	<string>For scanning and highlighting text</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Enable this to save your verses.</string>
 	<key>UILaunchStoryboardName</key>

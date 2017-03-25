@@ -14,16 +14,18 @@ class ScriptViewController: UIViewController {
     var frameSize = CGSize()
     var scriptId: String? = nil
     var scriptTitle: String? = nil
+    var scripts: [ScriptDoc] = [ScriptDoc]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        self.scriptCollection.initDisplayVerses(self.scriptId!)
+        self.scriptCollection.scripts = self.scripts
+        self.scriptCollection.initDisplayVerses()
         self.scriptCollection.scrollEnabled = true
     }
-    func prepareForScript(scriptId: String, title: String){
-        self.scriptId = scriptId
-        self.scriptTitle = title
+
+    func prepareForScripts(scriptDocs: [ScriptDoc]){
+        self.scripts = scriptDocs
     }
 
 

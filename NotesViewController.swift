@@ -41,14 +41,14 @@ class NotesViewController: UIViewController {
         
         // colors
         self.view.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
-        self.textView.textColor = self.themer.navyForLightOrTan(1.0)
         self.textView.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
 
         // fonts
         let textFont = themer.currentFont()
         self.textView.font = textFont
         self.noteHeader.font = textFont.fontWithSize(48.0)
-        
+        self.textView.textColor = self.themer.navyForLightOrTan(1.0)
+
         if self.isUpdate == true {
             // updating current note
             self.closeButton.hidden = true

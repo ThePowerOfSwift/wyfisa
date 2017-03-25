@@ -37,6 +37,10 @@ class CBStorage {
     }
     init(databaseName: String, skipSetup: Bool = false){
         self.databaseName = databaseName
+        self.setup(databaseName)
+    }
+    
+    func setup(databaseName: String, skipSetup: Bool = false){
         do {
             let db = try CBLManager.sharedInstance().databaseNamed(databaseName)
             self.db = db
@@ -53,13 +57,36 @@ class CBStorage {
                 }
             }
         } catch {
-            // TODO: Handle this can be really bad!
             print("Unable to create database")
         }
-
-        
     }
     
+    func initFromTut(){
+        
+        let cannedDbPath = NSBundle.mainBundle().pathForResource("tut", ofType: "cblite2")
+        let dbManager = CBLManager.sharedInstance()
+        let databaseName = self.db!.name
+        do {
+            // delete local db if exists
+            if dbManager.databaseExistsNamed(databaseName) {
+                try self.db!.deleteDatabase()
+            }
+            
+            // replicate
+            try dbManager.replaceDatabaseNamed(databaseName, withDatabaseDir: cannedDbPath!)
+            
+            // re-open and create views
+            self.setup(databaseName)
+
+            // update timestamps of scripts
+            self.updateAllScriptTimestamps()
+            
+        } catch let error {
+            print("could not init db from canned path", error)
+        }
+
+    }
+
     func authUser(uid: String, password: String){
         self.auth = CBLAuthenticator
             .basicAuthenticatorWithName(uid,
@@ -67,9 +94,6 @@ class CBStorage {
     }
     
     
-    func verseByScript(){
-        
-    }
     func createScriptView(){
         
         // create views
@@ -199,12 +223,12 @@ class CBStorage {
     }
     
 
-    func getTopicsForOwner(ownerId: String) -> [TopicDoc] {
+    func getTopicsForOwner(ownerId: String, tries: Int = 1) -> [TopicDoc] {
         var topics: [TopicDoc] = [TopicDoc]()
         
         if let db = self.db {
             let query = db.viewNamed("topicsForOwner").createQuery()
-            query.keys = [ownerId]
+            query.keys = [ownerId, TUT_OWNER_ID] // tut owner
             do {
                 let result = try query.run()
                 while let row = result.nextRow() {
@@ -213,7 +237,14 @@ class CBStorage {
                         topics.append(topic)
                     }
                 }
-            } catch {}
+            } catch let error {
+                // re-init and try again
+                print(error)
+                if tries > 0 {
+                    self.setup(self.databaseName)
+                    return self.getTopicsForOwner(ownerId, tries:tries-1)
+                }
+            }
         }
         
         topics.sortInPlace{ s1, s2 in return s1.title < s2.title }
@@ -232,6 +263,7 @@ class CBStorage {
     
     func getScriptsForTopic(topicId: String) -> [ScriptDoc] {
         var topicScripts: [ScriptDoc] = [ScriptDoc]()
+        
         if let db = self.db {
             let query = db.viewNamed("scriptsForTopic").createQuery()
             query.keys = [topicId]
@@ -425,6 +457,22 @@ class CBStorage {
                 } catch {
                     print("attach image failed")
                 }
+            }
+        }
+    }
+    
+    func updateAllScriptTimestamps() {
+        if let db = self.db {
+            let query = db.viewNamed("scriptsForTopic").createQuery()
+            query.descending = true
+            do {
+                let result = try query.run()
+                while let row = result.nextRow() {
+                    let scriptId = row.value as! String
+                    self.updateScriptTimestamp(scriptId)
+                }
+            } catch let error {
+                print(error)
             }
         }
     }
