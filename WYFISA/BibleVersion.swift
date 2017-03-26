@@ -9,7 +9,7 @@
 import UIKit
 
 enum Version: Int {
-    case KJV = 0, ESV, NIV, NLT
+    case KJV = 0, ESV, NIV, NLT, NASB, NET
     func text() -> String {
         switch self{
         case .KJV:
@@ -20,6 +20,10 @@ enum Version: Int {
             return "niv"
         case .NLT:
             return "nlt"
+        case .NASB:
+            return "nasb"
+        case .NET:
+            return "net"
         }
     }
     func desc() -> String {
@@ -32,10 +36,14 @@ enum Version: Int {
             return "New International Version"
         case .NLT:
             return "New Living Translation"
+        case .NASB:
+            return "New American Standard Bible"
+        case .NET:
+            return "New English Translation"
         }
     }
     
-    func count() -> Int {
-        return 4
+    static func count() -> Int {
+        return 6
     }
 }

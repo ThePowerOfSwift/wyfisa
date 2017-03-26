@@ -11,6 +11,9 @@ import paper_onboarding
 
 class OnboardingViewController: UIViewController, PaperOnboardingDataSource, PaperOnboardingDelegate {
 
+    @IBOutlet var onboardingMask: UIView!
+    @IBOutlet var swipLeftGresture: UISwipeGestureRecognizer!
+    @IBOutlet var swipeRightGesture: UISwipeGestureRecognizer!
     @IBOutlet var getStartedButton: UIButton!
     @IBOutlet var onboardingView: PaperOnboarding!
     override func viewDidLoad() {
@@ -59,6 +62,15 @@ class OnboardingViewController: UIViewController, PaperOnboardingDataSource, Pap
         return 1
     }
     
+    @IBAction func didSwipeRight(sender: AnyObject) {
+        self.onboardingView.currentIndex(1, animated: true)
+    }
+    
+    @IBAction func didSwipeLeft(sender: AnyObject) {
+        self.performSegueWithIdentifier("unwindtoroot",
+                                        sender: nil)
+    }
+    
     // MARK: - Delegate
     func onboardingDidTransitonToIndex(index: Int) {
         if index == 2 {
@@ -70,10 +82,19 @@ class OnboardingViewController: UIViewController, PaperOnboardingDataSource, Pap
     
     func onboardingWillTransitonToIndex(index: Int) {
         if index != 2 {// quickly hide
+            self.toggleEndView(false)
             Animations.start(0.3){
                 self.getStartedButton.alpha = 0
             }
+        } else {
+            self.toggleEndView(true)
         }
+    }
+    
+    func toggleEndView(enabled: Bool){
+        self.swipLeftGresture.enabled = enabled
+        self.swipeRightGesture.enabled = enabled
+        self.onboardingMask.hidden = !enabled
     }
 
     func onboardingConfigurationItem(item: OnboardingContentViewItem, index: Int){ }

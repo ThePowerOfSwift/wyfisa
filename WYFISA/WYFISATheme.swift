@@ -23,7 +23,7 @@ class WYFISATheme {
     
     init() {
         do {
-            let db = try CBLManager.sharedInstance().databaseNamed("config")
+            let db = try CBLManager.sharedInstance().databaseNamed(CONFIG_DB)
             if let doc = db.existingDocumentWithID("settings") {
                 // restore settings
                 let fontID = doc.propertyForKey("font") as! Int

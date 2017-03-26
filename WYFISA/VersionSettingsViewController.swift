@@ -48,7 +48,7 @@ class VersionSettingsViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return Version.count()
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -56,6 +56,9 @@ class VersionSettingsViewController: UIViewController, UITableViewDataSource, UI
             self.settings.version = newVersion
         }
         self.versionTable.reloadData()
+        
+        // invalidate chapter cache
+        VerseInfo.clearChapterCache()
     }
 
     // MARK: - Theme

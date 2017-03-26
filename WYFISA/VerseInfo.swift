@@ -176,6 +176,10 @@ class VerseInfo {
 
     }
     
+    class func clearChapterCache(){
+        CHAPTER_CACHE = [String: [VerseInfo]]()
+    }
+    
     func makeChapterVerse(verseNo: Int, verseText: String?) -> VerseInfo {
         let bookIdStr = String(format: "%02d", self.bookNo!)
         let chapterId = String(format: "%03d", Int(self.chapterNo!))

@@ -66,9 +66,9 @@ class SettingsManager {
     
     func detectFirstLaunch(){
         let defaults = NSUserDefaults.standardUserDefaults()
-        if defaults.stringForKey("isAppAlreadyLaunchedOnce") == nil {
+        if defaults.stringForKey("isAppAlreadyLaunchedOnce_v2") == nil {
             self.firstLaunch = true
-            defaults.setBool(true, forKey: "isAppAlreadyLaunchedOnce")
+            defaults.setBool(true, forKey: "isAppAlreadyLaunchedOnce_v2")
         }
     }
 }

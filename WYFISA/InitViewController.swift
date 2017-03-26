@@ -94,15 +94,17 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         // Dispose of any resources that can be recreated.
     }
     
-    
-    func didAuthorizeCameraAccess(sender: SharedCameraManager) {
+    func prepareCamUsage(){
         Timing.runAfter(0){
             self.camPrepView.hidden = false
-            print(self.camPrepView.hidden, self.camPrepView.frame.size)
             Timing.runAfterBg(0.0){
                 self.cam.prepareCamera()
             }
         }
+    }
+    
+    func didAuthorizeCameraAccess(sender: SharedCameraManager) {
+        self.prepareCamUsage()
     }
     
     func didPrepareCamera(sender: SharedCameraManager){
@@ -122,7 +124,6 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         
         if self.cam.checkCameraAuth() == false {
             // user has not authorized use of camera
-            print(self.cam.didAuthCameraUsage())
             
             if self.cam.didAuthCameraUsage() == true {
                 // this is not the first time we've asked for auth
@@ -135,6 +136,11 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
             }
 
             return
+        } else if self.cam.didAuthCameraUsage() == false {
+            // upgrade scenario where user has authorized use of camera
+            // but the property hasn't been set
+            self.cam.setCameraAuthStatus()
+            self.prepareCamUsage()
         }
         
         if self.cam.ready == false {

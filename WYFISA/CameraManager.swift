@@ -74,13 +74,13 @@ class SharedCameraManager {
     // set info property that we've already asked to auth the camera
     func setCameraAuthStatus(){
         let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setBool(true, forKey: "isAppAlreadyAuthCamera")
+        defaults.setBool(true, forKey: "isAppAlreadyAuthCamera_v2")
     }
     
     // returns true if we've asked to auth the camera
     func didAuthCameraUsage() -> Bool {
         let defaults = NSUserDefaults.standardUserDefaults()
-        return defaults.stringForKey("isAppAlreadyAuthCamera") != nil
+        return defaults.stringForKey("isAppAlreadyAuthCamera_v2") != nil
     }
     
     func isStopped() -> Bool {
