@@ -62,6 +62,7 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
             let textField = cell.viewWithTag(1) as! UITextField
             textField.text = nil
             textField.delegate = self
+            textField.textColor = themer.navyForLightOrOffWhite(1.0)
             if let oldTitle = self.oldTitle {
                 textField.placeholder = oldTitle
                 self.oldTitle = nil
@@ -72,6 +73,7 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
             label.textColor = themer.navyForLightOrOffWhite(1.0)
             label.text = topic.title
             let countLabel = cell.viewWithTag(2) as! UILabel
+            countLabel.textColor = themer.navyForLightOrOffWhite(1.0)
             if topic.count > 0 {
                 countLabel.text = "\(topic.count)"
                 countLabel.hidden = false
@@ -166,7 +168,11 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
     func textFieldDidEndEditing(textField: UITextField) {
 
         // save topic title
-        let title = self.newTopicTextField?.text ?? "Untitled Topic"
+        if self.newTopicTextField?.text == nil || self.newTopicTextField?.text == "" {
+            self.newTopicTextField = nil
+            return // title required
+        }
+        let title = self.newTopicTextField?.text
         let topic = self.topics[0]
         topic.title = title
         self.storage.putTopic(topic)

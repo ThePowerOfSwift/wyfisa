@@ -278,6 +278,8 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     
     func textFieldDidEndEditing(textField: UITextField) {
         if let title = textField.text {
+            self.scriptTitle.text = title
+            self.scriptVC?.scriptTitle = title
             self.storage.updateScriptTitle(self.activeScriptId!, title: title)
         }
         // disable ability to tap to end editing

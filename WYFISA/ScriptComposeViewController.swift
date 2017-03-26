@@ -385,9 +385,7 @@ class ScriptComposeViewController: UIViewController,
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        //self.escapeMask.hidden = true
-        let text = textField.text ?? ""
-        
+        let text = textField.text ?? ""        
         if text != "" {
             
             let verseInfo = VerseInfo(id: "0", name:  text, text: nil)
