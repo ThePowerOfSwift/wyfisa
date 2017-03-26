@@ -166,7 +166,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
                 // scroll to verse
                 if let activeVerse = self.verseInfo?.verse {
                     let path = NSIndexPath.init(forRow: 0, inSection: activeVerse-1)
-                    self.versesTable.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
+                    self.versesTable.scrollToRowAtIndexPath(path, atScrollPosition: .Middle, animated: false)
                     Timing.runAfter(0.5){
                         self.showFooterMask()
                     }
