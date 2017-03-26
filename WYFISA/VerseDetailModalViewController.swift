@@ -44,6 +44,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         if let verse = verseInfo {
             if (verse.bookNo != nil) && (verse.chapterNo != nil){
                 self.fetchCurrentChapter()
+                self.fetchCurrentCrossRefs()
             }
         }
         
@@ -441,6 +442,15 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         self.fetchCurrentChapter()
     }
     
+    func fetchCurrentCrossRefs(){
+        // get cross refs
+        let refRanges = db.crossReferencesForVerse(self.verseInfo!.id)
+        for range in refRanges {
+            print("range", range.from, range.to)
+            self.firDB.getVerseRange(range.from, range.to)
+        }
+    }
+    
     func fetchCurrentChapter(){
         self.loadSpinner.startAnimating()
 
@@ -450,7 +460,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         self.verseLabel.text = self.verseInfo!.name
 
         if let verses = CHAPTER_CACHE[cacheKey] {
-            self.didGetVerseContext(self, verses: verses)
+            self.didGetVerseContext(self, verses: verses, type: FBContextType.Chapter.rawValue)
         } else {
             self.firDB.getVerseContext(bookNo,
                                        chapterNo:  chapterNo)
@@ -527,10 +537,16 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     }
     
     // MARK: - FIR Delegate
-    func didGetVerseContext(sender: AnyObject, verses: [AnyObject]){
-        self.verseInfo?.updateChapterForVerses(verses as! [VerseInfo])
-        self.handleChapterChange()
-        self.loadSpinner.stopAnimating()
+    func didGetVerseContext(sender: AnyObject, verses: [AnyObject], type: AnyObject){
+        let rangeType = FBContextType(rawValue: type as! Int)!
+        
+        switch rangeType {
+        case .Chapter:
+            self.verseInfo?.updateChapterForVerses(verses as! [VerseInfo])
+            self.handleChapterChange()
+            self.loadSpinner.stopAnimating()
+        case .Range:
+            self.verseInfo?.updateRefsForVerses(verses as! [VerseInfo])
+        }
     }
-
 }

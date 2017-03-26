@@ -137,7 +137,6 @@ class VerseInfo {
     }
     
     func updateChapterForVerses(verses: [VerseInfo]){
-        // TODO: cache this... and ie the cache db is deleted on app reset
         
         var i = 1
         var chapterStr = ""
@@ -194,7 +193,66 @@ class VerseInfo {
         
         return chapterVerse
     }
-    
+
+    func updateRefsForVerses(verses: [VerseInfo]){
+        if verses.count == 0 { return }
+        if self.refs == nil {
+            self.refs = [VerseInfo]()
+        }
+        
+        let startId = verses.first!.id
+        let endId = verses.last!.id
+        let refVerse = verses.first!
+        var passage: String?
+        var refText: String = ""
+        var offset = 0
+        var firstVerse = -1
+        
+        for verse in verses {
+            // unpack passage vars
+            let bookNo = verse.bookNo!
+            let verseNo = verse.verse!
+            let chapterNo = verse.chapterNo!
+            
+            if firstVerse == -1 {
+                firstVerse = verseNo
+            }
+            
+            if let book = Books(rawValue: bookNo){
+                let bookName = book.name()
+                if startId == endId {
+                    passage = "\(bookName) \(chapterNo):\(verseNo)"
+                } else {
+                    let startVerseNo = verseNo - offset
+                    if startVerseNo <= 0 { // cross chapters
+                        passage = "\(bookName) \(chapterNo):\(firstVerse)ff"
+                    } else {
+                        passage = "\(bookName) \(chapterNo):\(firstVerse)-\(verseNo)"
+                    }
+                }
+            }
+            
+            
+            // append text
+            var text = verse.text!
+            if startId != endId {
+                if offset > 0 {
+                    text = "  \(verseNo) ".stringByAppendingString(text)
+                }
+            }
+            refText = refText.stringByAppendingString(text)
+            offset += 1
+        }
+        
+        if passage != nil {
+            refVerse.name = passage!
+            refVerse.text = refText
+            refVerse.verse = firstVerse
+            self.refs?.append(refVerse)
+        }
+
+    }
+
     func updateWithIdParts() {
         let pattern: Regex = Regex("(\\d{2})(\\d{3})(\\d{3})")
         let match = pattern.match(self.id)

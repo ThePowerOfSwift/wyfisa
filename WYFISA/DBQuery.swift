@@ -10,6 +10,11 @@ import Foundation
 import SQLite
 import Regex
 
+struct VerseRange {
+    let from: String
+    let to: String
+}
+
 struct BibleTableColumns {
     let id = Expression<String>("id")
     let text = Expression<String>("t")
@@ -44,8 +49,7 @@ class DBQuery {
         self.conn = try! Connection("", readonly: true)
         let path = NSBundle.mainBundle().pathForResource("cross_ref", ofType: "db")!
         self.refconn = try! Connection(path, readonly: true)
-        self.storage.replicate(.Pull)
-        self.storage.createBibleViews()
+
         
     }
     
@@ -181,76 +185,15 @@ class DBQuery {
         self.verseCache[verseId] = chapterVerses
         self.chapterCache[verseId] = chapter
         return chapter
-        /*
-        let vids = self.storage.getChapterVerses(verseParts[0], chapterNo: verseParts[1])
-        
-        // get book and chapter
-        var query = bibleTable.select(bibleCol.book, bibleCol.chapter, bibleCol.verse).filter(bibleCol.id == verseId)
-        if let row = conn.pluck(query) {
-            let bookId = row.get(bibleCol.book)
-            let chapterId = row.get(bibleCol.chapter)
-            let verseId = row.get(bibleCol.verse)
-            
-            // query for text
-            query = bibleTable.select(bibleCol.text)
-                .filter(bibleCol.book == bookId && bibleCol.chapter == chapterId)
-            
-            let bookName = Books(rawValue: bookId)!.name()
-            
-            do {
-                var i = 1
-                for row in try conn.prepare(query) {
-                    var rc = self.stripText(row.get(bibleCol.text))
-                    
-                    // create verse singleton
-                    let verseName = self.createVerseName(bookId, chapterNo: chapterId, verseNo: i)!
-                    let id = self.createVerseId(bookId, chapterNo: chapterId, verseNo: i)
-                    let verseInfo = VerseInfo.init(id: id, name: verseName, text: rc)
-                    verseInfo.verse = i
-                    verseInfo.bookNo = bookId
-                    verseInfo.chapterNo = chapterId
-                    verseInfo.verse = i
-                    chapterVerses.append(verseInfo)
-
-                    if (i == verseId){ // this is context verse
-                        if i == 1 {
-                            rc = "\u{293}\(rc)\u{297}"
-                        } else {
-                            rc = "  \u{293}\(i) \(rc)\u{297}"
-                        }
-                    } else {
-                        if i == 1 {
-                            rc = "\(rc)"
-                        } else {
-                            rc = "  \(i) \(rc)"
-                        }
-                    }
-                    chapter = chapter.stringByAppendingString(rc)
-
-                    i+=1
-                    
-                }
-            } catch { print("query error") }
-
-        }
-        self.verseCache[verseId] = chapterVerses
-        self.chapterCache[verseId] = chapter
- 
-        return chapter
-     */
     }
 
-    func crossReferencesForVerse(verseId: String) -> [VerseInfo] {
+    func crossReferencesForVerse(verseId: String) -> [VerseRange] {
         
-        if let cachedReferences = self.refCache[verseId] {
-            return cachedReferences
-        }
+        var references = [VerseRange]()
         
-        var references = [VerseInfo]()
-        
-        var query = self.crossRefTable.select(crossRefCol.rank, crossRefCol.start_verse, crossRefCol.end_verse)
+        let query = self.crossRefTable.select(crossRefCol.rank, crossRefCol.start_verse, crossRefCol.end_verse)
             .filter(crossRefCol.vid == verseId)
-            .order(crossRefCol.rank.desc)
+            .order(crossRefCol.rank)
             .limit(10)
         
         do {
@@ -263,7 +206,10 @@ class DBQuery {
                 if endId == "0" {
                     endId = startId
                 }
-                
+                let range = VerseRange(from: startId, to: endId)
+                references.append(range)
+
+                /*
                 let verseInfo = VerseInfo.init(id: startId, name: "pending", text: nil)
                 var passage: String?
                 var refText: String = ""
@@ -271,6 +217,8 @@ class DBQuery {
                 query = self.bibleTable.filter(bibleCol.id >= startId && bibleCol.id <= endId)
                 var offset = 0
                 var firstVerse = -1
+                
+                
                 for row in try conn.prepare(query) {
 
                     // unpack passage vars
@@ -315,12 +263,12 @@ class DBQuery {
                     verseInfo.verse = firstVerse
                     references.append(verseInfo)
                 }
-
+                */
             
             }
         } catch { print("query error") }
         
-        self.refCache[verseId] = references
+        // self.refCache[verseId] = references
         return references
     }
     
@@ -377,10 +325,8 @@ class DBQuery {
         let verse = VerseInfo.init(id: id, name: verseName, text: nil)
         
         let chapter = self.chapterForVerse(verse.id)
-        let refs = self.crossReferencesForVerse(verse.id)
         let verses = self.versesForChapter(verse.id)
         verse.chapter = chapter
-        verse.refs = refs
         verse.verses = verses
         verse.bookNo = bookNo
         verse.chapterNo = chapterNo

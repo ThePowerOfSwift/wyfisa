@@ -10,10 +10,15 @@ import Foundation
 import Firebase
 import FirebaseDatabase
 
+
+enum FBContextType: Int {
+    case Chapter = 0, Range
+}
+
 @objc protocol FBStorageDelegate: class {
     optional func didGetSingleVerse(sender: AnyObject, verse: AnyObject)
     optional func didGetSingleVerseForRow(sender: AnyObject, verse: AnyObject, section: Int)
-    optional func didGetVerseContext(sender: AnyObject, verses: [AnyObject])
+    optional func didGetVerseContext(sender: AnyObject, verses: [AnyObject], type: AnyObject)
 }
 
 
@@ -52,9 +57,7 @@ class FBStorage {
     
     
     func getVerseContext(bookNo: Int, chapterNo: Int) {
-        let version = settings.version.text()
-        var context:[VerseInfo] = []
-        
+
         let bookIdStr = String(format: "%02d", bookNo)
         let chapterStartId = String(format: "%03d", chapterNo)
         let chapterEndId = String(format: "%03d", chapterNo+1)
@@ -62,20 +65,29 @@ class FBStorage {
         let startId = "\(bookIdStr)\(chapterStartId)\(verseId)"
         let endId = "\(bookIdStr)\(chapterEndId)\(verseId)"
 
+        self.getVerseRange(startId, endId, type: .Chapter)
+
+    }
+    
+    func getVerseRange(from: String, _ to: String, type: FBContextType = .Range){
+        
+        let version = settings.version.text()
+        var context:[VerseInfo] = []
+    
         self.databaseRef.child(version)
             .queryOrderedByKey()
-            .queryStartingAtValue(startId)
-            .queryEndingAtValue(endId)
+            .queryStartingAtValue(from)
+            .queryEndingAtValue(to)
             .observeSingleEventOfType(.Value, withBlock: { (data) in
                 // convert value to verse(s)
                 if let snapshots = data.value as?  [String : AnyObject] {
-                    for var snapshot in snapshots.values {
+                    for snapshot in snapshots.values {
                         if let verse = VerseInfo.DocPropertiesToObj(snapshot) {
                             context.append(verse)
                         }
                     }
                     context.sortInPlace{ s1, s2 in return s1.id < s2.id }
-                    self.delegate?.didGetVerseContext?(self, verses: context)
+                    self.delegate?.didGetVerseContext?(self, verses: context, type: type.rawValue)
                 }
             })
     }

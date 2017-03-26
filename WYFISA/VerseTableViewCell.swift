@@ -239,9 +239,6 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
         // append to cell
         if let verse = verseInfo {
             // start the caching and such
-            let refs = db.crossReferencesForVerse(verse.id)
-            let verses = db.versesForChapter(verse.id)
-            verse.refs = refs
             self.delegate?.didTapMoreButtonForCell(self, withVerseInfo: verse)
         }
         
