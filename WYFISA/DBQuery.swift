@@ -207,68 +207,12 @@ class DBQuery {
                     endId = startId
                 }
                 let range = VerseRange(from: startId, to: endId)
-                references.append(range)
+                references.insert(range, atIndex:  0)
 
-                /*
-                let verseInfo = VerseInfo.init(id: startId, name: "pending", text: nil)
-                var passage: String?
-                var refText: String = ""
-    
-                query = self.bibleTable.filter(bibleCol.id >= startId && bibleCol.id <= endId)
-                var offset = 0
-                var firstVerse = -1
-                
-                
-                for row in try conn.prepare(query) {
-
-                    // unpack passage vars
-                    let bookNo = row.get(bibleCol.book)
-                    let verseNo = row.get(bibleCol.verse)
-                    let chapterNo = row.get(bibleCol.chapter)
-                    if firstVerse == -1 {
-                        firstVerse = verseNo
-                    }
-                    verseInfo.bookNo = bookNo
-                    verseInfo.chapterNo = chapterNo
-                    verseInfo.verse = firstVerse
-                    if let book = Books(rawValue: bookNo){
-                        let bookName = book.name()
-                        if startId == endId {
-                            passage = "\(bookName) \(chapterNo):\(verseNo)"
-                        } else {
-                            let startVerseNo = verseNo - offset
-                            if startVerseNo <= 0 { // cross chapters
-                                passage = "\(bookName) \(chapterNo):\(firstVerse)ff"
-                            } else {
-                                passage = "\(bookName) \(chapterNo):\(firstVerse)-\(verseNo)"
-                            }
-                        }
-                    }
-                    
-                    
-                    // append text
-                    var text = self.stripText(row.get(bibleCol.text))
-                    if startId != endId {
-                        if offset > 0 {
-                            text = "  \(verseNo) ".stringByAppendingString(text)
-                        }
-                    }
-                    refText = refText.stringByAppendingString(text)
-                    offset += 1
-                }
-                
-                if passage != nil {
-                    verseInfo.name = passage!
-                    verseInfo.text = refText
-                    verseInfo.verse = firstVerse
-                    references.append(verseInfo)
-                }
-                */
             
             }
         } catch { print("query error") }
         
-        // self.refCache[verseId] = references
         return references
     }
     

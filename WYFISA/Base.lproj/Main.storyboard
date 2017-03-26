@@ -1715,7 +1715,7 @@
                                 </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fCs-7e-QiV">
-                                <rect key="frame" x="0.0" y="88" width="375" height="579"/>
+                                <rect key="frame" x="0.0" y="88" width="375" height="529"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                             </tableView>
                             <tableView clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="uX5-vI-3LW">
@@ -1784,9 +1784,9 @@
                             <constraint firstItem="uX5-vI-3LW" firstAttribute="width" secondItem="NAF-BE-PDL" secondAttribute="width" id="SK8-sl-dL9"/>
                             <constraint firstItem="uX5-vI-3LW" firstAttribute="bottom" secondItem="YAU-Ng-BQl" secondAttribute="top" id="TNz-lz-ATC"/>
                             <constraint firstItem="OEX-Xc-Ke8" firstAttribute="width" secondItem="YAU-Ng-BQl" secondAttribute="width" id="URx-gO-hMy"/>
-                            <constraint firstItem="dn5-VG-3di" firstAttribute="top" secondItem="fCs-7e-QiV" secondAttribute="bottom" id="WWf-l7-VmJ"/>
                             <constraint firstItem="4et-yh-1i5" firstAttribute="top" secondItem="3wr-4G-kpu" secondAttribute="bottom" id="Xrf-DR-aTG"/>
                             <constraint firstItem="ZPj-QE-3IW" firstAttribute="centerY" secondItem="NAF-BE-PDL" secondAttribute="centerY" id="Yw8-2j-xaf"/>
+                            <constraint firstItem="fCs-7e-QiV" firstAttribute="bottom" secondItem="YAU-Ng-BQl" secondAttribute="top" id="Zux-QZ-ayK"/>
                             <constraint firstItem="3wr-4G-kpu" firstAttribute="top" secondItem="K9n-H3-z42" secondAttribute="bottom" constant="10" id="a2o-k6-DKf"/>
                             <constraint firstItem="OEX-Xc-Ke8" firstAttribute="height" secondItem="YAU-Ng-BQl" secondAttribute="height" id="dHV-qt-og0"/>
                             <constraint firstItem="Prk-Vd-cIZ" firstAttribute="top" secondItem="K9n-H3-z42" secondAttribute="bottom" id="did-Hg-CrX"/>
