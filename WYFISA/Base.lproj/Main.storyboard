@@ -13,7 +13,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Books-->
+        <!--Topics-->
         <scene sceneID="0CD-V7-i3I">
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="jHn-9q-1V7" customClass="TopicViewController" customModule="TurnTo" customModuleProvider="target" sceneMemberID="viewController">
@@ -128,7 +128,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="67"/>
                                 <color key="backgroundColor" red="1" green="0.24313725489999999" blue="0.047058823530000002" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Books" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.29999999999999999" translatesAutoresizingMaskIntoConstraints="NO" id="0sO-px-G93">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Topics" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.29999999999999999" translatesAutoresizingMaskIntoConstraints="NO" id="0sO-px-G93">
                                 <rect key="frame" x="8" y="80" width="307" height="36"/>
                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="30"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -168,7 +168,7 @@
                             <constraint firstItem="3Tm-zD-xiV" firstAttribute="centerX" secondItem="0gf-zW-ITA" secondAttribute="centerX" id="wGq-rM-RY0"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Books" id="HYp-Bb-50M">
+                    <navigationItem key="navigationItem" title="Topics" id="HYp-Bb-50M">
                         <barButtonItem key="rightBarButtonItem" image="ios7-gear-outline" style="plain" id="Pe3-wP-3Ky">
                             <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>

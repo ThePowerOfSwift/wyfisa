@@ -19,6 +19,7 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
     var newTopicTextField: UITextField? = nil
     var selectedTopic: TopicDoc? = nil
     var oldTitle: String? = nil
+    var editingRow: Int = -1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,6 +116,7 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
             tableView.editing = false
             self.oldTitle = self.topics[row].title
             self.topics[row].title = nil
+            self.editingRow = row
             tableView.reloadData()
         }
         editAction.backgroundColor = UIColor.grayColor()
@@ -151,6 +153,7 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
         let topic = TopicDoc.init(owner: self.ownerId!)
         self.topics.insert(topic, atIndex: 0)
+        self.editingRow = 0
         self.topicTable.reloadData()
 
     }
@@ -172,8 +175,8 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
             self.newTopicTextField = nil
             return // title required
         }
-        let title = self.newTopicTextField?.text
-        let topic = self.topics[0]
+        let title = textField.text
+        let topic = self.topics[self.editingRow]
         topic.title = title
         self.storage.putTopic(topic)
         
@@ -182,7 +185,7 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.newTopicTextField = nil
         
         // reload
-        let path = NSIndexPath(forRow: 0, inSection: 0)
+        let path = NSIndexPath(forRow: self.editingRow, inSection: 0)
         self.topicTable.reloadRowsAtIndexPaths([path], withRowAnimation: .Automatic)
         
         self.selectedTopic = topic
