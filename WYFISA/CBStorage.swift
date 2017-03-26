@@ -319,6 +319,10 @@ class CBStorage {
         
         // delete script
         self.removeDoc(script.id)
+        
+        // decrement script count
+        self.updateDocCount(script.topic, by: -1)
+        
     }
     
     func deleteTopic(topic: TopicDoc){
@@ -477,6 +481,21 @@ class CBStorage {
         }
     }
     
+    func updateDocCount(id: String, by: Int){
+        // update doc counter attribute
+        if let doc = db?.existingDocumentWithID(id) {
+            do {
+                try doc.update({
+                    (newRevision) -> Bool in
+                    newRevision["count"] = (newRevision["count"] as! Int) + by
+                    return true
+                })
+            } catch {
+                print("update doc count failed")
+            }
+        }
+    }
+    
     func updateScriptTimestamp(id: String){
         let ts =  NSDate().timeIntervalSince1970.description
         if let doc = db?.existingDocumentWithID(id) {
@@ -492,22 +511,12 @@ class CBStorage {
             
         }
     }
+
     func updateScriptCountAndTimestamp(id: String, counter: Int){
         self.updateScriptTimestamp(id)
-        if let doc = db?.existingDocumentWithID(id) {
-            do {
-                try doc.update({
-                    (newRevision) -> Bool in
-                    newRevision["count"] = (newRevision["count"] as! Int) + counter
-                    return true
-                })
-            } catch {
-                print("update doc failed")
-            }
-            
-        }
+        self.updateDocCount(id, by: counter)
     }
-    
+
     func incrementScriptCountAndTimestamp(id: String){
         self.updateScriptCountAndTimestamp(id, counter: 1)
     }
@@ -530,6 +539,7 @@ class CBStorage {
             
         }
     }
+    
     
     func updateVerseNote(id: String, note: String){
 
