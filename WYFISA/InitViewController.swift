@@ -15,8 +15,9 @@ protocol CaptureButtonDelegate: class {
     func didReleaseCaptureButton(sender: InitViewController) -> [VerseInfo]
 }
 
-class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDataSource, AKPickerViewDelegate, UITextFieldDelegate {
+class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDataSource, AKPickerViewDelegate, UITextFieldDelegate, SharedCameraManagerDelegate {
 
+    @IBOutlet var camPrepView: UIView!
     @IBOutlet var disabledCamView: UIView!
     @IBOutlet var maskGradientOverlay: UIView!
     @IBOutlet var captureButton: UIButton!
@@ -77,19 +78,14 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         // text field
         self.scriptTitle.delegate = self
         if self.isNewScript {
-           // self.scriptTitle.becomeFirstResponder()
-        }
-        
-        // get script doc
-        if let script = self.storage.getScriptDoc(self.activeScriptId!) {
-            self.activeScript = script
-            if (script.title != DEFAULT_SCRIPT_NAME)  && (script.title != "") {
-                self.scriptTitle.text = script.title
-            }
+            self.scriptTitle.becomeFirstResponder()
         }
         
         // theme
         self.view.backgroundColor = self.themer.offWhiteForLightOrNavy(0.7)
+        
+        // cam
+        self.cam.delegate = self
         
     }
 
@@ -99,8 +95,24 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     }
     
     
+    func didAuthorizeCameraAccess(sender: SharedCameraManager) {
+        Timing.runAfter(0){
+            self.camPrepView.hidden = false
+            print(self.camPrepView.hidden, self.camPrepView.frame.size)
+            Timing.runAfterBg(0.0){
+                self.cam.prepareCamera()
+            }
+        }
+    }
+    
+    func didPrepareCamera(sender: SharedCameraManager){
+        Timing.runAfter(1.0){
+            self.camPrepView.hidden = true
+        }
+    }
+    
     // entered capture tab
-    @IBAction func didSPressCaptureButton(sender: AnyObject) {
+    @IBAction func didPressCaptureButton(sender: AnyObject) {
         
         
         // transition to larger button
@@ -108,20 +120,26 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
         self.captureButton.setImage(largeButton, forState: .Normal)
         self.hideToolbar(true)
         
-        if self.cam.ready == false {
+        if self.cam.checkCameraAuth() == false {
+            // user has not authorized use of camera
+            print(self.cam.didAuthCameraUsage())
             
-            // try to get a camera instance
-            let ready = self.cam.prepareCamera()
-            if !ready {
-                if SettingsManager.sharedInstance.askedForCamera == true {
-                    // user actively rejected camera usage
-                    Animations.start(0.3){
-                        self.disabledCamView.hidden = false
-                    }
-                }
-                return
+            if self.cam.didAuthCameraUsage() == true {
+                // this is not the first time we've asked for auth
+                // so put up a privacy window
+                self.disabledCamView.hidden = false
+                
+            } else {
+                // record that we've asked for camera permission
+                self.cam.setCameraAuthStatus()
             }
-            
+
+            return
+        }
+        
+        if self.cam.ready == false {
+            // camera is not ready
+            return
         }
         
         // decide what to do depending on what state we are in
@@ -204,14 +222,21 @@ class InitViewController: UIViewController, UIScrollViewDelegate, AKPickerViewDa
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // save embedded vcs for accessing later
         
+        // get script doc
+        if let script = self.storage.getScriptDoc(self.activeScriptId!) {
+            self.activeScript = script
+            if (script.title != DEFAULT_SCRIPT_NAME)  && (script.title != "") {
+                self.scriptTitle.text = script.title
+            }
+        }
+
         // compose vc
         if segue.identifier == "scriptsegue" {
             if let svc = segue.destinationViewController as? ScriptComposeViewController {
                 self.scriptVC = svc
                 svc.scriptId = self.activeScriptId!
-                svc.scriptTitle = self.scriptTitle.text
+                svc.scriptTitle = self.activeScript?.title
             }
         } else {
             // going elsewhere

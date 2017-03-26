@@ -26,7 +26,7 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Do any additional setup after loading the view.
         self.topicTable.dataSource = self
         self.topicTable.delegate = self
-        
+
         self.ownerId = SettingsManager.sharedInstance.ownerId()
 
         // apply theme
@@ -40,7 +40,7 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // detect first launch
         if SettingsManager.sharedInstance.firstLaunch == true {
-           SettingsManager.sharedInstance.firstLaunch == false
+           SettingsManager.sharedInstance.firstLaunch = false
             // segue to getting started script
             if self.topics.count == 1 {
                 self.selectedTopic = self.topics[0]

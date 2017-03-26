@@ -13,7 +13,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Topic View Controller-->
+        <!--Topics-->
         <scene sceneID="0CD-V7-i3I">
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="jHn-9q-1V7" customClass="TopicViewController" customModule="TurnTo" customModuleProvider="target" sceneMemberID="viewController">
@@ -168,8 +168,7 @@
                             <constraint firstItem="3Tm-zD-xiV" firstAttribute="centerX" secondItem="0gf-zW-ITA" secondAttribute="centerX" id="wGq-rM-RY0"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="HYp-Bb-50M">
-                        <nil key="title"/>
+                    <navigationItem key="navigationItem" title="Topics" id="HYp-Bb-50M">
                         <barButtonItem key="rightBarButtonItem" image="ios7-gear-outline" style="plain" id="Pe3-wP-3Ky">
                             <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
@@ -738,9 +737,9 @@
                                 <rect key="frame" x="0.0" y="64" width="1125" height="554"/>
                             </scrollView>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aCU-Oc-mAT">
-                                <rect key="frame" x="-1" y="509" width="376" height="40"/>
+                                <rect key="frame" x="-0.5" y="509" width="375" height="40"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="3rm-2y-3Uf">
-                                    <rect key="frame" x="0.0" y="0.0" width="376" height="40"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <gestureRecognizers/>
                                 </view>
@@ -750,10 +749,10 @@
                                 <rect key="frame" x="154" y="539" width="67" height="67"/>
                                 <state key="normal" image="OvalSmall"/>
                                 <connections>
+                                    <action selector="didPressCaptureButton:" destination="XjC-yA-6pa" eventType="touchDown" id="D0M-oC-y4W"/>
                                     <action selector="didReleaseCaptureButton:" destination="XjC-yA-6pa" eventType="touchCancel" id="4dY-tw-Fps"/>
-                                    <action selector="didReleaseCaptureButton:" destination="XjC-yA-6pa" eventType="touchUpInside" id="bpx-OL-4f4"/>
+                                    <action selector="didReleaseCaptureButton:" destination="XjC-yA-6pa" eventType="touchUpInside" id="ZJm-Tj-6T3"/>
                                     <action selector="didReleaseCaptureButton:" destination="XjC-yA-6pa" eventType="touchUpOutside" id="pzO-Dr-XHV"/>
-                                    <action selector="didSPressCaptureButton:" destination="XjC-yA-6pa" eventType="touchDown" id="jVD-Cy-xXI"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tyL-Rv-AeB" customClass="AKPickerView" customModule="AKPickerView_Swift">
@@ -788,7 +787,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="445"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Camera Disabled" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sne-AP-Ma1">
-                                        <rect key="frame" x="-1" y="97" width="376" height="29"/>
+                                        <rect key="frame" x="-0.5" y="97" width="375" height="29"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="24"/>
                                         <color key="textColor" red="0.19215686269999999" green="0.23529411759999999" blue="0.25490196079999999" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -810,6 +809,28 @@
                                     <constraint firstItem="BT2-TN-cTk" firstAttribute="centerX" secondItem="OpF-AN-Fas" secondAttribute="centerX" id="tXz-uA-0nc"/>
                                 </constraints>
                             </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hGQ-um-S65">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Preparing Camera..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aZM-zI-Vf3">
+                                        <rect key="frame" x="-0.5" y="152.5" width="375" height="29"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="24"/>
+                                        <color key="textColor" red="0.98431372549999996" green="0.2470588235" blue="0.10980392160000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="xro-3A-bLD">
+                                        <rect key="frame" x="169.5" y="215.5" width="37" height="37"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.23529411759999999" blue="0.25490196079999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="aZM-zI-Vf3" firstAttribute="width" secondItem="hGQ-um-S65" secondAttribute="width" id="Bub-ff-D3t"/>
+                                    <constraint firstItem="xro-3A-bLD" firstAttribute="centerX" secondItem="hGQ-um-S65" secondAttribute="centerX" id="GEL-eQ-am6"/>
+                                    <constraint firstItem="xro-3A-bLD" firstAttribute="centerY" secondItem="hGQ-um-S65" secondAttribute="centerY" multiplier="0.7" id="dmh-05-LcP"/>
+                                    <constraint firstItem="aZM-zI-Vf3" firstAttribute="centerY" secondItem="hGQ-um-S65" secondAttribute="centerY" multiplier="0.5" id="hwp-QR-bV5"/>
+                                    <constraint firstItem="aZM-zI-Vf3" firstAttribute="centerX" secondItem="hGQ-um-S65" secondAttribute="centerX" id="mjx-tp-o1J"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
@@ -826,6 +847,7 @@
                             <constraint firstItem="OpF-AN-Fas" firstAttribute="centerX" secondItem="1QP-Ud-Rz5" secondAttribute="centerX" id="Gc1-Pz-1aE"/>
                             <constraint firstItem="aCU-Oc-mAT" firstAttribute="centerY" secondItem="tyL-Rv-AeB" secondAttribute="centerY" id="IJ2-wZ-HiY"/>
                             <constraint firstItem="OpF-AN-Fas" firstAttribute="top" secondItem="Rbz-3l-VGc" secondAttribute="bottom" id="IOf-Gy-eAX"/>
+                            <constraint firstItem="hGQ-um-S65" firstAttribute="centerY" secondItem="1QP-Ud-Rz5" secondAttribute="centerY" id="Ibi-Vf-q3d"/>
                             <constraint firstItem="d2R-Uk-VIT" firstAttribute="centerX" secondItem="1QP-Ud-Rz5" secondAttribute="centerX" id="OGo-0j-jvd"/>
                             <constraint firstItem="bRI-hl-eCe" firstAttribute="top" secondItem="Rbz-3l-VGc" secondAttribute="bottom" id="TNn-r2-Go1"/>
                             <constraint firstItem="1mQ-i2-W1V" firstAttribute="height" secondItem="1QP-Ud-Rz5" secondAttribute="height" id="TkJ-yE-Kgu"/>
@@ -839,10 +861,13 @@
                             <constraint firstItem="d2R-Uk-VIT" firstAttribute="centerY" secondItem="1QP-Ud-Rz5" secondAttribute="centerY" id="gxM-2H-vEq"/>
                             <constraint firstItem="aCU-Oc-mAT" firstAttribute="centerX" secondItem="tyL-Rv-AeB" secondAttribute="centerX" id="hSb-kk-SPU"/>
                             <constraint firstItem="1mQ-i2-W1V" firstAttribute="centerX" secondItem="1QP-Ud-Rz5" secondAttribute="centerX" id="hxd-mJ-BGA"/>
+                            <constraint firstItem="hGQ-um-S65" firstAttribute="centerX" secondItem="1QP-Ud-Rz5" secondAttribute="centerX" id="jbd-n1-upx"/>
                             <constraint firstItem="d2R-Uk-VIT" firstAttribute="width" secondItem="1QP-Ud-Rz5" secondAttribute="width" id="k4J-Ni-yYH"/>
                             <constraint firstItem="OpF-AN-Fas" firstAttribute="bottom" secondItem="tyL-Rv-AeB" secondAttribute="top" id="lLX-h8-ViF"/>
+                            <constraint firstItem="hGQ-um-S65" firstAttribute="width" secondItem="1QP-Ud-Rz5" secondAttribute="width" id="mNG-5y-l8J"/>
                             <constraint firstItem="1mQ-i2-W1V" firstAttribute="centerY" secondItem="1QP-Ud-Rz5" secondAttribute="centerY" id="oL2-IN-ZMe"/>
                             <constraint firstItem="qsZ-hl-vpr" firstAttribute="top" secondItem="ely-tg-guf" secondAttribute="bottom" multiplier="1.02" id="q1g-zo-rsi"/>
+                            <constraint firstItem="hGQ-um-S65" firstAttribute="height" secondItem="1QP-Ud-Rz5" secondAttribute="height" id="sgj-AQ-Ltq"/>
                             <constraint firstItem="tyL-Rv-AeB" firstAttribute="width" secondItem="1QP-Ud-Rz5" secondAttribute="width" multiplier="0.85" id="ztL-dj-jsv"/>
                         </constraints>
                     </view>
@@ -856,7 +881,7 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="1XS-Op-euD">
-                            <textField key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="new script" textAlignment="right" minimumFontSize="17" id="NeU-PH-bc5">
+                            <textField key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="untitled" textAlignment="right" minimumFontSize="17" id="NeU-PH-bc5">
                                 <rect key="frame" x="210" y="7" width="149" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -868,6 +893,7 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="actionScrollView" destination="bRI-hl-eCe" id="cce-Cc-Bul"/>
+                        <outlet property="camPrepView" destination="hGQ-um-S65" id="HMa-Pj-yWo"/>
                         <outlet property="captureButton" destination="ely-tg-guf" id="70c-Sm-uiF"/>
                         <outlet property="disabledCamView" destination="OpF-AN-Fas" id="Vvx-Os-Pje"/>
                         <outlet property="fxView" destination="aCU-Oc-mAT" id="ciJ-qH-eZh"/>

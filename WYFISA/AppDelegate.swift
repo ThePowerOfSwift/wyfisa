@@ -24,13 +24,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             db.initFromTut()
         }
 
-        // prep camera if we've already asked to use it
-        if SettingsManager.sharedInstance.askedForCamera == true {
+        // check if we've already asked to use camera
+        if SharedCameraManager.instance.didAuthCameraUsage() {
             Timing.runAfterBg(0){
                 SharedCameraManager.instance.prepareCamera()
             }
         }
-
+        
         return true
     }
 

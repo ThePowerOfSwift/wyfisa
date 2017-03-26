@@ -19,7 +19,6 @@ class SettingsManager {
     var version: Version = Version.ESV
     var owner: OwnerDoc
     var firstLaunch: Bool = false
-    var askedForCamera: Bool = false
 
     init(){
         
@@ -70,15 +69,6 @@ class SettingsManager {
         if defaults.stringForKey("isAppAlreadyLaunchedOnce") == nil {
             self.firstLaunch = true
             defaults.setBool(true, forKey: "isAppAlreadyLaunchedOnce")
-        }
-    }
-    
-    func detectFirstCameraUsage(){
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if defaults.stringForKey("isAppAlreadyAuthCamera") == nil {
-            defaults.setBool(true, forKey: "isAppAlreadyAuthCamera")
-        } else {
-            self.askedForCamera = true
         }
     }
 }

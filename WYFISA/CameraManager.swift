@@ -17,21 +17,74 @@ enum CameraState: Int {
     case Stopped = 0, InUse, Paused
 }
 
+protocol SharedCameraManagerDelegate: class {
+    func didAuthorizeCameraAccess(sender: SharedCameraManager)
+    func didPrepareCamera(sender: SharedCameraManager)
+}
+
 class SharedCameraManager {
     static let instance = SharedCameraManager()
+    weak var delegate:SharedCameraManagerDelegate?
     var cam: CameraManager? = nil
     var ready = false
     
     func prepareCamera() -> Bool {
+        
+        // check if camera is authorized
+        if !self.checkCameraAuth() {
+            self.ready = false
+            self.cam?.cameraEnabled = false
+            return false
+        }
+
         // make sure camera is ready
         if self.ready == false {
             // we need to init the camera
             self.cam = CameraManager.init()
-            if self.cam?.cameraEnabled == true {
-                self.ready = true
-            }
+            self.ready = true
+            self.cam?.cameraEnabled = true
+            self.cam?.start()
+            self.cam?.pause()
+            
+            // notify
+            self.delegate?.didPrepareCamera(self)
         }
         return self.ready
+    }
+    
+    func checkCameraAuth() -> Bool {
+        
+        var authorized = false
+        if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) !=  AVAuthorizationStatus.Authorized
+        {
+            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { (granted :Bool) -> Void in
+                if granted == true
+                {
+                    authorized = true
+                    self.delegate?.didAuthorizeCameraAccess(self)
+                }
+            });
+        } else {
+            authorized = true
+        }
+
+        return authorized
+    }
+    
+    // set info property that we've already asked to auth the camera
+    func setCameraAuthStatus(){
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setBool(true, forKey: "isAppAlreadyAuthCamera")
+    }
+    
+    // returns true if we've asked to auth the camera
+    func didAuthCameraUsage() -> Bool {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        return defaults.stringForKey("isAppAlreadyAuthCamera") != nil
+    }
+    
+    func isStopped() -> Bool {
+        return self.cam?.state == .Stopped
     }
 
 }
@@ -55,11 +108,8 @@ class CameraManager {
         self.cameraZoom = zoom
         self.cameraFocusMode = focus
         
-        self.checkCameraAccess()
-        if self.cameraEnabled {
-            self.camera.addTarget(filter)
-            self.camera.outputImageOrientation = .Portrait;
-        }
+        self.camera.addTarget(filter)
+        self.camera.outputImageOrientation = .Portrait;
         
     }
     
@@ -206,23 +256,6 @@ class CameraManager {
         return self.ocr.process(image)
     }
     
-    func checkCameraAccess() {
-        
-        if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) !=  AVAuthorizationStatus.Authorized
-        {
-            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { (granted :Bool) -> Void in
-                if granted == true
-                {
-                    self.cameraEnabled = true
-                }
-            });
-        } else {
-            self.cameraEnabled = true
-        }
-        
-        // remember for later that we've asked for acces already
-        SettingsManager.sharedInstance.detectFirstCameraUsage()
-    }
     
     
 

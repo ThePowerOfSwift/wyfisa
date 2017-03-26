@@ -12,10 +12,15 @@ class FirstNavigationViewController: UINavigationController {
 
     var didOnboarding = false
     var firstLaunch = false
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.tan()
+        self.firstLaunch = SettingsManager.sharedInstance.firstLaunch
+        
+        if self.firstLaunch == false {
+            self.performSegueWithIdentifier("topicsegue", sender: nil)
+
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -25,11 +30,9 @@ class FirstNavigationViewController: UINavigationController {
                 self.performSegueWithIdentifier("onboardsegue", sender: nil)
                 self.didOnboarding = true
             }
-        } else {
-            self.performSegueWithIdentifier("topicsegue", sender: nil)
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

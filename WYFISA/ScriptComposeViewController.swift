@@ -231,7 +231,7 @@ class ScriptComposeViewController: UIViewController,
             }
             
             // note can become title
-            if self.scriptTitle == nil {
+            if self.scriptTitle == nil || self.scriptTitle == "" {
                 if let text = verseInfo.text {
                     self.setScriptTitleFromContext(text)
                 }
@@ -272,7 +272,7 @@ class ScriptComposeViewController: UIViewController,
             self.verseTable.reloadData()
             
             // note can become title
-            if self.scriptTitle == nil {
+            if self.scriptTitle == nil || self.scriptTitle == "" {
                 self.setScriptTitleFromContext(verseInfo.name)
             }
         }
