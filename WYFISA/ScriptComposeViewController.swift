@@ -374,6 +374,8 @@ class ScriptComposeViewController: UIViewController,
         
         self.storage.decrementScriptCountAndTimestamp(self.scriptId!)
         self.syncWithDataSource()
+        self.verseTable.reloadData()
+
     }
     
     func handleAddVerseCallback(verse: AnyObject?){

@@ -374,8 +374,14 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     
     
     @IBAction func didTapChapterText(sender: AnyObject) {
-        self.showFooterMask()
-        self.showNavArea()
+        // tap toggles visibility of nav controls
+        if self.footerIsHidden {
+            self.showFooterMask()
+            self.showNavArea()
+        } else {
+            self.hideFooterMask()
+            self.hideNavArea()
+        }
     }
     
     // MARK: - UI Control
