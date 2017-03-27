@@ -23,11 +23,13 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     @IBOutlet var nextChapterButton: UIButton!
     @IBOutlet var prevChapterButton: UIButton!
     @IBOutlet var loadSpinner: UIActivityIndicatorView!
+    @IBOutlet var navLabel: UILabel!
     
     var themer = WYFISATheme.sharedInstance
     var db = DBQuery.sharedInstance
     let firDB = FBStorage()
     var verseInfo: VerseInfo? = nil
+    var handleAddVerseCallback = callbackWithItem
     var startViewPos: Int = 0
     var splitMode: Bool = false
     var lastScrollPos: CGFloat = 0
@@ -36,7 +38,8 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     var navIsHidden: Bool = false
     var nextVerse: VerseInfo? = nil
     var prevVerse: VerseInfo? = nil
-    
+    var fromVerseName: String? = nil
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.firDB.delegate = self
@@ -105,6 +108,15 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
 
     }
     
+    override func viewWillAppear(animated: Bool) {
+        // show title of last verse for nav context
+        if let name = self.fromVerseName {
+            self.navLabel.text = "Back to \(name)"
+        } else {
+            self.navLabel.text = nil
+        }
+    }
+    
     // scroll to middle of screen when view appears
     override func viewDidAppear(animated: Bool) {
         var yPos = self.startViewPos
@@ -118,6 +130,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
                 self.showFooterMask()
             }
         }
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -264,12 +277,16 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
                     verseCell.updateWithVerseInfo(refInfo, isExpanded: true)
                     if let activeVerse = self.verseInfo?.verse {
                         if activeVerse == indexPath.section+1 {
-                            verseCell.highlightText()
+                            if self.segmentBar.selectedSegmentIndex == 0 {
+                                // only do context selection on verse split
+                                verseCell.highlightText()
+                            }
                         }
                     }
                 }
             }
             verseCell.delegate = self
+            verseCell.swipeAction = .Add
             return verseCell
         } else {
             return VerseTableViewCell(style: .Default, reuseIdentifier: nil)
@@ -297,7 +314,6 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     }
     
     
-    // MARK: - navigation
     // MARK: - Table cell delegate
     func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo){
         
@@ -305,16 +321,32 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         let destVC = storyboard.instantiateViewControllerWithIdentifier("DetailView")
             as! VerseDetailModalViewController
         destVC.verseInfo = verse
+        
+        // pass to new window the last verse name
+        destVC.fromVerseName = self.verseInfo?.name
+        
+        // also pass along callback
+        destVC.handleAddVerseCallback = self.handleAddVerseCallback
+        
+        // present new context
         presentViewController(destVC, animated: true, completion: nil)
+
 
     }
     
+    func didAddCell(sender: VerseTableViewCell) {
+        // add to script
+        let verse = sender.verseInfo!
+        self.handleAddVerseCallback(verse)
+        sender.highlightText()
+    }
+
     func didTapInfoButtonForVerse(verse: VerseInfo){
-        //
+        // placeholder
     }
     
     func didRemoveCell(sender: VerseTableViewCell){
-        //
+        // placeholder
     }
         
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
@@ -346,6 +378,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         self.showNavArea()
     }
     
+    // MARK: - UI Control
     func hideFooterMask(){
         
         
@@ -356,6 +389,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         Animations.start(0.2){
             self.footerMask.alpha = 0
             self.closeButton.alpha = 0
+            self.navLabel.alpha = 0
             if self.nextVerse != nil {
                 self.nextChapterButton.alpha = 0
             }
@@ -376,6 +410,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         Animations.start(0.2){
             self.footerMask.alpha = 0.90
             self.closeButton.alpha = 1
+            self.navLabel.alpha = 1
             if self.nextVerse != nil {
                 self.nextChapterButton.alpha = 1
             }

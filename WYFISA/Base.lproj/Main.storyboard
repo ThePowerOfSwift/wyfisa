@@ -1728,13 +1728,27 @@
                                     <constraint firstAttribute="height" constant="50" id="xdI-4K-h9u"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OEX-Xc-Ke8">
-                                <rect key="frame" x="-0.5" y="617" width="375" height="50"/>
-                                <state key="normal" image="dropview"/>
-                                <connections>
-                                    <action selector="didPressCloseButton:" destination="MHR-2x-CaL" eventType="touchUpInside" id="xvs-F9-1g4"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="bCm-hC-y81">
+                                <rect key="frame" x="0.0" y="622" width="375" height="40"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dkj-Ag-iC6">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="18"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
+                                        <color key="textColor" red="0.98431372549999996" green="0.2470588235" blue="0.10980392160000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OEX-Xc-Ke8">
+                                        <rect key="frame" x="0.0" y="18" width="375" height="22"/>
+                                        <state key="normal" image="dropview"/>
+                                        <connections>
+                                            <action selector="didPressCloseButton:" destination="MHR-2x-CaL" eventType="touchUpInside" id="xvs-F9-1g4"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="OEX-Xc-Ke8" firstAttribute="width" secondItem="bCm-hC-y81" secondAttribute="width" id="1WD-Y5-KVG"/>
+                                </constraints>
+                            </stackView>
                             <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I1k-th-71p">
                                 <rect key="frame" x="319" y="44" width="40" height="40"/>
                                 <constraints>
@@ -1767,6 +1781,7 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="I1k-th-71p" secondAttribute="trailing" id="1Yg-iH-GZP"/>
+                            <constraint firstItem="bCm-hC-y81" firstAttribute="centerX" secondItem="YAU-Ng-BQl" secondAttribute="centerX" id="4Ry-Am-2IW"/>
                             <constraint firstItem="uX5-vI-3LW" firstAttribute="centerX" secondItem="NAF-BE-PDL" secondAttribute="centerX" id="4mM-yc-Tg5"/>
                             <constraint firstItem="fCs-7e-QiV" firstAttribute="width" secondItem="NAF-BE-PDL" secondAttribute="width" id="6At-ef-ntk"/>
                             <constraint firstItem="Prk-Vd-cIZ" firstAttribute="bottom" secondItem="4et-yh-1i5" secondAttribute="bottom" constant="20" id="7ZL-VK-4UY"/>
@@ -1780,25 +1795,24 @@
                             <constraint firstItem="Prk-Vd-cIZ" firstAttribute="centerX" secondItem="NAF-BE-PDL" secondAttribute="centerX" id="JF8-Zz-A3p"/>
                             <constraint firstItem="u1X-u8-pet" firstAttribute="centerX" secondItem="NAF-BE-PDL" secondAttribute="centerX" id="KBH-5e-0zf"/>
                             <constraint firstItem="I1k-th-71p" firstAttribute="centerY" secondItem="4et-yh-1i5" secondAttribute="centerY" id="LpG-qk-1sX"/>
+                            <constraint firstItem="bCm-hC-y81" firstAttribute="centerY" secondItem="YAU-Ng-BQl" secondAttribute="centerY" id="LuN-TH-PMO"/>
                             <constraint firstItem="fCs-7e-QiV" firstAttribute="centerX" secondItem="NAF-BE-PDL" secondAttribute="centerX" id="PLr-Sg-djW"/>
                             <constraint firstItem="uX5-vI-3LW" firstAttribute="width" secondItem="NAF-BE-PDL" secondAttribute="width" id="SK8-sl-dL9"/>
                             <constraint firstItem="uX5-vI-3LW" firstAttribute="bottom" secondItem="YAU-Ng-BQl" secondAttribute="top" id="TNz-lz-ATC"/>
-                            <constraint firstItem="OEX-Xc-Ke8" firstAttribute="width" secondItem="YAU-Ng-BQl" secondAttribute="width" id="URx-gO-hMy"/>
                             <constraint firstItem="4et-yh-1i5" firstAttribute="top" secondItem="3wr-4G-kpu" secondAttribute="bottom" id="Xrf-DR-aTG"/>
                             <constraint firstItem="ZPj-QE-3IW" firstAttribute="centerY" secondItem="NAF-BE-PDL" secondAttribute="centerY" id="Yw8-2j-xaf"/>
                             <constraint firstItem="fCs-7e-QiV" firstAttribute="bottom" secondItem="YAU-Ng-BQl" secondAttribute="top" id="Zux-QZ-ayK"/>
                             <constraint firstItem="3wr-4G-kpu" firstAttribute="top" secondItem="K9n-H3-z42" secondAttribute="bottom" constant="10" id="a2o-k6-DKf"/>
-                            <constraint firstItem="OEX-Xc-Ke8" firstAttribute="height" secondItem="YAU-Ng-BQl" secondAttribute="height" id="dHV-qt-og0"/>
                             <constraint firstItem="Prk-Vd-cIZ" firstAttribute="top" secondItem="K9n-H3-z42" secondAttribute="bottom" id="did-Hg-CrX"/>
+                            <constraint firstItem="bCm-hC-y81" firstAttribute="width" secondItem="YAU-Ng-BQl" secondAttribute="width" id="f2y-oE-pc1"/>
+                            <constraint firstItem="bCm-hC-y81" firstAttribute="height" secondItem="YAU-Ng-BQl" secondAttribute="height" multiplier="0.8" id="gb2-wh-nvX"/>
                             <constraint firstItem="ZPj-QE-3IW" firstAttribute="centerX" secondItem="NAF-BE-PDL" secondAttribute="centerX" id="hpt-9q-h2h"/>
                             <constraint firstItem="fCs-7e-QiV" firstAttribute="top" secondItem="4et-yh-1i5" secondAttribute="bottom" constant="10" id="kgs-dJ-oIL"/>
-                            <constraint firstItem="OEX-Xc-Ke8" firstAttribute="centerY" secondItem="YAU-Ng-BQl" secondAttribute="centerY" id="l87-wf-BWS"/>
                             <constraint firstItem="a3N-BO-Cby" firstAttribute="centerY" secondItem="4et-yh-1i5" secondAttribute="centerY" id="lFO-4l-Sej"/>
                             <constraint firstItem="YAU-Ng-BQl" firstAttribute="centerX" secondItem="NAF-BE-PDL" secondAttribute="centerX" id="lpu-ZV-wqD"/>
                             <constraint firstItem="u1X-u8-pet" firstAttribute="top" secondItem="K9n-H3-z42" secondAttribute="bottom" id="mI3-Qi-zMg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3wr-4G-kpu" secondAttribute="trailing" id="pea-30-8j9"/>
                             <constraint firstItem="dn5-VG-3di" firstAttribute="top" secondItem="YAU-Ng-BQl" secondAttribute="bottom" id="t2Z-Zj-ZSg"/>
-                            <constraint firstItem="OEX-Xc-Ke8" firstAttribute="centerX" secondItem="YAU-Ng-BQl" secondAttribute="centerX" id="uNh-eG-YM4"/>
                             <constraint firstItem="YAU-Ng-BQl" firstAttribute="width" secondItem="NAF-BE-PDL" secondAttribute="width" id="xny-W7-Kdf"/>
                         </constraints>
                     </view>
@@ -1809,6 +1823,7 @@
                         <outlet property="footerMask" destination="YAU-Ng-BQl" id="dxF-xO-pev"/>
                         <outlet property="loadSpinner" destination="ZPj-QE-3IW" id="Tv2-8r-Cqh"/>
                         <outlet property="navBackgroundView" destination="Prk-Vd-cIZ" id="bsW-EB-55U"/>
+                        <outlet property="navLabel" destination="dkj-Ag-iC6" id="pUh-xV-vu2"/>
                         <outlet property="navStackView" destination="3wr-4G-kpu" id="3jE-LT-rG8"/>
                         <outlet property="nextChapterButton" destination="I1k-th-71p" id="RCT-Vw-0MZ"/>
                         <outlet property="prevChapterButton" destination="a3N-BO-Cby" id="cQT-Bc-EHo"/>

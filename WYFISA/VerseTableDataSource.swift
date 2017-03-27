@@ -69,7 +69,6 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
                 let verse = self.recentVerses[index]
                 verseCell.enableMore = vTableView.isExpanded == true
                 verseCell.updateWithVerseInfo(verse, isExpanded: vTableView.isExpanded)
-                verseCell.resetDeleteMode()
     
                 return verseCell
             }
@@ -193,7 +192,6 @@ class VerseTableDataSource: NSObject, UITableViewDataSource {
             cell.delegate?.didRemoveCell(cell)
             
             // drop celll from section
-            print(indexPath.section)
             if indexPath.section > 1 {
                 let idxSet = NSIndexSet(index: indexPath.section)
                 tableView.deleteSections(idxSet, withRowAnimation: .Automatic)

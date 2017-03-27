@@ -8,10 +8,15 @@
 
 import UIKit
 
+enum SwipeableAction: Int {
+    case Delete = 0, Add
+}
+
 protocol VerseTableViewCellDelegate: class {
     func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo)
     func didTapInfoButtonForVerse(verse: VerseInfo)
     func didRemoveCell(sender: VerseTableViewCell)
+    func didAddCell(sender: VerseTableViewCell)
 }
 
 class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
@@ -23,9 +28,9 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     @IBOutlet var moreButton: UIButton!
     @IBOutlet var quoteImage: UIImageView!
     @IBOutlet var overlayImage: UIImageView!
-    @IBOutlet var deleteButton: UIButton!
     @IBOutlet var highLightBar: UIView!
     @IBOutlet var textStackView: UIStackView!
+    @IBOutlet var actionButton: UIButton!
 
     weak var delegate:VerseTableViewCellDelegate?
     var verseInfo: VerseInfo?
@@ -33,6 +38,9 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     let db = DBQuery.sharedInstance
     let themer = WYFISATheme.sharedInstance
     var swipe: UISwipeGestureRecognizer? = nil
+    var swipeAction: SwipeableAction = .Delete
+    var isContextVerse: Bool = false
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -41,49 +49,53 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
         
         swipe = UISwipeGestureRecognizer(target: self, action: #selector(VerseTableViewCell.handleSwipe(_:)))
         swipe!.direction = .Left
-        self.deleteButton.hidden = true
+        self.actionButton.hidden = true
         self.addGestureRecognizer(swipe!)
     }
     
     func handleSwipe(sender: AnyObject?){
 
+        if self.isContextVerse { return } // cannot do action on active verse
+
+        self.applySwipeStyle()
         if self.swipe!.direction == .Left {
             Animations.start(0.2){
-                self.deleteButton.hidden = false
+                self.actionButton.hidden = false
             }
             self.swipe!.direction = .Right
         } else {
             Animations.start(0.2){
-                self.deleteButton.hidden = true
+                self.actionButton.hidden = true
             }
             self.swipe!.direction = .Left
         }
     }
     
-    func resetDeleteMode(){
-        /*
-        self.swipe?.direction = .Left
-        Animations.start(0.2){
-            self.deleteButton.hidden = true
-        }*/
+    func applySwipeStyle(){
+        // apply swipe action styles
+        switch self.swipeAction {
+        case .Delete:
+            self.actionButton.backgroundColor = UIColor.redColor()
+            self.actionButton.setTitle("Delete", forState: .Normal)
+            self.actionButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        case .Add:
+            self.actionButton.backgroundColor = UIColor.offWhite(1.0)
+            self.actionButton.setTitle("Add", forState: .Normal)
+            self.actionButton.setTitleColor(UIColor.fire(), forState: .Normal)
+        }
     }
     
 
     func highlightText() {
-        
-        /*
-        let font = themer.currentFont()
-        
-        let attrs = [NSForegroundColorAttributeName: self.themer.fireForLightOrTurquoise(),
-                     NSFontAttributeName: font]
-        let attributedText = NSMutableAttributedString.init(string: self.labelText.text!, attributes: attrs)
-        self.labelText.attributedText = attributedText
-        */
+        Animations.start(0.2){
+            self.labelText.textColor = UIColor.fire()
+        }
+        self.isContextVerse = true
     }
 
     func applyCategoryStyle(verse: VerseInfo){
         swipe!.direction = .Left
-        self.deleteButton.hidden = true
+        self.actionButton.hidden = true
         
         // general styles
         self.mediaAccessory.hidden = true
@@ -116,6 +128,7 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.backgroundColor = self.themer.offWhiteForLightOrClear(1.0)
         }
         
+
     
     }
     
@@ -211,7 +224,6 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     }
     
     // MARK: - delegate
-    
     @IBAction func touchOut(sender: UIButton) {
         sender.backgroundColor = UIColor.clearColor()
     }
@@ -221,17 +233,9 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
     }
     
     @IBAction func willSelectCellView(sender: UIButton) {
-        /*
-        sender.backgroundColor = UIColor.turquoise()
-        Animations.startAfter(0.5, forDuration: 0.2){
-            sender.backgroundColor = UIColor.clearColor()
-        }
-        */
     }
     
     @IBAction func didCancelCellTap(sender: UIButton) {
-        // taped outside of cell
-        // sender.backgroundColor = UIColor.clearColor()
     }
     
     @IBAction func didTapCellView(sender: UIButton) {
@@ -249,10 +253,20 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
             self.delegate?.didTapInfoButtonForVerse(verse)
         }
     }
-    @IBAction func didTapDeleteButton(sender: AnyObject) {
-        self.delegate?.didRemoveCell(self)
+
+    @IBAction func didTapActionButton(sender: AnyObject) {
+
+        switch self.swipeAction {
+        case .Delete:
+            self.delegate?.didRemoveCell(self)
+        case .Add:
+            self.delegate?.didAddCell(self)
+            Animations.start(0.2){
+                self.actionButton.hidden = true
+            }
+        }
+        
     }
-    
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }

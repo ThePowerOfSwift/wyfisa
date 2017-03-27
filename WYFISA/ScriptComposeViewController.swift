@@ -298,6 +298,7 @@ class ScriptComposeViewController: UIViewController,
         }
     }
 
+
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
@@ -312,7 +313,8 @@ class ScriptComposeViewController: UIViewController,
             let toVc = segue.destinationViewController as! VerseDetailModalViewController
             let verse = sender as! VerseInfo
             toVc.verseInfo = verse
-        
+            toVc.handleAddVerseCallback = self.handleAddVerseCallback
+
         case "highlightsegue":
             // detect if this was a cell select
             let toVc = segue.destinationViewController as! InfoViewController
@@ -374,8 +376,18 @@ class ScriptComposeViewController: UIViewController,
         self.syncWithDataSource()
     }
     
+    func handleAddVerseCallback(verse: AnyObject?){
+        if let v = verse as? VerseInfo {
+            self.addVerseToDatastore(v)
+        }
+    }
+    
     func didTapInfoButtonForVerse(verse: VerseInfo) {
-        // implement prototype
+        // placeholder
+    }
+    
+    func didAddCell(sender: VerseTableViewCell) {
+        // placeholder
     }
     
     // MARK: - notes handler

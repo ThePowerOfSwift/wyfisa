@@ -9,5 +9,5 @@
 import Foundation
 
 func notifyCallback(){ }
-func notifyImageCallback(verse: VerseInfo?){ }
+func callbackWithItem(item: AnyObject?){ }
 func defaultCallback(page: Int){}
