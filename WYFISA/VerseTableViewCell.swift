@@ -81,14 +81,16 @@ class VerseTableViewCell: UITableViewCell, FBStorageDelegate {
         case .Add:
             self.actionButton.backgroundColor = UIColor.offWhite(1.0)
             self.actionButton.setTitle("Add", forState: .Normal)
-            self.actionButton.setTitleColor(UIColor.fire(), forState: .Normal)
+            let color = self.themer.fireForLightOrTurquoise()
+            self.actionButton.setTitleColor(color, forState: .Normal)
         }
     }
     
 
     func highlightText() {
         Animations.start(0.2){
-            self.labelText.textColor = UIColor.fire()
+            let color = self.themer.fireForLightOrTurquoise()
+            self.labelText.textColor = color
         }
         self.isContextVerse = true
     }
