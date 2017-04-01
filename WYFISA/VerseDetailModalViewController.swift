@@ -155,6 +155,8 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     
     @IBAction func didTapBarSegment(sender: UISegmentedControl) {
         
+
+
         self.splitMode = false
 
         // fade out everything
@@ -170,11 +172,14 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         // show footer
         self.showFooterMask()
 
-        
         switch sender.selectedSegmentIndex {
         case 0: // verse view
             
             self.splitMode = true
+            
+            if self.versesTable.numberOfSections == 1 {
+                return // no data
+            }
             
             // go to highligted verse on first time triggered
             if self.didShowSplitVerseOnce == false{
@@ -237,7 +242,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         // adjust lexicon scroll view
         let textHeight = self.lexiconTextView.text
                 .heightWithConstrainedWidth(self.view.frame.width*0.90,
-                                            font: UIFont.systemFontOfSize(14.0))*1.2
+                                            font: UIFont.systemFontOfSize(14.0))*1.5
         let usageHeight = self.usageWordLabel.text!
             .heightWithConstrainedWidth(self.view.frame.width*0.90,
                                         font: UIFont.systemFontOfSize(14.0)) * 3.0
@@ -259,6 +264,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         return  self.verseInfo?.verses
     }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        
         var nsec = 0
         if let refs = self.versesForCell() {
             nsec = refs.count
@@ -505,7 +511,6 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         // get cross refs
         let refRanges = db.crossReferencesForVerse(self.verseInfo!.id)
         for range in refRanges {
-            print("range", range.from, range.to)
             self.firDB.getVerseRange(range.from, range.to)
         }
     }
@@ -538,7 +543,9 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         // scroll up to top
         self.chapterTextView.scrollRectToVisible(CGRect.init(x: 0, y: 0, width: 100, height: 10), animated: false)
         let path = NSIndexPath.init(forRow: 0, inSection: 0)
-        self.versesTable.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
+        if self.versesTable.numberOfSections > 0 {
+            self.versesTable.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
+        }
      
         Timing.runAfter(0.5){
             self.showNavArea()
@@ -610,13 +617,13 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     }
     
     // MARK: - Interlinear Delegate
-    func didSelectNewPhrase(sender: AnyObject, strongs: StrongsEntry, lexicon: LexiconVerse){
+    func didSelectNewPhrase(sender: AnyObject, strongs: StrongsEntry, lexicon: LexiconEntry){
 
         self.originWordLabel.text = strongs.text // strongs.word
-        self.usageWordLabel.text = "\"\(lexicon.entry.word)\""
-        var lexiconStr = lexicon.entry.shortDef
+        self.usageWordLabel.text = "\"\(lexicon.word)\""
+        var lexiconStr = lexicon.shortDef
         lexiconStr.appendContentsOf("\n")
-        lexiconStr.appendContentsOf(lexicon.entry.longDef)
+        lexiconStr.appendContentsOf(lexicon.longDef)
         self.lexiconTextView.text = lexiconStr
         self.view.setNeedsLayout()
         Timing.runAfter(0.0){

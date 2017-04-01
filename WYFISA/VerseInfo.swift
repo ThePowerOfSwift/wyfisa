@@ -25,51 +25,6 @@ struct LexiconEntry {
     
 }
 
-class LexiconVerse {
-    let id: String
-    let entry: LexiconEntry
-    
-    init(id: String, entry: LexiconEntry){
-        self.id = id
-        self.entry = entry
-    }
-    
-    class func initFromSnapshot(value: [String: AnyObject]) -> LexiconVerse {
-        let strongs = value["strongs"] as! String
-        let word = value["word"] as! String
-        
-        let data = value["data"] as! [String: AnyObject]
-        let deriv = data["deriv"] as! String
-        let def = data["def"] as! [String: AnyObject]
-        let short = "\n"+(def["short"] as! String).firstCharacterUpperCase()
-        var long = "\n"
-        for longVal in def["long"] as! [AnyObject] {
-            //long.append(longVal)
-            if var longValStr = longVal as? String {
-                longValStr = longValStr.firstCharacterUpperCase()
-                long.appendContentsOf("\n- \(longValStr)")
-            } else if let longValSubVal = longVal as? [String] {
-                var i = 0
-                for var longValSubStr in longValSubVal {
-                    if i > 0 {
-                        long.appendContentsOf(",")
-                    }
-                    longValSubStr = longValSubStr.firstCharacterUpperCase()
-                    long.appendContentsOf(" (\(longValSubStr))")
-                    i += 1
-                }
-            }
-        }
-        
-        let entry = LexiconEntry(strongs: strongs,
-                                 word: word,
-                                 deriv: deriv,
-                                 shortDef: short,
-                                 longDef: long)
-        return LexiconVerse(id: strongs, entry: entry)
-    }
-}
-
 struct StrongsEntry {
     let index: Int
     let number: String

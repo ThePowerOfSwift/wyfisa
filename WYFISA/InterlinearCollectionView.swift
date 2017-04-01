@@ -8,8 +8,10 @@
 
 import UIKit
 
+var PHRASE_CACHE = [String: [StrongsEntry]]()
+
 protocol InterlinearCollectionViewDelegate: class {
-    func didSelectNewPhrase(sender: AnyObject, strongs: StrongsEntry, lexicon: LexiconVerse)
+    func didSelectNewPhrase(sender: AnyObject, strongs: StrongsEntry, lexicon: LexiconEntry)
 }
 
 class InterlinearCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, FBStorageDelegate {
@@ -19,6 +21,7 @@ class InterlinearCollectionView: UICollectionView, UICollectionViewDataSource, U
     var footerHeight: CGFloat!
     var phrases: [StrongsEntry]? = nil
     var themer = WYFISATheme.sharedInstance
+    var lexicon = LexiconData.sharedInstance
     var selectedRow: Int = 0
     weak var interlinearDelegate:InterlinearCollectionViewDelegate?
 
@@ -34,7 +37,12 @@ class InterlinearCollectionView: UICollectionView, UICollectionViewDataSource, U
     
     func loadDataForVerse(id: String){
         self.verseId = id
-        self.firDB.getInterlinearDoc(id)
+        if let phrases = PHRASE_CACHE[id] {
+            self.phrases = phrases
+            self.reloadData()
+        } else {
+            self.firDB.getInterlinearDoc(id)
+        }
     }
     
     func setFooterHeight(height: CGFloat){
@@ -110,7 +118,12 @@ class InterlinearCollectionView: UICollectionView, UICollectionViewDataSource, U
                 // greek
                 testament = "greek"
             }
-            self.firDB.getLexiconDoc(number, testament: testament, row: row)
+            if let lexicon = self.lexicon.getEntry(testament, strongs: number) {
+                let strongs = self.entryAt(row)
+                self.interlinearDelegate?.didSelectNewPhrase(self,
+                                                             strongs: strongs,
+                                                             lexicon: lexicon)
+            }
 
         }
 
@@ -163,18 +176,14 @@ class InterlinearCollectionView: UICollectionView, UICollectionViewDataSource, U
         if let verse  = verse as? InterlinearVerse {
             self.phrases = verse.phrases
             self.reloadData()
+            
+            // cache
+            if PHRASE_CACHE.count > PHRASE_CACHE_MAX {
+                PHRASE_CACHE =  [String: [StrongsEntry]]()
+            }
+            PHRASE_CACHE[self.verseId] = verse.phrases
         }
     }
     
-    func didGetSingleVerseForRow(sender: AnyObject, verse: AnyObject, section: Int) {
-        let entry = self.entryAt(section)
-        let lexiconVerse = verse as! LexiconVerse
-        self.interlinearDelegate?.didSelectNewPhrase(self,
-                                                     strongs: entry,
-                                                     lexicon: lexiconVerse)
-        
-    }
-
-
     
 }

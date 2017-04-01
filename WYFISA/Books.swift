@@ -8,6 +8,75 @@
 
 import Foundation
 
+struct LexiconData {
+    var greek: [[String:AnyObject]]
+    var hebrew: [[String:AnyObject]]
+    static let sharedInstance = LexiconData()
+
+    init(){
+        self.greek = [[String:AnyObject]]()
+        self.hebrew = [[String:AnyObject]]()
+        var filePath = NSBundle.mainBundle().pathForResource("greek",ofType:"json")
+        if let jsonData = NSData.init(contentsOfFile: filePath!) {
+            do {
+                let jsonDict = try NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments)
+                self.greek = jsonDict as! [[String:AnyObject]]
+            } catch  let err {
+                print(err, "json load error")
+            }
+        }
+        filePath = NSBundle.mainBundle().pathForResource("hebrew",ofType:"json")
+        if let jsonData = NSData.init(contentsOfFile: filePath!) {
+            do {
+                let jsonDict = try NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments)
+                self.hebrew = jsonDict as! [[String:AnyObject]]
+            } catch  let err {
+                print(err, "json load error")
+            }
+        }
+    }
+    
+    func getEntry(testament: String, strongs: String) -> LexiconEntry? {
+        let array =  testament == "greek" ? greek : hebrew
+        if let value = array.filter({($0["strongs"] as! String) == strongs}).first {
+            
+            let word = value["word"] as! String
+            
+            let data = value["data"] as! [String: AnyObject]
+            let deriv = data["deriv"] as! String
+            let def = data["def"] as! [String: AnyObject]
+            let short = "\n"+(def["short"] as! String).firstCharacterUpperCase()
+            var long = "\n"
+            for longVal in def["long"] as! [AnyObject] {
+                //long.append(longVal)
+                if var longValStr = longVal as? String {
+                    longValStr = longValStr.firstCharacterUpperCase()
+                    long.appendContentsOf("\n- \(longValStr)")
+                } else if let longValSubVal = longVal as? [String] {
+                    var i = 0
+                    for var longValSubStr in longValSubVal {
+                        if i > 0 {
+                            long.appendContentsOf(",")
+                        }
+                        longValSubStr = longValSubStr.firstCharacterUpperCase()
+                        long.appendContentsOf(" (\(longValSubStr))")
+                        i += 1
+                    }
+                }
+            }
+            
+            let entry = LexiconEntry(strongs: strongs,
+                                     word: word,
+                                     deriv: deriv,
+                                     shortDef: short,
+                                     longDef: long)
+            return entry
+        }
+        
+        return nil
+    }
+}
+
 struct BooksData {
     var data: [[String:AnyObject]]
     var stats: [String:[String:Int]]

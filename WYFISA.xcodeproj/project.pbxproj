@@ -31,6 +31,8 @@
 		C351DB4E1DEE7668009E853D /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB4D1DEE7668009E853D /* KeyboardObserver.swift */; };
 		C351DB501DEF52D7009E853D /* Generics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB4F1DEF52D7009E853D /* Generics.swift */; };
 		C351DB521DEFCCEE009E853D /* FBStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C351DB511DEFCCEE009E853D /* FBStorage.swift */; };
+		C35FBEA91E8FF289003E1307 /* hebrew.json in Resources */ = {isa = PBXBuildFile; fileRef = C35FBEA71E8FF289003E1307 /* hebrew.json */; };
+		C35FBEAA1E8FF289003E1307 /* greek.json in Resources */ = {isa = PBXBuildFile; fileRef = C35FBEA81E8FF289003E1307 /* greek.json */; };
 		C3606CE81DBBBACD00AE2E8B /* ScriptComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3606CE71DBBBACD00AE2E8B /* ScriptComposeViewController.swift */; };
 		C362A4441DACD662002B1AF4 /* InitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C362A4431DACD662002B1AF4 /* InitViewController.swift */; };
 		C36A24FE1DECB0CE00D2880E /* VerseInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36A24FD1DECB0CE00D2880E /* VerseInfo.swift */; };
@@ -119,6 +121,8 @@
 		C351DB4D1DEE7668009E853D /* KeyboardObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		C351DB4F1DEF52D7009E853D /* Generics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generics.swift; sourceTree = "<group>"; };
 		C351DB511DEFCCEE009E853D /* FBStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBStorage.swift; sourceTree = "<group>"; };
+		C35FBEA71E8FF289003E1307 /* hebrew.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = hebrew.json; sourceTree = "<group>"; };
+		C35FBEA81E8FF289003E1307 /* greek.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = greek.json; sourceTree = "<group>"; };
 		C3606CE71DBBBACD00AE2E8B /* ScriptComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptComposeViewController.swift; sourceTree = "<group>"; };
 		C362A4431DACD662002B1AF4 /* InitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitViewController.swift; sourceTree = "<group>"; };
 		C36A24FD1DECB0CE00D2880E /* VerseInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerseInfo.swift; sourceTree = "<group>"; };
@@ -333,6 +337,8 @@
 				C39090821D2C9AF8000DFD15 /* Info.plist */,
 				C379515C1D43D5F4003FB4F5 /* books.json */,
 				C30A24D21E78CD8500A7CE56 /* stats.json */,
+				C35FBEA71E8FF289003E1307 /* hebrew.json */,
+				C35FBEA81E8FF289003E1307 /* greek.json */,
 				C39090D21D2C9DE7000DFD15 /* WYFISA-Bridging-Header.h */,
 				C3A5A73D1D9A22FF00A22FDB /* cross_ref.db */,
 				C3DF5FC81E861E5C001B0B20 /* tut.cblite2 */,
@@ -492,6 +498,8 @@
 				C39090D01D2C9C88000DFD15 /* tessdata in Resources */,
 				C316B6B61D3A35DE00E272A3 /* SplashScreen.storyboard in Resources */,
 				C371D0931D44623F00F944CC /* Assets.xcassets in Resources */,
+				C35FBEAA1E8FF289003E1307 /* greek.json in Resources */,
+				C35FBEA91E8FF289003E1307 /* hebrew.json in Resources */,
 				C3F53B771D36945900E2F80D /* VerseTableViewCell.xib in Resources */,
 				C30963DF1DEFD420009CD474 /* GoogleService-Info.plist in Resources */,
 				C30A24D31E78CD8500A7CE56 /* stats.json in Resources */,
