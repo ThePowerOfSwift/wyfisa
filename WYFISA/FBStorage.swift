@@ -92,8 +92,32 @@ class FBStorage {
             })
     }
     
+    func getInterlinearDoc(id: String) {
+
+        self.databaseRef.child("interlinear")
+            .child(id)
+            .observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                // convert value to verse
+                let value = snapshot.value as?  [String : AnyObject]
+                let verse = InterlinearVerse.initFromSnapshot(value!)
+                self.delegate?.didGetSingleVerse?(self, verse: verse)
+            })
+    }
     
-      func upload(path: String, data: NSData, type: String?) -> FIRStorageUploadTask {
+    func getLexiconDoc(id: String, testament: String, row: Int) {
+        
+        self.databaseRef.child("lexicon")
+            .child(testament)
+            .child(id)
+            .observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                // convert value to verse
+                let value = snapshot.value as?  [String : AnyObject]
+                let verse = LexiconVerse.initFromSnapshot(value!)
+                self.delegate?.didGetSingleVerseForRow?(self, verse: verse, section: row)
+            })
+    }
+    
+    func upload(path: String, data: NSData, type: String?) -> FIRStorageUploadTask {
         
         let uploadRef = self.storageRef.child(path)
         let meta = FIRStorageMetadata()

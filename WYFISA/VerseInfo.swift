@@ -16,6 +16,98 @@ enum ItemCategory: Int {
     case Verse = 0, Note, Image
 }
 
+struct LexiconEntry {
+    let strongs: String
+    let word: String
+    let deriv: String
+    let shortDef: String
+    let longDef: String
+    
+}
+
+class LexiconVerse {
+    let id: String
+    let entry: LexiconEntry
+    
+    init(id: String, entry: LexiconEntry){
+        self.id = id
+        self.entry = entry
+    }
+    
+    class func initFromSnapshot(value: [String: AnyObject]) -> LexiconVerse {
+        let strongs = value["strongs"] as! String
+        let word = value["word"] as! String
+        
+        let data = value["data"] as! [String: AnyObject]
+        let deriv = data["deriv"] as! String
+        let def = data["def"] as! [String: AnyObject]
+        let short = "\n"+(def["short"] as! String).firstCharacterUpperCase()
+        var long = "\n"
+        for longVal in def["long"] as! [AnyObject] {
+            //long.append(longVal)
+            if var longValStr = longVal as? String {
+                longValStr = longValStr.firstCharacterUpperCase()
+                long.appendContentsOf("\n- \(longValStr)")
+            } else if let longValSubVal = longVal as? [String] {
+                var i = 0
+                for var longValSubStr in longValSubVal {
+                    if i > 0 {
+                        long.appendContentsOf(",")
+                    }
+                    longValSubStr = longValSubStr.firstCharacterUpperCase()
+                    long.appendContentsOf(" (\(longValSubStr))")
+                    i += 1
+                }
+            }
+        }
+        
+        let entry = LexiconEntry(strongs: strongs,
+                                 word: word,
+                                 deriv: deriv,
+                                 shortDef: short,
+                                 longDef: long)
+        return LexiconVerse(id: strongs, entry: entry)
+    }
+}
+
+struct StrongsEntry {
+    let index: Int
+    let number: String
+    let word: String
+    let text: String
+}
+
+class InterlinearVerse {
+    let id: String
+    let phrases: [StrongsEntry]
+    
+    init(id: String, phrases: [StrongsEntry]){
+        self.id = id
+        self.phrases = phrases
+    }
+    
+    class func initFromSnapshot(value: [String: AnyObject]) -> InterlinearVerse {
+        let id = value["id"] as! String
+        var phrases = [StrongsEntry]()
+        
+        if let phraseData = value["verse"] as? [[String : AnyObject]]{
+            for phrase in phraseData {
+                let index = phrase["i"] as! Int
+                let number = phrase["number"] as! String
+                let word = phrase["word"] as! String
+                var text = phrase["text"] as! String
+                if text == "" {
+                    text = "-"
+                }
+                let entry = StrongsEntry(index: index, number: number, word: word, text: text)
+                phrases.append(entry)
+            }
+        }
+
+        let verse = InterlinearVerse.init(id: id, phrases: phrases)
+        return verse
+    }
+}
 class VerseInfo {
     let id: String
     var key: String

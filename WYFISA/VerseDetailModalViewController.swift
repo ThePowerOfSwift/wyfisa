@@ -9,7 +9,7 @@
 import UIKit
 import Social
 
-class VerseDetailModalViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, VerseTableViewCellDelegate, FBStorageDelegate {
+class VerseDetailModalViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, VerseTableViewCellDelegate, FBStorageDelegate, InterlinearCollectionViewDelegate {
 
     @IBOutlet var segmentBar: UISegmentedControl!
     @IBOutlet var verseLabel: UILabel!
@@ -24,6 +24,13 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     @IBOutlet var prevChapterButton: UIButton!
     @IBOutlet var loadSpinner: UIActivityIndicatorView!
     @IBOutlet var navLabel: UILabel!
+    @IBOutlet var InterlinearCollection: InterlinearCollectionView!
+    @IBOutlet var interlinearInfo: UIView!
+    
+    @IBOutlet var originWordLabel: UILabel!
+    @IBOutlet var usageWordLabel: UILabel!
+    @IBOutlet var lexiconTextView: UITextView!
+    @IBOutlet var lexiconScrollView: UIScrollView!
     
     var themer = WYFISATheme.sharedInstance
     var db = DBQuery.sharedInstance
@@ -39,7 +46,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     var nextVerse: VerseInfo? = nil
     var prevVerse: VerseInfo? = nil
     var fromVerseName: String? = nil
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.firDB.delegate = self
@@ -55,7 +62,11 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         
         // apply color schema
         self.applyColorSchema()
+
+
     }
+    
+
     
     func initView() {
 
@@ -104,7 +115,9 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         self.versesTable.delegate = self
         
         self.chapterTextView.delegate = self
-        
+        self.InterlinearCollection.loadDataForVerse(self.verseInfo!.id)
+        self.InterlinearCollection.setFooterHeight(self.interlinearInfo.frame.size.height)
+        self.InterlinearCollection.interlinearDelegate = self
 
     }
     
@@ -133,46 +146,36 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
 
     }
     
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     
-    func setChapterVerseHideAlpha(){
-        // hide reference table
-        self.referenceTable.alpha = 0
-        if self.splitMode == true {
-            // hide chapter box
-            self.chapterTextView.alpha = 0
-        } else {
-            self.versesTable.alpha = 0
-        }
-    }
-    
-    func setChapterVerseShowAlpha(){
-        // hide reference table
-        self.referenceTable.alpha = 0
-        if self.splitMode == true {
-            self.versesTable.alpha = 1
-        } else {
-            self.chapterTextView.alpha = 1
-        }
-    }
-    
-    func fadeOutInChapterVerseStack(){
-        Animations.start(0.2, animations: self.setChapterVerseHideAlpha)
-        
-        // show related
-        Animations.startAfter(0.2,
-                              forDuration: 0.2,
-                              animations: self.setChapterVerseShowAlpha)
-    }
-    
     @IBAction func didTapBarSegment(sender: UISegmentedControl) {
         
-        if sender.selectedSegmentIndex == 0 {
+        self.splitMode = false
+
+        // fade out everything
+        Animations.start(0.2){
+            self.chapterTextView.alpha = 0
+            self.versesTable.alpha = 0
+            self.referenceTable.alpha = 0
+            self.InterlinearCollection.alpha = 0
+            self.interlinearInfo.alpha = 0
+            self.lexiconScrollView.alpha = 0
+        }
+        
+        // show footer
+        self.showFooterMask()
+
+        
+        switch sender.selectedSegmentIndex {
+        case 0: // verse view
+            
             self.splitMode = true
+            
             // go to highligted verse on first time triggered
             if self.didShowSplitVerseOnce == false{
                 
@@ -187,32 +190,37 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
                 }
             }
             
-            // hide unlreated views
-            self.fadeOutInChapterVerseStack()
-        } else {
-            self.splitMode = false
-        }
-        
-        if sender.selectedSegmentIndex == 1 {
-            self.fadeOutInChapterVerseStack()
-            self.showFooterMask()
-        }
-        
-        if sender.selectedSegmentIndex == 2 {
-            self.referenceTable.reloadData()
-            
-            // hide chapter and verses
-            Animations.start(0.2){
-                self.chapterTextView.alpha = 0
-                self.versesTable.alpha = 0
+            // show
+            Animations.startAfter(0.2, forDuration: 0.2){
+                self.versesTable.alpha = 1
             }
-           // self.hideFooterMask()
             
+        case 1: // chapter
+            
+            // show
+            Animations.startAfter(0.2, forDuration: 0.2){
+                self.chapterTextView.alpha = 1
+            }
+            
+        case 2: // cross references
+            self.referenceTable.reloadData()
+
             // show related
             Animations.startAfter(0.2, forDuration: 0.2){
                 self.referenceTable.alpha = 1
             }
+            
+        case 3: // interlinear
+            Animations.startAfter(0.2, forDuration: 0.2){
+                self.InterlinearCollection.alpha = 1
+                self.interlinearInfo.alpha = 1
+                self.lexiconScrollView.alpha = 1
+            }
+
+        default:
+            print("unknown segment")
         }
+        
     }
 
     override func prefersStatusBarHidden() -> Bool {
@@ -225,6 +233,16 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     
     override func viewDidLayoutSubviews() {
         self.chapterTextView.setContentOffset(CGPointZero, animated: false)
+        
+        // adjust lexicon scroll view
+        let textHeight = self.lexiconTextView.text
+                .heightWithConstrainedWidth(self.view.frame.width*0.90,
+                                            font: UIFont.systemFontOfSize(14.0))*1.2
+        let usageHeight = self.usageWordLabel.text!
+            .heightWithConstrainedWidth(self.view.frame.width*0.90,
+                                        font: UIFont.systemFontOfSize(14.0)) * 3.0
+        self.lexiconScrollView.contentSize = CGSize(width: self.view.frame.width,
+                                                    height: (textHeight + usageHeight))
     }
     
     // MARK: - tableview
@@ -590,4 +608,22 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             self.verseInfo?.updateRefsForVerses(verses as! [VerseInfo])
         }
     }
+    
+    // MARK: - Interlinear Delegate
+    func didSelectNewPhrase(sender: AnyObject, strongs: StrongsEntry, lexicon: LexiconVerse){
+
+        self.originWordLabel.text = strongs.text // strongs.word
+        self.usageWordLabel.text = "\"\(lexicon.entry.word)\""
+        var lexiconStr = lexicon.entry.shortDef
+        lexiconStr.appendContentsOf("\n")
+        lexiconStr.appendContentsOf(lexicon.entry.longDef)
+        self.lexiconTextView.text = lexiconStr
+        self.view.setNeedsLayout()
+        Timing.runAfter(0.0){
+            self.lexiconScrollView.setContentOffset(CGPointZero, animated: false)
+        }
+
+    }
+
+
 }

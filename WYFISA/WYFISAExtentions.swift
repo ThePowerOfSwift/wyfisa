@@ -65,6 +65,13 @@ extension String {
             return self
         }
     }
+    
+    // http://stackoverflow.com/questions/26306326/swift-apply-uppercasestring-to-only-the-first-letter-of-a-string
+    func firstCharacterUpperCase() -> String {
+        let lowercaseString = self.lowercaseString
+        
+        return lowercaseString.stringByReplacingCharactersInRange(lowercaseString.startIndex...lowercaseString.startIndex, withString: String(lowercaseString[lowercaseString.startIndex]).uppercaseString)
+    }
 }
 
 extension UIColor {

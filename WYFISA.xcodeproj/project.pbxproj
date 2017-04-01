@@ -45,6 +45,7 @@
 		C37B1BC11E7787DA00786412 /* BibleVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37B1BC01E7787DA00786412 /* BibleVersion.swift */; };
 		C37B1BC41E77916300786412 /* FontSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37B1BC31E77916300786412 /* FontSettingsViewController.swift */; };
 		C37B1BC61E77917600786412 /* VersionSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37B1BC51E77917600786412 /* VersionSettingsViewController.swift */; };
+		C383E5E41E8B48F100F2C22D /* BlbWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C383E5E31E8B48F100F2C22D /* BlbWebViewController.swift */; };
 		C38E6F1D1D3FDD1700833356 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C390907D1D2C9AF8000DFD15 /* Assets.xcassets */; };
 		C39090771D2C9AF8000DFD15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39090761D2C9AF8000DFD15 /* AppDelegate.swift */; };
 		C39090791D2C9AF8000DFD15 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39090781D2C9AF8000DFD15 /* ViewController.swift */; };
@@ -61,6 +62,7 @@
 		C3DF5FCB1E864D8B001B0B20 /* FirstNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DF5FCA1E864D8B001B0B20 /* FirstNavigationViewController.swift */; };
 		C3DF5FCD1E864DF9001B0B20 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DF5FCC1E864DF9001B0B20 /* OnboardingViewController.swift */; };
 		C3E0712C1D4DB54900097D01 /* WYFISAFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E0712B1D4DB54900097D01 /* WYFISAFont.swift */; };
+		C3EA03DB1E8D895E0039DB28 /* InterlinearCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EA03DA1E8D895E0039DB28 /* InterlinearCollectionView.swift */; };
 		C3EE86B31E7111BC004CB24C /* CaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EE86B21E7111BC004CB24C /* CaptureViewController.swift */; };
 		C3EE86B51E719A03004CB24C /* PhotoCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EE86B41E719A03004CB24C /* PhotoCaptureViewController.swift */; };
 		C3F4FA221DF550CF00301445 /* ScriptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F4FA211DF550CF00301445 /* ScriptViewController.swift */; };
@@ -129,6 +131,7 @@
 		C37B1BC01E7787DA00786412 /* BibleVersion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BibleVersion.swift; sourceTree = "<group>"; };
 		C37B1BC31E77916300786412 /* FontSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontSettingsViewController.swift; sourceTree = "<group>"; };
 		C37B1BC51E77917600786412 /* VersionSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionSettingsViewController.swift; sourceTree = "<group>"; };
+		C383E5E31E8B48F100F2C22D /* BlbWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlbWebViewController.swift; path = ../BlbWebViewController.swift; sourceTree = "<group>"; };
 		C39090731D2C9AF7000DFD15 /* TurnTo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TurnTo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C39090761D2C9AF8000DFD15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C39090781D2C9AF8000DFD15 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -154,6 +157,7 @@
 		C3DF5FCA1E864D8B001B0B20 /* FirstNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstNavigationViewController.swift; sourceTree = "<group>"; };
 		C3DF5FCC1E864DF9001B0B20 /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		C3E0712B1D4DB54900097D01 /* WYFISAFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WYFISAFont.swift; sourceTree = "<group>"; };
+		C3EA03DA1E8D895E0039DB28 /* InterlinearCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterlinearCollectionView.swift; sourceTree = "<group>"; };
 		C3EE86B21E7111BC004CB24C /* CaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureViewController.swift; sourceTree = "<group>"; };
 		C3EE86B41E719A03004CB24C /* PhotoCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhotoCaptureViewController.swift; path = ../PhotoCaptureViewController.swift; sourceTree = "<group>"; };
 		C3F4FA211DF550CF00301445 /* ScriptViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScriptViewController.swift; path = ../ScriptViewController.swift; sourceTree = "<group>"; };
@@ -287,6 +291,7 @@
 				C3D506591D3932FB00A04C83 /* Animations.swift */,
 				C34A95531E742ABA0004A2D2 /* AppConstants.swift */,
 				C39090761D2C9AF8000DFD15 /* AppDelegate.swift */,
+				C383E5E31E8B48F100F2C22D /* BlbWebViewController.swift */,
 				C379515F1D43D62A003FB4F5 /* Books.swift */,
 				C351DB4B1DEDE250009E853D /* CBStorage.swift */,
 				C3F53B701D36219400E2F80D /* CameraManager.swift */,
@@ -298,6 +303,7 @@
 				C351DB4F1DEF52D7009E853D /* Generics.swift */,
 				C37951651D44306C003FB4F5 /* ImageFilter.swift */,
 				C362A4431DACD662002B1AF4 /* InitViewController.swift */,
+				C3EA03DA1E8D895E0039DB28 /* InterlinearCollectionView.swift */,
 				C338AF371D964B2F004E5E97 /* InfoViewController.swift */,
 				C3AEF17B1DEB8D0C007750A8 /* NotesViewController.swift */,
 				C37951611D442023003FB4F5 /* OCR.swift */,
@@ -652,6 +658,7 @@
 				C34A95561E743E170004A2D2 /* UserDocs.swift in Sources */,
 				C30963E11DF03112009CD474 /* ScriptCollection.swift in Sources */,
 				C3EE86B31E7111BC004CB24C /* CaptureViewController.swift in Sources */,
+				C383E5E41E8B48F100F2C22D /* BlbWebViewController.swift in Sources */,
 				C374B4A01D8CF4600083366E /* SettingsViewController.swift in Sources */,
 				C3F53B761D36945900E2F80D /* VerseTableViewCell.swift in Sources */,
 				C3E0712C1D4DB54900097D01 /* WYFISAFont.swift in Sources */,
@@ -676,6 +683,7 @@
 				C351DB4C1DEDE250009E853D /* CBStorage.swift in Sources */,
 				C3AEF17C1DEB8D0C007750A8 /* NotesViewController.swift in Sources */,
 				C37B1BC41E77916300786412 /* FontSettingsViewController.swift in Sources */,
+				C3EA03DB1E8D895E0039DB28 /* InterlinearCollectionView.swift in Sources */,
 				C37B1BC11E7787DA00786412 /* BibleVersion.swift in Sources */,
 				C33C3AC21E727EBD00B3E3F1 /* SelectScriptViewController.swift in Sources */,
 				C323F3D71D86EE5B00A7EC95 /* SearchBarViewController.swift in Sources */,
