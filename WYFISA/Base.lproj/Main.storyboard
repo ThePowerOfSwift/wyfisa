@@ -2369,6 +2369,39 @@
                                                 </constraints>
                                                 <size key="customSize" width="30" height="30"/>
                                             </collectionViewCell>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" reuseIdentifier="searchresult" id="jvo-90-Km4">
+                                                <rect key="frame" x="200" y="10" width="30" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                                    <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C7J-dO-nfB">
+                                                            <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                            <subviews>
+                                                                <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6KD-aI-HTp">
+                                                                    <rect key="frame" x="-0.5" y="0.0" width="30" height="30"/>
+                                                                    <nil key="textColor"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                    <textInputTraits key="textInputTraits"/>
+                                                                </textField>
+                                                            </subviews>
+                                                            <constraints>
+                                                                <constraint firstItem="6KD-aI-HTp" firstAttribute="width" secondItem="C7J-dO-nfB" secondAttribute="width" id="Ede-o0-TjD"/>
+                                                                <constraint firstItem="6KD-aI-HTp" firstAttribute="height" secondItem="C7J-dO-nfB" secondAttribute="height" id="V4L-0y-N9X"/>
+                                                                <constraint firstItem="6KD-aI-HTp" firstAttribute="centerY" secondItem="C7J-dO-nfB" secondAttribute="centerY" id="Z4P-Dl-S1s"/>
+                                                                <constraint firstItem="6KD-aI-HTp" firstAttribute="centerX" secondItem="C7J-dO-nfB" secondAttribute="centerX" id="k5g-lT-HPU"/>
+                                                            </constraints>
+                                                        </view>
+                                                    </subviews>
+                                                </view>
+                                                <constraints>
+                                                    <constraint firstItem="C7J-dO-nfB" firstAttribute="leading" secondItem="jvo-90-Km4" secondAttribute="leading" id="MLC-4A-IaJ"/>
+                                                    <constraint firstAttribute="trailing" secondItem="C7J-dO-nfB" secondAttribute="trailing" id="qo0-1H-7Qh"/>
+                                                    <constraint firstItem="C7J-dO-nfB" firstAttribute="top" secondItem="jvo-90-Km4" secondAttribute="top" id="wjo-eX-4cy"/>
+                                                </constraints>
+                                                <size key="customSize" width="30" height="30"/>
+                                            </collectionViewCell>
                                         </cells>
                                     </collectionView>
                                 </subviews>

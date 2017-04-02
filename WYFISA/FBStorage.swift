@@ -19,6 +19,8 @@ enum FBContextType: Int {
     optional func didGetSingleVerse(sender: AnyObject, verse: AnyObject)
     optional func didGetSingleVerseForRow(sender: AnyObject, verse: AnyObject, section: Int)
     optional func didGetVerseContext(sender: AnyObject, verses: [AnyObject], type: AnyObject)
+    optional func didGetMatchIDs(sender: AnyObject, matches: [AnyObject])
+
 }
 
 
@@ -51,9 +53,7 @@ class FBStorage {
             .observeEventType(.Value, withBlock: {(snapshot) in
                 if let matchIDs = snapshot.value as? [String] {
                     // send out a query for each id
-                    for id in matchIDs {
-                        self.getVerseDoc(id)
-                    }
+                    self.delegate?.didGetMatchIDs?(self, matches: matchIDs)
                 }
             })
         

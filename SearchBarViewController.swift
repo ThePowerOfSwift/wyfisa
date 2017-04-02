@@ -25,7 +25,9 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     let themer = WYFISATheme.sharedInstance
     var firDB = FBStorage.init()
     var session: String!
-    
+    var matchIds = [String]()
+    var matchIdVerses = [String:VerseInfo]()
+
     @IBOutlet var matchLabel: UILabel!
     @IBOutlet var chapterCollection: UICollectionView!
     @IBOutlet var chapterLabel: UILabel!
@@ -73,6 +75,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
  
         // init session
         self.session = self.firDB.startSearchSession()
+        self.matchIds = [String]()
         
     }
     
@@ -207,7 +210,10 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             if let n = self.numChapterItems {
-                if self.selectedChapter == nil {
+                if n == 0 {
+                    // full text mode
+                    return self.matchIds.count
+                } else if self.selectedChapter == nil {
                     return n // collection of chapters
                 } else {
                    return 1 // just 1 selected item
@@ -229,6 +235,18 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("numcell", forIndexPath: indexPath)
         if section == 0 {
+            if self.numChapterItems == 0 {
+                // text cell
+                cell =  collectionView.dequeueReusableCellWithReuseIdentifier("searchresult", forIndexPath: indexPath)
+                let id = self.matchIds[indexPath.row]
+                if let verse = self.matchIdVerses[id] {
+                    let textView = cell.viewWithTag(1) as! UITextField
+                    textView.text = verse.text
+                } else {
+                    self.firDB.getVerseDoc(id)
+                }
+                return cell
+            }
             if let ch = self.selectedChapter {
                 // a chapter is selected
                 cell = collectionView.dequeueReusableCellWithReuseIdentifier("numcellsmallfire", forIndexPath: indexPath)
@@ -259,8 +277,13 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let offset = themer.fontSize
-        let size = CGSize.init(width: 40+offset/2, height: 30+offset)
-        return size
+        
+        if self.numChapterItems == 0 {
+            return CGSize(width: collectionView.frame.width*0.90, height: 20 + offset)
+        } else {
+            let size = CGSize.init(width: 40+offset/2, height: 30+offset)
+            return size
+        }
     }
     
     
@@ -293,8 +316,15 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.firDB.endSearchSession(self.session)
     }
     
+    func didGetMatchIDs(sender: AnyObject, matches: [AnyObject]){
+        self.matchIds = matches as! [String]
+        print(self.matchIds)
+    }
+
     func didGetSingleVerse(sender: AnyObject, verse: AnyObject){
         let matchVerse = verse as! VerseInfo
+        self.matchIdVerses[matchVerse.id] = matchVerse
+        self.chapterCollection.reloadData()
     }
  
 
