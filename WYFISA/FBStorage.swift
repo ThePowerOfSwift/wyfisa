@@ -24,7 +24,7 @@ enum FBContextType: Int {
 
 class FBStorage {
     var storage: FIRStorage
-    let storageRef: FIRStorageReference
+    let storageRef: FIRStorageReference? = nil
     let databaseRef: FIRDatabaseReference
     weak var delegate:FBStorageDelegate?
     let settings = SettingsManager.sharedInstance
@@ -32,10 +32,46 @@ class FBStorage {
 
     init(){
         self.storage = FIRStorage.storage()
-        self.storageRef = storage.referenceForURL("gs://turnto-26933.appspot.com")
         self.databaseRef = FIRDatabase.database().reference()
     }
     
+    func startSearchSession() -> String {
+        let key = randomString(10)
+        let ts =  NSDate().timeIntervalSince1970.description
+        let sessionDoc = ["ts": ts,
+                          "request": ""]
+        self.databaseRef
+            .child("query")
+            .child(key)
+            .setValue(sessionDoc)
+        
+        self.databaseRef
+            .child("query")
+            .child(key).child("response")
+            .observeEventType(.Value, withBlock: {(snapshot) in
+                if let matchIDs = snapshot.value as? [String] {
+                    // send out a query for each id
+                    for id in matchIDs {
+                        self.getVerseDoc(id)
+                    }
+                }
+            })
+        
+        return key
+    }
+    
+    func endSearchSession(key: String) {
+        self.databaseRef.child("query").child(key).removeValue()
+    }
+    
+    func updateSearchSession(key: String, text: String) {
+        
+        self.databaseRef
+            .child("query")
+            .child(key)
+            .child("request").setValue(text)
+        
+    }
     
     func getVerseDoc(id: String, section: Int? = nil) {
         let version = settings.version.text()
@@ -104,6 +140,7 @@ class FBStorage {
             })
     }
     
+    /*
     func upload(path: String, data: NSData, type: String?) -> FIRStorageUploadTask {
         
         let uploadRef = self.storageRef.child(path)
@@ -121,11 +158,12 @@ class FBStorage {
             let suffix = randomString(6)
             let path = "images/\(id)_\(suffix).jpg"
             let uploadTask = self.upload(path, data: data, type: "image/jpeg")
-            let observer = uploadTask.observeStatus(.Success) { snapshot in
+            let _ = uploadTask.observeStatus(.Success) { snapshot in
                 // ok
                 print("uploaded", path)
             }
             
         }
     }
+    */
 }

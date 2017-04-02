@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, FBStorageDelegate {
 
     let db = DBQuery.sharedInstance
     var numSections: Int = 1
@@ -23,6 +23,8 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     var resultInfo: VerseInfo?
     var isVisible: Bool = false
     let themer = WYFISATheme.sharedInstance
+    var firDB = FBStorage.init()
+    var session: String!
     
     @IBOutlet var matchLabel: UILabel!
     @IBOutlet var chapterCollection: UICollectionView!
@@ -32,6 +34,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.firDB.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -68,12 +71,15 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.matchLabel.font = self.themer.currentFontAdjustedBy(10)
         self.chapterLabel.font = self.themer.currentFontAdjustedBy(10)
  
+        // init session
+        self.session = self.firDB.startSearchSession()
         
     }
     
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         
+        self.firDB.updateSearchSession(self.session, text: searchText)
         if searchText == "" {
             // hide search view to allow user to click out
             Animations.start(0.3){
@@ -282,6 +288,13 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.isVisible = false
         self.escapeImageMask?.hidden = true
         self.escapeMask?.hidden = true
+        
+        // close out session
+        self.firDB.endSearchSession(self.session)
+    }
+    
+    func didGetSingleVerse(sender: AnyObject, verse: AnyObject){
+        let matchVerse = verse as! VerseInfo
     }
  
 

@@ -117,7 +117,7 @@ class InterlinearCollectionView: UICollectionView, UICollectionViewDataSource, U
             if number[0] == "g" {
                 // greek
                 testament = "greek"
-            }
+            }   
             if let lexicon = self.lexicon.getEntry(testament, strongs: number) {
                 let strongs = self.entryAt(row)
                 self.interlinearDelegate?.didSelectNewPhrase(self,

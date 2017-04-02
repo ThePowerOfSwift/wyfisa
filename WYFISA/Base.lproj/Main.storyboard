@@ -177,7 +177,7 @@
                             </connections>
                         </barButtonItem>
                         <view key="titleView" hidden="YES" contentMode="scaleToFill" id="XfK-Px-pY8">
-                            <rect key="frame" x="59" y="6" width="262" height="33"/>
+                            <rect key="frame" x="59" y="5.5" width="262" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <searchBar contentMode="redraw" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="A3v-ik-pna">

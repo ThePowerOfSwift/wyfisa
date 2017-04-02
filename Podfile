@@ -14,6 +14,7 @@ target 'TurnTo' do
   pod 'Firebase/Storage'
   pod 'Firebase/Core'
   pod 'Firebase/Database'
+  pod 'Firebase/Auth'
   pod "AKPickerView-Swift"
   pod 'SwiftMoment'
   pod 'paper-onboarding', '~> 1.1.3'

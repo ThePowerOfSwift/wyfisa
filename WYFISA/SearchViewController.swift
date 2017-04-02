@@ -70,8 +70,6 @@ class SearchViewController: UIViewController, FBStorageDelegate {
 
     }
     
-
-    
     func openSearchView(){
         self.searchBar.text = nil
         self.searchView.hidden = false
@@ -116,7 +114,6 @@ class SearchViewController: UIViewController, FBStorageDelegate {
         }
         
     }
-    
     
     func closeSearchView(){
         self.resignFirstResponder()
@@ -167,5 +164,4 @@ class SearchViewController: UIViewController, FBStorageDelegate {
         }
     }
     
-
 }
