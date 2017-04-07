@@ -49,6 +49,7 @@ extension String {
                 if let font = font {
                     newString.removeAttribute(NSFontAttributeName, range: range)
                     newString.addAttribute(NSFontAttributeName, value: font, range: range)
+
                 }
             }
             return newString
@@ -59,22 +60,6 @@ extension String {
         }
     }
     
-    /*
-    func toHtml() -> NSAttributedString? {
-        do {
-            
-            let data = self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-            if let d = data {
-                let str = try NSAttributedString(data: d,
-                                                 options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType],
-                                                 documentAttributes: nil)
-                return str
-            }
-        } catch {
-        }
-        return nil
-    }
- */
     
     subscript (i: Int) -> Character {
         return self[self.startIndex.advancedBy(i)]

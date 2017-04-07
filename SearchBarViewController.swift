@@ -26,6 +26,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     var firDB = FBStorage.init()
     var session: String!
     var searchMatches = [[String:AnyObject]]()
+    var originalFrameSize: CGSize!
 
     @IBOutlet var matchLabel: UILabel!
     @IBOutlet var chapterCollection: UICollectionView!
@@ -36,6 +37,10 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
 
         // Do any additional setup after loading the view.
         self.firDB.delegate = self
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        self.originalFrameSize = self.view.frame.size
     }
 
     override func didReceiveMemoryWarning() {
@@ -76,6 +81,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.session = self.firDB.startSearchSession()
         self.searchMatches = [[String:AnyObject]]()
         
+        
     }
     
     
@@ -90,6 +96,8 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
             Animations.start(0.3){
                 self.searchView?.alpha = 0
             }
+            
+            self.view.frame.size = self.originalFrameSize
 
         } else {
             // text being added show view if first time
@@ -156,43 +164,6 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.numSections = 1
         self.chapterLabel.text = ""
         self.selectedChapter = nil
-    }
-    
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        
-        if self.numChapterItems == 0 {
-            let matchId = self.getMatchId(indexPath.row)
-            self.resultInfo = VerseInfo.NewVerseWithId(matchId)
-            self.performSegueWithIdentifier("unwindToMain", sender: self)
-            return
-        }
-        
-        if indexPath.section == 1 {
-            // verse was selected
-            let bookIdStr = String(format: "%02d", self.selectedBook!)
-            let chapterId = String(format: "%03d", self.selectedChapter!+1)
-            let verseId = String(format: "%03d", indexPath.item+1)
-            let resultId = "\(bookIdStr)\(chapterId)\(verseId)"
-            let name = "\(self.matchLabel!.text!)\(self.selectedChapter!+1):\(indexPath.item+1)"
-            // at least start the pull
-            self.resultInfo = VerseInfo(id: resultId, name:name, text: nil)
-            self.resultInfo?.bookNo = self.selectedBook
-            self.resultInfo?.chapterNo = self.selectedChapter!+1
-
-            self.performSegueWithIdentifier("unwindToMain", sender: self)
-            return
-        }
-        
-        if self.selectedChapter != nil {
-            // deselecting chapter
-            self.deselectChapter()
-        } else {
-            self.selectChapter(indexPath.item+1)
-        }
-        
-        // reload data
-        self.chapterCollection.reloadData()
-
     }
     
     func selectChapter(chapter: Int){
@@ -283,10 +254,10 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
                 let htmlText = self.getMatchText(row)
 
                 textView.attributedText = htmlText.toHtml(themer.currentFont())
-                textView.textColor = self.themer.navyForLightOrTeal(1.0)
                 let nameLabel = cell.viewWithTag(2) as! UILabel
                 nameLabel.text = self.getMatchName(row)
                 if !self.themer.isLight() {
+                    textView.textColor = UIColor.teal()
                     nameLabel.textColor = UIColor.lightGrayColor()
                 }
                 return cell
@@ -319,6 +290,44 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         return cell
     }
     
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        if self.numChapterItems == 0 {
+            let matchId = self.getMatchId(indexPath.row)
+            self.resultInfo = VerseInfo.NewVerseWithId(matchId)
+            self.performSegueWithIdentifier("unwindToMain", sender: self)
+            return
+        }
+        
+        if indexPath.section == 1 {
+            // verse was selected
+            let bookIdStr = String(format: "%02d", self.selectedBook!)
+            let chapterId = String(format: "%03d", self.selectedChapter!+1)
+            let verseId = String(format: "%03d", indexPath.item+1)
+            let resultId = "\(bookIdStr)\(chapterId)\(verseId)"
+            let name = "\(self.matchLabel!.text!)\(self.selectedChapter!+1):\(indexPath.item+1)"
+
+            // at least start the pull
+            self.resultInfo = VerseInfo(id: resultId, name:name, text: nil)
+            self.resultInfo?.bookNo = self.selectedBook
+            self.resultInfo?.chapterNo = self.selectedChapter!+1
+            
+            self.performSegueWithIdentifier("unwindToMain", sender: self)
+            return
+        }
+        
+        if self.selectedChapter != nil {
+            // deselecting chapter
+            self.deselectChapter()
+        } else {
+            self.selectChapter(indexPath.item+1)
+        }
+        
+        // reload data
+        self.chapterCollection.reloadData()
+        
+    }
+
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         
         if self.numChapterItems == 0 {
@@ -339,11 +348,18 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
                 self.resultInfo = allVerses[0]
             }
         }
-        self.performSegueWithIdentifier("unwindToMain", sender: self)
+        if self.numChapterItems > 0 {
+            self.performSegueWithIdentifier("unwindToMain", sender: self)
+        } else {
+            searchBar.resignFirstResponder()
+            if let parentVC = self.parentViewController as? SearchViewController {
+                self.view.frame.size.height = parentVC.view.frame.size.height * 0.8
+            }
+        }
     }
     
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
-        if self.isVisible == true {
+        if self.isVisible == true && self.numChapterItems > 0 {
             self.performSegueWithIdentifier("unwindToMain", sender: self)
         }
     }
