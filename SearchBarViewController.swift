@@ -263,9 +263,12 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
                 let htmlText = self.getMatchText(row)
 
                 textView.attributedText = htmlText.toHtml(themer.currentFont())
-                textView.textColor = self.themer.navyForLightOrTan(1.0)
+                textView.textColor = self.themer.navyForLightOrTeal(1.0)
                 let nameLabel = cell.viewWithTag(2) as! UILabel
                 nameLabel.text = self.getMatchName(row)
+                if !self.themer.isLight() {
+                    nameLabel.textColor = UIColor.lightGrayColor()
+                }
                 return cell
             }
             if let ch = self.selectedChapter {
@@ -300,7 +303,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         
         if self.numChapterItems == 0 {
             let width:CGFloat = collectionView.frame.width
-            let height = self.themer.fontSize * 2.6
+            let height = self.themer.fontSize * 2.2
             return CGSize(width: width, height: height)
         } else {
             let offset = themer.fontSize

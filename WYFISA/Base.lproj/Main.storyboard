@@ -2380,14 +2380,14 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="111" height="69"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vfY-8r-TrA">
-                                                                    <rect key="frame" x="3" y="0.0" width="105" height="54.5"/>
+                                                                    <rect key="frame" x="3" y="0.0" width="105" height="57"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9OQ-bc-Ilt">
-                                                                    <rect key="frame" x="2.5" y="54.5" width="105" height="14.5"/>
-                                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                                                                    <rect key="frame" x="2.5" y="57" width="105" height="12"/>
+                                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="10"/>
                                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
