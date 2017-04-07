@@ -79,6 +79,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     }
     
     
+    // MARK: - search bar delegate
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         
         self.firDB.updateSearchSession(self.session, text: searchText)
@@ -96,6 +97,20 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
                 Animations.start(0.3){
                     self.searchView?.alpha = 1
                 }
+            }
+        }
+        
+        if searchText.length > 3 {
+            if self.searchMatches.count > 0 {
+                // switching to text matching if was in chapter match
+                if self.numChapterItems > 0 {
+                    self.setNoBookMatchAttrs()
+                    self.matchLabel.text = ""
+                    self.chapterCollection.reloadData()
+                }
+                
+                // either way it goes we are in text matching mode at this point
+                return
             }
         }
         
@@ -127,16 +142,20 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         } else {
             
             // not even book is matching so clear
-            self.numChapterItems = 0
-            self.numVerseItems = 0
-            self.numSections = 1
-            self.chapterLabel.text = ""
-            self.selectedChapter = nil
+            self.setNoBookMatchAttrs()
         }
         
         self.chapterCollection.reloadData()
         self.matchLabel.text = label
 
+    }
+    
+    func setNoBookMatchAttrs(){
+        self.numChapterItems = 0
+        self.numVerseItems = 0
+        self.numSections = 1
+        self.chapterLabel.text = ""
+        self.selectedChapter = nil
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
@@ -223,6 +242,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         return self.searchMatches[row]["id"] as! String
     }
     
+    // MARK: - collection view
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return self.numSections
     }
@@ -365,10 +385,11 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         }
         
         let needsReload = self.searchMatches.count == 0
+        let sameAffinity = self.searchMatches.count == newMatches.count
         self.searchMatches = newMatches
-        if needsReload {
-            self.chapterCollection.reloadData()
-        } else if reloadPaths.count > 0 {
+        if needsReload || !sameAffinity {
+            self.chapterCollection.reloadData() 
+        } else if (reloadPaths.count > 0) {
             self.chapterCollection.reloadItemsAtIndexPaths(reloadPaths)
         }
     }
