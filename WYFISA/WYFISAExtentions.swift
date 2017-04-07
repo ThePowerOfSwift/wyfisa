@@ -35,6 +35,47 @@ extension String {
                                                         range: nil)
     }
     
+    
+    func toHtml(font: UIFont?) ->  NSAttributedString? {
+        guard
+            let data = dataUsingEncoding(NSUTF8StringEncoding)
+            else { return nil }
+        do {
+            
+            let string = try NSAttributedString(data: data, options: [NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding], documentAttributes: nil)
+            
+            let newString = NSMutableAttributedString(attributedString: string)
+            string.enumerateAttributesInRange(NSRange.init(location: 0, length: string.length), options: .Reverse) { (attributes : [String : AnyObject], range:NSRange, _) -> Void in
+                if let font = font {
+                    newString.removeAttribute(NSFontAttributeName, range: range)
+                    newString.addAttribute(NSFontAttributeName, value: font, range: range)
+                }
+            }
+            return newString
+            
+        } catch let error as NSError {
+            print(error.localizedDescription)
+            return  nil
+        }
+    }
+    
+    /*
+    func toHtml() -> NSAttributedString? {
+        do {
+            
+            let data = self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+            if let d = data {
+                let str = try NSAttributedString(data: d,
+                                                 options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType],
+                                                 documentAttributes: nil)
+                return str
+            }
+        } catch {
+        }
+        return nil
+    }
+ */
+    
     subscript (i: Int) -> Character {
         return self[self.startIndex.advancedBy(i)]
     }

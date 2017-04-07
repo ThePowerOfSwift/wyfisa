@@ -25,8 +25,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     let themer = WYFISATheme.sharedInstance
     var firDB = FBStorage.init()
     var session: String!
-    var matchIds = [String]()
-    var matchIdVerses = [String:VerseInfo]()
+    var searchMatches = [[String:AnyObject]]()
 
     @IBOutlet var matchLabel: UILabel!
     @IBOutlet var chapterCollection: UICollectionView!
@@ -75,7 +74,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
  
         // init session
         self.session = self.firDB.startSearchSession()
-        self.matchIds = [String]()
+        self.searchMatches = [[String:AnyObject]]()
         
     }
     
@@ -84,6 +83,8 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         
         self.firDB.updateSearchSession(self.session, text: searchText)
         if searchText == "" {
+            self.searchMatches = [[String:AnyObject]]()
+
             // hide search view to allow user to click out
             Animations.start(0.3){
                 self.searchView?.alpha = 0
@@ -139,7 +140,14 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-
+        
+        if self.numChapterItems == 0 {
+            let matchId = self.getMatchId(indexPath.row)
+            self.resultInfo = VerseInfo.NewVerseWithId(matchId)
+            self.performSegueWithIdentifier("unwindToMain", sender: self)
+            return
+        }
+        
         if indexPath.section == 1 {
             // verse was selected
             let bookIdStr = String(format: "%02d", self.selectedBook!)
@@ -203,6 +211,18 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.chapterLabel.text = nil
     }
     
+    func getMatchText(row: Int) -> String {
+        return self.searchMatches[row]["text"] as! String
+    }
+    
+    func getMatchName(row: Int) -> String {
+        return self.searchMatches[row]["name"]! as! String
+    }
+    
+    func getMatchId(row: Int) -> String{
+        return self.searchMatches[row]["id"] as! String
+    }
+    
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return self.numSections
     }
@@ -212,7 +232,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
             if let n = self.numChapterItems {
                 if n == 0 {
                     // full text mode
-                    return self.matchIds.count
+                    return self.searchMatches.count
                 } else if self.selectedChapter == nil {
                     return n // collection of chapters
                 } else {
@@ -232,19 +252,20 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let section = indexPath.section
         var item = indexPath.item
+        let row = indexPath.row
         
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("numcell", forIndexPath: indexPath)
         if section == 0 {
             if self.numChapterItems == 0 {
                 // text cell
                 cell =  collectionView.dequeueReusableCellWithReuseIdentifier("searchresult", forIndexPath: indexPath)
-                let id = self.matchIds[indexPath.row]
-                if let verse = self.matchIdVerses[id] {
-                    let textView = cell.viewWithTag(1) as! UITextField
-                    textView.text = verse.text
-                } else {
-                    self.firDB.getVerseDoc(id)
-                }
+                let textView = cell.viewWithTag(1) as! UILabel
+                let htmlText = self.getMatchText(row)
+
+                textView.attributedText = htmlText.toHtml(themer.currentFont())
+                textView.textColor = self.themer.navyForLightOrTan(1.0)
+                let nameLabel = cell.viewWithTag(2) as! UILabel
+                nameLabel.text = self.getMatchName(row)
                 return cell
             }
             if let ch = self.selectedChapter {
@@ -276,11 +297,13 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let offset = themer.fontSize
         
         if self.numChapterItems == 0 {
-            return CGSize(width: collectionView.frame.width*0.90, height: 20 + offset)
+            let width:CGFloat = collectionView.frame.width
+            let height = self.themer.fontSize * 2.6
+            return CGSize(width: width, height: height)
         } else {
+            let offset = themer.fontSize
             let size = CGSize.init(width: 40+offset/2, height: 30+offset)
             return size
         }
@@ -317,15 +340,35 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     }
     
     func didGetMatchIDs(sender: AnyObject, matches: [AnyObject]){
-        self.matchIds = matches as! [String]
-        print(self.matchIds)
+        var newMatches = matches as! [[String:AnyObject]]
+        var row = 0
+        var reloadPaths = [NSIndexPath]()
+        for match in newMatches {
+            
+            let id = match["id"] as! String
+            newMatches[row]["name"] = VerseInfo.NewVerseWithId(id).name
+            if (row+1) > self.searchMatches.count {
+                row += 1
+                continue // cannot compare
+            }
+            
+            let oldText = self.searchMatches[row]["text"] as! String
+            if (match["text"] as! String) != oldText {
+                // just reload this row
+                let path = NSIndexPath(forRow: row, inSection: 0)
+                reloadPaths.append(path)
+            }
+            row += 1
+        }
+        
+        let needsReload = self.searchMatches.count == 0
+        self.searchMatches = newMatches
+        if needsReload {
+            self.chapterCollection.reloadData()
+        } else if reloadPaths.count > 0 {
+            self.chapterCollection.reloadItemsAtIndexPaths(reloadPaths)
+        }
     }
 
-    func didGetSingleVerse(sender: AnyObject, verse: AnyObject){
-        let matchVerse = verse as! VerseInfo
-        self.matchIdVerses[matchVerse.id] = matchVerse
-        self.chapterCollection.reloadData()
-    }
- 
 
 }

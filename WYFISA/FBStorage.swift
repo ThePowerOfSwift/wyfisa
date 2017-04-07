@@ -50,10 +50,11 @@ class FBStorage {
         self.databaseRef
             .child("query")
             .child(key).child("response")
+            .queryOrderedByChild("score")
             .observeEventType(.Value, withBlock: {(snapshot) in
-                if let matchIDs = snapshot.value as? [String] {
+                if let matches =  snapshot.value as? [[String:AnyObject]] {
                     // send out a query for each id
-                    self.delegate?.didGetMatchIDs?(self, matches: matchIDs)
+                    self.delegate?.didGetMatchIDs?(self, matches: matches)
                 }
             })
         

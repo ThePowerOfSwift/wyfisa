@@ -314,5 +314,17 @@ class VerseInfo {
             self.verse = Int(verse)!
         }
     }
+    
+    class func NewVerseWithId(id: String) -> VerseInfo {
+        let verse = VerseInfo(id: id, name:"", text: nil)
+        verse.updateWithIdParts()
+        
+        let bookNo = verse.bookNo!
+        let chapterNo = verse.chapterNo!
+        let verseNo = verse.verse!
+        let bookName = Books(rawValue: bookNo)!.name()
+        verse.name = "\(bookName) \(chapterNo):\(verseNo)"
+        return verse
+    }
 
 }
