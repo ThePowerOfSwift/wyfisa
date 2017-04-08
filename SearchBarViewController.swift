@@ -136,12 +136,15 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
             }
         }
         
+        let tm = TextMatcher()
+
+        
         if searchText.length > 4 {
-            if self.searchMatches.count > 0 {
+            if self.searchMatches.count > 0 && tm.findChapterInText(searchText) == nil {
                 // switching to text matching if was in chapter match
+                // only if we don't match on chapter pattern
                 if self.numChapterItems > 0 {
                     self.setNoBookMatchAttrs()
-                    self.matchLabel.text = ""
                     self.chapterCollection.reloadData()
                 }
                 
@@ -150,7 +153,6 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
             }
         }
         
-        let tm = TextMatcher()
         var label: String?
         
         // check if book can be found in text
