@@ -110,7 +110,7 @@ struct BooksData {
     func numVerses(book: Int, chapter: Int) -> Int? {
         // check that book, chapter and verse are within range
         if self.exists(book, chapter: chapter, verse: 1) {
-            return self.stats["\(book)"]!["\(chapter)"]
+            return self.stats["\(book)"]!["\(chapter)"]!+1
         }
         return nil
     }

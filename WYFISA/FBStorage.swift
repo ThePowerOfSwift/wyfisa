@@ -135,9 +135,10 @@ class FBStorage {
             .child(id)
             .observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                 // convert value to verse
-                let value = snapshot.value as?  [String : AnyObject]
-                let verse = InterlinearVerse.initFromSnapshot(value!)
-                self.delegate?.didGetSingleVerse?(self, verse: verse)
+                if let value = snapshot.value as?  [String : AnyObject]{
+                    let verse = InterlinearVerse.initFromSnapshot(value)
+                    self.delegate?.didGetSingleVerse?(self, verse: verse)
+                }
             })
     }
     

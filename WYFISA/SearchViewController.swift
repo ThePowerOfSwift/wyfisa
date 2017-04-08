@@ -131,7 +131,7 @@ class SearchViewController: UIViewController, FBStorageDelegate {
             //self.searchBar.hidden = true
             self.escapeImageMask.hidden = true
         }        
-    }
+    } 
     
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

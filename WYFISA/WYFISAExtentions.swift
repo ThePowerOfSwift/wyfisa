@@ -49,7 +49,6 @@ extension String {
                 if let font = font {
                     newString.removeAttribute(NSFontAttributeName, range: range)
                     newString.addAttribute(NSFontAttributeName, value: font, range: range)
-
                 }
             }
             return newString

@@ -27,7 +27,11 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     var session: String!
     var searchMatches = [[String:AnyObject]]()
     var originalFrameSize: CGSize!
-
+    var searchInResultLock = NSLock()
+    var lastSearchText: String!
+    var pendingEvents: Int = 0
+    
+    @IBOutlet var spinner: UIActivityIndicatorView!
     @IBOutlet var matchLabel: UILabel!
     @IBOutlet var chapterCollection: UICollectionView!
     @IBOutlet var chapterLabel: UILabel!
@@ -60,7 +64,6 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.chapterCollection.dataSource = self
         self.chapterCollection.delegate = self
         self.searchBarRef = searchBar
-        self.chapterCollection.reloadData()
         self.isVisible = true
         self.escapeMask?.hidden = false
         Animations.start(0.3){
@@ -80,15 +83,36 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         // init session
         self.session = self.firDB.startSearchSession()
         self.searchMatches = [[String:AnyObject]]()
-        
-        
+        self.lastSearchText = ""
+        self.chapterCollection.reloadData()
+        self.pendingEvents = 0
     }
     
     
+    func retryUpdate(text: String, n: Int){
+        Timing.runAfter(1.0){
+            if n == self.pendingEvents {
+                self.firDB.updateSearchSession(self.session, text: self.lastSearchText)
+            }
+        }
+    }
+
     // MARK: - search bar delegate
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         
-        self.firDB.updateSearchSession(self.session, text: searchText)
+        self.lastSearchText = searchText
+
+        if (searchText.length > 3){
+            if searchText.characters.last! != " " {
+                if self.searchInResultLock.tryLock() {
+                    self.firDB.updateSearchSession(self.session, text: searchText)
+                } else {
+                    self.pendingEvents += 1
+                    self.retryUpdate(searchText, n: self.pendingEvents)
+                }
+            }
+        }
+
         if searchText == "" {
             self.searchMatches = [[String:AnyObject]]()
 
@@ -97,6 +121,10 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
                 self.searchView?.alpha = 0
             }
             
+            // stop spinner
+            self.spinner.stopAnimating()
+            
+            // reset frame size
             self.view.frame.size = self.originalFrameSize
 
         } else {
@@ -108,7 +136,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
             }
         }
         
-        if searchText.length > 3 {
+        if searchText.length > 4 {
             if self.searchMatches.count > 0 {
                 // switching to text matching if was in chapter match
                 if self.numChapterItems > 0 {
@@ -127,7 +155,10 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         
         // check if book can be found in text
         if let book = tm.findBookInText(searchText){
-            
+
+            // reduce view size
+            self.view.frame.size.height = self.originalFrameSize.height * 0.50
+
             label = book.name()+" " //spacing for chapter
 
             // set book and num chapters
@@ -147,10 +178,20 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
                 }
             }
             
+            self.spinner.stopAnimating()
+            
         } else {
             
             // not even book is matching so clear
             self.setNoBookMatchAttrs()
+        }
+        
+        if self.numChapterItems == 0 && searchText.length > 1 {
+            // searching but not matching books
+            if self.searchMatches.count == 0 {
+                // and there are not matches
+                self.spinner.startAnimating()
+            }
         }
         
         self.chapterCollection.reloadData()
@@ -158,6 +199,34 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
 
     }
     
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        if let searchText = searchBar.text {
+            if let allVerses = TextMatcher().findVersesInText(searchText) {
+                self.resultInfo = allVerses[0]
+            }
+        }
+        if self.numChapterItems > 0 {
+            self.performSegueWithIdentifier("unwindToMain", sender: self)
+        } else {
+            searchBar.resignFirstResponder()
+            self.view.frame.size.height = self.originalFrameSize.height * 0.8
+            self.chapterCollection.reloadData()
+            self.chapterCollection.scrollEnabled = true
+        }
+    }
+    
+    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+        if self.isVisible == true && self.numChapterItems > 0 {
+            self.performSegueWithIdentifier("unwindToMain", sender: self)
+        }
+        
+        // release lock
+        self.searchInResultLock.tryLock()
+        self.searchInResultLock.unlock()
+    }
+    
+    // Mark: - Data methods
+
     func setNoBookMatchAttrs(){
         self.numChapterItems = 0
         self.numVerseItems = 0
@@ -214,32 +283,6 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     }
     
     // MARK: - collection view
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return self.numSections
-    }
-
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 0 {
-            if let n = self.numChapterItems {
-                if n == 0 {
-                    // full text mode
-                    return self.searchMatches.count
-                } else if self.selectedChapter == nil {
-                    return n // collection of chapters
-                } else {
-                   return 1 // just 1 selected item
-                }
-            }
-        }
-        if section == 1 {
-            if let n = self.numVerseItems {
-                return n
-            }
-        }
-        return 0
-    }
-
-    
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let section = indexPath.section
         var item = indexPath.item
@@ -254,11 +297,10 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
                 let htmlText = self.getMatchText(row)
 
                 textView.attributedText = htmlText.toHtml(themer.currentFont())
-                let nameLabel = cell.viewWithTag(2) as! UILabel
+                let nameLabel = cell.viewWithTag(3) as! UILabel
                 nameLabel.text = self.getMatchName(row)
                 if !self.themer.isLight() {
-                    textView.textColor = UIColor.teal()
-                    nameLabel.textColor = UIColor.lightGrayColor()
+                    nameLabel.textColor = UIColor.tan()
                 }
                 return cell
             }
@@ -332,7 +374,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         
         if self.numChapterItems == 0 {
             let width:CGFloat = collectionView.frame.width
-            let height = self.themer.fontSize * 2.2
+            let height = self.themer.fontSize * 2.4
             return CGSize(width: width, height: height)
         } else {
             let offset = themer.fontSize
@@ -341,28 +383,31 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         }
     }
     
-    
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        if let searchText = searchBar.text {
-            if let allVerses = TextMatcher().findVersesInText(searchText) {
-                self.resultInfo = allVerses[0]
-            }
-        }
-        if self.numChapterItems > 0 {
-            self.performSegueWithIdentifier("unwindToMain", sender: self)
-        } else {
-            searchBar.resignFirstResponder()
-            if let parentVC = self.parentViewController as? SearchViewController {
-                self.view.frame.size.height = parentVC.view.frame.size.height * 0.8
-            }
-        }
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        return self.numSections
     }
     
-    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
-        if self.isVisible == true && self.numChapterItems > 0 {
-            self.performSegueWithIdentifier("unwindToMain", sender: self)
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if section == 0 {
+            if let n = self.numChapterItems {
+                if n == 0 {
+                    // full text mode
+                    return self.searchMatches.count
+                } else if self.selectedChapter == nil {
+                    return n // collection of chapters
+                } else {
+                    return 1 // just 1 selected item
+                }
+            }
         }
+        if section == 1 {
+            if let n = self.numVerseItems {
+                return n
+            }
+        }
+        return 0
     }
+
     
     // MARK: - Navigation
 
@@ -376,6 +421,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         
         // close out session
         self.firDB.endSearchSession(self.session)
+        
     }
     
     func didGetMatchIDs(sender: AnyObject, matches: [AnyObject]){
@@ -386,6 +432,13 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
             
             let id = match["id"] as! String
             newMatches[row]["name"] = VerseInfo.NewVerseWithId(id).name
+            
+            if !themer.isLight() {
+                // flip the text fg
+                var matchText = newMatches[row]["text"] as! String
+                matchText.replaceAllMatching("687077", with: "F3F3F3")
+                newMatches[row]["text"] = matchText
+            }
             if (row+1) > self.searchMatches.count {
                 row += 1
                 continue // cannot compare
@@ -405,10 +458,15 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.searchMatches = newMatches
         if needsReload || !sameAffinity {
             self.chapterCollection.reloadData() 
-        } else if (reloadPaths.count > 0) {
+        } else if (reloadPaths.count > 0) && (self.numChapterItems == 0) { // dont try reload with chapter matches showing
             self.chapterCollection.reloadItemsAtIndexPaths(reloadPaths)
         }
+        
+        self.spinner.stopAnimating()
+        Timing.runAfter(0.0){
+            self.searchInResultLock.tryLock()
+            self.searchInResultLock.unlock()
+        }
     }
-
 
 }

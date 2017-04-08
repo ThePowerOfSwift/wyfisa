@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         FIRApp.configure()
         FIRAuth.auth()?.signInWithEmail("search@turnto.com", password: "__unset__"){  (user, error) in
-            print(user)
+            print(user, error)
         }
         
         // load canned data if this is first launch
