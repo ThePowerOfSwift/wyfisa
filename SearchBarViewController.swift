@@ -48,6 +48,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.originalFrameSize = self.view.frame.size
     }
 
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -77,6 +78,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.chapterLabel.textColor = self.themer.navyForLightOrWhite(1.0)
         self.searchView?.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
         self.chapterCollection.backgroundColor = self.themer.whiteForLightOrNavy(1.0)
+        self.chapterCollection.alpha = 1
         
         self.matchLabel.font = self.themer.currentFontAdjustedBy(10)
         self.chapterLabel.font = self.themer.currentFontAdjustedBy(10)
@@ -148,7 +150,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
                     self.setNoBookMatchAttrs()
                     self.chapterCollection.reloadData()
                 }
-                
+                self.matchLabel.text = ""
                 // either way it goes we are in text matching mode at this point
                 return
             }
@@ -245,10 +247,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.chapterLabel.text = "\(chapter)"
         
         // reflect in search bar
-        var searchBarText = self.matchLabel.text
-        if let ch = self.chapterLabel.text {
-            searchBarText = searchBarText?.stringByAppendingString(ch)
-        }
+        let searchBarText = self.lastSearchText // self.matchLabel.text
         self.searchBarRef?.text = searchBarText
         
         // change to 2 sections and display verses
@@ -334,7 +333,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         
         return cell
     }
-    
+
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
         if self.numChapterItems == 0 {
@@ -430,6 +429,9 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         self.viewIsleaving()
         if let toVc = segue.destinationViewController as? VerseDetailModalViewController {
             toVc.verseInfo = self.resultInfo
+            self.setNoBookMatchAttrs()
+            self.chapterCollection.reloadData()
+            self.matchLabel.text = ""
         }
         
     }
@@ -438,12 +440,18 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     override func performSegueWithIdentifier(identifier: String, sender: AnyObject?) {
         if identifier == "quickresultsegue" {
             self.viewIsleaving()
-            self.searchView?.alpha = 0
-            self.searchBarRef?.text = nil
             self.searchBarRef?.endEditing(true)
+            self.searchBarRef?.text = nil
+            self.view.frame.size = self.originalFrameSize
+            self.matchLabel.text = self.resultInfo?.name
+            self.chapterLabel.text = ""
+            self.chapterCollection.alpha = 0
+            self.spinner.startAnimating()
         }
         
-        super.performSegueWithIdentifier(identifier, sender: sender)
+        Timing.runAfter(0.1){
+            super.performSegueWithIdentifier(identifier, sender: sender)
+        }
     }
     
     func didGetMatchIDs(sender: AnyObject, matches: [AnyObject]){

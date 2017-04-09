@@ -40,6 +40,11 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     override func viewWillAppear(animated: Bool) {
+        self.searchView?.alpha = 0
+        if !self.themer.isLight() {
+            self.escapeImageMask.image = UIImage.init(named: "Gradient-navy")
+        }
+        
         self.topics = storage.getTopicsForOwner(self.ownerId!)
         self.topicTable.reloadData()
         
@@ -215,6 +220,7 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
             destVC.escapeMask = self.escapeMask
             destVC.searchView = self.searchView
             destVC.originalFrameSize = self.view.frame.size
+            destVC.originalFrameSize.height = destVC.originalFrameSize.height*1.2
             destVC.unwindIdentifier = "quickresultsegue"
             self.searchBar.delegate = destVC
         }

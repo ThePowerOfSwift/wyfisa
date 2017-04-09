@@ -211,11 +211,11 @@
                             </connections>
                         </barButtonItem>
                         <view key="titleView" contentMode="scaleToFill" id="XfK-Px-pY8">
-                            <rect key="frame" x="59" y="6" width="262" height="33"/>
+                            <rect key="frame" x="59" y="6" width="260" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Search for verse or phrase" translatesAutoresizingMaskIntoConstraints="NO" id="A3v-ik-pna">
-                                    <rect key="frame" x="0.0" y="-0.5" width="262" height="33"/>
+                                <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Turn to" translatesAutoresizingMaskIntoConstraints="NO" id="A3v-ik-pna">
+                                    <rect key="frame" x="0.0" y="-0.5" width="260" height="33"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </searchBar>
                             </subviews>
@@ -227,6 +227,9 @@
                                 <constraint firstItem="A3v-ik-pna" firstAttribute="height" secondItem="XfK-Px-pY8" secondAttribute="height" id="ywg-0q-5o8"/>
                             </constraints>
                         </view>
+                        <barButtonItem key="rightBarButtonItem" title="    " style="plain" id="DfZ-Ef-6cj">
+                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="escapeImageMask" destination="aqc-iU-5OE" id="nLU-vT-3nz"/>
@@ -3196,14 +3199,14 @@
                                 </constraints>
                             </stackView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="qgK-6a-ZVt">
-                                <rect key="frame" x="177" y="190" width="20" height="20"/>
+                                <rect key="frame" x="177" y="323.5" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="qgK-6a-ZVt" firstAttribute="centerY" secondItem="a39-Ry-VEp" secondAttribute="centerY" multiplier="0.6" id="48E-AL-IoY"/>
+                            <constraint firstItem="qgK-6a-ZVt" firstAttribute="centerY" secondItem="a39-Ry-VEp" secondAttribute="centerY" id="48E-AL-IoY"/>
                             <constraint firstItem="l9C-IX-8ku" firstAttribute="width" secondItem="a39-Ry-VEp" secondAttribute="width" id="DRg-sn-bSq"/>
-                            <constraint firstItem="l9C-IX-8ku" firstAttribute="height" secondItem="a39-Ry-VEp" secondAttribute="height" constant="-20" id="WIp-r6-gTi"/>
                             <constraint firstAttribute="leadingMargin" secondItem="l9C-IX-8ku" secondAttribute="leading" id="dOl-gr-2k5"/>
+                            <constraint firstAttribute="bottom" secondItem="l9C-IX-8ku" secondAttribute="bottom" id="lDE-iU-DcM"/>
                             <constraint firstItem="qgK-6a-ZVt" firstAttribute="centerX" secondItem="a39-Ry-VEp" secondAttribute="centerX" id="na4-hf-394"/>
                             <constraint firstItem="l9C-IX-8ku" firstAttribute="top" secondItem="LPA-lP-b46" secondAttribute="bottom" constant="20" id="xRG-PK-tkr"/>
                         </constraints>
