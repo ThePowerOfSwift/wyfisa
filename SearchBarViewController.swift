@@ -30,6 +30,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     var searchInResultLock = NSLock()
     var lastSearchText: String!
     var pendingEvents: Int = 0
+    var unwindIdentifier: String = "unwindToMain"
     
     @IBOutlet var spinner: UIActivityIndicatorView!
     @IBOutlet var matchLabel: UILabel!
@@ -208,7 +209,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
             }
         }
         if self.numChapterItems > 0 {
-            self.performSegueWithIdentifier("unwindToMain", sender: self)
+            self.performSegueWithIdentifier(self.unwindIdentifier, sender: self)
         } else {
             searchBar.resignFirstResponder()
             self.view.frame.size.height = self.originalFrameSize.height * 0.8
@@ -219,7 +220,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
         if self.isVisible == true && self.numChapterItems > 0 {
-            self.performSegueWithIdentifier("unwindToMain", sender: self)
+            self.performSegueWithIdentifier(self.unwindIdentifier, sender: self)
         }
         
         // release lock
@@ -339,7 +340,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
         if self.numChapterItems == 0 {
             let matchId = self.getMatchId(indexPath.row)
             self.resultInfo = VerseInfo.NewVerseWithId(matchId)
-            self.performSegueWithIdentifier("unwindToMain", sender: self)
+            self.performSegueWithIdentifier(self.unwindIdentifier, sender: self)
             return
         }
         
@@ -356,7 +357,7 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
             self.resultInfo?.bookNo = self.selectedBook
             self.resultInfo?.chapterNo = self.selectedChapter!+1
             
-            self.performSegueWithIdentifier("unwindToMain", sender: self)
+            self.performSegueWithIdentifier(self.unwindIdentifier, sender: self)
             return
         }
         
@@ -413,17 +414,36 @@ class SearchBarViewController: UIViewController, UISearchBarDelegate, UICollecti
     
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func viewIsleaving(){
         self.isVisible = false
         self.escapeImageMask?.hidden = true
         self.escapeMask?.hidden = true
         
         // close out session
         self.firDB.endSearchSession(self.session)
+    }
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        self.viewIsleaving()
+        if let toVc = segue.destinationViewController as? VerseDetailModalViewController {
+            toVc.verseInfo = self.resultInfo
+        }
         
+    }
+    
+    
+    override func performSegueWithIdentifier(identifier: String, sender: AnyObject?) {
+        if identifier == "quickresultsegue" {
+            self.viewIsleaving()
+            self.searchView?.alpha = 0
+            self.searchBarRef?.text = nil
+            self.searchBarRef?.endEditing(true)
+        }
+        
+        super.performSegueWithIdentifier(identifier, sender: sender)
     }
     
     func didGetMatchIDs(sender: AnyObject, matches: [AnyObject]){

@@ -21,6 +21,10 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
     var oldTitle: String? = nil
     var editingRow: Int = -1
     
+    @IBOutlet var searchView: UIView!
+    @IBOutlet var escapeImageMask: UIImageView!
+    @IBOutlet var escapeMask: UIView!
+    @IBOutlet var searchBar: UISearchBar!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -206,7 +210,24 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
         if let destVC = segue.destinationViewController as? SelectScriptViewController {
             destVC.activeTopic = self.selectedTopic
         }
+        if let destVC = segue.destinationViewController as? SearchBarViewController {
+            destVC.escapeImageMask = self.escapeImageMask
+            destVC.escapeMask = self.escapeMask
+            destVC.searchView = self.searchView
+            destVC.originalFrameSize = self.view.frame.size
+            destVC.unwindIdentifier = "quickresultsegue"
+            self.searchBar.delegate = destVC
+        }
     }
+    
+    @IBAction func didTapToEndSearch(sender: AnyObject) {
+        self.searchBar.endEditing(true)
+        Animations.start(0.3){
+            self.escapeImageMask.hidden = true
+            self.escapeMask.hidden = true
+        }
+    }
+    
     // MARK: - Theme
     func themeView(){
         self.view.backgroundColor = self.themer.tanForLightOrNavy(1.0)

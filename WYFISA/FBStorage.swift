@@ -66,7 +66,7 @@ class FBStorage {
     }
     
     func updateSearchSession(key: String, text: String) {
-        
+        print("Query", key)
         self.databaseRef
             .child("query")
             .child(key)

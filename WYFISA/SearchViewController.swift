@@ -153,6 +153,7 @@ class SearchViewController: UIViewController, FBStorageDelegate {
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return self.themer.statusBarStyle()
     }
+    
 
     // MARK: - FIR Delegate
     func didGetSingleVerse(sender: AnyObject, verse: AnyObject){
