@@ -130,14 +130,17 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         }
     }
     
-    // scroll to middle of screen when view appears
-    override func viewDidAppear(animated: Bool) {
+    func scrollToContextVerse(){
         var yPos = self.startViewPos
         yPos += Int(self.view.frame.height/2)
-        Animations.start(0.3){
+        Timing.runAfter(0.3){
             self.chapterTextView.scrollRangeToVisible(NSMakeRange(yPos, 0))
         }
-        
+    }
+    
+    // scroll to middle of screen when view appears
+    override func viewDidAppear(animated: Bool) {
+
         if self.segmentBar.selectedSegmentIndex == 1 {
             Timing.runAfter(0.5){
                 self.showFooterMask()
@@ -237,7 +240,8 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
     }
     
     override func viewDidLayoutSubviews() {
-        self.chapterTextView.setContentOffset(CGPointZero, animated: false)
+
+        // self.chapterTextView.setContentOffset(CGPointZero, animated: false)
         
         // adjust lexicon scroll view
         let textHeight = self.lexiconTextView.text
@@ -541,7 +545,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
         self.versesTable.reloadData()
         
         // scroll up to top
-        self.chapterTextView.scrollRectToVisible(CGRect.init(x: 0, y: 0, width: 100, height: 10), animated: false)
+        // self.chapterTextView.scrollRectToVisible(CGRect.init(x: 0, y: 0, width: 100, height: 10), animated: false)
         let path = NSIndexPath.init(forRow: 0, inSection: 0)
         if self.versesTable.numberOfSections > 0 {
             self.versesTable.scrollToRowAtIndexPath(path, atScrollPosition: .Bottom, animated: true)
@@ -611,6 +615,7 @@ class VerseDetailModalViewController: UIViewController, UITableViewDataSource, U
             self.verseInfo?.updateChapterForVerses(verses as! [VerseInfo])
             self.handleChapterChange()
             self.loadSpinner.stopAnimating()
+            self.scrollToContextVerse()
         case .Range:
             self.verseInfo?.updateRefsForVerses(verses as! [VerseInfo])
         }

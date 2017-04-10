@@ -20,7 +20,13 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
     var selectedTopic: TopicDoc? = nil
     var oldTitle: String? = nil
     var editingRow: Int = -1
-    
+    var quickCaptureVC: CaptureViewController!
+    var cam = SharedCameraManager.instance
+
+    @IBOutlet var disabledCamView: UIView!
+    @IBOutlet var doneButton: UIButton!
+    @IBOutlet var quickCaptureContainerView: UIView!
+    @IBOutlet var quickCaptureButton: UIButton!
     @IBOutlet var searchView: UIView!
     @IBOutlet var escapeImageMask: UIImageView!
     @IBOutlet var escapeMask: UIView!
@@ -36,10 +42,13 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
 
         // apply theme
         self.themeView()
+        
+        self.doneButton.hidden = true
 
     }
     
     override func viewWillAppear(animated: Bool) {
+
         self.searchView?.alpha = 0
         if !self.themer.isLight() {
             self.escapeImageMask.image = UIImage.init(named: "Gradient-navy")
@@ -224,6 +233,11 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
             destVC.unwindIdentifier = "quickresultsegue"
             self.searchBar.delegate = destVC
         }
+        if let destVC = segue.destinationViewController as? CaptureViewController {
+            self.quickCaptureVC = destVC
+            self.quickCaptureVC.configure(self.view.frame.size)
+            self.quickCaptureContainerView.hidden = true
+        }
     }
     
     @IBAction func didTapToEndSearch(sender: AnyObject) {
@@ -232,6 +246,65 @@ class TopicViewController: UIViewController, UITableViewDataSource, UITableViewD
             self.escapeImageMask.hidden = true
             self.escapeMask.hidden = true
         }
+    }
+    
+    @IBAction func didPressQuickCaptureButton(sender: AnyObject) {
+        if self.cam.checkCameraAuth() == false {
+            // user has not authorized use of camera
+            
+            if self.cam.didAuthCameraUsage() == true {
+                // this is not the first time we've asked for auth
+                // so put up a privacy window
+                self.disabledCamView.hidden = false
+                
+            } else {
+                // record that we've asked for camera permission
+                self.cam.setCameraAuthStatus()
+            }
+            
+            return
+        } else if self.cam.didAuthCameraUsage() == false {
+            // upgrade scenario where user has authorized use of camera
+            // but the property hasn't been set
+            self.cam.setCameraAuthStatus()
+            self.cam.prepareCamera()
+           // self.prepareCamUsage()
+        }
+        
+        if self.cam.ready == false {
+            // camera is not ready
+            return
+        }
+        Animations.start(0.3){
+            self.quickCaptureContainerView.alpha = 1
+            self.quickCaptureContainerView.hidden = false
+        }
+        CaptureSession.sharedInstance.clearMatches()
+        self.quickCaptureVC.didPressCaptureButton()
+
+    }
+    
+    @IBAction func didReleaseQuickCaptureButton(sender: AnyObject) {
+        let newMatches = self.quickCaptureVC.didReleaseQuickCaptureButton()
+        if newMatches == true {
+            self.doneButton.hidden = false
+            self.quickCaptureButton.hidden = true
+        } else {
+            self.didPressDoneButton(self)
+        }
+        self.disabledCamView.hidden = true
+    }
+    
+    @IBAction func didPressDoneButton(sender: AnyObject) {
+        self.quickCaptureVC.didReleaseCaptureButton()
+        Animations.start(0.3){
+            self.quickCaptureContainerView.alpha = 0
+        }
+        Timing.runAfter(0.3){
+            self.quickCaptureContainerView.hidden = true
+        }
+        self.doneButton.hidden = true
+        self.quickCaptureButton.hidden = false
     }
     
     // MARK: - Theme

@@ -17,6 +17,9 @@ class CaptureSession: NSObject {
     var newMatches = 0
     var misses = 0
     
+    func clearMatches() {
+        self.matches = [String]()
+    }
     func clearCache() {
         DBQuery.sharedInstance.clearCache()
     }

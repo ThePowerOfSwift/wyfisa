@@ -9,12 +9,15 @@
 import UIKit
 import GPUImage
 
-class CaptureViewController: UIViewController {
+class CaptureViewController: UIViewController, VerseTableViewCellDelegate {
 
     @IBOutlet var captureBoxActive: UIImageView!
     @IBOutlet var captureBox: UIImageView!
     @IBOutlet var captureVerseTable: VerseTableView!
+    @IBOutlet var captureVerseTableLarge: VerseTableView!
     @IBOutlet var captureView: GPUImageView!
+    @IBOutlet var bgMask: UIView!
+    @IBOutlet var spinner: UIActivityIndicatorView!
     
     var cam: CameraManager? = nil
     let settings = SettingsManager.sharedInstance
@@ -36,15 +39,23 @@ class CaptureViewController: UIViewController {
         self.tableDataSource = VerseTableDataSource.init(frameSize: self.view.frame.size,
                                                          scriptId: nil,
                                                          ephemeral: true)
+        self.tableDataSource!.cellDelegate = self
         self.captureVerseTable.dataSource = self.tableDataSource
         self.captureVerseTable.isExpanded = false
-
-
+        self.captureVerseTableLarge.dataSource = self.tableDataSource
+        self.captureVerseTableLarge.isExpanded = true
     }
     
 
+    override func viewWillDisappear(animated: Bool) {
+        if self.spinner.isAnimating() {
+            self.spinner.stopAnimating()
+            self.captureVerseTableLarge.alpha = 1
+        }
+    }
     func configure(size: CGSize){
         self.frameSize = size
+        self.view.frame.size = self.frameSize
     }
     
     // MARK: -CaptureButton Delegate
@@ -90,7 +101,11 @@ class CaptureViewController: UIViewController {
         
         // start capture loop
         self.captureLoop()
-            
+        
+        
+        // prepare large view
+        self.captureVerseTableLarge.reloadData()
+        
     }
     
     func captureLoop(){
@@ -191,6 +206,20 @@ class CaptureViewController: UIViewController {
         updateLock.unlock()
         
     }
+    func didReleaseQuickCaptureButton() -> Bool {
+    
+        self.cam?.pause()
+        if  self.session.newMatches == 0 {
+            return false
+        } else {
+            self.captureVerseTableLarge.reloadData()
+            Animations.start(0.3){
+                self.bgMask.alpha = 1
+                self.captureVerseTableLarge.alpha = 1
+            }
+        }
+        return true
+    }
     
     func didReleaseCaptureButton() -> [VerseInfo] {
         
@@ -223,9 +252,19 @@ class CaptureViewController: UIViewController {
         self.captureVerseTable.clear()
         
         updateLock.unlock()
-
         self.cam?.removeAllTargets()
+        
+        self.quickCaptureCleanup()
         return capturedVerses
+
+    }
+    
+    func quickCaptureCleanup(){
+        Animations.start(0.3){
+            self.bgMask.alpha = 0
+            self.captureVerseTableLarge.alpha = 0
+        }
+        self.spinner.stopAnimating()
     }
     
     func handleCaptureRelease() -> Bool {
@@ -256,6 +295,33 @@ class CaptureViewController: UIViewController {
         self.session.active = false
 
         return hasNewMatches
+    }
+    
+    // MARK: cell delegate
+    func didTapMoreButtonForCell(sender: VerseTableViewCell, withVerseInfo verse: VerseInfo){
+        self.captureVerseTableLarge.alpha = 0.7
+        self.spinner.startAnimating()
+        Timing.runAfter(0.1){
+            self.performSegueWithIdentifier("quickscandetailsegue", sender: (verse as AnyObject))
+        }
+    }
+    
+    func didTapInfoButtonForVerse(verse: VerseInfo){
+        
+    }
+    func didRemoveCell(sender: VerseTableViewCell){
+        
+    }
+    func didAddCell(sender: VerseTableViewCell){
+        
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "quickscandetailsegue" {
+            let toVc = segue.destinationViewController as! VerseDetailModalViewController
+            let verse = sender as! VerseInfo
+            toVc.verseInfo = verse
+        }
     }
 
 }
